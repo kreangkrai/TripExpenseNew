@@ -6,6 +6,8 @@ using Microsoft.Maui.Devices.Sensors;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Messaging;
+using TripExpenseNew.Models;
 
 namespace TripExpenseNew.Platforms.Android
 {
@@ -82,7 +84,7 @@ namespace TripExpenseNew.Platforms.Android
                             previousLocation = location;
 
                             // ส่งข้อมูลไป MainPage
-                            //MessagingCenter.Send(this, "LocationUpdate", new LocationData { Location = location, TotalDistance = totalDistance });
+                            WeakReferenceMessenger.Default.Send(new LocationData { Location = location, TotalDistance = totalDistance });
 
                             Console.WriteLine($"Android Service ==> Lat: {location.Latitude}, Lon: {location.Longitude}, Speed: {speedKmh}, Distance: {totalDistance}");
                         }
@@ -116,11 +118,5 @@ namespace TripExpenseNew.Platforms.Android
 
             return R * c;
         }
-    }
-
-    public class LocationData
-    {
-        public Location Location { get; set; }
-        public double TotalDistance { get; set; }
     }
 }

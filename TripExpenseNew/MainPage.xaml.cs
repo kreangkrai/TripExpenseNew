@@ -4,6 +4,10 @@ using Microsoft.Maui.Devices.Sensors;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Messaging;
+using TripExpenseNew.Models;
+
+
 #if ANDROID
 using Android.Content;
 using Microsoft.Maui.ApplicationModel;
@@ -30,6 +34,13 @@ namespace TripExpenseNew
         public MainPage()
         {
             InitializeComponent();
+            WeakReferenceMessenger.Default.Register<LocationData>(this,async (send,data) =>
+            {
+                Console.WriteLine($"==================Reguster : {data.Location.Longitude}");
+                await UpdateLocationDataAsync(data.Location);
+                totalDistance = data.TotalDistance; // อัปเดต totalDistance จาก Service
+            });
+
 #if IOS
             try
             {

@@ -1,7 +1,9 @@
-﻿using CoreLocation;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using CoreLocation;
 using Foundation;
 using Microsoft.Maui.Devices.Sensors;
 using System;
+using TripExpenseNew.Models;
 
 namespace TripExpenseNew.Platforms.iOS
 {
@@ -96,6 +98,7 @@ namespace TripExpenseNew.Platforms.iOS
                             Speed = loc.Speed >= 0 ? loc.Speed : null
                         };
                         service.onLocationUpdate?.Invoke(location);
+                        WeakReferenceMessenger.Default.Send(new LocationData { Location = location, TotalDistance = 0 });
                     }
                 }
                 catch (Exception ex)
