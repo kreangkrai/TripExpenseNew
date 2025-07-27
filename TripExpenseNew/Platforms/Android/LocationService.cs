@@ -15,14 +15,11 @@ namespace TripExpenseNew.Platforms.Android
     public class LocationService : Service
     {
         private CancellationTokenSource cancellationTokenSource;
-        private Location previousLocation = null;
-        private double totalDistance = 0;
 
         public override IBinder OnBind(Intent intent) => null;
 
         public override StartCommandResult OnStartCommand(Intent intent, StartCommandFlags flags, int startId)
         {
-            Console.WriteLine("===============Back Ground Android====================");
             try
             {
                 if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
@@ -76,17 +73,17 @@ namespace TripExpenseNew.Platforms.Android
 
                         if (location != null)
                         {
-                            double speedKmh = location.Speed.HasValue ? location.Speed.Value * 3.6 : 0;
-                            if (previousLocation != null)
-                            {
-                                totalDistance += CalculateDistance(previousLocation, location);
-                            }
-                            previousLocation = location;
+                            //double speedKmh = location.Speed.HasValue ? location.Speed.Value * 3.6 : 0;
+                            //if (previousLocation != null)
+                            //{
+                            //    totalDistance += CalculateDistance(previousLocation, location);
+                            //}
+                            //previousLocation = location;
 
                             // ส่งข้อมูลไป MainPage
-                            WeakReferenceMessenger.Default.Send(new LocationData { Location = location, TotalDistance = totalDistance });
+                            WeakReferenceMessenger.Default.Send(new LocationData { Location = location});
 
-                            Console.WriteLine($"Android Service ==> Lat: {location.Latitude}, Lon: {location.Longitude}, Speed: {speedKmh}, Distance: {totalDistance}");
+                            //Console.WriteLine($"Android Service ==> Lat: {location.Latitude}, Lon: {location.Longitude}, Speed: {speedKmh}, Distance: {totalDistance}");
                         }
                     }
                     catch (Exception ex)
@@ -101,22 +98,6 @@ namespace TripExpenseNew.Platforms.Android
             {
                 Console.WriteLine("Location tracking cancelled");
             }
-        }
-
-        private double CalculateDistance(Location loc1, Location loc2)
-        {
-            double R = 6371;
-            double lat1 = loc1.Latitude * Math.PI / 180;
-            double lat2 = loc2.Latitude * Math.PI / 180;
-            double deltaLat = (loc2.Latitude - loc1.Latitude) * Math.PI / 180;
-            double deltaLon = (loc2.Longitude - loc1.Longitude) * Math.PI / 180;
-
-            double a = Math.Sin(deltaLat / 2) * Math.Sin(deltaLat / 2) +
-                       Math.Cos(lat1) * Math.Cos(lat2) *
-                       Math.Sin(deltaLon / 2) * Math.Sin(deltaLon / 2);
-            double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
-
-            return R * c;
         }
     }
 }

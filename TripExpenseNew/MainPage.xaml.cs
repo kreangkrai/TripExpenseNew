@@ -27,8 +27,7 @@ namespace TripExpenseNew
 
 #if IOS
         private Platforms.iOS.LocationService locationService;
-#elif ANDROID
-        private Platforms.Android.LocationService locationService;
+
 #endif
 
         public MainPage()
@@ -36,25 +35,14 @@ namespace TripExpenseNew
             InitializeComponent();
             WeakReferenceMessenger.Default.Register<LocationData>(this,async (send,data) =>
             {
-                Console.WriteLine($"==================Reguster : {data.Location.Longitude}");
                 await UpdateLocationDataAsync(data.Location);
-                totalDistance = data.TotalDistance; // อัปเดต totalDistance จาก Service
+                totalDistance = data.TotalDistance;
             });
 
 #if IOS
             try
             {
                 locationService = new Platforms.iOS.LocationService();
-            }
-            catch (Exception ex)
-            {
-                LocationLabel.Text = $"เกิดข้อผิดพลาดในการเริ่มต้น LocationService: {ex.Message}";
-                Console.WriteLine($"LocationService Initialization Error: {ex}");
-            }
-#elif ANDROID
-        try
-            {
-                locationService = new Platforms.Android.LocationService();
             }
             catch (Exception ex)
             {
@@ -153,45 +141,45 @@ namespace TripExpenseNew
             }
         }
 
-        private async Task StartTrackingAsync(CancellationToken cancellationToken)
-        {
-            try
-            {
-                while (!cancellationToken.IsCancellationRequested)
-                {
-                    var request = new GeolocationRequest(GeolocationAccuracy.Best, TimeSpan.FromSeconds(10));
-                    var location = await Geolocation.Default.GetLocationAsync(request, cancellationToken);
+        //private async Task StartTrackingAsync(CancellationToken cancellationToken)
+        //{
+        //    try
+        //    {
+        //        while (!cancellationToken.IsCancellationRequested)
+        //        {
+        //            var request = new GeolocationRequest(GeolocationAccuracy.Best, TimeSpan.FromSeconds(10));
+        //            var location = await Geolocation.Default.GetLocationAsync(request, cancellationToken);
 
-                    if (location != null)
-                    {
-                        await UpdateLocationDataAsync(location);
-                    }
-                    else
-                    {
-                        await MainThread.InvokeOnMainThreadAsync(() =>
-                        {
-                            LocationLabel.Text = "ไม่สามารถดึงตำแหน่งได้";
-                            SpeedLabel.Text = "ความเร็ว: N/A";
-                            DistanceLabel.Text = $"ระยะทาง: {totalDistance:F2} กม.";
-                            ZipcodeLabel.Text = "รหัสไปรษณีย์: N/A";
-                        });
-                    }
+        //            if (location != null)
+        //            {
+        //                await UpdateLocationDataAsync(location);
+        //            }
+        //            else
+        //            {
+        //                await MainThread.InvokeOnMainThreadAsync(() =>
+        //                {
+        //                    LocationLabel.Text = "ไม่สามารถดึงตำแหน่งได้";
+        //                    SpeedLabel.Text = "ความเร็ว: N/A";
+        //                    DistanceLabel.Text = $"ระยะทาง: {totalDistance:F2} กม.";
+        //                    ZipcodeLabel.Text = "รหัสไปรษณีย์: N/A";
+        //                });
+        //            }
 
-                    await Task.Delay(5000, cancellationToken);
-                }
-            }
-            catch (Exception ex)
-            {
-                await MainThread.InvokeOnMainThreadAsync(() =>
-                {
-                    LocationLabel.Text = $"หยุดการติดตาม: {ex.Message}";
-                    SpeedLabel.Text = "ความเร็ว: N/A";
-                    DistanceLabel.Text = $"ระยะทาง: {totalDistance:F2} กม.";
-                    ZipcodeLabel.Text = "รหัสไปรษณีย์: N/A";
-                });
-                Console.WriteLine($"StartTrackingAsync Error: {ex}");
-            }
-        }
+        //            await Task.Delay(5000, cancellationToken);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        await MainThread.InvokeOnMainThreadAsync(() =>
+        //        {
+        //            LocationLabel.Text = $"หยุดการติดตาม: {ex.Message}";
+        //            SpeedLabel.Text = "ความเร็ว: N/A";
+        //            DistanceLabel.Text = $"ระยะทาง: {totalDistance:F2} กม.";
+        //            ZipcodeLabel.Text = "รหัสไปรษณีย์: N/A";
+        //        });
+        //        Console.WriteLine($"StartTrackingAsync Error: {ex}");
+        //    }
+        //}
 
         private async Task UpdateLocationDataAsync(Location location)
         {
