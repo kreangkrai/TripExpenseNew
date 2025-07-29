@@ -11,7 +11,7 @@ namespace TripExpenseNew.Services
     {
         public string ConnectAPI()
         {
-            return "https://192.168.15.12:444/";
+            return "http://192.168.15.12/tripexpenseapi";
         }
     }
 }

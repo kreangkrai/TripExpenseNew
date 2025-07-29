@@ -10,23 +10,32 @@ namespace TripExpenseNew
     public static class MauiProgram
     {
         public static MauiApp CreateMauiApp()
-        {
-
+        { 
             var builder = MauiApp.CreateBuilder();
             
             builder
                 .UseMauiApp<App>()
-                .UseMauiMaps() // เพิ่มการใช้งาน Maps
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
+            builder.Services.AddTransient<IAuthen, AuthenService>();
+            builder.Services.AddTransient<IBorrowerLog, BorrowerLogService>();
+            builder.Services.AddTransient<IBorrower, BorrowerService>();
+            builder.Services.AddTransient<ICar, CarService>();
+            builder.Services.AddTransient<ICompany, CompanyService>();
+            builder.Services.AddTransient<IEmployee, EmployeeService>();
+            builder.Services.AddTransient<ILastTrip, LastTripService>();
+            builder.Services.AddTransient<ILocationCustomer, LocationCustomerService>();
+            builder.Services.AddTransient<IOther, OtherService>();
+            builder.Services.AddTransient<IPassengerCompany, PassengerCompanyService>();
+            builder.Services.AddTransient<IPassengerPersonal, PassengerPersonalService>();
+            builder.Services.AddTransient<IPersonal, PersonalService>();
+            builder.Services.AddTransient<ITracking, TrackingService>();
+            builder.Services.AddTransient<IVersion, VersionService>();
 
-            //builder.Services.AddTransient<IAuthen, AuthenService>();
-            //builder.Services.AddTransient<MainPage>();
-            //builder.Services.AddTransient<App>();
-            //builder.Services.AddTransient<AppShell>();
+            builder.Services.AddTransient<MainPage>();
             return builder.Build();
         }
     }

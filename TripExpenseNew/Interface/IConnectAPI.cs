@@ -8,6 +8,6 @@ namespace TripExpenseNew.Interface
 {
     public interface IConnectAPI
     {
-        String ConnectAPI();
+        string ConnectAPI();
     }
 }

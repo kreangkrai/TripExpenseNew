@@ -91,7 +91,7 @@ namespace TripExpenseNew.Platforms.Android
                         Console.WriteLine($"StartTrackingAsync Error: {ex.Message}");
                     }
 
-                    await Task.Delay(3000, cancellationToken);
+                    await Task.Delay(5000, cancellationToken);
                 }
             }
             catch (TaskCanceledException)

@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Messaging;
 using TripExpenseNew.Models;
+using TripExpenseNew.Interface;
 
 
 #if ANDROID
@@ -20,6 +21,8 @@ namespace TripExpenseNew
 {
     public partial class MainPage : ContentPage
     {
+        private readonly IAuthen AuthenService;
+        private IPersonal Personal;
         private bool isTracking = false;
         private CancellationTokenSource cancellationTokenSource;
         private Location previousLocation = null;
@@ -30,9 +33,11 @@ namespace TripExpenseNew
 
 #endif
 
-        public MainPage()
+        public MainPage(IAuthen _AuthenService,IPersonal _Personal)
         {
             InitializeComponent();
+            AuthenService = _AuthenService;
+            Personal = _Personal;
             WeakReferenceMessenger.Default.Register<LocationData>(this,async (send,data) =>
             {
                 await UpdateLocationDataAsync(data.Location);
@@ -56,6 +61,7 @@ namespace TripExpenseNew
         {
             try
             {
+                //var x = await AuthenService.ActiveDirectoryAuthenticate("kriangkrai", "Meeci50026");
                 if (!isTracking)
                 {
 #if IOS
@@ -208,7 +214,25 @@ namespace TripExpenseNew
                     ZipcodeLabel.Text = $"รหัสไปรษณีย์: {zipcode}";
                 });
 
-                Console.WriteLine($"ALL ==> Lat: {location.Latitude}, Lon: {location.Longitude}, Speed: {(location.Speed.HasValue ? location.Speed.Value * 3.6 : 0)}, Distance: {totalDistance}, Zipcode: {zipcode}");
+                double speed = location.Speed.HasValue ? location.Speed.Value * 3.6 : 0;
+                PersonalModel personal = new PersonalModel()
+                {
+                    driver = "059197",
+                    date = DateTime.Now,
+                    job_id = "J250009",
+                    distance = totalDistance,
+                    latitude = location.Latitude,
+                    longitude = location.Longitude,
+                    location = zipcode,
+                    zipcode = zipcode,
+                    location_mode = "CUSTOMER",
+                    speed = speed,
+                    mileage = 1234,
+                    trip = DateTime.Now,
+                    status = "START"
+                };
+                string message = await Personal.Insert(personal);
+                Console.WriteLine($"ALL ==> {message} Lat: {location.Latitude}, Lon: {location.Longitude}, Speed: {speed}, Distance: {totalDistance}, Zipcode: {zipcode}");
             }
             catch (Exception ex)
             {

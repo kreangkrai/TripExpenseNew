@@ -4,8 +4,8 @@ namespace TripExpenseNew.Interface
 {
     public interface IPersonal
     {
-        string Insert(PersonalModel data);
-        string Insert(List<PersonalModel> datas);
-        List<PersonalViewModel> GetPersonalByMonth(string driver,string month);
+        Task<string> Insert(PersonalModel data);
+        Task<string> Insert(List<PersonalModel> datas);
+        Task<List<PersonalViewModel>> GetPersonalByMonth(string driver,string month);
     }
 }

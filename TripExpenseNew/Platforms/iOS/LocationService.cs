@@ -11,7 +11,8 @@ namespace TripExpenseNew.Platforms.iOS
     {
         private CLLocationManager locationManager;
         private Action<Location> onLocationUpdate;
-
+        private DateTime lastUpdateTime = DateTime.MinValue;
+        private readonly TimeSpan updateInterval = TimeSpan.FromSeconds(5);
         public LocationService()
         {
             try
@@ -87,18 +88,23 @@ namespace TripExpenseNew.Platforms.iOS
                 this.service = service;
             }
 
-            public override void LocationsUpdated(CLLocationManager manager, CLLocation[] locations)
+            public override async void LocationsUpdated(CLLocationManager manager, CLLocation[] locations)
             {
                 try
                 {
                     foreach (var loc in locations)
                     {
-                        var location = new Location(loc.Coordinate.Latitude, loc.Coordinate.Longitude)
+                        if (DateTime.Now - service.lastUpdateTime >= service.updateInterval)
                         {
-                            Speed = loc.Speed >= 0 ? loc.Speed : null
-                        };
-                        service.onLocationUpdate?.Invoke(location);
-                        WeakReferenceMessenger.Default.Send(new LocationData { Location = location, TotalDistance = 0 });
+                            var location = new Location(loc.Coordinate.Latitude, loc.Coordinate.Longitude)
+                            {
+                                Speed = loc.Speed >= 0 ? loc.Speed : null
+                            };
+                            service.onLocationUpdate?.Invoke(location);
+                            service.lastUpdateTime = DateTime.Now;
+                            //WeakReferenceMessenger.Default.Send(new LocationData { Location = location, TotalDistance = 0 });
+                            await Task.Delay((int)service.updateInterval.TotalMilliseconds);
+                        }
                     }
                 }
                 catch (Exception ex)

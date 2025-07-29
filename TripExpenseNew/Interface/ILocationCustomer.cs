@@ -4,7 +4,7 @@ namespace TripExpenseNew.Interface
 {
     public interface ILocationCustomer
     {
-        string Insert(LocationCustomerModel location);
-        List<LocationCustomerModel> GetByEmp(string emp_id);
+        Task<string> Insert(LocationCustomerModel location);
+        Task<List<LocationCustomerModel>> GetByEmp(string emp_id);
     }
 }

@@ -4,8 +4,8 @@ namespace TripExpenseNew.Interface
 {
     public interface ILastTrip
     {
-        string Insert(LastTripModel trip);
-        string Delete(string emp_id);
-        List<LastTripViewModel> GetByEmp(string emp_id);
+        Task<string> Insert(LastTripModel trip);
+        Task<string> Delete(string emp_id);
+        Task<List<LastTripViewModel>> GetByEmp(string emp_id);
     }
 }

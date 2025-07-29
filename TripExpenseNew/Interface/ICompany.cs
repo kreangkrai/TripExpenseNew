@@ -4,9 +4,9 @@ namespace TripExpenseNew.Interface
 {
     public interface ICompany
     {
-        string Insert(CompanyModel data);
-        string Insert(List<CompanyModel> datas);
-        List<CompanyViewModel> GetCompanyDriverByMonth(string driver, string month);
-        List<CompanyViewModel> GetCompanyCarByMonth(string car, string month);
+        Task<string> Insert(CompanyModel data);
+        Task<string> Insert(List<CompanyModel> datas);
+        Task<List<CompanyViewModel>> GetCompanyDriverByMonth(string driver, string month);
+        Task<List<CompanyViewModel>> GetCompanyCarByMonth(string car, string month);
     }
 }

@@ -4,7 +4,7 @@ namespace TripExpenseNew.Interface
 {
     public interface ITracking
     {
-        string Update(TrackingModel tracking);
-        TrackingModel GetTracking();
+        Task<string> Update(TrackingModel tracking);
+        Task<TrackingModel> GetTracking();
     }
 }

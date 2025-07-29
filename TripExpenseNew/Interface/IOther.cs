@@ -4,8 +4,8 @@ namespace TripExpenseNew.Interface
 {
     public interface IOther
     {
-        string Insert(OtherModel data);
-        string Insert(List<OtherModel> datas);
-        List<OtherViewModel> GetOtherByMonth(string passenger, string month);
+        Task<string> Insert(OtherModel data);
+        Task<string> Insert(List<OtherModel> datas);
+        Task<List<OtherViewModel>> GetOtherByMonth(string passenger, string month);
     }
 }

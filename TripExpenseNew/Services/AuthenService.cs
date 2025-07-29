@@ -9,7 +9,7 @@ using TripExpenseNew.Models;
 
 namespace TripExpenseNew.Services
 {
-    public class AuthenService
+    public class AuthenService : IAuthen
     {
         private IConnectAPI API;
         private readonly string URL;
@@ -27,7 +27,7 @@ namespace TripExpenseNew.Services
 
         public async Task<AuthenModel> ActiveDirectoryAuthenticate(string username, string password)
         {
-            HttpResponseMessage response = await _httpClient.GetAsync(URL + $"api/Authen/get?username={username}&password={password}");
+            HttpResponseMessage response = await _httpClient.GetAsync(URL + $"/api/Authen/get?username={username}&password={password}");
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
             AuthenModel authen = JsonConvert.DeserializeObject<AuthenModel>(content);

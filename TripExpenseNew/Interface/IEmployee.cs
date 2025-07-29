@@ -4,9 +4,9 @@ namespace TripExpenseNew.Interface
 {
     public interface IEmployee
     {
-        string Insert(EmployeeModel data);
-        string Insert(List<EmployeeModel> datas);
-        string Update(EmployeeModel data);
-        List<EmployeeModel> GetEmployees();
+        Task<string> Insert(EmployeeModel data);
+        Task<string> Insert(List<EmployeeModel> datas);
+        Task<string> Update(EmployeeModel data);
+        Task<List<EmployeeModel>> GetEmployees();
     }
 }

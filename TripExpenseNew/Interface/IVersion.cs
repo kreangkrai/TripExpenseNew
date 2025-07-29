@@ -4,7 +4,7 @@ namespace TripExpenseNew.Interface
 {
     public interface IVersion
     {
-        VersionModel GetVersion();
-        string Update(VersionModel version);
+        Task<VersionModel> GetVersion();
+        Task<string> Update(VersionModel version);
     }
 }
