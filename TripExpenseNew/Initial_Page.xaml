@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="TripExpenseNew.Initial_Page"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:shell="http://schemas.microsoft.com/dotnet/2021/maui"
+    Title="Initial_Page"
+    shell:Shell.NavBarIsVisible="False">
+
+    <StackLayout Padding="60,150" Spacing="20">
+        <Image
+            Aspect="AspectFit"
+            HeightRequest="200"
+            SemanticProperties.Description="dot net bot in a race car number eight"
+            Source="logo_tripexpense.png" />
+
+        <Label
+            CharacterSpacing="2"
+            FontFamily="Rajdhani-SemiBold.ttf"
+            FontSize="16"
+            SemanticProperties.HeadingLevel="Level2"
+            Style="{StaticResource Headline}"
+            Text="By Contrologic"
+            TextColor="#A7A7A7" />
+
+        <Button
+            x:Name="EnterpriseBtn"
+            Padding="10,5"
+            BackgroundColor="#1C4698"
+            CharacterSpacing="03"
+            Clicked="OnGoToLoginPageClicked"
+            CornerRadius="50"
+            FontSize="Large"
+            HeightRequest="100"
+            HorizontalOptions="Center"
+            SemanticProperties.Hint="Counts the number of times you click"
+            Text="ENTERPRISE"
+            VerticalOptions="Center"
+            WidthRequest="300" />
+
+        <Button
+            x:Name="GeneralBtn"
+            BackgroundColor="LightGrey"
+            CharacterSpacing="03"
+            CornerRadius="20"
+            SemanticProperties.Hint="Counts the number of times you click"
+            Text="GENERAL"
+            VerticalOptions="End"
+            WidthRequest="150" />
+    </StackLayout>
+
+</ContentPage>

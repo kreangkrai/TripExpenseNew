@@ -10,6 +10,8 @@
         public string driver_name { get; set; }
         public string car_id { get; set; }
         public string license_plate { get; set; }
+        public double speed { get; set; }
+        public double distance { get; set; }
         public string mode { get; set; }
     }
 }

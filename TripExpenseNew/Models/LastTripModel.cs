@@ -7,6 +7,8 @@
         public DateTime trip { get; set; }
         public string driver { get; set; }
         public string car_id { get; set; }
+        public double speed { get; set; }
+        public double distance { get; set; }
         public string mode { get; set; }
 
     }

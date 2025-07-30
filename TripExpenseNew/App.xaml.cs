@@ -4,11 +4,11 @@ namespace TripExpenseNew
 {
     public partial class App : Application
     {
-        public App(MainPage mainPage)
+        public App()
         {
             InitializeComponent();
-
-            MainPage = mainPage;
+            MainPage = new AppShell();
+            //MainPage = mainPage;
         }
     }
 }

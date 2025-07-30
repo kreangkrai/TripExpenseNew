@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="TripExpenseNew.ServerName_BTS"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:mauiToolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    Padding="20"
+    BackgroundColor="White">
+    <VerticalStackLayout
+        HorizontalOptions="Center"
+        Spacing="15"
+        VerticalOptions="Center">
+        <Label
+            CharacterSpacing="1"
+            FontFamily="Rajdhani-Bold.ttf"
+            FontSize="28"
+            SemanticProperties.HeadingLevel="Level2"
+            Style="{StaticResource Headline}"
+            Text="SERVER NAME"
+            TextColor="#1C4698" />
+
+        <!--  ENTRY | USERNAME  -->
+        <Border
+            Stroke="#778899"
+            StrokeShape="RoundRectangle 5"
+            StrokeThickness="2">
+            <Entry
+                ClearButtonVisibility="WhileEditing"
+                FontSize="18"
+                Keyboard="Text"
+                Placeholder="ctracking.contrologic.co.th"
+                Text="{Binding Text}" />
+        </Border>
+
+        <Button
+            BackgroundColor="DodgerBlue"
+            Clicked="OnSaveClicked"
+            CornerRadius="10"
+            Text="บันทึกข้อมูล 💾"
+            TextColor="White" />
+
+        <Button
+            BackgroundColor="Red"
+            Clicked="OnCloseClicked"
+            CornerRadius="10"
+            Text="ปิดหน้าต่าง ✖️"
+            TextColor="White" />
+    </VerticalStackLayout>
+</ContentView>

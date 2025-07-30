@@ -14,9 +14,9 @@ namespace TripExpenseNew.Services
         private IConnectAPI API;
         private readonly string URL;
         private readonly HttpClient _httpClient;
-        public AuthenService()
+        public AuthenService(IConnectAPI _API)
         {
-            API = new ConnectAPIService();
+            API = _API;
             URL = API.ConnectAPI();
             var handler = new HttpClientHandler
             {

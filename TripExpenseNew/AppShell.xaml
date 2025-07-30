@@ -1,15 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Shell
+    <Shell
     x:Class="TripExpenseNew.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:TripExpenseNew"
     Shell.FlyoutBehavior="Disabled"
+    xmlns:pages="clr-namespace:TripExpenseNew"
     Title="TripExpenseNew">
 
-    <ShellContent
+    <!-- <ShellContent
         Title="Home"
         ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+        Route="MainPage" /> -->
+
+    <ShellContent
+    Title="Initial"
+    ContentTemplate="{DataTemplate pages:Initial_Page}"
+    Route="Initial_Page" />
+
+    <ShellContent
+    Title="Login"
+    ContentTemplate="{DataTemplate pages:Login_Page}"
+    Route="Login_Page" />
 
 </Shell>

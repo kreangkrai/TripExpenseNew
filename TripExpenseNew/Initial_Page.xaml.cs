@@ -1,0 +1,15 @@
+namespace TripExpenseNew;
+
+public partial class Initial_Page : ContentPage
+{
+	public Initial_Page()
+	{
+        InitializeComponent();
+
+    }
+    private async void OnGoToLoginPageClicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync("Login_Page");
+    }
+
+}

@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Messaging;
 using TripExpenseNew.Models;
 using TripExpenseNew.Interface;
+using TripExpenseNew.DBInterface;
+using TripExpenseNew.DBModels;
+
+
 
 
 #if ANDROID
@@ -22,7 +26,8 @@ namespace TripExpenseNew
     public partial class MainPage : ContentPage
     {
         private readonly IAuthen AuthenService;
-        private IPersonal Personal;
+        private ILogin Login;
+        private Interface.IPersonal Personal;
         private bool isTracking = false;
         private CancellationTokenSource cancellationTokenSource;
         private Location previousLocation = null;
@@ -33,11 +38,12 @@ namespace TripExpenseNew
 
 #endif
 
-        public MainPage(IAuthen _AuthenService,IPersonal _Personal)
+        public MainPage(IAuthen _AuthenService,Interface.IPersonal _Personal, ILogin _Login)
         {
             InitializeComponent();
             AuthenService = _AuthenService;
             Personal = _Personal;
+            Login = _Login;
             WeakReferenceMessenger.Default.Register<LocationData>(this,async (send,data) =>
             {
                 await UpdateLocationDataAsync(data.Location);
@@ -61,6 +67,13 @@ namespace TripExpenseNew
         {
             try
             {
+               int message = await Login.Save(new DBModels.LoginModel()
+                {
+                    name = "kriangkrai",
+                    password = "password",
+                });
+
+                List<LoginModel> login = await Login.GetLogin();
                 //var x = await AuthenService.ActiveDirectoryAuthenticate("kriangkrai", "Meeci50026");
                 if (!isTracking)
                 {
