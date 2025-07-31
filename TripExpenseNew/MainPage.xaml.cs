@@ -9,9 +9,11 @@ using TripExpenseNew.Models;
 using TripExpenseNew.Interface;
 using TripExpenseNew.DBInterface;
 using TripExpenseNew.DBModels;
+using Plugin.LocalNotification;
 
-
-
+#if IOS
+using UserNotifications;
+#endif
 
 #if ANDROID
 using Android.Content;
@@ -44,6 +46,7 @@ namespace TripExpenseNew
             AuthenService = _AuthenService;
             Personal = _Personal;
             Login = _Login;
+            
             WeakReferenceMessenger.Default.Register<LocationData>(this,async (send,data) =>
             {
                 await UpdateLocationDataAsync(data.Location);
@@ -63,17 +66,89 @@ namespace TripExpenseNew
 #endif
         }
 
+        async Task RequestNotificationPermission()
+        {
+            if (!await LocalNotificationCenter.Current.AreNotificationsEnabled())
+            {
+                await LocalNotificationCenter.Current.RequestNotificationPermission();
+            }
+        }
+
+        public async Task SendNotification(string title, string message)
+        {
+#if IOS
+            try
+            {
+                // ขอสิทธิ์
+                var center = UNUserNotificationCenter.Current;
+                var (approved, error) = await center.RequestAuthorizationAsync(UNAuthorizationOptions.Alert | UNAuthorizationOptions.Sound | UNAuthorizationOptions.Badge);
+                if (!approved)
+                {
+                    Console.WriteLine("Notification permission denied");
+                    return;
+                }
+
+                // สร้างการแจ้งเตือน
+                var content = new UNMutableNotificationContent
+                {
+                    Title = title,
+                    Body = message,
+                    Badge = 1,
+                    Sound = UNNotificationSound.Default
+                };
+
+                // กำหนดเวลา
+                var trigger = UNTimeIntervalNotificationTrigger.CreateTrigger(2, false);
+                var request = UNNotificationRequest.FromIdentifier(((int)DateTime.Now.Ticks).ToString(), content, trigger);
+
+                // ส่งการแจ้งเตือน
+                await center.AddNotificationRequestAsync(request);
+                Console.WriteLine("Native iOS notification sent!");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error sending native notification: {ex.Message}");
+            }
+#else
+    // ใช้ Plugin.LocalNotification สำหรับ Android
+    try
+    {
+        var notification = new NotificationRequest
+        {
+            NotificationId = (int)DateTime.Now.Ticks,
+            Title = title,
+            Description = message,
+            BadgeNumber = 1,
+            Schedule = new NotificationRequestSchedule
+            {
+                NotifyTime = DateTime.Now.AddSeconds(2)
+            }
+        };
+
+        Console.WriteLine("Sending notification...");
+        await LocalNotificationCenter.Current.Show(notification);
+        Console.WriteLine("Notification sent!");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error sending notification: {ex.Message}");
+    }
+#endif
+        }
+        
         private async void OnToggleTrackingClicked(object sender, EventArgs e)
         {
             try
             {
-               int message = await Login.Save(new DBModels.LoginModel()
-                {
-                    name = "kriangkrai",
-                    password = "password",
-                });
+                await RequestNotificationPermission();              
+                await SendNotification("สวัสดี", "นี่คือการแจ้งเตือนจาก MAUI!");
+                //int message = await Login.Save(new DBModels.LoginModel()
+                // {
+                //     name = "kriangkrai",
+                //     password = "password",
+                // });
 
-                List<LoginModel> login = await Login.GetLogin();
+                //List<LoginModel> login = await Login.GetLogin();
                 //var x = await AuthenService.ActiveDirectoryAuthenticate("kriangkrai", "Meeci50026");
                 if (!isTracking)
                 {

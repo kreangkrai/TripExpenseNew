@@ -10,7 +10,7 @@ namespace TripExpenseNew.DBModels
     public class ServerModel
     {
         [PrimaryKey, AutoIncrement]
-        public int id { get; set; }
+        public int Id { get; set; }
         public string server { get; set; }
     }
 }

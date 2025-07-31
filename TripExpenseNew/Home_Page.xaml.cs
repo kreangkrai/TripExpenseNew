@@ -66,4 +66,9 @@ public partial class Home_Page : ContentPage
         uint duration = 250; // ระยะเวลาแอนิเมชัน (ms)
         LastTripBTS.TranslateTo(0, targetY, duration, Easing.CubicInOut);
     }
+
+    private async void AddTripBtn_Clicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync("MainPage");
+    }
 }

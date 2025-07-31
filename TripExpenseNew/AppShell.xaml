@@ -21,5 +21,10 @@
     Title="Login"
     ContentTemplate="{DataTemplate pages:Login_Page}"
     Route="Login_Page" />
+        
+    <ShellContent
+    Title="MainPage"
+    ContentTemplate="{DataTemplate pages:MainPage}"
+    Route="MainPage" />
 
 </Shell>

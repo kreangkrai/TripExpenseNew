@@ -20,9 +20,9 @@ namespace TripExpenseNew.DBService
             database.CreateTableAsync<LoginModel>().Wait();
         }
 
-        public Task<List<LoginModel>> GetLogin()
+        public Task<LoginModel> GetLogin(int id)
         {
-            return database.Table<LoginModel>().ToListAsync();
+            return database.Table<LoginModel>().Where(w => w.Id == id).FirstOrDefaultAsync();
         }
 
         public async Task<int> Save(LoginModel login)

@@ -10,6 +10,6 @@ namespace TripExpenseNew.DBInterface
     public interface ILogin
     {
         Task<int> Save (LoginModel login);
-        Task<List<LoginModel>> GetLogin();
+        Task<LoginModel> GetLogin(int id);
     }
 }

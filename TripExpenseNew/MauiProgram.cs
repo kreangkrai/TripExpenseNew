@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Controls.Hosting;
 using Microsoft.Maui.Controls.Maps;
+using Plugin.LocalNotification;
 using TripExpenseNew.DBInterface;
 using TripExpenseNew.DBService;
 using TripExpenseNew.Interface;
@@ -19,6 +20,7 @@ namespace TripExpenseNew
             builder
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
+                .UseLocalNotification()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -26,6 +28,7 @@ namespace TripExpenseNew
                 });
             builder.Services.AddTransient<IConnectAPI, ConnectAPIService>();
             builder.Services.AddTransient<IAuthen, AuthenService>();
+
             builder.Services.AddTransient<IBorrowerLog, BorrowerLogService>();
             builder.Services.AddTransient<IBorrower, BorrowerService>();
             builder.Services.AddTransient<ICar, CarService>();
@@ -49,6 +52,7 @@ namespace TripExpenseNew
             builder.Services.AddSingleton<ILogin, LoginService>();
             builder.Services.AddSingleton<DBInterface.IPersonal, DBService.PersonalService>();
             builder.Services.AddSingleton<DBInterface.ICompany,DBService.CompanyService>();
+
             return builder.Build();
         }
     }

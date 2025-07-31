@@ -55,6 +55,7 @@
             Grid.Row="5"
             Grid.Column="1"
             Padding="10,5"
+            Clicked="AddTripBtn_Clicked"
             BackgroundColor="#14AE5C"
             CharacterSpacing="03"
             CornerRadius="20"
@@ -63,7 +64,7 @@
             HeightRequest="60"
             HorizontalOptions="Fill"
             SemanticProperties.Hint="Counts the number of times you click"
-            Text="LOG IN"
+            Text="MAIN PAGE"
             VerticalOptions="Center" />
 
         <!--  OPEN BTS | LAST TRIP DETAIL  -->

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TripExpenseNew.DBInterface;
 using TripExpenseNew.DBModels;
+using TripExpenseNew.DBService;
 using TripExpenseNew.Interface;
 
 namespace TripExpenseNew.Services
@@ -12,9 +13,9 @@ namespace TripExpenseNew.Services
     public class ConnectAPIService : IConnectAPI
     {
         private readonly IServer Server;
-        public ConnectAPIService(IServer _Server)
+        public ConnectAPIService()
         {
-            Server = _Server;
+            Server = new ServerService();
         }
         public string ConnectAPI()
         {

@@ -10,7 +10,7 @@ namespace TripExpenseNew.DBModels
     public class PersonalDBModel
     {
         [PrimaryKey, AutoIncrement]
-        public int id { get; set; }
+        public int Id { get; set; }
         public string driver { get; set; }
         public string job_id { get; set; }
         public DateTime trip { get; set; }

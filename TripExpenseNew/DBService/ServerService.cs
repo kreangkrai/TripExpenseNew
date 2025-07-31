@@ -21,7 +21,7 @@ namespace TripExpenseNew.DBService
 
         public Task<ServerModel> Get(int id)
         {
-            return database.Table<ServerModel>().Where(w => w.id == id).FirstOrDefaultAsync();
+            return database.Table<ServerModel>().Where(w => w.Id == id).FirstOrDefaultAsync();
         }
 
         public async Task<int> Save(ServerModel server)

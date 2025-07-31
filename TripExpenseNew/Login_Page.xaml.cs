@@ -4,12 +4,14 @@ using Microsoft.Maui.Controls;
 using Microsoft.Maui.Primitives;
 using TripExpenseNew.DBInterface;
 using TripExpenseNew.DBModels;
+using TripExpenseNew.DBService;
 using TripExpenseNew.Interface;
 using TripExpenseNew.Models;
+using TripExpenseNew.Services;
 
 public partial class Login_Page : ContentPage
 {
-    private readonly IAuthen Authen;
+    private IAuthen Authen;
     private ILogin Login;
     private IServer Server;
     private bool _isOpen = false;
@@ -29,10 +31,13 @@ public partial class Login_Page : ContentPage
         }
         else
         {
-            List<LoginModel> login = Login.GetLogin().Result;
-            txt_name.Text = login[0].name;
-            txt_password.Text = login[0].password;
-            txt_server.Text = servers.server;
+            LoginModel login = Login.GetLogin(1).Result;
+            if (login != null)
+            {
+                txt_name.Text = login.name;
+                txt_password.Text = login.password;
+                txt_server.Text = servers.server;
+            }
         }
             _sheetHeight = BottomSheet.HeightRequest > 0 ? BottomSheet.HeightRequest : 300; // ใช้ HeightRequest หรือตั้งค่าเริ่มต้น
     }
@@ -94,14 +99,18 @@ public partial class Login_Page : ContentPage
         }
     }
 
-    private void ConnectBtn_Clicked(object sender, EventArgs e)
+    private async void ConnectBtn_Clicked(object sender, EventArgs e)
     {
         if (txt_server.Text.Trim() != "")
         {
-            Server.Save(new ServerModel()
+            int message = await Server.Save(new ServerModel()
             {
+                Id = 1,
                 server = txt_server.Text.Trim()
             });
+
+            Server = new ServerService();
+            Authen = new AuthenService();
 
             ServerModel servers = Server.Get(1).Result;
             if (servers != null)
@@ -125,21 +134,31 @@ public partial class Login_Page : ContentPage
     {
         if (txt_name.Text.Trim().Length > 0 && txt_password.Text.Trim().Length > 0)
         {
-            AuthenModel authen =  await Authen.ActiveDirectoryAuthenticate(txt_name.Text, txt_password.Text);
-            if (authen != null)
+            try
             {
-                await Login.Save(new LoginModel()
+                AuthenModel authen = await Authen.ActiveDirectoryAuthenticate(txt_name.Text, txt_password.Text);
+                if (authen.authen == true)
                 {
-                    name = txt_name.Text.Trim(),
-                    password = txt_password.Text.Trim()
-                });
-                await Shell.Current.GoToAsync("Home_Page");
+                    await Login.Save(new LoginModel()
+                    {
+                        name = txt_name.Text.Trim(),
+                        password = txt_password.Text.Trim()
+                    });
+                    await Shell.Current.GoToAsync("Home_Page");
+                }
+                else
+                {
+                    MainThread.BeginInvokeOnMainThread(async () =>
+                    {
+                        await DisplayAlert("", "ชื่อหรือรหัสผ่านไม่ถูกต้อง", "ตกลง");
+                    });
+                }
             }
-            else
+            catch (Exception ex) 
             {
                 MainThread.BeginInvokeOnMainThread(async () =>
                 {
-                    await DisplayAlert("", "ชื่อหรือรหัสผ่านไม่ถูกต้อง", "ตกลง");
+                    await DisplayAlert("", ex.Message, "ตกลง");
                 });
             }
         }
