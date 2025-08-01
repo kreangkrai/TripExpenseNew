@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
+
 <ContentPage
     x:Class="TripExpenseNew.Home_Page"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
@@ -6,135 +7,344 @@
     xmlns:shell="http://schemas.microsoft.com/dotnet/2021/maui"
     Title="Home_Page"
     shell:Shell.NavBarIsVisible="False">
+    <ScrollView>
+        <Grid
+            Padding="15,15"
+            ColumnDefinitions=".30*,.40*,.30*"
+            RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+            RowSpacing="20">
 
-    <Grid
-        Padding="10,10"
-        ColumnDefinitions=".10*,.80*,.10*"
-        RowDefinitions="Auto,300,Auto,50,50,70,Auto"
-        RowSpacing="20">
+            <!--  BUTTON | LOG OUT  -->
+            <Button
+                x:Name="LogOutBtn"
+                Grid.Row="0"
+                Grid.ColumnSpan="3"
+                Padding="10,5"
+                BackgroundColor="#1C4698"
+                CharacterSpacing="01"
+                Clicked="OnGoToLoginPageClicked"
+                CornerRadius="10"
+                FontSize="Small"
+                HorizontalOptions="End"
+                SemanticProperties.Hint="Counts the number of times you click"
+                Text="LOG OUT"
+                VerticalOptions="Start" />
 
-        <!--  BUTTON | LOG OUT  -->
-        <Button
-            x:Name="LogOutBtn"
-            Grid.ColumnSpan="3"
-            Padding="10,5"
-            BackgroundColor="#1C4698"
-            CharacterSpacing="01"
-            Clicked="OnGoToLoginPageClicked"
-            CornerRadius="10"
-            FontSize="Small"
-            HorizontalOptions="End"
-            SemanticProperties.Hint="Counts the number of times you click"
-            Text="LOG OUT"
-            VerticalOptions="Center" />
+            <!--  LABEL | HOME  -->
+            <Label
+                Grid.Row="0"
+                Grid.ColumnSpan="2"
+                CharacterSpacing="2"
+                FontFamily="Rajdhani-Bold"
+                FontSize="38"
+                HorizontalOptions="Start"
+                SemanticProperties.HeadingLevel="Level1"
+                Style="{StaticResource Headline}"
+                Text="HOME"
+                TextColor="#1C4698" />
 
-        <!--  IMAGE | LOGO TRIP EXPENSE  -->
-        <Image
-            Grid.Row="1"
-            Grid.Column="1"
-            Aspect="AspectFit"
-            HeightRequest="200"
-            SemanticProperties.Description="dot net bot in a race car number eight"
-            Source="logo_tripexpense.png" />
+            <!--  LABEL | NAME & SURNAME  -->
+            <ContentView Grid.Row="1" Grid.ColumnSpan="3">
+                <StackLayout>
+                    <!--  LABEL | NAME  -->
+                    <Label
+                        CharacterSpacing="1"
+                        FontFamily="Rajdhani-Bold"
+                        FontSize="34"
+                        HorizontalOptions="Start"
+                        SemanticProperties.HeadingLevel="Level2"
+                        Style="{StaticResource Headline}"
+                        Text="Sarit"
+                        TextColor="#000000" />
+                    <!--  LABEL | SURNAME  -->
+                    <Label
+                        CharacterSpacing="1"
+                        FontFamily="Rajdhani-Bold"
+                        FontSize="28"
+                        HorizontalOptions="Start"
+                        SemanticProperties.HeadingLevel="Level2"
+                        Style="{StaticResource Headline}"
+                        Text="Treepathumrat"
+                        TextColor="#000000" />
+                </StackLayout>
+            </ContentView>
 
-        <Label
-            Grid.Row="1"
-            Grid.Column="1"
-            CharacterSpacing="2"
-            FontFamily="Rajdhani-SemiBold.ttf"
-            FontSize="16"
-            SemanticProperties.HeadingLevel="Level2"
-            Style="{StaticResource Headline}"
-            Text="By Contrologic"
-            TextColor="#A7A7A7"
-            VerticalOptions="End" />
+            <!--  LABEL | STATUS  -->
+            <Label
+                Grid.Row="2"
+                CharacterSpacing="1"
+                FontFamily="Rajdhani-Bold"
+                FontSize="24"
+                HorizontalOptions="Start"
+                SemanticProperties.HeadingLevel="Level2"
+                Style="{StaticResource Headline}"
+                Text="Status:"
+                TextColor="#000000"
+                VerticalOptions="Center" />
 
-        <!--  BUTTON | LOG IN  -->
-        <Button
-            x:Name="AddTripBtn"
-            Grid.Row="5"
-            Grid.Column="1"
-            Padding="10,5"
-            Clicked="AddTripBtn_Clicked"
-            BackgroundColor="#14AE5C"
-            CharacterSpacing="03"
-            CornerRadius="20"
-            FontAttributes="Bold"
-            FontSize="Large"
-            HeightRequest="60"
-            HorizontalOptions="Fill"
-            SemanticProperties.Hint="Counts the number of times you click"
-            Text="MAIN PAGE"
-            VerticalOptions="Center" />
-
-        <!--  OPEN BTS | LAST TRIP DETAIL  -->
-        <ImageButton
-            Grid.Row="3"
-            Grid.Column="2"
-            Clicked="OnTapOpenBottomSheet"
-            HorizontalOptions="Start"
-            Scale="0.6"
-            Source="icon_settings.png"
-            VerticalOptions="Start">
-            <VisualStateManager.VisualStateGroups>
-                <VisualStateGroupList>
-                    <VisualStateGroup x:Name="CommonStates">
-                        <VisualState x:Name="Normal">
-                            <VisualState.Setters>
-                                <Setter Property="Scale" Value="0.6" />
-                            </VisualState.Setters>
-                        </VisualState>
-                        <VisualState x:Name="Pressed">
-                            <VisualState.Setters>
-                                <Setter Property="Scale" Value="0.5" />
-                            </VisualState.Setters>
-                        </VisualState>
-                        <VisualState x:Name="PointerOver" />
-                    </VisualStateGroup>
-                </VisualStateGroupList>
-            </VisualStateManager.VisualStateGroups>
-        </ImageButton>
-
-        <!--  Bottom Sheet  -->
-        <ContentView
-            x:Name="LastTripBTS"
-            Grid.Row="4"
-            Grid.RowSpan="3"
-            Grid.ColumnSpan="3"
-            Padding="10"
-            BackgroundColor="White"
-            IsVisible="False"
-            TranslationY="0">
-            <ContentView.GestureRecognizers>
-                <PanGestureRecognizer PanUpdated="OnPanUpdated" />
-            </ContentView.GestureRecognizers>
-            <VerticalStackLayout Spacing="15">
-                <BoxView
-                    Margin="0,5"
-                    HeightRequest="5"
-                    HorizontalOptions="Center"
-                    WidthRequest="50"
-                    Color="Gray" />
+            <!--  BORDER | STATUS (Active, Inactive, In Progress)  -->
+            <Border
+                Grid.Row="2"
+                Grid.Column="1"
+                Grid.ColumnSpan="1"
+                BackgroundColor="#14AE5C"
+                HeightRequest="40"
+                Stroke="#778899"
+                StrokeShape="RoundRectangle 20"
+                StrokeThickness="2">
                 <Label
-                    CharacterSpacing="1"
-                    FontFamily="Rajdhani-Bold.ttf"
-                    FontSize="28"
+                    CharacterSpacing="2"
+                    FontAttributes="Bold"
+                    FontSize="20"
+                    HorizontalOptions="Center"
                     SemanticProperties.HeadingLevel="Level2"
                     Style="{StaticResource Headline}"
-                    Text="SERVER NAME"
-                    TextColor="#1C4698" />
+                    Text="Active"
+                    TextColor="#FFFFFF"
+                    VerticalOptions="Center" />
+            </Border>
+
+            <ContentView Grid.Row="3" Grid.ColumnSpan="3">
+                <StackLayout Spacing="15">
+                    <!--  IMAGE | CAR  -->
+                    <Image
+                        Aspect="AspectFit"
+                        HeightRequest="60"
+                        SemanticProperties.Description="dot net bot in a race car number eight"
+                        Source="car.png"
+                        VerticalOptions="End" />
+
+                    <!--  LABEL | Ready to start a trip?  -->
+                    <Label
+                        CharacterSpacing="1"
+                        FontFamily="Rajdhani-SemiBold"
+                        FontSize="Large"
+                        HorizontalOptions="Center"
+                        SemanticProperties.HeadingLevel="Level2"
+                        Style="{StaticResource Headline}"
+                        Text="Ready to start a trip?"
+                        TextColor="#000000"
+                        VerticalOptions="Center" />
+
+                    <!--  BUTTON | ADD TRIP  -->
+                    <Button
+                        x:Name="AddTripBtn"
+                        Padding="10,5"
+                        BackgroundColor="#297CC0"
+                        CharacterSpacing="03"
+                        Clicked="OnGoToModePageClicked"
+                        CornerRadius="20"
+                        FontAttributes="Bold"
+                        FontSize="Large"
+                        HeightRequest="60"
+                        HorizontalOptions="Fill"
+                        SemanticProperties.Hint="Counts the number of times you click"
+                        Text="ADD TRIP"
+                        VerticalOptions="Center"
+                        WidthRequest="300" />
+                </StackLayout>
+            </ContentView>
+
+            <!--  INFO | LAST TRIP DETAIL  -->
+            <ContentView Grid.Row="4" Grid.ColumnSpan="3">
+                <Grid
+                    Padding="10,0"
+                    ColumnDefinitions=".20*,.80*"
+                    RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+                    RowSpacing="10">
+
+                    <!--  LABEL | Last Trip Detail:  -->
+                    <Label
+                        Grid.Row="0"
+                        Grid.ColumnSpan="3"
+                        CharacterSpacing="1"
+                        FontFamily="Rajdhani-Bold"
+                        FontSize="24"
+                        HorizontalOptions="Start"
+                        SemanticProperties.HeadingLevel="Level2"
+                        Style="{StaticResource Headline}"
+                        Text="Last Trip Detail:"
+                        TextColor="#000000"
+                        VerticalOptions="Center" />
+
+                    <!--  BORDER | LAST TRIP DETAIL  -->
+                    <Border
+                        Grid.Row="1"
+                        Grid.RowSpan="7"
+                        Grid.ColumnSpan="4"
+                        Stroke="#778899"
+                        StrokeShape="RoundRectangle 10"
+                        StrokeThickness="2" />
+
+                    <!--  IMAGE | map_pin  -->
+                    <Image
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Aspect="AspectFit"
+                        HeightRequest="30"
+                        Source="map_pin.png"
+                        VerticalOptions="Center" />
+                    <!--  LABEL | CTL-(HQ) to Customer  -->
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        CharacterSpacing="1"
+                        FontFamily="Rajdhani-SemiBold"
+                        FontSize="22"
+                        HorizontalOptions="Start"
+                        SemanticProperties.HeadingLevel="Level2"
+                        Style="{StaticResource Headline}"
+                        Text="CTL-(HQ) to Customer"
+                        VerticalOptions="Center" />
+
+                    <!--  IMAGE | calendar  -->
+                    <Image
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        Aspect="AspectFit"
+                        HeightRequest="30"
+                        Source="calendar.png"
+                        VerticalOptions="Center" />
+                    <!--  LABEL | Date 21/07/25  -->
+                    <Label
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        CharacterSpacing="1"
+                        FontFamily="Rajdhani-SemiBold"
+                        FontSize="22"
+                        HorizontalOptions="Start"
+                        SemanticProperties.HeadingLevel="Level2"
+                        Style="{StaticResource Headline}"
+                        Text="21/07/25"
+                        VerticalOptions="Center" />
+
+                    <!--  IMAGE | route  -->
+                    <Image
+                        Grid.Row="4"
+                        Grid.Column="0"
+                        Aspect="AspectFit"
+                        HeightRequest="35"
+                        Source="route.png"
+                        VerticalOptions="Center" />
+                    <!--  LABEL | Distance 540.8 km  -->
+                    <Label
+                        Grid.Row="4"
+                        Grid.Column="1"
+                        CharacterSpacing="1"
+                        FontFamily="Rajdhani-SemiBold"
+                        FontSize="22"
+                        HorizontalOptions="Start"
+                        SemanticProperties.HeadingLevel="Level2"
+                        Style="{StaticResource Headline}"
+                        Text="540.8 km"
+                        VerticalOptions="Center" />
+
+                    <!--  IMAGE | users  -->
+                    <Image
+                        Grid.Row="5"
+                        Grid.Column="0"
+                        Aspect="AspectFit"
+                        HeightRequest="30"
+                        Source="users.png"
+                        VerticalOptions="Center" />
+                    <!--  LABEL | 3 Passengers  -->
+                    <Label
+                        Grid.Row="5"
+                        Grid.Column="1"
+                        CharacterSpacing="1"
+                        FontFamily="Rajdhani-SemiBold"
+                        FontSize="22"
+                        HorizontalOptions="Start"
+                        SemanticProperties.HeadingLevel="Level2"
+                        Style="{StaticResource Headline}"
+                        Text="3 Passengers"
+                        VerticalOptions="Center" />
+
+                    <!--  BUTTON | View More  -->
+                    <Button
+                        x:Name="ViewMoreBtn"
+                        Grid.Row="6"
+                        Grid.ColumnSpan="3"
+                        Padding="10,5"
+                        BackgroundColor="Transparent"
+                        BorderColor="#3C9BCB"
+                        BorderWidth="2"
+                        CharacterSpacing="03"
+                        CornerRadius="30"
+                        FontAttributes="Bold"
+                        FontSize="Medium"
+                        HeightRequest="50"
+                        HorizontalOptions="Fill"
+                        SemanticProperties.Hint="Counts the number of times you click"
+                        Text="View More"
+                        TextColor="#3C9BCB"
+                        VerticalOptions="Center"
+                        WidthRequest="200" />
+                </Grid>
+            </ContentView>
+
+            <!--  BUTTON | Trip History  -->
+            <Button
+                x:Name="HistoryBtn"
+                Grid.Row="5"
+                Grid.ColumnSpan="3"
+                Padding="10,5"
+                BackgroundColor="Transparent"
+                BorderColor="#3C9BCB"
+                BorderWidth="2"
+                CharacterSpacing="02"
+                CornerRadius="20"
+                FontAttributes="Bold"
+                FontSize="Medium"
+                HeightRequest="50"
+                HorizontalOptions="Fill"
+                SemanticProperties.Hint="Counts the number of times you click"
+                Text="TRIP HISTORY"
+                TextColor="#3C9BCB"
+                VerticalOptions="Center"
+                WidthRequest="300" />
+
+            <!--  Bottom Sheet  -->
+            <ContentView
+                x:Name="LastTripBTS"
+                Grid.Row="4"
+                Grid.RowSpan="3"
+                Grid.ColumnSpan="3"
+                Padding="10"
+                BackgroundColor="White"
+                IsVisible="False"
+                TranslationY="0">
+                <ContentView.GestureRecognizers>
+                    <PanGestureRecognizer PanUpdated="OnPanUpdated" />
+                </ContentView.GestureRecognizers>
+                <VerticalStackLayout Spacing="15">
+                    <BoxView
+                        Margin="0,5"
+                        HeightRequest="5"
+                        HorizontalOptions="Center"
+                        WidthRequest="50"
+                        Color="Gray" />
+                    <Label
+                        CharacterSpacing="1"
+                        FontFamily="Rajdhani-Bold.ttf"
+                        FontSize="28"
+                        SemanticProperties.HeadingLevel="Level2"
+                        Style="{StaticResource Headline}"
+                        Text="SERVER NAME"
+                        TextColor="#1C4698" />
 
 
-                <Button
-                    Margin="0,0"
-                    BackgroundColor="#B2B2B2"
-                    CharacterSpacing="03"
-                    Clicked="OnCloseBottomSheet"
-                    FontAttributes="Bold"
-                    FontSize="Medium"
-                    Text="Close" />
+                    <Button
+                        Margin="0,0"
+                        BackgroundColor="#B2B2B2"
+                        CharacterSpacing="03"
+                        Clicked="OnCloseBottomSheet"
+                        FontAttributes="Bold"
+                        FontSize="Medium"
+                        Text="Close" />
 
-            </VerticalStackLayout>
-        </ContentView>
-    </Grid>
+                </VerticalStackLayout>
+            </ContentView>
+        </Grid>
+    </ScrollView>
 </ContentPage>

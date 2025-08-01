@@ -14,16 +14,18 @@ public partial class Login_Page : ContentPage
     private IAuthen Authen;
     private ILogin Login;
     private IServer Server;
+    private readonly IEmployee Employee;
     private bool _isOpen = false;
     private double _startY;
     private double _sheetHeight;
 
-    public Login_Page(IAuthen _Authen,ILogin _Login, IServer _Server)
+    public Login_Page(IAuthen _Authen,ILogin _Login, IServer _Server, IEmployee _Employee)
 	{
         InitializeComponent();
         Authen = _Authen;
         Login = _Login;
         Server = _Server;
+        Employee = _Employee;
         ServerModel servers = Server.Get(1).Result;
         if (servers == null)
         {
@@ -134,17 +136,33 @@ public partial class Login_Page : ContentPage
     {
         if (txt_name.Text.Trim().Length > 0 && txt_password.Text.Trim().Length > 0)
         {
+            var popup = new ProgressPopup();
+            this.ShowPopup(popup);
             try
             {
                 AuthenModel authen = await Authen.ActiveDirectoryAuthenticate(txt_name.Text, txt_password.Text);
                 if (authen.authen == true)
                 {
-                    await Login.Save(new LoginModel()
+                    List<EmployeeModel> employees = await Employee.GetEmployees();
+                    LoginModel login = new LoginModel()
                     {
+                        Id = 1,
                         name = txt_name.Text.Trim(),
-                        password = txt_password.Text.Trim()
-                    });
-                    await Shell.Current.GoToAsync("Home_Page");
+                        password = txt_password.Text.Trim(),
+                        emp_id = employees.Where(w => w.name.ToLower() == authen.user.ToLower()).Select(s=>s.emp_id).FirstOrDefault()
+                    };
+                    await Login.Save(login);
+
+                    //var popup_ = new CheckInPopup();
+                    //var result = await this.ShowPopupAsync(popup_);
+
+                    //if (result is string text && !string.IsNullOrEmpty(text))
+                    //{
+                    //    // ส่งข้อมูลไปยังหน้าใหม่
+                        
+                    //}
+                    await Navigation.PushAsync(new Home_Page());
+                    //await Shell.Current.GoToAsync("Home_Page");
                 }
                 else
                 {
@@ -161,6 +179,7 @@ public partial class Login_Page : ContentPage
                     await DisplayAlert("", ex.Message, "ตกลง");
                 });
             }
+            await popup.CloseAsync();
         }
         else
         {

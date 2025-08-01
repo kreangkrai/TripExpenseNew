@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="TripExpenseNew.ModePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:shell="http://schemas.microsoft.com/dotnet/2021/maui"
+    Title=""
+    shell:Shell.NavBarIsVisible="False">
+    <!--  shell:Shell.NavBarIsVisible="False"  
+    <Shell.TitleView>
+        <Grid
+            Padding="0,10"
+            ColumnDefinitions="*"
+            RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+            RowSpacing="10" />
+    </Shell.TitleView> -->
+    <Grid
+        Padding="0,10"
+        ColumnDefinitions="*"
+        RowDefinitions="*"
+        VerticalOptions="Center"
+        HorizontalOptions="Center"
+        RowSpacing="0">
+
+        <ContentView Grid.Row="0">
+            <VerticalStackLayout Padding="20,20" Spacing="30">
+                <!--  LABEL |  select Mode  -->
+                <Label
+                    CharacterSpacing="1"
+                    FontFamily="Rajdhani-SemiBold"
+                    FontSize="30"
+                    HorizontalOptions="Center"
+                    SemanticProperties.HeadingLevel="Level2"
+                    Style="{StaticResource Headline}"
+                    Text="SELECT MODE"
+                    TextColor="#000000"
+                    VerticalOptions="Center" />
+
+                <!--  BUTTON | Personal Car  -->
+                <Button
+                    x:Name="PersonalCarBtn"
+                    Padding="10,5"
+                    Clicked="PersonalCar_Clicked"
+                    BackgroundColor="#297CC0"
+                    CharacterSpacing="3"
+                    CornerRadius="20"
+                    FontAttributes="Bold"
+                    FontSize="28"
+                    HeightRequest="80"
+                    HorizontalOptions="Center"
+                    Text="Personal Car"
+                    VerticalOptions="Center"
+                    WidthRequest="300" />
+
+                <!--  BUTTON | Company Car  -->
+                <Button
+                    x:Name="CompanyCarBtn"
+                    Padding="10,5"
+                    BackgroundColor="#297CC0"
+                    CharacterSpacing="3"
+                    CornerRadius="20"
+                    FontAttributes="Bold"
+                    FontSize="28"
+                    HeightRequest="80"
+                    HorizontalOptions="Center"
+                    Text="Company Car"
+                    VerticalOptions="Center"
+                    WidthRequest="300" />
+
+                <!--  BUTTON | Passenger  -->
+                <Button
+                    x:Name="PassengerBtn"
+                    Padding="10,5"
+                    BackgroundColor="Transparent"
+                    BorderColor="#297CC0"
+                    BorderWidth="3"
+                    CharacterSpacing="3"
+                    CornerRadius="20"
+                    FontAttributes="Bold"
+                    FontSize="28"
+                    HeightRequest="80"
+                    HorizontalOptions="Center"
+                    Text="Passenger"
+                    TextColor="#297CC0"
+                    VerticalOptions="Center"
+                    WidthRequest="300" />
+
+                <!--  BUTTON | Public  -->
+                <Button
+                    x:Name="PublicBtn"
+                    Padding="10,5"
+                    BackgroundColor="Transparent"
+                    BorderColor="#297CC0"
+                    BorderWidth="3"
+                    CharacterSpacing="03"
+                    CornerRadius="20"
+                    FontAttributes="Bold"
+                    FontSize="28"
+                    HeightRequest="80"
+                    HorizontalOptions="Center"
+                    Text="Public"
+                    TextColor="#297CC0"
+                    VerticalOptions="Center"
+                    WidthRequest="300" />
+
+            </VerticalStackLayout>
+        </ContentView>
+    </Grid>
+</ContentPage>

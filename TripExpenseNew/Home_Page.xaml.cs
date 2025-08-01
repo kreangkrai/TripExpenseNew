@@ -3,6 +3,8 @@
 using CommunityToolkit.Maui.Views;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Primitives;
+using static System.Net.Mime.MediaTypeNames;
+
 public partial class Home_Page : ContentPage
 {
     private bool _isOpen = false;
@@ -11,12 +13,16 @@ public partial class Home_Page : ContentPage
     public Home_Page()
     {
         InitializeComponent();
-        _sheetHeight = LastTripBTS.HeightRequest > 0 ? LastTripBTS.HeightRequest : 300; // ใช้ HeightRequest หรือตั้งค่าเริ่มต้น
+        _sheetHeight = LastTripBTS.HeightRequest > 0 ? LastTripBTS.HeightRequest : 300;
     }
 
     private async void OnGoToLoginPageClicked(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync("Login_Page");
+    }
+    private async void OnGoToModePageClicked(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new ModePage());
     }
 
     private void OnTapOpenBottomSheet(object sender, EventArgs e)

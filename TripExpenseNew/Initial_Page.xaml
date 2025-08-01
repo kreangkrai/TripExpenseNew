@@ -7,21 +7,11 @@
     Title="Initial_Page"
     shell:Shell.NavBarIsVisible="False">
 
-    <StackLayout Padding="60,150" Spacing="20">
+    <StackLayout Padding="60,120" Spacing="20" VerticalOptions="Center" HorizontalOptions="Center">
         <Image
             Aspect="AspectFit"
-            HeightRequest="200"
-            SemanticProperties.Description="dot net bot in a race car number eight"
+            HeightRequest="280"
             Source="logo_tripexpense.png" />
-
-        <Label
-            CharacterSpacing="2"
-            FontFamily="Rajdhani-SemiBold.ttf"
-            FontSize="16"
-            SemanticProperties.HeadingLevel="Level2"
-            Style="{StaticResource Headline}"
-            Text="By Contrologic"
-            TextColor="#A7A7A7" />
 
         <Button
             x:Name="EnterpriseBtn"
@@ -42,11 +32,12 @@
             x:Name="GeneralBtn"
             BackgroundColor="LightGrey"
             CharacterSpacing="03"
-            CornerRadius="20"
+            CornerRadius="50"
             SemanticProperties.Hint="Counts the number of times you click"
             Text="GENERAL"
             VerticalOptions="End"
-            WidthRequest="150" />
+            HeightRequest="100"
+            WidthRequest="300" />
     </StackLayout>
 
 </ContentPage>

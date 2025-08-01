@@ -13,5 +13,6 @@ namespace TripExpenseNew.DBModels
         public int Id { get; set; }
         public string name { get; set; }
         public string password { get; set; }
+        public string emp_id { get; set; }
     }
 }

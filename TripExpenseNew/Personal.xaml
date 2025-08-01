@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:shell="http://schemas.microsoft.com/dotnet/2021/maui"
+             x:Class="TripExpenseNew.Personal"
+             shell:Shell.NavBarIsVisible="False">
+    <StackLayout Padding="20">
+        <Label Text="ตำแหน่งและข้อมูล" FontSize="Title" HorizontalOptions="Center" />
+        <Label x:Name="LocationLabel" Text="ละติจูด: N/A, ลองจิจูด: N/A" FontSize="Medium" HorizontalOptions="Center" />
+        <Label x:Name="SpeedLabel" Text="ความเร็ว: N/A" FontSize="Medium" HorizontalOptions="Center" />
+        <Label x:Name="DistanceLabel" Text="ระยะทาง: N/A" FontSize="Medium" HorizontalOptions="Center" />
+        <Label x:Name="ZipcodeLabel" Text="รหัสไปรษณีย์: N/A" FontSize="Medium" HorizontalOptions="Center" />
+        <Button x:Name="ToggleButton" Text="เริ่ม" Clicked="OnToggleTrackingClicked" Margin="10" />
+    </StackLayout>
+</ContentPage>

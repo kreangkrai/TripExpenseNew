@@ -25,6 +25,11 @@ namespace TripExpenseNew
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                    fonts.AddFont("Rajdhani-Bold.ttf", "RajdhaniBold");
+                    fonts.AddFont("Rajdhani-Light.ttf", "RajdhaniLight");
+                    fonts.AddFont("Rajdhani-Medium.ttf", "RajdhaniMedium");
+                    fonts.AddFont("Rajdhani-Regular.ttf", "RajdhaniRegular");
+                    fonts.AddFont("Rajdhani-SemiBold.ttf", "RajdhaniSemibold");
                 });
             builder.Services.AddTransient<IConnectAPI, ConnectAPIService>();
             builder.Services.AddTransient<IAuthen, AuthenService>();
@@ -44,6 +49,9 @@ namespace TripExpenseNew
             builder.Services.AddTransient<IVersion, VersionService>();
 
             builder.Services.AddTransient<MainPage>();
+            builder.Services.AddTransient<Personal>();
+            builder.Services.AddTransient<PersonalPage>();
+            builder.Services.AddTransient<ModePage>();
             builder.Services.AddTransient<Initial_Page>();
             builder.Services.AddTransient<Login_Page>();
             builder.Services.AddTransient<Home_Page>();

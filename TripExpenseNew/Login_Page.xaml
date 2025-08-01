@@ -10,15 +10,18 @@
         <Grid
         Padding="5,5"
         ColumnDefinitions=".10*,.80*,.10*"
-        RowDefinitions="*,Auto,50,50,70,Auto"
-        RowSpacing="20">
+        RowDefinitions="*,50,50,60,60,Auto"
+        RowSpacing="20"
+        VerticalOptions="Center">
 
             <!--  IMAGE | LOGO TRIP EXPENSE  -->
             <Image
             Grid.Row="0"
             Grid.Column="1"            
             Aspect="AspectFit"
-            HeightRequest="240"
+            HeightRequest="250"
+            VerticalOptions="Center"
+            HorizontalOptions="Center"
             Source="logo_tripexpense.png" />
 
             <!--  ENTRY | USERNAME  -->
