@@ -47,6 +47,7 @@ namespace TripExpenseNew
             builder.Services.AddTransient<Interface.IPersonal, Services.PersonalService>();
             builder.Services.AddTransient<ITracking, TrackingService>();
             builder.Services.AddTransient<IVersion, VersionService>();
+            builder.Services.AddTransient<ICurrentTime, CurrentTimeService>();
 
             builder.Services.AddTransient<MainPage>();
             builder.Services.AddTransient<Personal>();
@@ -58,6 +59,8 @@ namespace TripExpenseNew
 
             builder.Services.AddSingleton<IServer, ServerService>();
             builder.Services.AddSingleton<ILogin, LoginService>();
+            builder.Services.AddSingleton<IActivePersonal, ActivePersonalService>();
+            builder.Services.AddSingleton<IActiveCompany, ActiveCompanyService>();
             builder.Services.AddSingleton<DBInterface.IPersonal, DBService.PersonalService>();
             builder.Services.AddSingleton<DBInterface.ICompany,DBService.CompanyService>();
 

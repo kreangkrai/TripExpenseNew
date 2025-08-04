@@ -14,6 +14,7 @@ public partial class PersonalPage : ContentPage
 
     private async void PersonalCancel_Clicked(object sender, EventArgs e)
     {
-        await Navigation.PushAsync(new Home_Page());
+        //await Navigation.PushAsync(new Home_Page());
+        await Shell.Current.GoToAsync("Home_Page");
     }
 }

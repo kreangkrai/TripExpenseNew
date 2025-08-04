@@ -61,7 +61,7 @@ namespace TripExpenseNew
             }
             catch (Exception ex)
             {
-                LocationLabel.Text = $"เกิดข้อผิดพลาดในการเริ่มต้น LocationService: {ex.Message}";
+                //LocationLabel.Text = $"เกิดข้อผิดพลาดในการเริ่มต้น LocationService: {ex.Message}";
                 Console.WriteLine($"LocationService Initialization Error: {ex}");
             }
 #endif
@@ -160,7 +160,7 @@ namespace TripExpenseNew
                     // ตรวจสอบ Location Services ด้วย CLLocationManager
                     if (!CLLocationManager.LocationServicesEnabled)
                     {
-                        LocationLabel.Text = "Location Services ถูกปิด กรุณาเปิดใน Settings";
+                        //LocationLabel.Text = "Location Services ถูกปิด กรุณาเปิดใน Settings";
                         return;
                     }
 #else
@@ -174,7 +174,7 @@ namespace TripExpenseNew
                         status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
                         if (status != PermissionStatus.Granted)
                         {
-                            LocationLabel.Text = "ไม่ได้รับอนุญาต กรุณาเปิดใช้บริการตำแหน่ง";
+                            //LocationLabel.Text = "ไม่ได้รับอนุญาต กรุณาเปิดใช้บริการตำแหน่ง";
                             return;
                         }
                     }
@@ -186,14 +186,14 @@ namespace TripExpenseNew
                         status = await Permissions.RequestAsync<Permissions.LocationAlways>();
                         if (status != PermissionStatus.Granted)
                         {
-                            LocationLabel.Text = "ไม่ได้รับอนุญาต Background Location";
+                            //LocationLabel.Text = "ไม่ได้รับอนุญาต Background Location";
                             return;
                         }
                     }
 #endif
 
                     isTracking = true;
-                    ToggleButton.Text = "หยุด";
+                    //ToggleButton.Text = "หยุด";
                     cancellationTokenSource = new CancellationTokenSource();
                     previousLocation = null;
                     totalDistance = 0;
@@ -201,7 +201,7 @@ namespace TripExpenseNew
 #if IOS
                     if (locationService == null)
                     {
-                        LocationLabel.Text = "LocationService ไม่ได้เริ่มต้น";
+                       // LocationLabel.Text = "LocationService ไม่ได้เริ่มต้น";
                         return;
                     }
                     locationService.StartUpdatingLocation(async location =>
@@ -218,7 +218,7 @@ namespace TripExpenseNew
                 else
                 {
                     isTracking = false;
-                    ToggleButton.Text = "เริ่ม";
+                    //ToggleButton.Text = "เริ่ม";
                     cancellationTokenSource?.Cancel();
 
 #if IOS
@@ -233,7 +233,7 @@ namespace TripExpenseNew
             {
                 await MainThread.InvokeOnMainThreadAsync(() =>
                 {
-                    LocationLabel.Text = $"เกิดข้อผิดพลาด: {ex.Message}";
+                    //LocationLabel.Text = $"เกิดข้อผิดพลาด: {ex.Message}";
                 });
                 Console.WriteLine($"Crash in OnToggleTrackingClicked: {ex}");
             }
@@ -285,8 +285,8 @@ namespace TripExpenseNew
             {
                 await MainThread.InvokeOnMainThreadAsync(() =>
                 {
-                    LocationLabel.Text = $"ละติจูด: {location.Latitude:F6}, ลองจิจูด: {location.Longitude:F6}";
-                    SpeedLabel.Text = $"ความเร็ว: {(location.Speed.HasValue ? location.Speed.Value * 3.6 : 0):F2} กม./ชม.";
+                    //LocationLabel.Text = $"ละติจูด: {location.Latitude:F6}, ลองจิจูด: {location.Longitude:F6}";
+                    //SpeedLabel.Text = $"ความเร็ว: {(location.Speed.HasValue ? location.Speed.Value * 3.6 : 0):F2} กม./ชม.";
                 });
 
                 if (previousLocation != null)
@@ -294,7 +294,7 @@ namespace TripExpenseNew
                     totalDistance += CalculateDistance(previousLocation, location);
                     await MainThread.InvokeOnMainThreadAsync(() =>
                     {
-                        DistanceLabel.Text = $"ระยะทาง: {totalDistance:F2} กม.";
+                        //DistanceLabel.Text = $"ระยะทาง: {totalDistance:F2} กม.";
                     });
                 }
                 previousLocation = location;
@@ -303,7 +303,7 @@ namespace TripExpenseNew
                 var zipcode = placemarks?.FirstOrDefault()?.PostalCode ?? "N/A";
                 await MainThread.InvokeOnMainThreadAsync(() =>
                 {
-                    ZipcodeLabel.Text = $"รหัสไปรษณีย์: {zipcode}";
+                    //ZipcodeLabel.Text = $"รหัสไปรษณีย์: {zipcode}";
                 });
 
                 double speed = location.Speed.HasValue ? location.Speed.Value * 3.6 : 0;
@@ -330,7 +330,7 @@ namespace TripExpenseNew
             {
                 await MainThread.InvokeOnMainThreadAsync(() =>
                 {
-                    LocationLabel.Text = $"ข้อผิดพลาดใน UpdateLocationData: {ex.Message}";
+                    //LocationLabel.Text = $"ข้อผิดพลาดใน UpdateLocationData: {ex.Message}";
                 });
                 Console.WriteLine($"UpdateLocationDataAsync Error: {ex}");
             }
@@ -350,6 +350,11 @@ namespace TripExpenseNew
             double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
 
             return R * c;
+        }
+
+        private async void StopTripBtn_Clicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("Home_Page");
         }
     }
 }

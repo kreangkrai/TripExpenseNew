@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8" ?>
-
 <ContentPage
     x:Class="TripExpenseNew.Home_Page"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
@@ -9,7 +8,7 @@
     shell:Shell.NavBarIsVisible="False">
     <ScrollView>
         <Grid
-            Padding="15,15"
+            Padding="15,25"
             ColumnDefinitions=".30*,.40*,.30*"
             RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto"
             RowSpacing="20">
@@ -20,13 +19,12 @@
                 Grid.Row="0"
                 Grid.ColumnSpan="3"
                 Padding="10,5"
-                BackgroundColor="#1C4698"
+                BackgroundColor="#1C9698"
                 CharacterSpacing="01"
                 Clicked="OnGoToLoginPageClicked"
-                CornerRadius="10"
+                CornerRadius="5"
                 FontSize="Small"
                 HorizontalOptions="End"
-                SemanticProperties.Hint="Counts the number of times you click"
                 Text="LOG OUT"
                 VerticalOptions="Start" />
 
@@ -47,25 +45,37 @@
             <ContentView Grid.Row="1" Grid.ColumnSpan="3">
                 <StackLayout>
                     <!--  LABEL | NAME  -->
+                    <Grid
+                        Padding="1,1"
+                        ColumnDefinitions=".30*,.30*"
+                        RowDefinitions="Auto"
+                        RowSpacing="20">
                     <Label
+                        Grid.Row="0"
+                        Grid.Column="0"
                         CharacterSpacing="1"
+                        x:Name="lbl_name"
                         FontFamily="Rajdhani-Bold"
                         FontSize="34"
                         HorizontalOptions="Start"
                         SemanticProperties.HeadingLevel="Level2"
                         Style="{StaticResource Headline}"
-                        Text="Sarit"
+                        Text=""
                         TextColor="#000000" />
                     <!--  LABEL | SURNAME  -->
                     <Label
+                        Grid.Row="0"
+                        Grid.Column="1"
                         CharacterSpacing="1"
+                        x:Name="lbl_lastname"
                         FontFamily="Rajdhani-Bold"
-                        FontSize="28"
-                        HorizontalOptions="Start"
+                        FontSize="34"
+                        HorizontalOptions="End"
                         SemanticProperties.HeadingLevel="Level2"
                         Style="{StaticResource Headline}"
-                        Text="Treepathumrat"
+                        Text=""
                         TextColor="#000000" />
+                    </Grid>
                 </StackLayout>
             </ContentView>
 
@@ -188,13 +198,14 @@
                     <Label
                         Grid.Row="2"
                         Grid.Column="1"
+                        x:Name="txt_last_location"
                         CharacterSpacing="1"
                         FontFamily="Rajdhani-SemiBold"
                         FontSize="22"
                         HorizontalOptions="Start"
                         SemanticProperties.HeadingLevel="Level2"
                         Style="{StaticResource Headline}"
-                        Text="CTL-(HQ) to Customer"
+                        Text=""
                         VerticalOptions="Center" />
 
                     <!--  IMAGE | calendar  -->
@@ -209,13 +220,14 @@
                     <Label
                         Grid.Row="3"
                         Grid.Column="1"
+                        x:Name="txt_last_date"
                         CharacterSpacing="1"
                         FontFamily="Rajdhani-SemiBold"
                         FontSize="22"
                         HorizontalOptions="Start"
                         SemanticProperties.HeadingLevel="Level2"
                         Style="{StaticResource Headline}"
-                        Text="21/07/25"
+                        Text=""
                         VerticalOptions="Center" />
 
                     <!--  IMAGE | route  -->
@@ -230,13 +242,14 @@
                     <Label
                         Grid.Row="4"
                         Grid.Column="1"
+                        x:Name="txt_last_distance"
                         CharacterSpacing="1"
                         FontFamily="Rajdhani-SemiBold"
                         FontSize="22"
                         HorizontalOptions="Start"
                         SemanticProperties.HeadingLevel="Level2"
                         Style="{StaticResource Headline}"
-                        Text="540.8 km"
+                        Text=""
                         VerticalOptions="Center" />
 
                     <!--  IMAGE | users  -->
@@ -245,19 +258,20 @@
                         Grid.Column="0"
                         Aspect="AspectFit"
                         HeightRequest="30"
-                        Source="users.png"
+                        Source="tachometer.png"
                         VerticalOptions="Center" />
                     <!--  LABEL | 3 Passengers  -->
                     <Label
                         Grid.Row="5"
                         Grid.Column="1"
+                        x:Name="txt_last_mileage"
                         CharacterSpacing="1"
                         FontFamily="Rajdhani-SemiBold"
                         FontSize="22"
                         HorizontalOptions="Start"
                         SemanticProperties.HeadingLevel="Level2"
                         Style="{StaticResource Headline}"
-                        Text="3 Passengers"
+                        Text=""
                         VerticalOptions="Center" />
 
                     <!--  BUTTON | View More  -->

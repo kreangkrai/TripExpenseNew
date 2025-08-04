@@ -26,7 +26,8 @@ namespace TripExpenseNew.Services
         }
         public async Task<List<LastTripViewModel>> GetByEmp(string emp_id)
         {
-            var response = await _httpClient.GetAsync(URL + $"/api/LastTrip/getbyemp?emp_id={emp_id}");
+            HttpResponseMessage response = await _httpClient.GetAsync(URL + $"/api/LastTrip/getbyemp?emp_id={emp_id}");
+            response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
             List<LastTripViewModel> trips = JsonConvert.DeserializeObject<List<LastTripViewModel>>(content);
             return trips;

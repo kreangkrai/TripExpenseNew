@@ -7,11 +7,7 @@
     xmlns:pages="clr-namespace:TripExpenseNew"
     Title="TripExpenseNew">
 
-    <!-- <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" /> -->
-
+    
     <ShellContent
     Title="Initial"
     ContentTemplate="{DataTemplate pages:Initial_Page}"
@@ -31,5 +27,10 @@
     Title="Personal"
     ContentTemplate="{DataTemplate pages:Personal}"
     Route="Personal" />
+        
+    <ShellContent
+    Title="Home"
+    ContentTemplate="{DataTemplate pages:Home_Page}"
+    Route="Home_Page" />
 
 </Shell>

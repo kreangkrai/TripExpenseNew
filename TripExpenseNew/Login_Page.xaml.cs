@@ -161,8 +161,8 @@ public partial class Login_Page : ContentPage
                     //    // ส่งข้อมูลไปยังหน้าใหม่
                         
                     //}
-                    await Navigation.PushAsync(new Home_Page());
-                    //await Shell.Current.GoToAsync("Home_Page");
+                    //await Navigation.PushAsync(new Home_Page());
+                    await Shell.Current.GoToAsync("Home_Page");
                 }
                 else
                 {

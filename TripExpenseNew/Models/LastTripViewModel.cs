@@ -12,6 +12,9 @@
         public string license_plate { get; set; }
         public double speed { get; set; }
         public double distance { get; set; }
+        public string location { get; set; }
+        public int mileage { get; set; }
         public string mode { get; set; }
+        public bool status { get; set; }
     }
 }

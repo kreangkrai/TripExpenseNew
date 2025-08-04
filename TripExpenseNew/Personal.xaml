@@ -1,4 +1,358 @@
 <?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="TripExpenseNew.Personal"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:shell="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    Title="Personal"
+    shell:Shell.NavBarIsVisible="False">
+
+    <ScrollView>
+        <Grid
+            Padding="20,20"
+            ColumnDefinitions=".25*,.25*,.25*,.25*"
+            ColumnSpacing="15"
+            RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+            RowSpacing="10">
+
+            <!--  LABEL | ACTIVE TRIP  -->
+            <Label
+                Grid.Row="0"
+                Grid.ColumnSpan="4"
+                CharacterSpacing="1"
+                FontAttributes="Bold"
+                FontFamily="Rajdhani-Bold"
+                FontSize="32"
+                HorizontalOptions="Center"
+                SemanticProperties.HeadingLevel="Level2"
+                Style="{StaticResource Headline}"
+                Text="ACTIVE TRIP"
+                TextColor="#1C4698"
+                VerticalOptions="Center" />
+            <!--  LABEL | (Personal Car)  -->
+            <Label
+                Grid.Row="1"
+                Grid.ColumnSpan="4"
+                CharacterSpacing="1"
+                FontAttributes="Bold"
+                FontFamily="Rajdhani-Bold"
+                FontSize="24"
+                HorizontalOptions="Center"
+                SemanticProperties.HeadingLevel="Level2"
+                Style="{StaticResource Headline}"
+                Text="(Personal Car)"
+                TextColor="#1C4698"
+                VerticalOptions="Center" />
+
+            <!--  INFO | Duration  -->
+            <Frame
+                Grid.Row="3"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                BorderColor="#BCBCBC"
+                CornerRadius="20">
+                <Grid
+                    Padding="0,0"
+                    ColumnDefinitions="*"
+                    RowDefinitions="Auto,Auto,Auto">
+
+                    <!--  IMAGE | clock  -->
+                    <Image
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Aspect="AspectFit"
+                        HeightRequest="35"
+                        HorizontalOptions="Center"
+                        Source="clock.png"
+                        VerticalOptions="Center" />
+
+                    <!--  LABEL | Time  -->
+                    <Label
+                        Grid.Row="1"
+                        Grid.ColumnSpan="3"
+                        CharacterSpacing="1"
+                        FontFamily="Rajdhani-Bold"
+                        FontSize="30"
+                        HorizontalOptions="Center"
+                        SemanticProperties.HeadingLevel="Level2"
+                        Style="{StaticResource Headline}"
+                        Text="01:23:45"
+                        TextColor="#000000"
+                        VerticalOptions="Center" />
+
+                    <!--  LABEL | Duration  -->
+                    <Label
+                        Grid.Row="2"
+                        Grid.ColumnSpan="3"
+                        CharacterSpacing="1"
+                        FontFamily="Rajdhani-Medium"
+                        FontSize="20"
+                        HorizontalOptions="Center"
+                        SemanticProperties.HeadingLevel="Level2"
+                        Style="{StaticResource Headline}"
+                        Text="Duration"
+                        TextColor="#535353"
+                        VerticalOptions="Center" />
+                </Grid>
+            </Frame>
+            <!--  //////////////////////////////////////////////  -->
+
+            <!--  INFO | Distance  -->
+            <Frame
+                Grid.Row="3"
+                Grid.Column="2"
+                Grid.ColumnSpan="2"
+                BorderColor="#BCBCBC"
+                CornerRadius="20">
+                <Grid
+                    Padding="0,0"
+                    ColumnDefinitions="*"
+                    RowDefinitions="Auto,Auto,Auto">
+
+                    <!--  IMAGE | destination  -->
+                    <Image
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Aspect="AspectFit"
+                        HeightRequest="35"
+                        HorizontalOptions="Center"
+                        Source="destination.png"
+                        VerticalOptions="Center" />
+
+                    <!--  LABEL | Time  -->
+                    <Label
+                        Grid.Row="1"
+                        Grid.ColumnSpan="3"
+                        CharacterSpacing="1"
+                        FontFamily="Rajdhani-Bold"
+                        FontSize="30"
+                        HorizontalOptions="Center"
+                        SemanticProperties.HeadingLevel="Level2"
+                        Style="{StaticResource Headline}"
+                        Text="678.9 km"
+                        TextColor="#000000"
+                        VerticalOptions="Center" />
+
+                    <!--  LABEL | Distance  -->
+                    <Label
+                        Grid.Row="2"
+                        Grid.ColumnSpan="3"
+                        CharacterSpacing="1"
+                        FontFamily="Rajdhani-Medium"
+                        FontSize="20"
+                        HorizontalOptions="Center"
+                        SemanticProperties.HeadingLevel="Level2"
+                        Style="{StaticResource Headline}"
+                        Text="Distance"
+                        TextColor="#535353"
+                        VerticalOptions="Center" />
+                </Grid>
+            </Frame>
+            <!--  //////////////////////////////////////////////  -->
+
+            <!--  LABEL | Active Trip Detail:  -->
+            <Label
+                Grid.Row="4"
+                Grid.ColumnSpan="4"
+                FontAttributes="Bold"
+                FontFamily="Rajdhani-Bold"
+                FontSize="24"
+                HorizontalOptions="Start"
+                SemanticProperties.HeadingLevel="Level2"
+                Style="{StaticResource Headline}"
+                Text="Active Trip Detail:"
+                TextColor="#1C4698"
+                VerticalOptions="Center" />
+
+            <!--  Collection View | Active Trip Detail:  -->
+            <CollectionView
+                Grid.Row="5"
+                Grid.ColumnSpan="4"
+                ItemsSource="{Binding Passengers}"
+                SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame
+                            Margin="5"
+                            Padding="10"
+                            BackgroundColor="#FFFFFF"
+                            CornerRadius="8"
+                            HasShadow="True">
+                            <Grid ColumnDefinitions="*,Auto,Auto">
+                                <StackLayout>
+                                    <Label
+                                        AutomationProperties.IsInAccessibleTree="True"
+                                        AutomationProperties.Name="Passenger Name"
+                                        FontAttributes="Bold"
+                                        FontSize="16"
+                                        Text="{Binding PassengerName}" />
+                                    <Label
+                                        FontSize="14"
+                                        Text="{Binding JoinedTime}"
+                                        TextColor="#757575" />
+                                </StackLayout>
+                                <Button
+                                    Grid.Column="1"
+                                    Padding="10,5"
+                                    AutomationProperties.IsInAccessibleTree="True"
+                                    AutomationProperties.Name="Toggle Active/Drop-off"
+                                    BackgroundColor="{Binding IsActive, Converter={StaticResource ActiveToColorConverter}}"
+                                    Command="{Binding ToggleActiveCommand}"
+                                    CornerRadius="8"
+                                    Text="{Binding IsActive, Converter={StaticResource ActiveToTextConverter}}"
+                                    TextColor="White" />
+                                <Image
+                                    Grid.Column="2"
+                                    Margin="10,0,0,0"
+                                    HeightRequest="24"
+                                    HorizontalOptions="End"
+                                    Source="user_icon.png"
+                                    VerticalOptions="Center"
+                                    WidthRequest="24">
+                                    <Image.Triggers>
+                                        <DataTrigger
+                                            Binding="{Binding IsActive}"
+                                            TargetType="Image"
+                                            Value="False">
+                                            <Setter Property="IsVisible" Value="False" />
+                                        </DataTrigger>
+                                    </Image.Triggers>
+                                </Image>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!--  BUTTON | Check In  -->
+            <Button
+                x:Name="CheckInBtn"
+                Grid.Row="6"
+                Grid.ColumnSpan="4"
+                Padding="10,5"
+                BackgroundColor="#297CC0"
+                CharacterSpacing="1"
+                ContentLayout="Right,10"
+                CornerRadius="20"
+                FontAttributes="Bold"
+                FontSize="22"
+                HeightRequest="60"
+                HorizontalOptions="Fill"
+                ImageSource="check_in.png"
+                SemanticProperties.Hint="Counts the number of times you click"
+                Text="Check-in"
+                VerticalOptions="Center" />
+
+            <!--  LABEL | Active Trip Detail:  -->
+            <Label
+                Grid.Row="7"
+                Grid.ColumnSpan="4"
+                FontAttributes="Bold"
+                FontFamily="Rajdhani-Bold"
+                FontSize="24"
+                HorizontalOptions="Start"
+                SemanticProperties.HeadingLevel="Level2"
+                Style="{StaticResource Headline}"
+                Text="Current Passenger (3)"
+                TextColor="#1C4698"
+                VerticalOptions="Center" />
+
+            <!--  CollectionView | Current Passenger:  -->
+            <CollectionView ItemsSource="{Binding Passengers}" SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame
+                            Margin="5"
+                            Padding="10"
+                            BackgroundColor="#FFFFFF"
+                            CornerRadius="8"
+                            HasShadow="True">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <StackLayout>
+                                    <Label
+                                        AutomationProperties.IsInAccessibleTree="True"
+                                        AutomationProperties.Name="Passenger Name"
+                                        FontAttributes="Bold"
+                                        FontSize="16"
+                                        Text="{Binding PassengerName}" />
+                                    <Label
+                                        FontSize="14"
+                                        Text="{Binding JoinedTime}"
+                                        TextColor="#757575" />
+                                </StackLayout>
+                                <Button
+                                    Grid.Column="1"
+                                    Padding="10,5"
+                                    AutomationProperties.IsInAccessibleTree="True"
+                                    AutomationProperties.Name="Toggle Active/Drop-off"
+                                    BackgroundColor="{Binding IsActive, Converter={StaticResource ActiveToColorConverter}}"
+                                    Command="{Binding ToggleActiveCommand}"
+                                    CornerRadius="12"
+                                    Text="{Binding IsActive, Converter={StaticResource ActiveToTextConverter}}"
+                                    TextColor="White">
+                                    <VisualStateManager.VisualStateGroups>
+                                        <VisualStateGroup Name="CommonStates">
+                                            <VisualState Name="Normal" />
+                                            <VisualState Name="Pressed">
+                                                <VisualState.Setters>
+                                                    <Setter Property="BackgroundColor" Value="#D32F2F" />
+                                                </VisualState.Setters>
+                                            </VisualState>
+                                        </VisualStateGroup>
+                                    </VisualStateManager.VisualStateGroups>
+                                </Button>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!--  BUTTON | Add Passenger  -->
+            <Button
+                x:Name="AddPassengerBtn"
+                Grid.Row="9"
+                Grid.ColumnSpan="4"
+                Padding="10,5"
+                BackgroundColor="#14AE5C"
+                CharacterSpacing="1"
+                ContentLayout="Right,10"
+                CornerRadius="20"
+                FontAttributes="Bold"
+                FontSize="22"
+                HeightRequest="60"
+                HorizontalOptions="Fill"
+                ImageSource="add_passenger.png"
+                SemanticProperties.Hint="Counts the number of times you click"
+                Text="Add Passenger"
+                VerticalOptions="Center" />
+
+            <!--  BUTTON | Stop Trip  -->
+            <Button
+                x:Name="StopTripBtn"
+                Grid.Row="10"
+                Grid.ColumnSpan="4"
+                Padding="10,5"
+                Clicked="StopTripBtn_Clicked"
+                BackgroundColor="#EC221F"
+                CharacterSpacing="1"
+                ContentLayout="Right,10"
+                CornerRadius="20"
+                FontAttributes="Bold"
+                FontSize="22"
+                HeightRequest="60"
+                HorizontalOptions="Fill"
+                ImageSource="stop_trip.png"
+                SemanticProperties.Hint="Counts the number of times you click"
+                Text="STOP TRIP"
+                VerticalOptions="Center" />
+
+
+        </Grid>
+    </ScrollView>
+</ContentPage>
+
+<!--<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:shell="http://schemas.microsoft.com/dotnet/2021/maui"
@@ -12,4 +366,4 @@
         <Label x:Name="ZipcodeLabel" Text="รหัสไปรษณีย์: N/A" FontSize="Medium" HorizontalOptions="Center" />
         <Button x:Name="ToggleButton" Text="เริ่ม" Clicked="OnToggleTrackingClicked" Margin="10" />
     </StackLayout>
-</ContentPage>
+</ContentPage>  -->
