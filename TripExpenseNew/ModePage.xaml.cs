@@ -11,6 +11,7 @@ public partial class ModePage : ContentPage
 
     private async void PersonalCar_Clicked(object sender, EventArgs e)
     {
-		 await Navigation.PushAsync(new PersonalPage());
+        await Shell.Current.GoToAsync("PersonalPage");
+        //await Navigation.PushAsync(new PersonalPage());
     }
 }

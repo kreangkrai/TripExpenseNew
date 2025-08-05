@@ -49,6 +49,8 @@
             HeightRequest="80"
             HorizontalOptions="Center"
             Text="START"
+            TextColor="White"
+            IsEnabled="False"
             VerticalOptions="Center"
             WidthRequest="300" />
 

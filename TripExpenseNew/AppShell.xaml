@@ -27,7 +27,12 @@
     Title="Personal"
     ContentTemplate="{DataTemplate pages:Personal}"
     Route="Personal" />
-        
+
+    <ShellContent
+    Title="PersonalPage"
+    ContentTemplate="{DataTemplate pages:PersonalPage}"
+    Route="PersonalPage" />
+
     <ShellContent
     Title="Home"
     ContentTemplate="{DataTemplate pages:Home_Page}"

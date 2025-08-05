@@ -109,6 +109,9 @@
 	  <MauiXaml Update="PersonalPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="PersonalStartPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="ProgressPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

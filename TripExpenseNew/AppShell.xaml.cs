@@ -10,6 +10,7 @@
             Routing.RegisterRoute("Home_Page", typeof(Home_Page));
             Routing.RegisterRoute("MainPage", typeof(MainPage));
             Routing.RegisterRoute("Personal", typeof(Personal));
+            Routing.RegisterRoute("PersonalPage", typeof(PersonalPage));
         }
     }
 }

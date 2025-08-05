@@ -146,14 +146,7 @@ namespace TripExpenseNew
 
                 await RequestNotificationPermission();
                 await SendNotification("สวัสดี", "นี่คือการแจ้งเตือนจาก MAUI!");
-                //int message = await Login.Save(new DBModels.LoginModel()
-                // {
-                //     name = "kriangkrai",
-                //     password = "password",
-                // });
 
-                //List<LoginModel> login = await Login.GetLogin();
-                //var x = await AuthenService.ActiveDirectoryAuthenticate("kriangkrai", "Meeci50026");
                 if (!isTracking)
                 {
 #if IOS

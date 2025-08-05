@@ -41,6 +41,7 @@ namespace TripExpenseNew
             builder.Services.AddTransient<IEmployee, EmployeeService>();
             builder.Services.AddTransient<ILastTrip, LastTripService>();
             builder.Services.AddTransient<ILocationCustomer, LocationCustomerService>();
+            builder.Services.AddTransient<ILocationOther, LocationOtherService>();
             builder.Services.AddTransient<IOther, OtherService>();
             builder.Services.AddTransient<IPassengerCompany, PassengerCompanyService>();
             builder.Services.AddTransient<IPassengerPersonal, PassengerPersonalService>();

@@ -2,6 +2,7 @@
 using CommunityToolkit.Maui.Views;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Primitives;
+using Plugin.LocalNotification;
 using TripExpenseNew.DBInterface;
 using TripExpenseNew.DBModels;
 using TripExpenseNew.DBService;
@@ -14,7 +15,7 @@ public partial class Login_Page : ContentPage
     private IAuthen Authen;
     private ILogin Login;
     private IServer Server;
-    private readonly IEmployee Employee;
+    private IEmployee Employee;
     private bool _isOpen = false;
     private double _startY;
     private double _sheetHeight;
@@ -43,7 +44,36 @@ public partial class Login_Page : ContentPage
         }
             _sheetHeight = BottomSheet.HeightRequest > 0 ? BottomSheet.HeightRequest : 300; // ใช้ HeightRequest หรือตั้งค่าเริ่มต้น
     }
-    
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+        var status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
+        if (status != PermissionStatus.Granted)
+        {
+            status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+            if (status != PermissionStatus.Granted)
+            {
+                return;
+            }
+        }
+
+        status = await Permissions.CheckStatusAsync<Permissions.LocationAlways>();
+        if (status != PermissionStatus.Granted)
+        {
+            status = await Permissions.RequestAsync<Permissions.LocationAlways>();
+            if (status != PermissionStatus.Granted)
+            {
+                return;
+            }
+        }
+
+        if (!await LocalNotificationCenter.Current.AreNotificationsEnabled())
+        {
+            await LocalNotificationCenter.Current.RequestNotificationPermission();
+        }
+    }
     private void OnTapOpenBottomSheet(object sender, EventArgs e)
     {
         if (!_isOpen)
@@ -113,6 +143,7 @@ public partial class Login_Page : ContentPage
 
             Server = new ServerService();
             Authen = new AuthenService();
+            Employee = new EmployeeService();
 
             ServerModel servers = Server.Get(1).Result;
             if (servers != null)
@@ -152,16 +183,6 @@ public partial class Login_Page : ContentPage
                         emp_id = employees.Where(w => w.name.ToLower() == authen.user.ToLower()).Select(s=>s.emp_id).FirstOrDefault()
                     };
                     await Login.Save(login);
-
-                    //var popup_ = new CheckInPopup();
-                    //var result = await this.ShowPopupAsync(popup_);
-
-                    //if (result is string text && !string.IsNullOrEmpty(text))
-                    //{
-                    //    // ส่งข้อมูลไปยังหน้าใหม่
-                        
-                    //}
-                    //await Navigation.PushAsync(new Home_Page());
                     await Shell.Current.GoToAsync("Home_Page");
                 }
                 else
