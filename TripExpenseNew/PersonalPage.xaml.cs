@@ -124,7 +124,8 @@ public partial class PersonalPage : ContentPage
         {
             if (personal.location != null && personal.location != "" && personal.mileage != 0)
             {
-                await Shell.Current.GoToAsync("Personal");
+                //await Shell.Current.GoToAsync("Personal");
+                await Navigation.PushAsync(new Personal(personal));
             }
             else
             {

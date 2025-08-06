@@ -102,6 +102,23 @@
                     TextColor="#297CC0"
                     VerticalOptions="Center"
                     WidthRequest="300" />
+                <Button
+                    x:Name="CancelBtn"
+                    Padding="10,5"
+                    Clicked="CancelBtn_Clicked"
+                    BackgroundColor="Red"
+                    BorderColor="Red"
+                    TextColor="White"
+                    BorderWidth="3"
+                    CharacterSpacing="03"
+                    CornerRadius="20"
+                    FontAttributes="Bold"
+                    FontSize="20"
+                    HeightRequest="80"
+                    HorizontalOptions="Center"
+                    Text="Cancel"
+                    VerticalOptions="Center"
+                    WidthRequest="300" />
 
             </VerticalStackLayout>
         </ContentView>

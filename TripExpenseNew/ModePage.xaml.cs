@@ -14,4 +14,9 @@ public partial class ModePage : ContentPage
         await Shell.Current.GoToAsync("PersonalPage");
         //await Navigation.PushAsync(new PersonalPage());
     }
+
+    private async void CancelBtn_Clicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync("Home_Page");
+    }
 }

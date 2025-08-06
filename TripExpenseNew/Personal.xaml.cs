@@ -9,6 +9,7 @@ using TripExpenseNew.Models;
 using TripExpenseNew.Interface;
 using TripExpenseNew.DBInterface;
 using TripExpenseNew.DBModels;
+using TripExpenseNew.Services;
 using Plugin.LocalNotification;
 
 #if IOS
@@ -18,6 +19,7 @@ using UserNotifications;
 #if ANDROID
 using Android.Content;
 using Microsoft.Maui.ApplicationModel;
+using System.Reflection.Emit;
 #endif
 #if IOS
 using CoreLocation;
@@ -27,27 +29,29 @@ namespace TripExpenseNew
 {
     public partial class Personal : ContentPage
     {
-        private readonly IAuthen AuthenService;
         private ILogin Login;
         private Interface.IPersonal _Personal;
         private bool isTracking = false;
         private CancellationTokenSource cancellationTokenSource;
         private Location previousLocation = null;
+        private Location g_location = null;
         private double totalDistance = 0;
         string emp_id = "";
-
+        PersonalPopupStartModel start = new PersonalPopupStartModel();
+        bool isStart = false;
+        bool isStop = false;
+        DateTime start_date = DateTime.MinValue;
 #if IOS
         private Platforms.iOS.LocationService locationService;
 
 #endif
 
-        public Personal(IAuthen _AuthenService, Interface.IPersonal _Personal_, ILogin _Login)
+        public Personal(PersonalPopupStartModel _start)
         {
             InitializeComponent();
-            AuthenService = _AuthenService;
-            _Personal = _Personal_;
-            Login = _Login;
-            
+            _Personal = new PersonalService();
+            Login = new DBService.LoginService();
+            start = _start;
             WeakReferenceMessenger.Default.Register<LocationData>(this, async (send, data) =>
             {
                 await UpdateLocationDataAsync(data.Location);
@@ -67,6 +71,11 @@ namespace TripExpenseNew
 #endif
         }
 
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            OnStartTracking();
+        }
         async Task RequestNotificationPermission()
         {
             if (!await LocalNotificationCenter.Current.AreNotificationsEnabled())
@@ -137,7 +146,7 @@ namespace TripExpenseNew
 #endif
         }
 
-        private async void OnToggleTrackingClicked(object sender, EventArgs e)
+        private async void OnStartTracking()
         {
             try
             {
@@ -231,57 +240,11 @@ namespace TripExpenseNew
                 Console.WriteLine($"Crash in OnToggleTrackingClicked: {ex}");
             }
         }
-
-        //private async Task StartTrackingAsync(CancellationToken cancellationToken)
-        //{
-        //    try
-        //    {
-        //        while (!cancellationToken.IsCancellationRequested)
-        //        {
-        //            var request = new GeolocationRequest(GeolocationAccuracy.Best, TimeSpan.FromSeconds(10));
-        //            var location = await Geolocation.Default.GetLocationAsync(request, cancellationToken);
-
-        //            if (location != null)
-        //            {
-        //                await UpdateLocationDataAsync(location);
-        //            }
-        //            else
-        //            {
-        //                await MainThread.InvokeOnMainThreadAsync(() =>
-        //                {
-        //                    LocationLabel.Text = "ไม่สามารถดึงตำแหน่งได้";
-        //                    SpeedLabel.Text = "ความเร็ว: N/A";
-        //                    DistanceLabel.Text = $"ระยะทาง: {totalDistance:F2} กม.";
-        //                    ZipcodeLabel.Text = "รหัสไปรษณีย์: N/A";
-        //                });
-        //            }
-
-        //            await Task.Delay(5000, cancellationToken);
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        await MainThread.InvokeOnMainThreadAsync(() =>
-        //        {
-        //            LocationLabel.Text = $"หยุดการติดตาม: {ex.Message}";
-        //            SpeedLabel.Text = "ความเร็ว: N/A";
-        //            DistanceLabel.Text = $"ระยะทาง: {totalDistance:F2} กม.";
-        //            ZipcodeLabel.Text = "รหัสไปรษณีย์: N/A";
-        //        });
-        //        Console.WriteLine($"StartTrackingAsync Error: {ex}");
-        //    }
-        //}
-
+      
         private async Task UpdateLocationDataAsync(Location location)
         {
             try
-            {
-                await MainThread.InvokeOnMainThreadAsync(() =>
-                {
-                    //LocationLabel.Text = $"ละติจูด: {location.Latitude:F6}, ลองจิจูด: {location.Longitude:F6}";
-                    //SpeedLabel.Text = $"ความเร็ว: {(location.Speed.HasValue ? location.Speed.Value * 3.6 : 0):F2} กม./ชม.";
-                });
-
+            {             
                 if (previousLocation != null)
                 {
                     totalDistance += CalculateDistance(previousLocation, location);
@@ -292,32 +255,67 @@ namespace TripExpenseNew
                 }
                 previousLocation = location;
 
-                var placemarks = await Geocoding.Default.GetPlacemarksAsync(location.Latitude, location.Longitude);
-                var zipcode = placemarks?.FirstOrDefault()?.PostalCode ?? "N/A";
+                double speed = location.Speed.HasValue ? location.Speed.Value * 3.6 : 0;
+                PersonalModel personal = new PersonalModel();
+                if (!isStart)
+                {
+                    var placemarks = await Geocoding.Default.GetPlacemarksAsync(location.Latitude, location.Longitude);
+                    var zipcode = placemarks?.FirstOrDefault()?.PostalCode ?? "N/A";
+
+                    DateTime _start = DateTime.Now;
+                    start_date = _start;
+                    personal = new PersonalModel()
+                    {
+                        driver = emp_id,
+                        date = _start,
+                        job_id = start.job,
+                        distance = totalDistance,
+                        latitude = location.Latitude,
+                        longitude = location.Longitude,
+                        location = start.location,
+                        zipcode = zipcode,
+                        location_mode = start.IsCustomer ? "CUSTOMER" : "OTHER",
+                        speed = speed,
+                        mileage = start.mileage,
+                        trip = DateTime.Now,
+                        status = "START"
+                    };
+                    isStart = true;
+                    string message = await _Personal.Insert(personal);
+                    
+                    Console.WriteLine($"ALL ==> {message} Lat: {location.Latitude}, Lon: {location.Longitude}, Speed: {speed}, Distance: {totalDistance}, Zipcode: {zipcode}");
+                }
+                else
+                {
+                    personal = new PersonalModel()
+                    {
+                        driver = emp_id,
+                        date = DateTime.Now,
+                        job_id = start.job,
+                        distance = totalDistance,
+                        latitude = location.Latitude,
+                        longitude = location.Longitude,
+                        location = "",
+                        zipcode = "",
+                        location_mode = "",
+                        speed = speed,
+                        mileage = 0,
+                        trip = DateTime.Now,
+                        status = "NA"
+                    };
+                    string message = await _Personal.Insert(personal);
+
+                    Console.WriteLine($"ALL ==> {message} Lat: {location.Latitude}, Lon: {location.Longitude}, Speed: {speed}, Distance: {totalDistance}");
+                }
+
                 await MainThread.InvokeOnMainThreadAsync(() =>
                 {
-                    //ZipcodeLabel.Text = $"รหัสไปรษณีย์: {zipcode}";
+                    DateTime now = DateTime.Now;
+                    TimeSpan duration = now - start_date;
+                    trip_distance.Text = totalDistance.ToString("#.#") + " km";
+                    trip_duration.Text = duration.ToString(@"hh\:mm\:ss");
                 });
-
-                double speed = location.Speed.HasValue ? location.Speed.Value * 3.6 : 0;
-                PersonalModel personal = new PersonalModel()
-                {
-                    driver = emp_id,
-                    date = DateTime.Now,
-                    job_id = "J250009",
-                    distance = totalDistance,
-                    latitude = location.Latitude,
-                    longitude = location.Longitude,
-                    location = zipcode,
-                    zipcode = zipcode,
-                    location_mode = "CUSTOMER",
-                    speed = speed,
-                    mileage = 1234,
-                    trip = DateTime.Now,
-                    status = "START"
-                };
-                string message = await _Personal.Insert(personal);
-                Console.WriteLine($"ALL ==> {message} Lat: {location.Latitude}, Lon: {location.Longitude}, Speed: {speed}, Distance: {totalDistance}, Zipcode: {zipcode}");
+                g_location = location;
             }
             catch (Exception ex)
             {
@@ -347,7 +345,36 @@ namespace TripExpenseNew
 
         private async void StopTripBtn_Clicked(object sender, EventArgs e)
         {
-            await Shell.Current.GoToAsync("Home_Page");
+            double speed = g_location.Speed.HasValue ? g_location.Speed.Value * 3.6 : 0;
+            var placemarks = await Geocoding.Default.GetPlacemarksAsync(g_location.Latitude, g_location.Longitude);
+            var zipcode = placemarks?.FirstOrDefault()?.PostalCode ?? "N/A";
+            PersonalModel personal = new PersonalModel()
+            {
+                driver = emp_id,
+                date = DateTime.Now,
+                job_id = start.job,
+                distance = totalDistance,
+                latitude = g_location.Latitude,
+                longitude = g_location.Longitude,
+                location = "",
+                zipcode = zipcode,
+                location_mode = "",
+                speed = speed,
+                mileage = 12348,
+                trip = DateTime.Now,
+                status = "STOP"
+            };
+            string message = await _Personal.Insert(personal);
+            if (message != null)
+            {
+#if IOS
+                    locationService?.StopUpdatingLocation();
+#elif ANDROID
+                var intent = new Intent(Platform.AppContext, typeof(TripExpenseNew.Platforms.Android.LocationService));
+                Platform.AppContext.StopService(intent);
+#endif
+                await Shell.Current.GoToAsync("Home_Page");
+            }
         }
     }
 }

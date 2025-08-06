@@ -71,20 +71,21 @@
                     <Label
                         Grid.Row="1"
                         Grid.ColumnSpan="3"
+                        x:Name="trip_duration"
                         CharacterSpacing="1"
                         FontFamily="Rajdhani-Bold"
                         FontSize="30"
                         HorizontalOptions="Center"
                         SemanticProperties.HeadingLevel="Level2"
                         Style="{StaticResource Headline}"
-                        Text="01:23:45"
+                        Text="00:00:00"
                         TextColor="#000000"
                         VerticalOptions="Center" />
 
                     <!--  LABEL | Duration  -->
                     <Label
                         Grid.Row="2"
-                        Grid.ColumnSpan="3"
+                        Grid.ColumnSpan="3"                        
                         CharacterSpacing="1"
                         FontFamily="Rajdhani-Medium"
                         FontSize="20"
@@ -124,13 +125,14 @@
                     <Label
                         Grid.Row="1"
                         Grid.ColumnSpan="3"
+                        x:Name="trip_distance"
                         CharacterSpacing="1"
                         FontFamily="Rajdhani-Bold"
                         FontSize="30"
                         HorizontalOptions="Center"
                         SemanticProperties.HeadingLevel="Level2"
                         Style="{StaticResource Headline}"
-                        Text="678.9 km"
+                        Text="0 km"
                         TextColor="#000000"
                         VerticalOptions="Center" />
 

@@ -7,7 +7,7 @@
            Size="300,400">
     <VerticalStackLayout Padding="-1" Spacing="5">
         <Frame BackgroundColor="#1C4698" HeightRequest="50" Padding="0" WidthRequest="310">
-            <Label Text="START" TextColor="White" HorizontalTextAlignment="Center" FontSize="Large" FontAttributes="Bold" HeightRequest="20" />
+            <Label Text="START" TextColor="White" HorizontalTextAlignment="Center" FontSize="Large" FontAttributes="Bold" HeightRequest="30" VerticalTextAlignment="Center" VerticalOptions="Center" />
         </Frame>
         <Grid
              Padding="5,5"

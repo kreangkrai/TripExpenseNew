@@ -8,7 +8,7 @@
     shell:Shell.NavBarIsVisible="False">
     <ScrollView>
         <Grid
-            Padding="15,25"
+            Padding="15,5"
             ColumnDefinitions=".30*,.40*,.30*"
             RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto"
             RowSpacing="20">
@@ -28,35 +28,15 @@
                 Text="LOG OUT"
                 VerticalOptions="Start" />
 
-            <!--  LABEL | HOME  -->
-            <Label
-                Grid.Row="0"
-                Grid.ColumnSpan="2"
-                CharacterSpacing="2"
-                FontFamily="Rajdhani-Bold"
-                FontSize="38"
-                HorizontalOptions="Start"
-                SemanticProperties.HeadingLevel="Level1"
-                Style="{StaticResource Headline}"
-                Text="HOME"
-                TextColor="#1C4698" />
-
             <!--  LABEL | NAME & SURNAME  -->
             <ContentView Grid.Row="1" Grid.ColumnSpan="3">
                 <StackLayout>
                     <!--  LABEL | NAME  -->
-                    <Grid
-                        Padding="1,1"
-                        ColumnDefinitions=".30*,.30*"
-                        RowDefinitions="Auto"
-                        RowSpacing="20">
                     <Label
-                        Grid.Row="0"
-                        Grid.Column="0"
                         CharacterSpacing="1"
                         x:Name="lbl_name"
                         FontFamily="Rajdhani-Bold"
-                        FontSize="34"
+                        FontSize="45"
                         HorizontalOptions="Start"
                         SemanticProperties.HeadingLevel="Level2"
                         Style="{StaticResource Headline}"
@@ -64,18 +44,15 @@
                         TextColor="#000000" />
                     <!--  LABEL | SURNAME  -->
                     <Label
-                        Grid.Row="0"
-                        Grid.Column="1"
                         CharacterSpacing="1"
                         x:Name="lbl_lastname"
                         FontFamily="Rajdhani-Bold"
                         FontSize="34"
-                        HorizontalOptions="End"
+                        HorizontalOptions="Start"
                         SemanticProperties.HeadingLevel="Level2"
                         Style="{StaticResource Headline}"
                         Text=""
                         TextColor="#000000" />
-                    </Grid>
                 </StackLayout>
             </ContentView>
 
