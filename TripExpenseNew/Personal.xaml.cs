@@ -31,8 +31,10 @@ namespace TripExpenseNew
     {
         private ILogin Login;
         private Interface.IPersonal _Personal;
-        private bool isTracking = false;
-        private CancellationTokenSource cancellationTokenSource;
+        private ITracking Tracking;
+        private ILastTrip LastTrip;
+        private DBInterface.IPersonal DB_Personal;
+        private DBInterface.IActivePersonal ActivePersonal;
         private Location previousLocation = null;
         private Location g_location = null;
         private double totalDistance = 0;
@@ -41,9 +43,14 @@ namespace TripExpenseNew
         bool isStart = false;
         bool isStop = false;
         DateTime start_date = DateTime.MinValue;
+        DateTime start_tracking = DateTime.MinValue;
+        TrackingModel tracking = new TrackingModel();
+        int interval = 0;
+        int tracking_db = 0;
 #if IOS
         private Platforms.iOS.LocationService locationService;
-
+#elif ANDROID
+        private Intent intent = new Intent();
 #endif
 
         public Personal(PersonalPopupStartModel _start)
@@ -52,30 +59,36 @@ namespace TripExpenseNew
             _Personal = new PersonalService();
             Login = new DBService.LoginService();
             start = _start;
+            Tracking = new TrackingService();
+            DB_Personal = new DBService.PersonalService();
+            ActivePersonal = new DBService.ActivePersonalService();
+            LastTrip = new LastTripService();
+
             WeakReferenceMessenger.Default.Register<LocationData>(this, async (send, data) =>
             {
                 await UpdateLocationDataAsync(data.Location);
-                totalDistance = data.TotalDistance;
             });
-
+        }
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+            OnStartTracking();
+            tracking = await Tracking.GetTracking();
+            interval = tracking.time_interval;
+            tracking_db = tracking.time_tracking;
+            start_tracking = DateTime.Now;
 #if IOS
             try
             {
-                locationService = new Platforms.iOS.LocationService();
+                locationService = new Platforms.iOS.LocationService(interval);
             }
             catch (Exception ex)
             {
-                //LocationLabel.Text = $"เกิดข้อผิดพลาดในการเริ่มต้น LocationService: {ex.Message}";
                 Console.WriteLine($"LocationService Initialization Error: {ex}");
             }
 #endif
         }
-
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-            OnStartTracking();
-        }
+        
         async Task RequestNotificationPermission()
         {
             if (!await LocalNotificationCenter.Current.AreNotificationsEnabled())
@@ -156,91 +169,66 @@ namespace TripExpenseNew
                 await RequestNotificationPermission();
                 await SendNotification("สวัสดี", "นี่คือการแจ้งเตือนจาก MAUI!");
 
-                if (!isTracking)
-                {
+                previousLocation = null;
+                totalDistance = 0;
+
 #if IOS
-                    // ตรวจสอบ Location Services ด้วย CLLocationManager
-                    if (!CLLocationManager.LocationServicesEnabled)
-                    {
-                        //LocationLabel.Text = "Location Services ถูกปิด กรุณาเปิดใน Settings";
-                        return;
-                    }
-#else
-                    // สำหรับ Android และแพลตฟอร์มอื่นๆ อาจไม่สามารถตรวจสอบได้โดยตรง
-                    // ใช้ try-catch ใน Geolocation แทน
+                // ตรวจสอบ Location Services ด้วย CLLocationManager
+                if (!CLLocationManager.LocationServicesEnabled)
+                {
+                    Console.WriteLine("Location Services ถูกปิด กรุณาเปิดใน Settings");
+                    return;
+                }
+
+                if (locationService == null)
+                {
+                    locationService = new Platforms.iOS.LocationService(interval);
+                }
+                locationService.StartUpdatingLocation(async location =>
+                {
+                    await MainThread.InvokeOnMainThreadAsync(() => UpdateLocationDataAsync(location));
+                });
+#elif ANDROID
+        // ตรวจสอบสถานะ service และเริ่มใหม่
+        intent = new Intent(Platform.AppContext, typeof(TripExpenseNew.Platforms.Android.LocationService));
+        intent.PutExtra("TrackingInterval", interval * 1000);
+
+        // หยุด service ก่อน (ถ้ายังทำงานอยู่) เพื่อให้แน่ใจว่าเริ่มใหม่ในสถานะสะอาด
+        Platform.AppContext.StopService(intent);
+        await Task.Delay(100); // รอให้ service หยุดสมบูรณ์
+        Platform.AppContext.StartForegroundService(intent);
 #endif
 
-                    var status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
+                var status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
+                if (status != PermissionStatus.Granted)
+                {
+                    status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
                     if (status != PermissionStatus.Granted)
                     {
-                        status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
-                        if (status != PermissionStatus.Granted)
-                        {
-                            //LocationLabel.Text = "ไม่ได้รับอนุญาต กรุณาเปิดใช้บริการตำแหน่ง";
-                            return;
-                        }
+                        Console.WriteLine("ไม่ได้รับอนุญาต กรุณาเปิดใช้บริการตำแหน่ง");
+                        return;
                     }
+                }
 
 #if IOS || ANDROID
-                    status = await Permissions.CheckStatusAsync<Permissions.LocationAlways>();
+                status = await Permissions.CheckStatusAsync<Permissions.LocationAlways>();
+                if (status != PermissionStatus.Granted)
+                {
+                    status = await Permissions.RequestAsync<Permissions.LocationAlways>();
                     if (status != PermissionStatus.Granted)
                     {
-                        status = await Permissions.RequestAsync<Permissions.LocationAlways>();
-                        if (status != PermissionStatus.Granted)
-                        {
-                            //LocationLabel.Text = "ไม่ได้รับอนุญาต Background Location";
-                            return;
-                        }
-                    }
-#endif
-
-                    isTracking = true;
-                    //ToggleButton.Text = "หยุด";
-                    cancellationTokenSource = new CancellationTokenSource();
-                    previousLocation = null;
-                    totalDistance = 0;
-
-#if IOS
-                    if (locationService == null)
-                    {
-                       // LocationLabel.Text = "LocationService ไม่ได้เริ่มต้น";
+                        Console.WriteLine("ไม่ได้รับอนุญาต Background Location");
                         return;
                     }
-                    locationService.StartUpdatingLocation(async location =>
-                    {
-                        await MainThread.InvokeOnMainThreadAsync(() => UpdateLocationDataAsync(location));
-                    });
-#elif ANDROID
-                    var intent = new Intent(Platform.AppContext, typeof(TripExpenseNew.Platforms.Android.LocationService));
-                    Platform.AppContext.StartForegroundService(intent);
-                    //await locationService.StartTrackingAsync(cancellationTokenSource.Token);
-                    //await StartTrackingAsync(cancellationTokenSource.Token);
-#endif
                 }
-                else
-                {
-                    isTracking = false;
-                    //ToggleButton.Text = "เริ่ม";
-                    cancellationTokenSource?.Cancel();
-
-#if IOS
-                    locationService?.StopUpdatingLocation();
-#elif ANDROID
-                    var intent = new Intent(Platform.AppContext, typeof(TripExpenseNew.Platforms.Android.LocationService));
-                    Platform.AppContext.StopService(intent);
 #endif
-                }
             }
             catch (Exception ex)
             {
-                await MainThread.InvokeOnMainThreadAsync(() =>
-                {
-                    //LocationLabel.Text = $"เกิดข้อผิดพลาด: {ex.Message}";
-                });
-                Console.WriteLine($"Crash in OnToggleTrackingClicked: {ex}");
+                Console.WriteLine($"Crash in OnStartTracking: {ex}");
             }
         }
-      
+
         private async Task UpdateLocationDataAsync(Location location)
         {
             try
@@ -248,10 +236,6 @@ namespace TripExpenseNew
                 if (previousLocation != null)
                 {
                     totalDistance += CalculateDistance(previousLocation, location);
-                    await MainThread.InvokeOnMainThreadAsync(() =>
-                    {
-                        //DistanceLabel.Text = $"ระยะทาง: {totalDistance:F2} กม.";
-                    });
                 }
                 previousLocation = location;
 
@@ -277,17 +261,45 @@ namespace TripExpenseNew
                         location_mode = start.IsCustomer ? "CUSTOMER" : "OTHER",
                         speed = speed,
                         mileage = start.mileage,
-                        trip = DateTime.Now,
+                        trip = start_date,
                         status = "START"
                     };
                     isStart = true;
                     string message = await _Personal.Insert(personal);
-                    
+
+                    LastTripModel lastTrip = new LastTripModel()
+                    {
+                        driver = personal.driver,
+                        speed = personal.speed,
+                        emp_id = personal.driver,
+                        distance = personal.distance,
+                        location = personal.location,
+                        mileage = personal.mileage,
+                        mode = "PERSONAL",
+                        status = true,
+                        trip = personal.trip,
+                        car_id = personal.driver
+                    };
+
+                    string l = await LastTrip.Insert(lastTrip);
+
+                    ActivePersonalModel active_personal = new ActivePersonalModel()
+                    {
+                        driver = personal.driver,
+                        distance = totalDistance,
+                        location = personal.location,
+                        mileage = personal.mileage,
+                        status = personal.status,
+                        trip = personal.trip,
+                    };
+
+                    int act = await ActivePersonal.Insert(active_personal);
+
                     Console.WriteLine($"ALL ==> {message} Lat: {location.Latitude}, Lon: {location.Longitude}, Speed: {speed}, Distance: {totalDistance}, Zipcode: {zipcode}");
                 }
                 else
                 {
-                    personal = new PersonalModel()
+                    PersonalDBModel db_personal = new PersonalDBModel()
                     {
                         driver = emp_id,
                         date = DateTime.Now,
@@ -300,12 +312,73 @@ namespace TripExpenseNew
                         location_mode = "",
                         speed = speed,
                         mileage = 0,
-                        trip = DateTime.Now,
+                        trip = start_date,
                         status = "NA"
                     };
-                    string message = await _Personal.Insert(personal);
 
-                    Console.WriteLine($"ALL ==> {message} Lat: {location.Latitude}, Lon: {location.Longitude}, Speed: {speed}, Distance: {totalDistance}");
+                    int message = await DB_Personal.Insert(db_personal);
+
+                    int diff = (int)(DateTime.Now - start_tracking).TotalSeconds;
+                    if (diff >= tracking_db)
+                    {
+                        List<PersonalDBModel> db_personals = new List<PersonalDBModel>();
+                        db_personals = await DB_Personal.GetByTrip(start_date);
+
+                        List<PersonalModel> personals = new List<PersonalModel>();
+                        personals = db_personals.Select(s=> new PersonalModel()
+                        {
+                            job_id = s.job_id,
+                            distance = s.distance,
+                            date = s.date,
+                            latitude = s.latitude,
+                            longitude = s.longitude,
+                            location = s.location,
+                            zipcode = s.zipcode,
+                            location_mode = s.location_mode,
+                            speed = s.speed,
+                            mileage = s.mileage,
+                            trip = start_date,
+                            status = s.status,
+                            driver = s.driver,                           
+                        }).ToList();
+                        string m = await _Personal.Inserts(personals);
+
+                        await DB_Personal.Delete(start_date);
+
+                        personal = personals.FirstOrDefault();
+
+                        LastTripModel lastTrip = new LastTripModel()
+                        {
+                            driver = personal.driver,
+                            speed = personal.speed,
+                            emp_id = personal.driver,
+                            distance = personal.distance,
+                            location = personal.location,
+                            mileage = personal.mileage,
+                            mode = "PERSONAL",
+                            status = true,
+                            trip = personal.trip,
+                            car_id = personal.driver
+                        };
+
+                        string l = await LastTrip.Insert(lastTrip);
+
+                        
+                        ActivePersonalModel active_personal = new ActivePersonalModel()
+                        {
+                            driver = personal.driver,
+                            distance = totalDistance,
+                            location = personal.location,
+                            mileage = personal.mileage,
+                            status = personal.status,
+                            trip = personal.trip,
+                        };
+
+                        int act = await ActivePersonal.Insert(active_personal);
+
+                        Console.WriteLine($"ALL ==> {m} Lat: {location.Latitude}, Lon: {location.Longitude}, Speed: {speed}, Distance: {totalDistance}");
+                        start_tracking = DateTime.Now;
+                    }            
                 }
 
                 await MainThread.InvokeOnMainThreadAsync(() =>
@@ -319,10 +392,6 @@ namespace TripExpenseNew
             }
             catch (Exception ex)
             {
-                await MainThread.InvokeOnMainThreadAsync(() =>
-                {
-                    //LocationLabel.Text = $"ข้อผิดพลาดใน UpdateLocationData: {ex.Message}";
-                });
                 Console.WriteLine($"UpdateLocationDataAsync Error: {ex}");
             }
         }
@@ -345,36 +414,89 @@ namespace TripExpenseNew
 
         private async void StopTripBtn_Clicked(object sender, EventArgs e)
         {
-            double speed = g_location.Speed.HasValue ? g_location.Speed.Value * 3.6 : 0;
-            var placemarks = await Geocoding.Default.GetPlacemarksAsync(g_location.Latitude, g_location.Longitude);
-            var zipcode = placemarks?.FirstOrDefault()?.PostalCode ?? "N/A";
-            PersonalModel personal = new PersonalModel()
+            try
             {
-                driver = emp_id,
-                date = DateTime.Now,
-                job_id = start.job,
-                distance = totalDistance,
-                latitude = g_location.Latitude,
-                longitude = g_location.Longitude,
-                location = "",
-                zipcode = zipcode,
-                location_mode = "",
-                speed = speed,
-                mileage = 12348,
-                trip = DateTime.Now,
-                status = "STOP"
-            };
-            string message = await _Personal.Insert(personal);
-            if (message != null)
-            {
+                double speed = g_location?.Speed.HasValue ?? false ? g_location.Speed.Value * 3.6 : 0;
+                var placemarks = await Geocoding.Default.GetPlacemarksAsync(g_location.Latitude, g_location.Longitude);
+                var zipcode = placemarks?.FirstOrDefault()?.PostalCode ?? "N/A";
+
+                List<PersonalDBModel> db_personals = await DB_Personal.GetByTrip(start_date);
+                List<PersonalModel> personals = db_personals.Select(s => new PersonalModel()
+                {
+                    job_id = s.job_id,
+                    distance = s.distance,
+                    date = s.date,
+                    latitude = s.latitude,
+                    longitude = s.longitude,
+                    location = s.location,
+                    zipcode = s.zipcode,
+                    location_mode = s.location_mode,
+                    speed = s.speed,
+                    mileage = s.mileage,
+                    trip = start_date,
+                    status = s.status,
+                    driver = s.driver,
+                }).ToList();
+                string m = await _Personal.Inserts(personals);
+
+                await DB_Personal.Delete(start_date);
+
+                PersonalModel personal = new PersonalModel()
+                {
+                    driver = emp_id,
+                    date = DateTime.Now,
+                    job_id = start.job,
+                    distance = totalDistance,
+                    latitude = g_location.Latitude,
+                    longitude = g_location.Longitude,
+                    location = "",
+                    zipcode = zipcode,
+                    location_mode = "",
+                    speed = speed,
+                    mileage = 12348,
+                    trip = start_date,
+                    status = "STOP"
+                };
+                string message = await _Personal.Insert(personal);
+
+                LastTripModel lastTrip = new LastTripModel()
+                {
+                    driver = personal.driver,
+                    speed = personal.speed,
+                    emp_id = personal.driver,
+                    distance = personal.distance,
+                    location = personal.location,
+                    mileage = personal.mileage,
+                    mode = "PERSONAL",
+                    status = false,
+                    trip = personal.trip,
+                    car_id = personal.driver
+                };
+
+                string l = await LastTrip.Insert(lastTrip);
+
+                int act = await ActivePersonal.Delete(start_date);
+
+                if (message != null)
+                {
 #if IOS
                     locationService?.StopUpdatingLocation();
+                    locationService = null; // รีเซ็ต locationService
 #elif ANDROID
-                var intent = new Intent(Platform.AppContext, typeof(TripExpenseNew.Platforms.Android.LocationService));
-                Platform.AppContext.StopService(intent);
-#endif
-                await Shell.Current.GoToAsync("Home_Page");
+            intent = new Intent(Platform.AppContext, typeof(TripExpenseNew.Platforms.Android.LocationService));
+            Platform.AppContext.StopService(intent);
+#endif                
+                    previousLocation = null;
+                    totalDistance = 0;
+                    isStart = false;
+                    start_date = DateTime.MinValue;
+                    await Shell.Current.GoToAsync("Home_Page");
+                }
             }
-        }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"StopTripBtn_Clicked Error: {ex}");
+            }
+        }       
     }
 }

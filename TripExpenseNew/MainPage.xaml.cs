@@ -56,7 +56,7 @@ namespace TripExpenseNew
 #if IOS
             try
             {
-                locationService = new Platforms.iOS.LocationService();
+                locationService = new Platforms.iOS.LocationService(3);
             }
             catch (Exception ex)
             {

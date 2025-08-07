@@ -12,11 +12,12 @@ namespace TripExpenseNew.Platforms.iOS
         private CLLocationManager locationManager;
         private Action<Location> onLocationUpdate;
         private DateTime lastUpdateTime = DateTime.MinValue;
-        private readonly TimeSpan updateInterval = TimeSpan.FromSeconds(5);
-        public LocationService()
+        private readonly TimeSpan updateInterval = new TimeSpan(0);
+        public LocationService(int interval)
         {
             try
             {
+                updateInterval = TimeSpan.FromSeconds(interval);
                 locationManager = new CLLocationManager
                 {
                     PausesLocationUpdatesAutomatically = false,

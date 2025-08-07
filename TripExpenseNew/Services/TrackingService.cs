@@ -14,9 +14,9 @@ namespace TripExpenseNew.Services
         private IConnectAPI API;
         private readonly string URL;
         private readonly HttpClient _httpClient;
-        public TrackingService(IConnectAPI _API)
+        public TrackingService()
         {
-            API = _API;
+            API = new ConnectAPIService();
             URL = API.ConnectAPI();
             var handler = new HttpClientHandler
             {

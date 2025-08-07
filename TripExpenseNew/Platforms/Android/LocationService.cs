@@ -8,6 +8,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Messaging;
 using TripExpenseNew.Models;
+using AndroidX.Core.Content;
+using Android;
 
 namespace TripExpenseNew.Platforms.Android
 {
@@ -22,11 +24,27 @@ namespace TripExpenseNew.Platforms.Android
         {
             try
             {
+                // ตรวจสอบสิทธิ์ตำแหน่ง
+                if (ContextCompat.CheckSelfPermission(this, Manifest.Permission.AccessFineLocation) != Permission.Granted)
+                {
+                    Console.WriteLine("ไม่มีสิทธิ์เข้าถึงตำแหน่ง");
+                    StopSelf();
+                    return StartCommandResult.NotSticky;
+                }
+
+                if (cancellationTokenSource != null && !cancellationTokenSource.IsCancellationRequested)
+                {
+                    cancellationTokenSource.Cancel();
+                    cancellationTokenSource.Dispose();
+                }
+
+                cancellationTokenSource = new CancellationTokenSource();
+
                 if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
                 {
                     var channel = new NotificationChannel("location_channel", "Location Service", NotificationImportance.Low)
                     {
-                        Description = "Channel for location tracking service"
+                        Description = "ช่องสำหรับบริการติดตามตำแหน่ง"
                     };
                     var notificationManager = GetSystemService(NotificationService) as NotificationManager;
                     notificationManager?.CreateNotificationChannel(channel);
@@ -40,13 +58,13 @@ namespace TripExpenseNew.Platforms.Android
                     .Build();
 
                 StartForeground(1000, notification);
-
-                cancellationTokenSource = new CancellationTokenSource();
-                Task.Run(() => StartTrackingAsync(cancellationTokenSource.Token));
+                int trackingInterval = intent.GetIntExtra("TrackingInterval", 5000); // ค่าเริ่มต้น 5 วินาที
+                Console.WriteLine($"เริ่มติดตามตำแหน่งด้วยช่วงเวลา: {trackingInterval}ms");
+                Task.Run(() => StartTrackingAsync(cancellationTokenSource.Token, trackingInterval));
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"OnStartCommand Error: {ex.Message}");
+                Console.WriteLine($"ข้อผิดพลาดใน OnStartCommand: {ex.Message}");
                 StopSelf();
             }
 
@@ -55,12 +73,16 @@ namespace TripExpenseNew.Platforms.Android
 
         public override void OnDestroy()
         {
-            cancellationTokenSource?.Cancel();
+            if (cancellationTokenSource != null)
+            {
+                cancellationTokenSource.Cancel();
+                cancellationTokenSource.Dispose();
+                cancellationTokenSource = null;
+                Console.WriteLine("CancellationTokenSource ถูกยกเลิกและกำจัดแล้ว");
+            }
             base.OnDestroy();
-            Console.WriteLine("LocationService stopped");
         }
-
-        private async Task StartTrackingAsync(CancellationToken cancellationToken)
+        private async Task StartTrackingAsync(CancellationToken cancellationToken,int trackingInterval)
         {
             try
             {
@@ -68,35 +90,34 @@ namespace TripExpenseNew.Platforms.Android
                 {
                     try
                     {
-                        var request = new GeolocationRequest(GeolocationAccuracy.Medium, TimeSpan.FromSeconds(10));
+                        var request = new GeolocationRequest(GeolocationAccuracy.Medium, TimeSpan.FromSeconds(20));
                         var location = await Geolocation.Default.GetLocationAsync(request, cancellationToken);
-
                         if (location != null)
                         {
-                            //double speedKmh = location.Speed.HasValue ? location.Speed.Value * 3.6 : 0;
-                            //if (previousLocation != null)
-                            //{
-                            //    totalDistance += CalculateDistance(previousLocation, location);
-                            //}
-                            //previousLocation = location;
-
-                            // ส่งข้อมูลไป MainPage
-                            WeakReferenceMessenger.Default.Send(new LocationData { Location = location});
-
-                            //Console.WriteLine($"Android Service ==> Lat: {location.Latitude}, Lon: {location.Longitude}, Speed: {speedKmh}, Distance: {totalDistance}");
+                            MainThread.BeginInvokeOnMainThread(() =>
+                            {
+                                WeakReferenceMessenger.Default.Send(new LocationData { Location = location });
+                            });
+                        }
+                        else
+                        {
+                            Console.WriteLine("Location is null");
                         }
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine($"StartTrackingAsync Error: {ex.Message}");
+                        Console.WriteLine($"Inner loop error: {ex.GetType().Name} - {ex.Message}");
                     }
-
-                    await Task.Delay(5000, cancellationToken);
+                    await Task.Delay(trackingInterval, cancellationToken);
                 }
             }
-            catch (TaskCanceledException)
+            catch (TaskCanceledException ex)
             {
-                Console.WriteLine("Location tracking cancelled");
+                Console.WriteLine($"Location tracking cancelled: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected error in StartTrackingAsync: {ex.GetType().Name} - {ex.Message}");
             }
         }
     }

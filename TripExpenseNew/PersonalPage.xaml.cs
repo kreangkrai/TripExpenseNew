@@ -26,14 +26,15 @@ public partial class PersonalPage : ContentPage
     private ILocationOther LocationOther;
     private ILogin Login;
     private CancellationTokenSource cancellationTokenSource;
-    private bool isTracking = false;
+    private bool isTracking = true;
     Tuple<string, bool> loc = new Tuple<string, bool> ("",false);
     List<LocationCustomerModel> GetLocationCustomers = new List<LocationCustomerModel>();
     List<LocationOtherModel> GetLocationOthers = new List<LocationOtherModel>();
     List<LocationOtherModel> GetLocationCTL = new List<LocationOtherModel>();
 #if IOS
         private Platforms.iOS.LocationService locationService;
-
+#elif ANDROID
+        private Intent intent = new Intent();
 #endif
     public PersonalPage(ILocationCustomer _LocationCustomer, ILogin _Login, ILocationOther _LocationOther)
 	{
@@ -41,7 +42,7 @@ public partial class PersonalPage : ContentPage
 
         Login = _Login;
         LocationCustomer = _LocationCustomer;
-        LocationOther = _LocationOther;
+        LocationOther = _LocationOther;      
         WeakReferenceMessenger.Default.Register<LocationData>(this, (send, data) =>
         {
              UpdateLocationDataAsync(data.Location);
@@ -104,7 +105,7 @@ public partial class PersonalPage : ContentPage
 #if IOS
             try
             {
-                locationService = new Platforms.iOS.LocationService();
+                locationService = new Platforms.iOS.LocationService(5);
             }
             catch (Exception ex)
             {
@@ -140,9 +141,9 @@ public partial class PersonalPage : ContentPage
     private async void PersonalCancel_Clicked(object sender, EventArgs e)
     {
 #if IOS
-                    locationService?.StopUpdatingLocation();
+        locationService?.StopUpdatingLocation();
 #elif ANDROID
-                    var intent = new Intent(Platform.AppContext, typeof(TripExpenseNew.Platforms.Android.LocationService));
+                    intent = new Intent(Platform.AppContext, typeof(TripExpenseNew.Platforms.Android.LocationService));
                     Platform.AppContext.StopService(intent);
 #endif
 
@@ -153,7 +154,7 @@ public partial class PersonalPage : ContentPage
     {
         try
         {
-            if (!isTracking)
+            if (isTracking)
             {
 #if IOS
                     // ตรวจสอบ Location Services ด้วย CLLocationManager
@@ -191,8 +192,7 @@ public partial class PersonalPage : ContentPage
                     }
 #endif
 
-                isTracking = true;
-                //ToggleButton.Text = "หยุด";
+                
                 cancellationTokenSource = new CancellationTokenSource();
 
 #if IOS
@@ -206,24 +206,11 @@ public partial class PersonalPage : ContentPage
                         await MainThread.InvokeOnMainThreadAsync(() => UpdateLocationDataAsync(location));
                     });
 #elif ANDROID
-                    var intent = new Intent(Platform.AppContext, typeof(TripExpenseNew.Platforms.Android.LocationService));
-                    Platform.AppContext.StartForegroundService(intent);
-                    //await locationService.StartTrackingAsync(cancellationTokenSource.Token);
-                    //await StartTrackingAsync(cancellationTokenSource.Token);
+                    intent = new Intent(Platform.AppContext, typeof(TripExpenseNew.Platforms.Android.LocationService));
+                    intent.PutExtra("TrackingInterval",3000);
+                    Platform.AppContext.StartForegroundService(intent);                   
 #endif
-            }
-            else
-            {
-                isTracking = false;
-                cancellationTokenSource?.Cancel();
-
-#if IOS
-                    locationService?.StopUpdatingLocation();
-#elif ANDROID
-                    var intent = new Intent(Platform.AppContext, typeof(TripExpenseNew.Platforms.Android.LocationService));
-                    Platform.AppContext.StopService(intent);
-#endif
-            }
+            }          
         }
         catch (Exception ex)
         {
@@ -236,12 +223,12 @@ public partial class PersonalPage : ContentPage
         try
         {
             Console.WriteLine($"ALL ==> Lat: {location.Latitude}, Lon: {location.Longitude}");
-#if IOS
-                    locationService?.StopUpdatingLocation();
-#elif ANDROID
-                    var intent = new Intent(Platform.AppContext, typeof(TripExpenseNew.Platforms.Android.LocationService));
-                    Platform.AppContext.StopService(intent);
-#endif
+//#if IOS
+//            locationService?.StopUpdatingLocation();
+//#elif ANDROID
+//                    intent = new Intent(Platform.AppContext, typeof(TripExpenseNew.Platforms.Android.LocationService));
+//                    Platform.AppContext.StopService(intent);
+//#endif
             MainThread.BeginInvokeOnMainThread(() =>
             {
                 PersonalStart.IsEnabled = true;

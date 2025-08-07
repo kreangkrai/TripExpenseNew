@@ -14,9 +14,9 @@ namespace TripExpenseNew.Services
         private IConnectAPI API;
         private readonly string URL;
         private readonly HttpClient _httpClient;
-        public LastTripService(IConnectAPI _API)
+        public LastTripService()
         {
-            API = _API;
+            API = new ConnectAPIService();
             URL = API.ConnectAPI();
             var handler = new HttpClientHandler
             {
