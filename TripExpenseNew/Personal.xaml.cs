@@ -11,6 +11,8 @@ using TripExpenseNew.DBInterface;
 using TripExpenseNew.DBModels;
 using TripExpenseNew.Services;
 using Plugin.LocalNotification;
+using TripExpenseNew.ViewModels;
+using System.Collections.ObjectModel;
 
 #if IOS
 using UserNotifications;
@@ -20,6 +22,8 @@ using UserNotifications;
 using Android.Content;
 using Microsoft.Maui.ApplicationModel;
 using System.Reflection.Emit;
+using CommunityToolkit.Maui.Views;
+
 #endif
 #if IOS
 using CoreLocation;
@@ -45,6 +49,7 @@ namespace TripExpenseNew
         DateTime start_date = DateTime.MinValue;
         DateTime start_tracking = DateTime.MinValue;
         TrackingModel tracking = new TrackingModel();
+        private ObservableCollection<TripItems> tripItems = new ObservableCollection<TripItems>();
         int interval = 0;
         int tracking_db = 0;
 #if IOS
@@ -264,9 +269,11 @@ namespace TripExpenseNew
                         trip = start_date,
                         status = "START"
                     };
+
                     isStart = true;
                     string message = await _Personal.Insert(personal);
-
+                    
+                    // Insert Last Trip to Server DB
                     LastTripModel lastTrip = new LastTripModel()
                     {
                         driver = personal.driver,
@@ -283,6 +290,7 @@ namespace TripExpenseNew
 
                     string l = await LastTrip.Insert(lastTrip);
 
+                    // Insert Active Personal to Local DB
                     ActivePersonalModel active_personal = new ActivePersonalModel()
                     {
                         driver = personal.driver,
@@ -291,10 +299,41 @@ namespace TripExpenseNew
                         mileage = personal.mileage,
                         status = personal.status,
                         trip = personal.trip,
+                        date = DateTime.Now,
                     };
 
                     int act = await ActivePersonal.Insert(active_personal);
 
+                    #region Show Active Personal
+                    tripItems = new ObservableCollection<TripItems>();
+                    List<ActivePersonalModel> act_personals = await ActivePersonal.GetByTrip(personal.trip);
+                    foreach (var ap in act_personals)
+                    {
+                        Color color = new Color();
+                        if (ap.status == "START")
+                        {
+                            color = Color.FromRgb(255, 255, 255);
+                        }
+                        else
+                        {
+                            color = Color.FromRgb(255, 255, 255);
+                        }
+                        TripItems trip_item = new TripItems()
+                        {
+                            FrameColor = color,
+                            TextStatus = ap.status,
+                            IconLocationSource = "route.png",
+                            TextLocation = $"Location: {ap.location}",
+                            IconDateSource = "clock.png",
+                            TextDate = $"Date: {ap.date}"
+                        };
+
+                        tripItems.Add(trip_item);
+                    }
+                    
+                    TripCollectionView.ItemsSource = tripItems;
+
+                    #endregion
                     Console.WriteLine($"ALL ==> {message} Lat: {location.Latitude}, Lon: {location.Longitude}, Speed: {speed}, Distance: {totalDistance}, Zipcode: {zipcode}");
                 }
                 else
@@ -319,6 +358,7 @@ namespace TripExpenseNew
                     int message = await DB_Personal.Insert(db_personal);
 
                     int diff = (int)(DateTime.Now - start_tracking).TotalSeconds;
+
                     if (diff >= tracking_db)
                     {
                         List<PersonalDBModel> db_personals = new List<PersonalDBModel>();
@@ -372,10 +412,41 @@ namespace TripExpenseNew
                             mileage = personal.mileage,
                             status = personal.status,
                             trip = personal.trip,
+                            date = DateTime.Now,
                         };
 
                         int act = await ActivePersonal.Insert(active_personal);
 
+                        #region Show Active Personal
+                        tripItems = new ObservableCollection<TripItems>();
+                        List<ActivePersonalModel> act_personals = await ActivePersonal.GetByTrip(personal.trip);
+                        foreach (var ap in act_personals)
+                        {
+                            Color color = new Color();
+                            if (ap.status == "START")
+                            {
+                                color = Color.FromRgb(255,255,255);
+                            }
+                            else
+                            {
+                                color = Color.FromRgb(255, 255, 255);
+                            }
+                            TripItems trip_item = new TripItems()
+                            {
+                                FrameColor = color,
+                                TextStatus = ap.status,
+                                IconLocationSource = "route.png",
+                                TextLocation = $"Location: {ap.location}",
+                                IconDateSource = "clock.png",
+                                TextDate = $"Date: {ap.date}"
+                            };
+
+                            tripItems.Add(trip_item);
+                        }
+
+                        TripCollectionView.ItemsSource = tripItems;
+
+                        #endregion
                         Console.WriteLine($"ALL ==> {m} Lat: {location.Latitude}, Lon: {location.Longitude}, Speed: {speed}, Distance: {totalDistance}");
                         start_tracking = DateTime.Now;
                     }            
@@ -497,6 +568,16 @@ namespace TripExpenseNew
             {
                 Console.WriteLine($"StopTripBtn_Clicked Error: {ex}");
             }
-        }       
+        }
+
+        private void CheckInBtn_Clicked(object sender, EventArgs e)
+        {
+
+        }
+
+        private async void AddPassengerBtn_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new AddPassengerPersonal_Page("XXXXX"));           
+        }
     }
 }

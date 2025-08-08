@@ -13,6 +13,7 @@ namespace TripExpenseNew.DBModels
         public int Id { get; set; }
         public string car_id { get; set; }
         public DateTime trip { get; set; }
+        public DateTime date { get; set; }
         public string status { get; set; }
         public double distance { get; set; }
         public string location { get; set; }

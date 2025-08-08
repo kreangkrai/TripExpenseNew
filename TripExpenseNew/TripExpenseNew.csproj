@@ -83,11 +83,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="ViewModels\" />
 	  <Folder Include="Views\" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="AddPassengerPersonal_Page.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="CheckInPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

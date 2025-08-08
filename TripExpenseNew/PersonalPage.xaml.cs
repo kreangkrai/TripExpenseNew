@@ -118,7 +118,6 @@ public partial class PersonalPage : ContentPage
     }
     private async void PersonalStart_Clicked(object sender, EventArgs e)
     {
-
         var result = await this.ShowPopupAsync(new PersonalStartPopup(loc.Item1,loc.Item2));
 
         if (result is PersonalPopupStartModel personal)
