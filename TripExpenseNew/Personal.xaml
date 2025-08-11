@@ -238,60 +238,48 @@
                 HorizontalOptions="Start"
                 SemanticProperties.HeadingLevel="Level2"
                 Style="{StaticResource Headline}"
-                Text="Current Passenger (3)"
+                Text="Current Passenger :"
                 TextColor="#1C4698"
                 VerticalOptions="Center" />
 
             <!--  CollectionView | Current Passenger:  -->
-            <CollectionView ItemsSource="{Binding Passengers}" SelectionMode="None">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Frame
-                            Margin="5"
-                            Padding="10"
-                            BackgroundColor="#FFFFFF"
-                            CornerRadius="8"
-                            HasShadow="True">
-                            <Grid ColumnDefinitions="*,Auto">
-                                <StackLayout>
-                                    <Label
-                                        AutomationProperties.IsInAccessibleTree="True"
-                                        AutomationProperties.Name="Passenger Name"
-                                        FontAttributes="Bold"
-                                        FontSize="16"
-                                        Text="{Binding PassengerName}" />
-                                    <Label
-                                        FontSize="14"
-                                        Text="{Binding JoinedTime}"
-                                        TextColor="#757575" />
-                                </StackLayout>
-                                <Button
-                                    Grid.Column="1"
-                                    Padding="10,5"
-                                    AutomationProperties.IsInAccessibleTree="True"
-                                    AutomationProperties.Name="Toggle Active/Drop-off"
-                                    BackgroundColor="{Binding IsActive, Converter={StaticResource ActiveToColorConverter}}"
-                                    Command="{Binding ToggleActiveCommand}"
-                                    CornerRadius="12"
-                                    Text="{Binding IsActive, Converter={StaticResource ActiveToTextConverter}}"
-                                    TextColor="White">
-                                    <VisualStateManager.VisualStateGroups>
-                                        <VisualStateGroup Name="CommonStates">
-                                            <VisualState Name="Normal" />
-                                            <VisualState Name="Pressed">
-                                                <VisualState.Setters>
-                                                    <Setter Property="BackgroundColor" Value="#D32F2F" />
-                                                </VisualState.Setters>
-                                            </VisualState>
-                                        </VisualStateGroup>
-                                    </VisualStateManager.VisualStateGroups>
-                                </Button>
-                            </Grid>
-                        </Frame>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-
+            <Frame
+                Padding="5" Grid.Row="8"
+                Grid.ColumnSpan="4"
+                Margin="1"
+                BackgroundColor= "White"
+                CornerRadius="5"
+                BorderColor="DimGrey"
+                HasShadow="False">
+            <StackLayout Padding="10">
+                <CollectionView x:Name="PassengerCollectionView" HeightRequest="150">
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Vertical" ItemSpacing="2" />
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame
+                    Margin="5"
+                    Padding="5,1,5,2"
+                    CornerRadius="8"
+                    HasShadow="False">
+                                <Grid RowDefinitions="Auto,Auto" Padding="1" RowSpacing="3">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="100" />
+                                        </Grid.ColumnDefinitions>
+                                    <Label Grid.Row="0" Grid.ColumnSpan="3" Text="{Binding TextPassenger}" VerticalOptions="Center" FontSize="20" FontFamily="Rajdhani-Bold"/>
+                                    <Image Grid.Row="1" Grid.Column="0" Source="{Binding IconDatePassengerSource}" WidthRequest="16" HeightRequest="16" Margin="1,0" />
+                                    <Label Grid.Row="1" Grid.Column="1" Padding="3" Text="{Binding TextDatePassenger}" VerticalOptions="Center" FontSize="16" FontFamily="Rajdhani-Medium"/>
+                                    <Button Grid.Row="1" Grid.Column="2" Text="Drop Off" CornerRadius="15"  HeightRequest="50" Clicked="OnDropOffPassengerItemClicked"  BackgroundColor="Red" TextColor="White" CommandParameter="{Binding .}" Margin="1" FontSize="14" FontAttributes="Bold"/>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </StackLayout>
+            </Frame>
             <!--  BUTTON | Add Passenger  -->
             <Button
                 x:Name="AddPassengerBtn"

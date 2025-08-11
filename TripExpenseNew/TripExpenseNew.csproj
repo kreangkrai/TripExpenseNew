@@ -105,6 +105,9 @@
 	  <MauiXaml Update="ModePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="PassengerPage\PersonalPassengerPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Personal.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

@@ -13,6 +13,9 @@ using TripExpenseNew.Services;
 using Plugin.LocalNotification;
 using TripExpenseNew.ViewModels;
 using System.Collections.ObjectModel;
+using CommunityToolkit.Maui.Views;
+using CommunityToolkit.Mvvm.DependencyInjection;
+using TripExpenseNew.PassengerPage;
 
 #if IOS
 using UserNotifications;
@@ -22,7 +25,6 @@ using UserNotifications;
 using Android.Content;
 using Microsoft.Maui.ApplicationModel;
 using System.Reflection.Emit;
-using CommunityToolkit.Maui.Views;
 
 #endif
 #if IOS
@@ -50,6 +52,7 @@ namespace TripExpenseNew
         DateTime start_tracking = DateTime.MinValue;
         TrackingModel tracking = new TrackingModel();
         private ObservableCollection<TripItems> tripItems = new ObservableCollection<TripItems>();
+        private ObservableCollection<PassengerItems> passengerItems = new ObservableCollection<PassengerItems>();
         int interval = 0;
         int tracking_db = 0;
 #if IOS
@@ -325,7 +328,7 @@ namespace TripExpenseNew
                             IconLocationSource = "route.png",
                             TextLocation = $"Location: {ap.location}",
                             IconDateSource = "clock.png",
-                            TextDate = $"Date: {ap.date}"
+                            TextDate = $"Date: {ap.date.ToString("yyyy-MM-dd HH:mm:ss")}"
                         };
 
                         tripItems.Add(trip_item);
@@ -438,7 +441,7 @@ namespace TripExpenseNew
                                 IconLocationSource = "route.png",
                                 TextLocation = $"Location: {ap.location}",
                                 IconDateSource = "clock.png",
-                                TextDate = $"Date: {ap.date}"
+                                TextDate = $"Date: {ap.date.ToString("yyyy-MM-dd HH:mm:ss")}"
                             };
 
                             tripItems.Add(trip_item);
@@ -485,8 +488,10 @@ namespace TripExpenseNew
 
         private async void StopTripBtn_Clicked(object sender, EventArgs e)
         {
+            var popup = new ProgressPopup();
+            this.ShowPopup(popup);
             try
-            {
+            {           
                 double speed = g_location?.Speed.HasValue ?? false ? g_location.Speed.Value * 3.6 : 0;
                 var placemarks = await Geocoding.Default.GetPlacemarksAsync(g_location.Latitude, g_location.Longitude);
                 var zipcode = placemarks?.FirstOrDefault()?.PostalCode ?? "N/A";
@@ -568,6 +573,7 @@ namespace TripExpenseNew
             {
                 Console.WriteLine($"StopTripBtn_Clicked Error: {ex}");
             }
+            await popup.CloseAsync();
         }
 
         private void CheckInBtn_Clicked(object sender, EventArgs e)
@@ -577,7 +583,42 @@ namespace TripExpenseNew
 
         private async void AddPassengerBtn_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new AddPassengerPersonal_Page("XXXXX"));           
+            var result = await this.ShowPopupAsync(new PersonalPassengerPopup());
+
+            if (result != null)
+            {
+                if (result is EmployeeModel emp)
+                {
+                    //await Shell.Current.GoToAsync("Personal");
+                    //await Navigation.PushAsync(new Personal(personal));
+                    Console.WriteLine(result);
+
+                    #region Show Passenger          
+                    PassengerItems passengerItem = new PassengerItems()
+                    {
+                        TextPassenger = $"{emp.name}",
+                        IconDatePassengerSource = "clock.png",
+                        TextDatePassenger = $"Date: {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}"
+                    };
+
+                    passengerItems.Add(passengerItem);
+                    PassengerCollectionView.ItemsSource = passengerItems;
+
+                    #endregion
+                }
+            }
+        }
+
+        private async void OnDropOffPassengerItemClicked(object sender, EventArgs e)
+        {
+            if (sender is Button button && button.CommandParameter is PassengerItems passengerItem)
+            {
+                bool confirm = await DisplayAlert("Confirm Drop Off", $"Drop Off: {passengerItem.TextPassenger}?", "Yes", "No");
+                if (confirm)
+                {
+                    passengerItems.Remove(passengerItem);
+                }
+            }
         }
     }
 }

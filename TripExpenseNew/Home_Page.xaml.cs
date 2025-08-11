@@ -50,8 +50,8 @@ public partial class Home_Page : ContentPage
                 lbl_lastname.Text = trips[trips.Count - 1].driver_name.Split(' ')[1];
 
                 txt_last_location.Text = trips[trips.Count - 1].location;
-                txt_last_date.Text = trips[trips.Count - 1].trip.ToString("dd/MM/yyyy");
-                txt_last_distance.Text = trips[trips.Count - 1].distance.ToString() + " km";
+                txt_last_date.Text = trips[trips.Count - 1].trip.ToString("dd/MM/yyyy HH:mm:ss");
+                txt_last_distance.Text = trips[trips.Count - 1].distance.ToString("#.#") + " km";
                 txt_last_mileage.Text = trips[trips.Count - 1].mileage.ToString();
 }
             else

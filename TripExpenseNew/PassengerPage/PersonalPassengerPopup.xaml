@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup
+    x:Class="TripExpenseNew.PassengerPage.PersonalPassengerPopup"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:shell="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:vm="clr-namespace:TripExpenseNew.ViewModels"
+    xmlns:local="clr-namespace:TripExpenseNew.Models"
+    Color="White">
+
+    <Grid
+    Padding="20,20"
+    ColumnDefinitions=".50*"
+    ColumnSpacing="1"
+    RowDefinitions="Auto,Auto,Auto"
+    RowSpacing="5">
+        <Label
+    Grid.Row="0"
+    CharacterSpacing="1"
+    FontAttributes="Bold"
+    FontFamily="Rajdhani-Bold"
+    FontSize="32"
+    HorizontalOptions="Center"
+    Text="ADD PASSENGER"
+    TextColor="#1C4698"
+    VerticalOptions="Center" />
+        <Grid Grid.Row="1" HeightRequest="200" WidthRequest="300" Margin="1">
+            <!-- <ContentPage.BindingContext>
+                <vm:EmployeeItems />
+            </ContentPage.BindingContext> -->
+
+            <VerticalStackLayout Padding="2">
+                <!-- SearchBar สำหรับค้นหา -->
+                <SearchBar Placeholder="ค้นหารายชื่อ"
+                           BackgroundColor="White"
+               Text="{Binding SearchText}"
+               FontSize="16" />
+                <!-- CollectionView สำหรับแสดงรายชื่อ -->
+                <CollectionView ItemsSource="{Binding FilteredEmployees}"
+                    SelectionMode="Single"
+                    SelectionChanged="OnCollectionViewSelectionChanged">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="local:EmployeeModel">
+                            <Grid Padding="5" RowSpacing="3">
+                                <Label Text="{Binding name}"
+                           FontSize="16"
+                           FontFamily="Rajdhani-Medium"/>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+        </Grid>
+
+        <!--  BUTTON | Cancel  -->
+        <Button
+                Grid.Row="2"
+        x:Name="CancelBtn"
+        Padding="10,10"
+        BackgroundColor="#EC2210"
+        CharacterSpacing="2"
+        Clicked="CancelBtn_Clicked"
+        CornerRadius="5"
+        FontAttributes="Bold"
+        FontSize="22"
+        HeightRequest="60"
+        HorizontalOptions="Fill"
+        Text="Cancel"
+        VerticalOptions="Center">
+            <Button.Shadow>
+                <Shadow
+                Brush="Black"
+                Opacity="0.2"
+                Radius="20"
+                Offset="0,10" />
+            </Button.Shadow>
+        </Button>
+    </Grid>
+</toolkit:Popup>
+
