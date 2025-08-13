@@ -103,7 +103,7 @@ namespace TripExpenseNew.Platforms.iOS
                             };
                             service.onLocationUpdate?.Invoke(location);
                             service.lastUpdateTime = DateTime.Now;
-                            //WeakReferenceMessenger.Default.Send(new LocationData { Location = location, TotalDistance = 0 });
+                            //WeakReferenceMessenger.Default.Send(new LocationData { Location = location });
                             await Task.Delay((int)service.updateInterval.TotalMilliseconds);
                         }
                     }
@@ -116,7 +116,7 @@ namespace TripExpenseNew.Platforms.iOS
 
             public override void AuthorizationChanged(CLLocationManager manager, CLAuthorizationStatus status)
             {
-                Console.WriteLine($"Authorization Changed: {status}");
+                //Console.WriteLine($"Authorization Changed: {status}");
             }
 
             public override void Failed(CLLocationManager manager, NSError error)

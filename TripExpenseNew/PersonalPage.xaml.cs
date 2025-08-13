@@ -39,13 +39,13 @@ public partial class PersonalPage : ContentPage
     public PersonalPage(ILocationCustomer _LocationCustomer, ILogin _Login, ILocationOther _LocationOther)
 	{
 		InitializeComponent();
-
         Login = _Login;
         LocationCustomer = _LocationCustomer;
         LocationOther = _LocationOther;      
         WeakReferenceMessenger.Default.Register<LocationData>(this, (send, data) =>
         {
-             UpdateLocationDataAsync(data.Location);
+            UpdateLocationDataAsync(data.Location);
+            
         });
     }
 
@@ -209,7 +209,7 @@ public partial class PersonalPage : ContentPage
                     intent.PutExtra("TrackingInterval",3000);
                     Platform.AppContext.StartForegroundService(intent);                   
 #endif
-            }          
+            }
         }
         catch (Exception ex)
         {
@@ -221,21 +221,32 @@ public partial class PersonalPage : ContentPage
     {
         try
         {
-            Console.WriteLine($"ALL ==> Lat: {location.Latitude}, Lon: {location.Longitude}");
-//#if IOS
-//            locationService?.StopUpdatingLocation();
-//#elif ANDROID
-//                    intent = new Intent(Platform.AppContext, typeof(TripExpenseNew.Platforms.Android.LocationService));
-//                    Platform.AppContext.StopService(intent);
-//#endif
-            MainThread.BeginInvokeOnMainThread(() =>
+            if (location != null)
             {
-                PersonalStart.IsEnabled = true;
-            });
+                MainThread.BeginInvokeOnMainThread(async () =>
+                {
+                    PersonalStart.IsEnabled = true;
+                    PersonalStart.TextColor = Colors.White;
+                    PersonalStart.BackgroundColor = Color.FromArgb("#297CC1");
+                    await Task.Delay(10);
+                    PersonalStart.BackgroundColor = Color.FromArgb("#297CC0");
+                    PersonalStart.Text = "START";
+                });
 
-            FindLocationService findLocation = new FindLocationService();
-            loc = findLocation.FindLocation(GetLocationCTL, GetLocationOthers, GetLocationCustomers, location);
+                FindLocationService findLocation = new FindLocationService();
+                loc = findLocation.FindLocation(GetLocationCTL, GetLocationOthers, GetLocationCustomers, location);
 
+                Console.WriteLine($"ALL ==> Lat: {location.Latitude}, Lon: {location.Longitude}");
+            }
+
+            //Console.WriteLine($"ALL ==> Lat: {location.Latitude}, Lon: {location.Longitude}");
+            //#if IOS
+            //            locationService?.StopUpdatingLocation();
+            //#elif ANDROID
+            //                    intent = new Intent(Platform.AppContext, typeof(TripExpenseNew.Platforms.Android.LocationService));
+            //                    Platform.AppContext.StopService(intent);
+            //#endif
+           
         }
         catch (Exception ex)
         {

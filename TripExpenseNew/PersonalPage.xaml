@@ -48,9 +48,9 @@
             FontSize="24"
             HeightRequest="80"
             HorizontalOptions="Center"
-            Text="START"
+            Text="Processing.."
             TextColor="White"
-            IsEnabled="False"
+            IsEnabled="False"   
             VerticalOptions="Center"
             WidthRequest="300" />
 

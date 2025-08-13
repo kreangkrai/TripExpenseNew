@@ -16,6 +16,7 @@ using System.Collections.ObjectModel;
 using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using TripExpenseNew.PassengerPage;
+using TripExpenseNew.CustomPopup;
 
 #if IOS
 using UserNotifications;
@@ -576,9 +577,11 @@ namespace TripExpenseNew
             await popup.CloseAsync();
         }
 
-        private void CheckInBtn_Clicked(object sender, EventArgs e)
+        private async void CheckInBtn_Clicked(object sender, EventArgs e)
         {
-
+            var popup = new CheckInAlert { Title = "CHECK IN", Message = "Please Select type of check in?" };
+            var result = await Shell.Current.ShowPopupAsync(popup);
+            await Shell.Current.DisplayAlert("Result", $"You clicked: {result}", "OK");
         }
 
         private async void AddPassengerBtn_Clicked(object sender, EventArgs e)

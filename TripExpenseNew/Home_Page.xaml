@@ -8,28 +8,13 @@
     shell:Shell.NavBarIsVisible="False">
     <ScrollView>
         <Grid
-            Padding="15,5"
+            Padding="20,3"
             ColumnDefinitions=".30*,.40*,.30*"
-            RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto"
-            RowSpacing="20">
-
-            <!--  BUTTON | LOG OUT  -->
-            <Button
-                x:Name="LogOutBtn"
-                Grid.Row="0"
-                Grid.ColumnSpan="3"
-                Padding="10,5"
-                BackgroundColor="#1C9698"
-                CharacterSpacing="01"
-                Clicked="OnGoToLoginPageClicked"
-                CornerRadius="5"
-                FontSize="Small"
-                HorizontalOptions="End"
-                Text="LOG OUT"
-                VerticalOptions="Start" />
-
+            RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto"
+            RowSpacing="1">
+          
             <!--  LABEL | NAME & SURNAME  -->
-            <ContentView Grid.Row="1" Grid.ColumnSpan="3">
+            <ContentView Grid.Row="0" Grid.ColumnSpan="2" Padding="5">
                 <StackLayout>
                     <!--  LABEL | NAME  -->
                     <Label
@@ -55,11 +40,23 @@
                         TextColor="#000000" />
                 </StackLayout>
             </ContentView>
-
+            
+            <!--  BUTTON | LOG OUT  -->
+            <ImageButton Source="power_off.png" 
+                         WidthRequest="50"
+                         HeightRequest="50"                       
+                         Padding="10,5"
+                         Grid.Row="0" 
+                         Grid.Column="2"
+                         HorizontalOptions="End"
+                         VerticalOptions="Start"
+                         Clicked="ImageButton_Clicked" >
+            </ImageButton>
             <!--  LABEL | STATUS  -->
             <Label
-                Grid.Row="2"
+                Grid.Row="1"
                 CharacterSpacing="1"
+                Padding="5"
                 FontFamily="Rajdhani-Bold"
                 FontSize="24"
                 HorizontalOptions="Start"
@@ -71,7 +68,7 @@
 
             <!--  BORDER | STATUS (Active, Inactive, In Progress)  -->
             <Border
-                Grid.Row="2"
+                Grid.Row="1"
                 Grid.Column="1"
                 Grid.ColumnSpan="1"
                 BackgroundColor="#14AE5C"
@@ -116,7 +113,7 @@
                     <!--  BUTTON | ADD TRIP  -->
                     <Button
                         x:Name="AddTripBtn"
-                        Padding="10,5"
+                        Padding="5"
                         BackgroundColor="#297CC0"
                         CharacterSpacing="03"
                         Clicked="OnGoToModePageClicked"
@@ -133,9 +130,9 @@
             </ContentView>
 
             <!--  INFO | LAST TRIP DETAIL  -->
-            <ContentView Grid.Row="4" Grid.ColumnSpan="3">
+            <ContentView Grid.Row="4" Grid.ColumnSpan="3" Padding="5">
                 <Grid
-                    Padding="10,0"
+                    Padding="5,10"
                     ColumnDefinitions=".20*,.80*"
                     RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
                     RowSpacing="10">
@@ -256,12 +253,12 @@
                         x:Name="ViewMoreBtn"
                         Grid.Row="6"
                         Grid.ColumnSpan="3"
-                        Padding="10,5"
+                        Padding="5"
                         BackgroundColor="Transparent"
                         BorderColor="#3C9BCB"
                         BorderWidth="2"
                         CharacterSpacing="03"
-                        CornerRadius="30"
+                        CornerRadius="20"
                         FontAttributes="Bold"
                         FontSize="Medium"
                         HeightRequest="50"
@@ -279,7 +276,7 @@
                 x:Name="HistoryBtn"
                 Grid.Row="5"
                 Grid.ColumnSpan="3"
-                Padding="10,5"
+                Padding="5"
                 BackgroundColor="Transparent"
                 BorderColor="#3C9BCB"
                 BorderWidth="2"
@@ -301,7 +298,7 @@
                 Grid.Row="4"
                 Grid.RowSpan="3"
                 Grid.ColumnSpan="3"
-                Padding="10"
+                Padding="5"
                 BackgroundColor="White"
                 IsVisible="False"
                 TranslationY="0">

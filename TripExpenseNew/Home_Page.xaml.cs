@@ -46,8 +46,8 @@ public partial class Home_Page : ContentPage
                     lbl_lastname.FontSize = 34;
                 }
 
-                lbl_name.Text = trips[trips.Count - 1].driver_name.Split(' ')[0];
-                lbl_lastname.Text = trips[trips.Count - 1].driver_name.Split(' ')[1];
+                lbl_name.Text = trips[trips.Count - 1].emp_name.Split(' ')[0];
+                lbl_lastname.Text = trips[trips.Count - 1].emp_name.Split(' ')[1];
 
                 txt_last_location.Text = trips[trips.Count - 1].location;
                 txt_last_date.Text = trips[trips.Count - 1].trip.ToString("dd/MM/yyyy HH:mm:ss");
@@ -134,5 +134,14 @@ public partial class Home_Page : ContentPage
     private async void AddTripBtn_Clicked(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync("MainPage");
+    }
+
+    private async void ImageButton_Clicked(object sender, EventArgs e)
+    {
+        bool result = await DisplayAlert("", "Do you want to Logout?", "Yes", "No");
+        if (result)
+        {
+            await Shell.Current.GoToAsync("Login_Page");
+        }        
     }
 }
