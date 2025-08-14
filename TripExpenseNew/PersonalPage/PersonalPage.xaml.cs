@@ -6,9 +6,10 @@ using TripExpenseNew.DBModels;
 using TripExpenseNew.Interface;
 using TripExpenseNew.Models;
 using TripExpenseNew.Services;
-
+using TripExpenseNew.CustomPopup;
 #if IOS
 using UserNotifications;
+
 #endif
 
 #if ANDROID
@@ -18,13 +19,14 @@ using Microsoft.Maui.ApplicationModel;
 #if IOS
 using CoreLocation;
 #endif
-namespace TripExpenseNew;
+namespace TripExpenseNew.PersonalPage;
 
 public partial class PersonalPage : ContentPage
 {
     private ILocationCustomer LocationCustomer;
     private ILocationOther LocationOther;
     private ILogin Login;
+    private IMileage Mileage;
     private CancellationTokenSource cancellationTokenSource;
     private bool isTracking = true;
     Tuple<string, bool> loc = new Tuple<string, bool> ("",false);
@@ -36,12 +38,13 @@ public partial class PersonalPage : ContentPage
 #elif ANDROID
         private Intent intent = new Intent();
 #endif
-    public PersonalPage(ILocationCustomer _LocationCustomer, ILogin _Login, ILocationOther _LocationOther)
+    public PersonalPage(ILocationCustomer _LocationCustomer, ILogin _Login, ILocationOther _LocationOther, IMileage _Mileage)
 	{
 		InitializeComponent();
         Login = _Login;
         LocationCustomer = _LocationCustomer;
-        LocationOther = _LocationOther;      
+        LocationOther = _LocationOther;
+        Mileage = _Mileage;
         WeakReferenceMessenger.Default.Register<LocationData>(this, (send, data) =>
         {
             UpdateLocationDataAsync(data.Location);
@@ -118,7 +121,9 @@ public partial class PersonalPage : ContentPage
     }
     private async void PersonalStart_Clicked(object sender, EventArgs e)
     {
-        var result = await this.ShowPopupAsync(new PersonalStartPopup(loc.Item1,loc.Item2));
+        MileageDBModel mileage = await Mileage.GetMileage(1);
+
+        var result = await this.ShowPopupAsync(new PersonalStartPopup(loc.Item1,loc.Item2,mileage.mileage));
 
         if (result is PersonalPopupStartModel personal)
         {
@@ -239,14 +244,15 @@ public partial class PersonalPage : ContentPage
                 Console.WriteLine($"ALL ==> Lat: {location.Latitude}, Lon: {location.Longitude}");
             }
 
-            //Console.WriteLine($"ALL ==> Lat: {location.Latitude}, Lon: {location.Longitude}");
-            //#if IOS
-            //            locationService?.StopUpdatingLocation();
-            //#elif ANDROID
-            //                    intent = new Intent(Platform.AppContext, typeof(TripExpenseNew.Platforms.Android.LocationService));
-            //                    Platform.AppContext.StopService(intent);
-            //#endif
-           
+            #region STOP
+#if IOS
+            locationService?.StopUpdatingLocation();
+            locationService = null;
+#elif ANDROID
+                                intent = new Intent(Platform.AppContext, typeof(TripExpenseNew.Platforms.Android.LocationService));
+                                Platform.AppContext.StopService(intent);
+#endif
+            #endregion
         }
         catch (Exception ex)
         {

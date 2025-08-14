@@ -1,4 +1,6 @@
-﻿namespace TripExpenseNew
+﻿using TripExpenseNew.PersonalPage;
+
+namespace TripExpenseNew
 {
     public partial class AppShell : Shell
     {
@@ -10,7 +12,7 @@
             Routing.RegisterRoute("Home_Page", typeof(Home_Page));
             Routing.RegisterRoute("MainPage", typeof(MainPage));
             Routing.RegisterRoute("Personal", typeof(Personal));
-            Routing.RegisterRoute("PersonalPage", typeof(PersonalPage));
+            Routing.RegisterRoute("PersonalPage", typeof(PersonalPage.PersonalPage));
         }
     }
 }

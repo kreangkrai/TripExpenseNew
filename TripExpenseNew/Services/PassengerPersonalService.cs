@@ -14,9 +14,9 @@ namespace TripExpenseNew.Services
         private IConnectAPI API;
         private readonly string URL;
         private readonly HttpClient _httpClient;
-        public PassengerPersonalService(IConnectAPI _API)
+        public PassengerPersonalService()
         {
-            API = _API;
+            API = new ConnectAPIService();
             URL = API.ConnectAPI();
             var handler = new HttpClientHandler
             {
@@ -52,6 +52,14 @@ namespace TripExpenseNew.Services
             var response = await _httpClient.PostAsync(URL + "/api/PassengerPersonal/inserts", byteContent);
             var message = await response.Content.ReadAsStringAsync();
             return message;
+        }
+
+        public async Task<List<PassengerPersonalViewModel>> GetPassengerPersonalByDriver(string driver, string trip)
+        {
+            var response = await _httpClient.GetAsync(URL + $"/api/PassengerPersonal/getbydriver?driver={driver}&trip={trip}");
+            var content = await response.Content.ReadAsStringAsync();
+            List<PassengerPersonalViewModel> passengers = JsonConvert.DeserializeObject<List<PassengerPersonalViewModel>>(content);
+            return passengers;
         }
     }
 }

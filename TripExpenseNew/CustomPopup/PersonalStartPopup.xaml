@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <toolkit:Popup
-    x:Class="TripExpenseNew.PersonalStartPopup"
+    x:Class="TripExpenseNew.CustomPopup.PersonalStartPopup"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:shell="http://schemas.microsoft.com/dotnet/2021/maui"
@@ -137,8 +137,7 @@
                 Spacing="5">
                 <!--  LABEL | Job  -->
                 <Label
-                    CharacterSpacing="1"
-                    x:Name="Text_Job"
+                    CharacterSpacing="1"                    
                     FontAttributes="None"
                     FontSize="20"
                     HorizontalOptions="Start"
@@ -152,6 +151,7 @@
                     <Entry
                         Margin="2"
                         CharacterSpacing="1"
+                        x:Name="Text_Job"
                         ClearButtonVisibility="WhileEditing"
                         FontSize="18"
                         Keyboard="Text"

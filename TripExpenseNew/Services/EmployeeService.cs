@@ -65,5 +65,13 @@ namespace TripExpenseNew.Services
             List<EmployeeModel> employees = JsonConvert.DeserializeObject<List<EmployeeModel>>(content);
             return employees;
         }
+
+        public async Task<EmployeeModel> GetEmployeeByName(string name)
+        {
+            var response = await _httpClient.GetAsync(URL + $"/api/Employee/getbyname?name={name}");
+            var content = await response.Content.ReadAsStringAsync();
+            EmployeeModel employee = JsonConvert.DeserializeObject<EmployeeModel>(content);
+            return employee;
+        }
     }
 }

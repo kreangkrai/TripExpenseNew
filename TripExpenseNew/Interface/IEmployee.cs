@@ -8,5 +8,6 @@ namespace TripExpenseNew.Interface
         Task<string> Insert(List<EmployeeModel> datas);
         Task<string> Update(EmployeeModel data);
         Task<List<EmployeeModel>> GetEmployees();
+        Task<EmployeeModel> GetEmployeeByName(string name);
     }
 }

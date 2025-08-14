@@ -7,6 +7,7 @@ using Plugin.LocalNotification;
 using TripExpenseNew.DBInterface;
 using TripExpenseNew.DBService;
 using TripExpenseNew.Interface;
+using TripExpenseNew.PersonalPage;
 using TripExpenseNew.Services;
 
 namespace TripExpenseNew
@@ -52,7 +53,7 @@ namespace TripExpenseNew
 
             builder.Services.AddTransient<MainPage>();
             builder.Services.AddTransient<Personal>();
-            builder.Services.AddTransient<PersonalPage>();
+            builder.Services.AddTransient<PersonalPage.PersonalPage>();
             builder.Services.AddTransient<ModePage>();
             builder.Services.AddTransient<Initial_Page>();
             builder.Services.AddTransient<Login_Page>();
@@ -64,6 +65,7 @@ namespace TripExpenseNew
             builder.Services.AddSingleton<IActiveCompany, ActiveCompanyService>();
             builder.Services.AddSingleton<DBInterface.IPersonal, DBService.PersonalService>();
             builder.Services.AddSingleton<DBInterface.ICompany,DBService.CompanyService>();
+            builder.Services.AddSingleton<DBInterface.IMileage, DBService.MileageService>();
 
             return builder.Build();
         }

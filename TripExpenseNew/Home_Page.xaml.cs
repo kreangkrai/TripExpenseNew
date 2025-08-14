@@ -32,7 +32,7 @@ public partial class Home_Page : ContentPage
         {
             emp_id = await Login.GetLogin(1);
             List<LastTripViewModel> trips = await GetLastTrip();
-            if (trips != null)
+            if (trips.Count > 0)
             {
                 _sheetHeight = LastTripBTS.HeightRequest > 0 ? LastTripBTS.HeightRequest : 300;
                 if (trips[trips.Count - 1].driver_name.Length > 25)
@@ -53,10 +53,6 @@ public partial class Home_Page : ContentPage
                 txt_last_date.Text = trips[trips.Count - 1].trip.ToString("dd/MM/yyyy HH:mm:ss");
                 txt_last_distance.Text = trips[trips.Count - 1].distance.ToString("#.#") + " km";
                 txt_last_mileage.Text = trips[trips.Count - 1].mileage.ToString();
-}
-            else
-            {
-                await DisplayAlert("Error", "No trips found", "OK");
             }
         }
         catch (Exception ex)

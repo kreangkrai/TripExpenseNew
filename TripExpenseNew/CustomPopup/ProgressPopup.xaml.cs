@@ -1,6 +1,6 @@
 using CommunityToolkit.Maui.Views;
 
-namespace TripExpenseNew;
+namespace TripExpenseNew.CustomPopup;
 
 public partial class ProgressPopup : Popup
 {

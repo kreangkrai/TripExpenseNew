@@ -53,5 +53,13 @@ namespace TripExpenseNew.Services
             var message = await response.Content.ReadAsStringAsync();
             return message;
         }
+
+        public async Task<List<PassengerCompanyViewModel>> GetPassengerCompanyByDriver(string driver, string trip)
+        {
+            var response = await _httpClient.GetAsync(URL + $"/api/PassengerCompany/getbydriver?driver={driver}&trip={trip}");
+            var content = await response.Content.ReadAsStringAsync();
+            List<PassengerCompanyViewModel> passengers = JsonConvert.DeserializeObject<List<PassengerCompanyViewModel>>(content);
+            return passengers;
+        }
     }
 }

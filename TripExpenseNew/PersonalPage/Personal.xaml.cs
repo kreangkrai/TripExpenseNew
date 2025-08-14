@@ -17,9 +17,10 @@ using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using TripExpenseNew.PassengerPage;
 using TripExpenseNew.CustomPopup;
-
+using System.Globalization;
 #if IOS
 using UserNotifications;
+
 #endif
 
 #if ANDROID
@@ -32,7 +33,7 @@ using System.Reflection.Emit;
 using CoreLocation;
 #endif
 
-namespace TripExpenseNew
+namespace TripExpenseNew.PersonalPage
 {
     public partial class Personal : ContentPage
     {
@@ -42,20 +43,30 @@ namespace TripExpenseNew
         private ILastTrip LastTrip;
         private DBInterface.IPersonal DB_Personal;
         private DBInterface.IActivePersonal ActivePersonal;
+        private IPassengerPersonal PassengerPersonal;
+        private IEmployee Employee;
+        private ILocationCustomer LocationCustomer;
+        private ILocationOther LocationOther;
+        private IMileage Mileage;
         private Location previousLocation = null;
         private Location g_location = null;
         private double totalDistance = 0;
         string emp_id = "";
         PersonalPopupStartModel start = new PersonalPopupStartModel();
         bool isStart = false;
-        bool isStop = false;
-        DateTime start_date = DateTime.MinValue;
+        //bool isStop = false;
+        DateTime trip_start = DateTime.MinValue;
         DateTime start_tracking = DateTime.MinValue;
         TrackingModel tracking = new TrackingModel();
+        PersonalModel data_personal = new PersonalModel();
         private ObservableCollection<TripItems> tripItems = new ObservableCollection<TripItems>();
         private ObservableCollection<PassengerItems> passengerItems = new ObservableCollection<PassengerItems>();
         int interval = 0;
         int tracking_db = 0;
+
+        List<LocationCustomerModel> GetLocationCustomers = new List<LocationCustomerModel>();
+        List<LocationOtherModel> GetLocationOthers = new List<LocationOtherModel>();
+        List<LocationOtherModel> GetLocationCTL = new List<LocationOtherModel>();
 #if IOS
         private Platforms.iOS.LocationService locationService;
 #elif ANDROID
@@ -72,7 +83,11 @@ namespace TripExpenseNew
             DB_Personal = new DBService.PersonalService();
             ActivePersonal = new DBService.ActivePersonalService();
             LastTrip = new LastTripService();
-
+            PassengerPersonal = new PassengerPersonalService();
+            Employee = new EmployeeService();
+            LocationCustomer = new LocationCustomerService();
+            LocationOther = new LocationOtherService();
+            Mileage = new DBService.MileageService();
             WeakReferenceMessenger.Default.Register<LocationData>(this, async (send, data) =>
             {
                 await UpdateLocationDataAsync(data.Location);
@@ -97,7 +112,7 @@ namespace TripExpenseNew
             }
 #endif
         }
-        
+
         async Task RequestNotificationPermission()
         {
             if (!await LocalNotificationCenter.Current.AreNotificationsEnabled())
@@ -241,7 +256,7 @@ namespace TripExpenseNew
         private async Task UpdateLocationDataAsync(Location location)
         {
             try
-            {             
+            {
                 if (previousLocation != null)
                 {
                     totalDistance += CalculateDistance(previousLocation, location);
@@ -249,15 +264,15 @@ namespace TripExpenseNew
                 previousLocation = location;
 
                 double speed = location.Speed.HasValue ? location.Speed.Value * 3.6 : 0;
-                PersonalModel personal = new PersonalModel();
+                
                 if (!isStart)
                 {
                     var placemarks = await Geocoding.Default.GetPlacemarksAsync(location.Latitude, location.Longitude);
                     var zipcode = placemarks?.FirstOrDefault()?.PostalCode ?? "N/A";
 
                     DateTime _start = DateTime.Now;
-                    start_date = _start;
-                    personal = new PersonalModel()
+                    trip_start = _start;
+                    data_personal = new PersonalModel()
                     {
                         driver = emp_id,
                         date = _start,
@@ -270,26 +285,26 @@ namespace TripExpenseNew
                         location_mode = start.IsCustomer ? "CUSTOMER" : "OTHER",
                         speed = speed,
                         mileage = start.mileage,
-                        trip = start_date,
+                        trip = trip_start,
                         status = "START"
                     };
 
                     isStart = true;
-                    string message = await _Personal.Insert(personal);
-                    
+                    string message = await _Personal.Insert(data_personal);
+
                     // Insert Last Trip to Server DB
                     LastTripModel lastTrip = new LastTripModel()
                     {
-                        driver = personal.driver,
-                        speed = personal.speed,
-                        emp_id = personal.driver,
-                        distance = personal.distance,
-                        location = personal.location,
-                        mileage = personal.mileage,
+                        driver = data_personal.driver,
+                        speed = data_personal.speed,
+                        emp_id = data_personal.driver,
+                        distance = data_personal.distance,
+                        location = data_personal.location,
+                        mileage = data_personal.mileage,
                         mode = "PERSONAL",
                         status = true,
-                        trip = personal.trip,
-                        car_id = personal.driver
+                        trip = data_personal.trip,
+                        car_id = data_personal.driver
                     };
 
                     string l = await LastTrip.Insert(lastTrip);
@@ -297,12 +312,12 @@ namespace TripExpenseNew
                     // Insert Active Personal to Local DB
                     ActivePersonalModel active_personal = new ActivePersonalModel()
                     {
-                        driver = personal.driver,
+                        driver = data_personal.driver,
                         distance = totalDistance,
-                        location = personal.location,
-                        mileage = personal.mileage,
-                        status = personal.status,
-                        trip = personal.trip,
+                        location = data_personal.location,
+                        mileage = data_personal.mileage,
+                        status = data_personal.status,
+                        trip = data_personal.trip,
                         date = DateTime.Now,
                     };
 
@@ -310,7 +325,7 @@ namespace TripExpenseNew
 
                     #region Show Active Personal
                     tripItems = new ObservableCollection<TripItems>();
-                    List<ActivePersonalModel> act_personals = await ActivePersonal.GetByTrip(personal.trip);
+                    List<ActivePersonalModel> act_personals = await ActivePersonal.GetByTrip(data_personal.trip);
                     foreach (var ap in act_personals)
                     {
                         Color color = new Color();
@@ -334,7 +349,7 @@ namespace TripExpenseNew
 
                         tripItems.Add(trip_item);
                     }
-                    
+
                     TripCollectionView.ItemsSource = tripItems;
 
                     #endregion
@@ -355,7 +370,7 @@ namespace TripExpenseNew
                         location_mode = "",
                         speed = speed,
                         mileage = 0,
-                        trip = start_date,
+                        trip = trip_start,
                         status = "NA"
                     };
 
@@ -366,10 +381,10 @@ namespace TripExpenseNew
                     if (diff >= tracking_db)
                     {
                         List<PersonalDBModel> db_personals = new List<PersonalDBModel>();
-                        db_personals = await DB_Personal.GetByTrip(start_date);
+                        db_personals = await DB_Personal.GetByTrip(trip_start);
 
                         List<PersonalModel> personals = new List<PersonalModel>();
-                        personals = db_personals.Select(s=> new PersonalModel()
+                        personals = db_personals.Select(s => new PersonalModel()
                         {
                             job_id = s.job_id,
                             distance = s.distance,
@@ -381,15 +396,15 @@ namespace TripExpenseNew
                             location_mode = s.location_mode,
                             speed = s.speed,
                             mileage = s.mileage,
-                            trip = start_date,
+                            trip = trip_start,
                             status = s.status,
-                            driver = s.driver,                           
+                            driver = s.driver,
                         }).ToList();
                         string m = await _Personal.Inserts(personals);
 
-                        await DB_Personal.Delete(start_date);
+                        await DB_Personal.Delete(trip_start);
 
-                        personal = personals.FirstOrDefault();
+                        PersonalModel personal = personals.FirstOrDefault();
 
                         LastTripModel lastTrip = new LastTripModel()
                         {
@@ -405,9 +420,9 @@ namespace TripExpenseNew
                             car_id = personal.driver
                         };
 
-                        string l = await LastTrip.Insert(lastTrip);
+                        string l = await LastTrip.UpdateByTrip(lastTrip);
 
-                        
+
                         ActivePersonalModel active_personal = new ActivePersonalModel()
                         {
                             driver = personal.driver,
@@ -429,7 +444,7 @@ namespace TripExpenseNew
                             Color color = new Color();
                             if (ap.status == "START")
                             {
-                                color = Color.FromRgb(255,255,255);
+                                color = Color.FromRgb(255, 255, 255);
                             }
                             else
                             {
@@ -453,13 +468,13 @@ namespace TripExpenseNew
                         #endregion
                         Console.WriteLine($"ALL ==> {m} Lat: {location.Latitude}, Lon: {location.Longitude}, Speed: {speed}, Distance: {totalDistance}");
                         start_tracking = DateTime.Now;
-                    }            
+                    }
                 }
 
                 await MainThread.InvokeOnMainThreadAsync(() =>
                 {
                     DateTime now = DateTime.Now;
-                    TimeSpan duration = now - start_date;
+                    TimeSpan duration = now - trip_start;
                     trip_distance.Text = totalDistance.ToString("#.#") + " km";
                     trip_duration.Text = duration.ToString(@"hh\:mm\:ss");
                 });
@@ -488,93 +503,189 @@ namespace TripExpenseNew
         }
 
         private async void StopTripBtn_Clicked(object sender, EventArgs e)
-        {
-            var popup = new ProgressPopup();
-            this.ShowPopup(popup);
+        {          
             try
-            {           
-                double speed = g_location?.Speed.HasValue ?? false ? g_location.Speed.Value * 3.6 : 0;
-                var placemarks = await Geocoding.Default.GetPlacemarksAsync(g_location.Latitude, g_location.Longitude);
-                var zipcode = placemarks?.FirstOrDefault()?.PostalCode ?? "N/A";
-
-                List<PersonalDBModel> db_personals = await DB_Personal.GetByTrip(start_date);
-                List<PersonalModel> personals = db_personals.Select(s => new PersonalModel()
+            {
+                #region Find Location
+                GetLocationCTL.Add(new LocationOtherModel()
                 {
-                    job_id = s.job_id,
-                    distance = s.distance,
-                    date = s.date,
-                    latitude = s.latitude,
-                    longitude = s.longitude,
-                    location = s.location,
-                    zipcode = s.zipcode,
-                    location_mode = s.location_mode,
-                    speed = s.speed,
-                    mileage = s.mileage,
-                    trip = start_date,
-                    status = s.status,
-                    driver = s.driver,
-                }).ToList();
-                string m = await _Personal.Inserts(personals);
-
-                await DB_Personal.Delete(start_date);
-
-                PersonalModel personal = new PersonalModel()
+                    location = "CTL(HQ)",
+                    latitude = 13.729175,
+                    longitude = 100.728538
+                });
+                GetLocationCTL.Add(new LocationOtherModel()
                 {
-                    driver = emp_id,
-                    date = DateTime.Now,
-                    job_id = start.job,
-                    distance = totalDistance,
-                    latitude = g_location.Latitude,
-                    longitude = g_location.Longitude,
-                    location = "",
-                    zipcode = zipcode,
-                    location_mode = "",
-                    speed = speed,
-                    mileage = 12348,
-                    trip = start_date,
-                    status = "STOP"
-                };
-                string message = await _Personal.Insert(personal);
-
-                LastTripModel lastTrip = new LastTripModel()
+                    location = "CTL(RBO)",
+                    latitude = 12.718476,
+                    longitude = 101.162984
+                });
+                GetLocationCTL.Add(new LocationOtherModel()
                 {
-                    driver = personal.driver,
-                    speed = personal.speed,
-                    emp_id = personal.driver,
-                    distance = personal.distance,
-                    location = personal.location,
-                    mileage = personal.mileage,
-                    mode = "PERSONAL",
-                    status = false,
-                    trip = personal.trip,
-                    car_id = personal.driver
-                };
+                    location = "CTL(KBO)",
+                    latitude = 16.444429,
+                    longitude = 102.794939
+                });
 
-                string l = await LastTrip.Insert(lastTrip);
 
-                int act = await ActivePersonal.Delete(start_date);
+                LoginModel login = await Login.GetLogin(1);
+                GetLocationCustomers = await LocationCustomer.GetByEmp(login.emp_id);
+                GetLocationOthers = await LocationOther.GetByEmp(login.emp_id);
 
-                if (message != null)
+                FindLocationService findLocation = new FindLocationService();
+                Tuple<string,bool> loc = findLocation.FindLocation(GetLocationCTL, GetLocationOthers, GetLocationCustomers, g_location);
+
+                #endregion
+                var result = await this.ShowPopupAsync(new PersonalStopPopup(loc.Item1,loc.Item2,start.mileage));
+
+                if (result is PersonalPopupStopModel personal)
                 {
+                    if (personal.location != null && personal.location != "" && personal.mileage != 0)
+                    {
+                        if (personal.mileage >= start.mileage)
+                        {
+                            var popup = new ProgressPopup();
+                            this.ShowPopup(popup);
+                            double speed = g_location?.Speed.HasValue ?? false ? g_location.Speed.Value * 3.6 : 0;
+                            var placemarks = await Geocoding.Default.GetPlacemarksAsync(g_location.Latitude, g_location.Longitude);
+                            var zipcode = placemarks?.FirstOrDefault()?.PostalCode ?? "N/A";
+
+                            List<PersonalDBModel> db_personals = await DB_Personal.GetByTrip(trip_start);
+                            List<PersonalModel> personals = db_personals.Select(s => new PersonalModel()
+                            {
+                                job_id = s.job_id,
+                                distance = s.distance,
+                                date = s.date,
+                                latitude = s.latitude,
+                                longitude = s.longitude,
+                                location = personal.location,
+                                zipcode = s.zipcode,
+                                location_mode = s.location_mode,
+                                speed = s.speed,
+                                mileage = personal.mileage,
+                                trip = trip_start,
+                                status = s.status,
+                                driver = s.driver,
+                            }).ToList();
+                            string m = await _Personal.Inserts(personals);
+
+                            await DB_Personal.Delete(trip_start);
+
+                            data_personal = new PersonalModel()
+                            {
+                                driver = emp_id,
+                                date = DateTime.Now,
+                                job_id = start.job,
+                                distance = totalDistance,
+                                latitude = g_location.Latitude,
+                                longitude = g_location.Longitude,
+                                location = personal.location,
+                                zipcode = zipcode,
+                                location_mode = "",
+                                speed = speed,
+                                mileage = personal.mileage,
+                                trip = trip_start,
+                                status = "STOP"
+                            };
+                            string message = await _Personal.Insert(data_personal);
+
+                            LastTripModel lastTrip = new LastTripModel()
+                            {
+                                driver = data_personal.driver,
+                                speed = data_personal.speed,
+                                emp_id = data_personal.driver,
+                                distance = data_personal.distance,
+                                location = personal.location,
+                                mileage = personal.mileage,
+                                mode = "PERSONAL",
+                                status = false,
+                                trip = data_personal.trip,
+                                car_id = data_personal.driver
+                            };
+
+                            string l = await LastTrip.UpdateByTrip(lastTrip);
+
+                            int act = await ActivePersonal.Delete(trip_start);
+
+                            #region GET PASSENGER
+                            CultureInfo usCulture = new CultureInfo("en-US");
+                            List<PassengerPersonalViewModel> passenger_personals = await PassengerPersonal.GetPassengerPersonalByDriver(data_personal.driver, data_personal.trip.ToString("yyyy-MM-dd HH:mm:ss", usCulture));
+                            
+                            List<DateTime> trip_list = passenger_personals.Where(w => w.status == "STOP").Select(s=>s.trip).ToList();
+
+                            passenger_personals = passenger_personals.Where(w => !trip_list.Equals(w.trip)).ToList();
+                            if (passenger_personals.Count > 0)
+                            {
+                                #region ADD PASSENGER
+                                for (int i = 0; i < passenger_personals.Count; i++)
+                                {
+                                    PassengerPersonalModel passengerPersonal = new PassengerPersonalModel()
+                                    {
+                                        date = DateTime.Now,
+                                        driver = emp_id,
+                                        trip = data_personal.trip,
+                                        job_id = data_personal.job_id,
+                                        latitude = data_personal.latitude,
+                                        longitude = data_personal.longitude,
+                                        location = personal.location,
+                                        location_mode = data_personal.location_mode,
+                                        passenger = passenger_personals[i].passenger,
+                                        status = "STOP",
+                                        zipcode = data_personal.zipcode
+                                    };
+                                    string mes = await PassengerPersonal.Insert(passengerPersonal);
+                                }
+                                #endregion
+                            }
+                            #endregion
+
+                            #region Update Last Mileage
+                            MileageDBModel db_mileage = new MileageDBModel()
+                            {
+                                Id = 1,
+                                mileage = personal.mileage
+                            };
+                            int id = await Mileage.Save(db_mileage);
+                            #endregion
+
+                            #region Stop
 #if IOS
-                    locationService?.StopUpdatingLocation();
-                    locationService = null; // รีเซ็ต locationService
+                            locationService?.StopUpdatingLocation();
+                            locationService = null; // รีเซ็ต locationService
 #elif ANDROID
             intent = new Intent(Platform.AppContext, typeof(TripExpenseNew.Platforms.Android.LocationService));
             Platform.AppContext.StopService(intent);
-#endif                
-                    previousLocation = null;
-                    totalDistance = 0;
-                    isStart = false;
-                    start_date = DateTime.MinValue;
-                    await Shell.Current.GoToAsync("Home_Page");
+#endif
+                            #endregion
+
+                            previousLocation = null;
+                            totalDistance = 0;
+                            isStart = false;
+                            trip_start = DateTime.MinValue;
+                            await Shell.Current.GoToAsync("Home_Page");
+
+                            await popup.CloseAsync();
+                        }
+                        else
+                        {
+                            MainThread.BeginInvokeOnMainThread(async () =>
+                            {
+                                await DisplayAlert("", "กรุณาใส่ข้อมูลไมล์ให้ถูกต้อง", "ตกลง");
+                            });
+                        }
+                    }
+                    else
+                    {
+                        MainThread.BeginInvokeOnMainThread(async () =>
+                        {
+                            await DisplayAlert("", "กรุณาใส่ข้อมูล", "ตกลง");
+                        });
+                    }
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"StopTripBtn_Clicked Error: {ex}");
-            }
-            await popup.CloseAsync();
+            }         
         }
 
         private async void CheckInBtn_Clicked(object sender, EventArgs e)
@@ -592,10 +703,6 @@ namespace TripExpenseNew
             {
                 if (result is EmployeeModel emp)
                 {
-                    //await Shell.Current.GoToAsync("Personal");
-                    //await Navigation.PushAsync(new Personal(personal));
-                    Console.WriteLine(result);
-
                     #region Show Passenger          
                     PassengerItems passengerItem = new PassengerItems()
                     {
@@ -608,6 +715,39 @@ namespace TripExpenseNew
                     PassengerCollectionView.ItemsSource = passengerItems;
 
                     #endregion
+
+                    #region ADD PASSENGER
+                    PassengerPersonalModel passengerPersonal = new PassengerPersonalModel()
+                    {
+                        date = DateTime.Now,
+                        driver = emp_id,
+                        trip = data_personal.trip,
+                        job_id = data_personal.job_id,
+                        latitude = data_personal.latitude,
+                        longitude = data_personal.longitude,
+                        location = data_personal.location,
+                        location_mode = data_personal.location_mode,
+                        passenger = emp.emp_id,
+                        status = "START",
+                        zipcode = data_personal.zipcode
+                    };
+                    string message = await PassengerPersonal.Insert(passengerPersonal);
+
+                    if (message == "Success")
+                    {
+                        MainThread.BeginInvokeOnMainThread(async () =>
+                        {
+                            await DisplayAlert("", message, "OK");
+                        });
+                    }
+                    else
+                    {
+                        MainThread.BeginInvokeOnMainThread(async () =>
+                        {
+                            await DisplayAlert("", "Error", "OK");
+                        });
+                    }
+                    #endregion
                 }
             }
         }
@@ -619,6 +759,23 @@ namespace TripExpenseNew
                 bool confirm = await DisplayAlert("Confirm Drop Off", $"Drop Off: {passengerItem.TextPassenger}?", "Yes", "No");
                 if (confirm)
                 {
+                    EmployeeModel emp = await Employee.GetEmployeeByName(passengerItem.TextPassenger);
+                    PassengerPersonalModel passengerPersonal = new PassengerPersonalModel()
+                    {
+                        date = DateTime.Now,
+                        driver = emp_id,
+                        trip = data_personal.trip,
+                        job_id = data_personal.job_id,
+                        latitude = data_personal.latitude,
+                        longitude = data_personal.longitude,
+                        location = data_personal.location,
+                        location_mode = data_personal.location_mode,
+                        passenger = emp.emp_id,
+                        status = "STOP",
+                        zipcode = data_personal.zipcode
+                    };
+                    string mes = await PassengerPersonal.Insert(passengerPersonal);
+
                     passengerItems.Remove(passengerItem);
                 }
             }

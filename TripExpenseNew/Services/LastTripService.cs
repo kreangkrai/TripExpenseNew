@@ -65,5 +65,16 @@ namespace TripExpenseNew.Services
             List<LastTripViewModel> trips = JsonConvert.DeserializeObject<List<LastTripViewModel>>(content);
             return trips;
         }
+
+        public async Task<string> UpdateByTrip(LastTripModel trip)
+        {
+            var json = JsonConvert.SerializeObject(trip);
+            var buffer = Encoding.UTF8.GetBytes(json);
+            var byteContent = new ByteArrayContent(buffer);
+            byteContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+            var response = await _httpClient.PutAsync(URL + "/api/LastTrip/updatebytrip", byteContent);
+            var message = await response.Content.ReadAsStringAsync();
+            return message;
+        }
     }
 }

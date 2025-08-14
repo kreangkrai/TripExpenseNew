@@ -1,16 +1,18 @@
 using CommunityToolkit.Maui.Views;
 using TripExpenseNew.Models;
 
-namespace TripExpenseNew;
+namespace TripExpenseNew.CustomPopup;
 
-public partial class PersonalStartPopup : Popup
+public partial class PersonalStopPopup : Popup
 {
-    bool Iscustomer = false;
-	public PersonalStartPopup(string location,bool iscustomer)
+    private bool Iscustomer = false;
+
+    public PersonalStopPopup(string location,bool isCustomer,int mileage)
 	{
 		InitializeComponent();
         Text_Location.Text = location;
-        Iscustomer = iscustomer;
+        Iscustomer = isCustomer;
+        Text_mileage.Text = $"Mileage Start: {mileage}";
         if (Iscustomer)
         {
             CustomerBtn.BackgroundColor = Colors.Blue;
@@ -22,7 +24,6 @@ public partial class PersonalStartPopup : Popup
             OtherBtn.BackgroundColor = Colors.Blue;
         }
     }
-
     private void CancelBtn_Clicked(object sender, EventArgs e)
     {
         Close(null);
@@ -30,10 +31,9 @@ public partial class PersonalStartPopup : Popup
 
     private void OKBtn_Clicked(object sender, EventArgs e)
     {
-        PersonalPopupStartModel personal = new PersonalPopupStartModel()
+        PersonalPopupStopModel personal = new PersonalPopupStopModel()
         {
             IsCustomer = Iscustomer,
-            job = Text_Job.Text,
             location = Text_Location.Text,
             mileage = Text_Mileage.Text != null ? Convert.ToInt32(Text_Mileage.Text) : 0
         };

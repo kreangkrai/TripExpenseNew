@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     Shell.FlyoutBehavior="Disabled"
     xmlns:pages="clr-namespace:TripExpenseNew"
+    xmlns:pages_="clr-namespace:TripExpenseNew.PersonalPage"
     Title="TripExpenseNew">
 
     
@@ -25,12 +26,12 @@
 
     <ShellContent
     Title="Personal"
-    ContentTemplate="{DataTemplate pages:Personal}"
+    ContentTemplate="{DataTemplate pages_:Personal}"
     Route="Personal" />
 
     <ShellContent
     Title="PersonalPage"
-    ContentTemplate="{DataTemplate pages:PersonalPage}"
+    ContentTemplate="{DataTemplate pages_:PersonalPage}"
     Route="PersonalPage" />
 
     <ShellContent
