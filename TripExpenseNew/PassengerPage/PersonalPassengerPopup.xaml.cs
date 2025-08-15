@@ -10,18 +10,22 @@ namespace TripExpenseNew.PassengerPage;
 public partial class PersonalPassengerPopup : Popup
 {
     private IEmployee Employee;
+    private ILastTrip LastTrip;
     List<EmployeeModel> employees = new List<EmployeeModel>();
     public PersonalPassengerPopup()
 	{
-		InitializeComponent();
-        
-
+		InitializeComponent();       
     }
     protected async override void OnParentChanged()
     {
         base.OnParentChanged();
         Employee = new EmployeeService();
+        LastTrip = new LastTripService();
         employees = await Employee.GetEmployees();
+        
+        List<string> emps = await LastTrip.GetInUse();
+        employees = employees.Where(w=> !emps.Contains(w.emp_id)).ToList();
+
         BindingContext = new EmployeeItems(employees);
     }
     protected override void OnBindingContextChanged()

@@ -76,5 +76,23 @@ namespace TripExpenseNew.Services
             var message = await response.Content.ReadAsStringAsync();
             return message;
         }
+
+        public async Task<List<string>> GetAvailable()
+        {
+            HttpResponseMessage response = await _httpClient.GetAsync(URL + $"/api/LastTrip/getavailable");
+            response.EnsureSuccessStatusCode();
+            var content = await response.Content.ReadAsStringAsync();
+            List<string> emps = JsonConvert.DeserializeObject<List<string>>(content);
+            return emps;
+        }
+
+        public async Task<List<string>> GetInUse()
+        {
+            HttpResponseMessage response = await _httpClient.GetAsync(URL + $"/api/LastTrip/getinuse");
+            response.EnsureSuccessStatusCode();
+            var content = await response.Content.ReadAsStringAsync();
+            List<string> emps = JsonConvert.DeserializeObject<List<string>>(content);
+            return emps;
+        }
     }
 }

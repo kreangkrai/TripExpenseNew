@@ -10,5 +10,7 @@ namespace TripExpenseNew.Interface
         Task<string> UpdateByTrip(LastTripModel trip);
         Task<List<LastTripViewModel>> GetByEmp(string emp_id);
         Task<List<LastTripViewModel>> GetByTrip(DateTime trip);
+        Task<List<string>> GetAvailable();
+        Task<List<string>> GetInUse();
     }
 }

@@ -17,5 +17,6 @@
         public string location { get; set; }
         public string zipcode { get; set; }
         public int mileage { get; set; }
+        public double cash { get; set; }
     }
 }
