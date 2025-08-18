@@ -13,6 +13,8 @@ namespace TripExpenseNew
             Routing.RegisterRoute("MainPage", typeof(MainPage));
             Routing.RegisterRoute("Personal", typeof(Personal));
             Routing.RegisterRoute("PersonalPage", typeof(PersonalPage.PersonalPage));
+            Routing.RegisterRoute("PersonalForceStop", typeof(PersonalPage.PersonalForceStop));
+            Routing.RegisterRoute("CompanyPage", typeof(CompanyPage.CompanyPage));
         }
     }
 }
