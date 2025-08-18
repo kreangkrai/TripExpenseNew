@@ -1,42 +1,42 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-    <Shell
+<Shell
     x:Class="TripExpenseNew.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    Shell.FlyoutBehavior="Disabled"
     xmlns:pages="clr-namespace:TripExpenseNew"
     xmlns:pages_="clr-namespace:TripExpenseNew.PersonalPage"
-    Title="TripExpenseNew">
+    Title="TripExpenseNew"
+    Shell.FlyoutBehavior="Disabled">
 
-    
-    <ShellContent
-    Title="Initial"
-    ContentTemplate="{DataTemplate pages:Initial_Page}"
-    Route="Initial_Page" />
 
     <ShellContent
-    Title="Login"
-    ContentTemplate="{DataTemplate pages:Login_Page}"
-    Route="Login_Page" />
-        
-    <ShellContent
-    Title="MainPage"
-    ContentTemplate="{DataTemplate pages:MainPage}"
-    Route="MainPage" />
+        Title="Initial"
+        ContentTemplate="{DataTemplate pages:Initial_Page}"
+        Route="Initial_Page" />
 
     <ShellContent
-    Title="Personal"
-    ContentTemplate="{DataTemplate pages_:Personal}"
-    Route="Personal" />
+        Title="Login"
+        ContentTemplate="{DataTemplate pages:Login_Page}"
+        Route="Login_Page" />
 
     <ShellContent
-    Title="PersonalPage"
-    ContentTemplate="{DataTemplate pages_:PersonalPage}"
-    Route="PersonalPage" />
+        Title="MainPage"
+        ContentTemplate="{DataTemplate pages:MainPage}"
+        Route="MainPage" />
 
     <ShellContent
-    Title="Home"
-    ContentTemplate="{DataTemplate pages:Home_Page}"
-    Route="Home_Page" />
+        Title="Personal"
+        ContentTemplate="{DataTemplate pages_:Personal}"
+        Route="Personal" />
+
+    <ShellContent
+        Title="PersonalPage"
+        ContentTemplate="{DataTemplate pages_:PersonalPage}"
+        Route="PersonalPage" />
+
+    <ShellContent
+        Title="Home"
+        ContentTemplate="{DataTemplate pages:Home_Page}"
+        Route="Home_Page" />
 
 </Shell>

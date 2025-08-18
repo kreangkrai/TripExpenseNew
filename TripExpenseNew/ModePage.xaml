@@ -6,21 +6,21 @@
     xmlns:shell="http://schemas.microsoft.com/dotnet/2021/maui"
     Title=""
     shell:Shell.NavBarIsVisible="False">
-    <!--  shell:Shell.NavBarIsVisible="False"  
+    <!--  shell:Shell.NavBarIsVisible="False"
     <Shell.TitleView>
         <Grid
             Padding="0,10"
             ColumnDefinitions="*"
             RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
             RowSpacing="10" />
-    </Shell.TitleView> -->
+    </Shell.TitleView>-->
     <Grid
         Padding="0,10"
         ColumnDefinitions="*"
-        RowDefinitions="*"
-        VerticalOptions="Center"
         HorizontalOptions="Center"
-        RowSpacing="0">
+        RowDefinitions="*"
+        RowSpacing="0"
+        VerticalOptions="Center">
 
         <ContentView Grid.Row="0">
             <VerticalStackLayout Padding="20,20" Spacing="30">
@@ -40,9 +40,9 @@
                 <Button
                     x:Name="PersonalCarBtn"
                     Padding="10,5"
-                    Clicked="PersonalCar_Clicked"
                     BackgroundColor="#297CC0"
                     CharacterSpacing="3"
+                    Clicked="PersonalCar_Clicked"
                     CornerRadius="20"
                     FontAttributes="Bold"
                     FontSize="28"
@@ -58,6 +58,7 @@
                     Padding="10,5"
                     BackgroundColor="#297CC0"
                     CharacterSpacing="3"
+                    Clicked="CompanyCar_Clicked"
                     CornerRadius="20"
                     FontAttributes="Bold"
                     FontSize="28"
@@ -105,18 +106,18 @@
                 <Button
                     x:Name="CancelBtn"
                     Padding="10,5"
-                    Clicked="CancelBtn_Clicked"
                     BackgroundColor="Red"
                     BorderColor="Red"
-                    TextColor="White"
                     BorderWidth="3"
                     CharacterSpacing="03"
+                    Clicked="CancelBtn_Clicked"
                     CornerRadius="20"
                     FontAttributes="Bold"
                     FontSize="20"
                     HeightRequest="80"
                     HorizontalOptions="Center"
                     Text="Cancel"
+                    TextColor="White"
                     VerticalOptions="Center"
                     WidthRequest="300" />
 

@@ -82,7 +82,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="CompanyPage\" />
 	  <Folder Include="Views\" />
 	</ItemGroup>
 
@@ -94,6 +93,9 @@
 
 	<ItemGroup>
 	  <MauiXaml Update="AddPassengerPersonal_Page.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="CompanyPage\CompanyPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="CustomPopup\PersonalCheckinCustomerPopup.xaml">
@@ -133,6 +135,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="PersonalPage\Personal.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="PersonalPage\PersonalForceStop.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="PersonalPage\PersonalPage.xaml">
