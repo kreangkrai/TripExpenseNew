@@ -7,7 +7,7 @@
         public string driver { get; set; }
         public string passenger { get; set; }
         public string job_id { get; set; }
-        public DateTime trip { get; set; }
+        public string trip { get; set; }
         public DateTime date { get; set; }
         public string status { get; set; }
         public double latitude { get; set; }

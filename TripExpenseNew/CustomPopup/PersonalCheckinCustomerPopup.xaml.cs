@@ -1,4 +1,5 @@
 using CommunityToolkit.Maui.Views;
+using Microsoft.Maui.Devices.Sensors;
 
 namespace TripExpenseNew.CustomPopup;
 
@@ -8,7 +9,15 @@ public partial class PersonalCheckinCustomerPopup : Popup
 	{   
 		InitializeComponent();
         Text_Customer.Text = customer;
-	}
+        if (customer != "CTL(HQ)" && customer != "CTL(KBO)" && customer != "CTL(RBO)")
+        {
+            Text_Customer.IsEnabled = true;
+        }
+        else
+        {
+            Text_Customer.IsEnabled = false;
+        }
+    }
 
     private void OnCloseButtonClicked(object sender, EventArgs e)
     {

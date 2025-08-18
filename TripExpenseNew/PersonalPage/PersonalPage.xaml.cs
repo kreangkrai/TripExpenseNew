@@ -30,6 +30,7 @@ public partial class PersonalPage : ContentPage
     private CancellationTokenSource cancellationTokenSource;
     private bool isTracking = true;
     Tuple<string, bool> loc = new Tuple<string, bool> ("",false);
+    Location g_location = null;
     List<LocationCustomerModel> GetLocationCustomers = new List<LocationCustomerModel>();
     List<LocationOtherModel> GetLocationOthers = new List<LocationOtherModel>();
     List<LocationOtherModel> GetLocationCTL = new List<LocationOtherModel>();
@@ -127,9 +128,11 @@ public partial class PersonalPage : ContentPage
 
         if (result is PersonalPopupStartModel personal)
         {
-            if (personal.location != null && personal.location != "" && personal.mileage != 0)
+            if (personal.location_name != null && personal.location_name != "" && personal.mileage != 0)
             {
                 //await Shell.Current.GoToAsync("Personal");
+                personal.location = g_location;
+                personal.IsContinue = false;
                 await Navigation.PushAsync(new Personal(personal));
             }
             else
@@ -241,6 +244,7 @@ public partial class PersonalPage : ContentPage
                 FindLocationService findLocation = new FindLocationService();
                 loc = findLocation.FindLocation(GetLocationCTL, GetLocationOthers, GetLocationCustomers, location);
 
+                g_location = location;
                 Console.WriteLine($"ALL ==> Lat: {location.Latitude}, Lon: {location.Longitude}");
             }
 
