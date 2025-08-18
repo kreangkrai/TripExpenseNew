@@ -845,16 +845,15 @@ namespace TripExpenseNew.PersonalPage
                     if (result_customer != null)
                     {
                         chkinlocation = result_customer.ToString();
+                        isChkIn = true;
                     }
                     else
                     {
-                        isChkIn = false;
                         MainThread.BeginInvokeOnMainThread(async () =>
                         {
                             await DisplayAlert("", "กรุณากรอกข้อมูล", "OK");
                         });
                     }
-                    isChkIn = true;
                 }
 
                 if (result.ToString() == "Other")
@@ -868,16 +867,16 @@ namespace TripExpenseNew.PersonalPage
                     if (result_other != null)
                     {
                         chkinlocation = result_other.ToString();
+                        isChkIn = true;
                     }
                     else
                     {
-                        isChkIn = false;
                         MainThread.BeginInvokeOnMainThread(async () =>
                         {
                             await DisplayAlert("", "กรุณากรอกข้อมูล", "OK");
                         });
                     }
-                    isChkIn = true;
+                    
                 }
 
                 if (result.ToString() == "Gas Station")
@@ -894,17 +893,16 @@ namespace TripExpenseNew.PersonalPage
                         {
                             chkinlocation = data.Item1;
                             cash = data.Item2;
+                            isChkIn = true;
                         }
                     }
                     else
                     {
-                        isChkIn = false;
                         MainThread.BeginInvokeOnMainThread(async () =>
                         {
                             await DisplayAlert("", "กรุณากรอกข้อมูล", "OK");
                         });
-                    }
-                    isChkIn = true;
+                    }                   
                 }
 
                 if (isChkIn)
