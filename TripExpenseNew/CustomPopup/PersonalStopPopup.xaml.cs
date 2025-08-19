@@ -11,6 +11,15 @@ public partial class PersonalStopPopup : Popup
 	{
 		InitializeComponent();
         Text_Location.Text = location;
+        if (location != "CTL(HQ)" && location != "CTL(KBO)" && location != "CTL(RBO)")
+        {
+            Text_Location.IsEnabled = true;
+        }
+        else
+        {
+            Text_Location.IsEnabled = false;
+        }
+
         Iscustomer = isCustomer;
         Text_mileage.Text = $"Mileage Start: {mileage}";
         if (Iscustomer)

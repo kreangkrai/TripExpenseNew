@@ -10,8 +10,12 @@ namespace TripExpenseNew.Models
     public class PersonalPopupStartModel
     {
         public bool IsCustomer {  get; set; }
-        public string location { get; set; }
-        public string job {  get; set; }
+        public bool IsContinue {  get; set; }
+        public string location_name { get; set; }
+        public string job_id {  get; set; }
         public int mileage { get; set; }
+        public Location location { get; set; }
+        public string trip {  get; set; }
+        public double distance { get; set; }
     }
 }

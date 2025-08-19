@@ -8,6 +8,14 @@ public partial class PersonalCheckinOtherPopup : Popup
 	{
 		InitializeComponent();
         Text_Other.Text = customer;
+        if (customer != "CTL(HQ)" && customer != "CTL(KBO)" && customer != "CTL(RBO)")
+        {
+            Text_Other.IsEnabled = true;
+        }
+        else
+        {
+            Text_Other.IsEnabled = false;
+        }
     }
 
     private void OnCloseButtonClicked(object sender, EventArgs e)

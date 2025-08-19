@@ -18,7 +18,7 @@ namespace TripExpenseNew.DBService
             database = new SQLiteAsyncConnection(dbPath);
             database.CreateTableAsync<PersonalDBModel>().Wait();
         }
-        public async Task<int> Delete(DateTime trip)
+        public async Task<int> Delete(string trip)
         {
             var itemsToDelete = await database.Table<PersonalDBModel>()
                .Where(w => w.trip == trip)
@@ -33,7 +33,7 @@ namespace TripExpenseNew.DBService
             return rowsDeleted;
         }
 
-        public Task<List<PersonalDBModel>> GetByTrip(DateTime trip)
+        public Task<List<PersonalDBModel>> GetByTrip(string trip)
         {
             return database.Table<PersonalDBModel>().Where(w=>w.trip == trip).ToListAsync();
         }

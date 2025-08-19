@@ -10,6 +10,16 @@ public partial class PersonalStartPopup : Popup
 	{
 		InitializeComponent();
         Text_Location.Text = location;
+
+        if(location != "CTL(HQ)" && location != "CTL(KBO)" && location != "CTL(RBO)")
+        {
+            Text_Location.IsEnabled = true;
+        }
+        else
+        {
+            Text_Location.IsEnabled = false;
+        }
+
         Iscustomer = iscustomer;
         Text_Mileage.Text = mileage.ToString();
         if (Iscustomer)
@@ -34,8 +44,8 @@ public partial class PersonalStartPopup : Popup
         PersonalPopupStartModel personal = new PersonalPopupStartModel()
         {
             IsCustomer = Iscustomer,
-            job = Text_Job.Text,
-            location = Text_Location.Text,
+            job_id = Text_Job.Text,
+            location_name = Text_Location.Text,
             mileage = Text_Mileage.Text != null ? Convert.ToInt32(Text_Mileage.Text) : 0
         };
         Close(personal);

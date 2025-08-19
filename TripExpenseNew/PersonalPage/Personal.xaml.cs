@@ -97,6 +97,8 @@ namespace TripExpenseNew.PersonalPage
             LocationOther = new LocationOtherService();
             Mileage = new DBService.MileageService();
 
+            totalDistance = start.distance;
+
             WeakReferenceMessenger.Default.Register<LocationData>(this, async (send, data) =>
             {
                 await UpdateLocationDataAsync(data.Location);
@@ -281,23 +283,46 @@ namespace TripExpenseNew.PersonalPage
 
                     DateTime _start = DateTime.Now;
                     trip_start = _start;
-                    data_personal = new PersonalModel()
+                    if (start.IsContinue)
                     {
-                        driver = emp_id,
-                        date = _start,
-                        job_id = start.job,
-                        distance = totalDistance,
-                        latitude = location.Latitude,
-                        longitude = location.Longitude,
-                        location = start.location,
-                        zipcode = zipcode,
-                        location_mode = start.IsCustomer ? "CUSTOMER" : "OTHER",
-                        speed = speed,
-                        mileage = start.mileage,
-                        trip = trip_start,
-                        status = "START",
-                        cash = 0
-                    };
+                        data_personal = new PersonalModel()
+                        {
+                            driver = emp_id,
+                            date = DateTime.Now,
+                            job_id = start.job_id,
+                            distance = totalDistance,
+                            latitude = location.Latitude,
+                            longitude = location.Longitude,
+                            location = start.location_name,
+                            zipcode = zipcode,
+                            location_mode = start.IsCustomer ? "CUSTOMER" : "OTHER",
+                            speed = speed,
+                            mileage = start.mileage,
+                            trip = start.trip,
+                            status = "CONTINUE",
+                            cash = 0
+                        };
+                    }
+                    else
+                    {
+                        data_personal = new PersonalModel()
+                        {
+                            driver = emp_id,
+                            date = _start,
+                            job_id = start.job_id,
+                            distance = totalDistance,
+                            latitude = location.Latitude,
+                            longitude = location.Longitude,
+                            location = start.location_name,
+                            zipcode = zipcode,
+                            location_mode = start.IsCustomer ? "CUSTOMER" : "OTHER",
+                            speed = speed,
+                            mileage = start.mileage,
+                            trip = trip_start.ToString("yyyyMMddHHmmss"),
+                            status = "START",
+                            cash = 0
+                        };
+                    }
 
                     isStart = true;
                     string message = await _Personal.Insert(data_personal);
@@ -307,7 +332,9 @@ namespace TripExpenseNew.PersonalPage
                     {
                         driver = data_personal.driver,
                         speed = data_personal.speed,
+                        job_id= data_personal.job_id,
                         emp_id = data_personal.driver,
+                        date = DateTime.Now,
                         distance = data_personal.distance,
                         location = data_personal.location,
                         mileage = data_personal.mileage,
@@ -363,6 +390,77 @@ namespace TripExpenseNew.PersonalPage
                     TripCollectionView.ItemsSource = tripItems;
 
                     #endregion
+
+                    if (start.location_name != "" && start.location_name != "CTL(HQ)" && start.location_name != "CTL(KBO)" && start.location_name != "CTL(RBO)")
+                    {
+                        if (start.IsCustomer)
+                        {
+                            LocationCustomerModel locationCustomer = new LocationCustomerModel()
+                            {
+                                emp_id = emp_id,
+                                latitude = location.Latitude,
+                                longitude = location.Longitude,
+                                location = start.location_name,
+                                location_id = DateTime.Now.ToString("yyyyMMddHHmmssfff"),
+                                zipcode = zipcode,
+                            };
+                            await LocationCustomer.Insert(locationCustomer);                          
+                        }
+                        else
+                        {
+                            LocationOtherModel locationOther = new LocationOtherModel()
+                            {
+                                emp_id = emp_id,
+                                latitude = location.Latitude,
+                                longitude = location.Longitude,
+                                location = start.location_name,
+                                location_id = DateTime.Now.ToString("yyyyMMddHHmmssfff"),
+                                zipcode = zipcode,
+                            };
+
+                            await LocationOther.Insert(locationOther);
+                        }
+                    }
+                    else
+                    {
+                        double dist = CalculateDistance(start.location, location);
+                        if (dist > 0.3)
+                        {
+                            if (start.IsCustomer)
+                            {
+                                LocationCustomerModel locationCustomer = new LocationCustomerModel()
+                                {
+                                    emp_id = emp_id,
+                                    latitude = location.Latitude,
+                                    longitude = location.Longitude,
+                                    location = start.location_name,
+                                    location_id = DateTime.Now.ToString("yyyyMMddHHmmssfff"),
+                                    zipcode = zipcode,
+                                };
+                                await LocationCustomer.Insert(locationCustomer);                                
+                            }
+                            else
+                            {
+                                LocationOtherModel locationOther = new LocationOtherModel()
+                                {
+                                    emp_id = emp_id,
+                                    latitude = location.Latitude,
+                                    longitude = location.Longitude,
+                                    location = start.location_name,
+                                    location_id = DateTime.Now.ToString("yyyyMMddHHmmssfff"),
+                                    zipcode = zipcode,
+                                };
+                                await LocationOther.Insert(locationOther);
+                            }
+                        }
+                    }
+
+                    #region Add Location
+
+
+
+                    #endregion
+
                     Console.WriteLine($"ALL ==> {message} Lat: {location.Latitude}, Lon: {location.Longitude}, Speed: {speed}, Distance: {totalDistance}, Zipcode: {zipcode}");
                 }
                 else
@@ -384,7 +482,7 @@ namespace TripExpenseNew.PersonalPage
                                     {
                                         driver = emp_id,
                                         date = DateTime.Now,
-                                        job_id = start.job,
+                                        job_id = start.job_id,
                                         distance = totalDistance,
                                         latitude = location.Latitude,
                                         longitude = location.Longitude,
@@ -393,7 +491,7 @@ namespace TripExpenseNew.PersonalPage
                                         location_mode = "",
                                         speed = speed,
                                         mileage = 0,
-                                        trip = trip_start,
+                                        trip = trip_start.ToString("yyyyMMddHHmmss"),
                                         status = "INACTIVE",
                                         cash = 0
                                     };
@@ -403,7 +501,9 @@ namespace TripExpenseNew.PersonalPage
                                     {
                                         driver = personal.driver,
                                         speed = personal.speed,
+                                        job_id = personal.job_id,
                                         emp_id = personal.driver,
+                                        date = DateTime.Now,
                                         distance = personal.distance,
                                         location = personal.location,
                                         mileage = personal.mileage,
@@ -439,7 +539,7 @@ namespace TripExpenseNew.PersonalPage
                             {
                                 driver = emp_id,
                                 date = DateTime.Now,
-                                job_id = start.job,
+                                job_id = start.job_id,
                                 distance = totalDistance,
                                 latitude = location.Latitude,
                                 longitude = location.Longitude,
@@ -448,7 +548,7 @@ namespace TripExpenseNew.PersonalPage
                                 location_mode = "",
                                 speed = speed,
                                 mileage = 0,
-                                trip = trip_start,
+                                trip = trip_start.ToString("yyyyMMddHHmmss"),
                                 status = "NA",
                                 cash = 0
                             };
@@ -460,7 +560,7 @@ namespace TripExpenseNew.PersonalPage
                             if (diff >= tracking_db)
                             {
                                 List<PersonalDBModel> db_personals = new List<PersonalDBModel>();
-                                db_personals = await DB_Personal.GetByTrip(trip_start);
+                                db_personals = await DB_Personal.GetByTrip(trip_start.ToString("yyyyMMddHHmmss"));
 
                                 List<PersonalModel> personals = new List<PersonalModel>();
                                 personals = db_personals.Select(s => new PersonalModel()
@@ -475,14 +575,14 @@ namespace TripExpenseNew.PersonalPage
                                     location_mode = s.location_mode,
                                     speed = s.speed,
                                     mileage = s.mileage,
-                                    trip = trip_start,
+                                    trip = trip_start.ToString("yyyyMMddHHmmss"),
                                     status = s.status,
                                     driver = s.driver,
                                     cash = s.cash,
                                 }).ToList();
                                 string m = await _Personal.Inserts(personals);
 
-                                await DB_Personal.Delete(trip_start);
+                                await DB_Personal.Delete(trip_start.ToString("yyyyMMddHHmmss"));
 
                                 PersonalModel personal = personals.FirstOrDefault();
 
@@ -490,7 +590,9 @@ namespace TripExpenseNew.PersonalPage
                                 {
                                     driver = personal.driver,
                                     speed = personal.speed,
+                                    job_id = personal.job_id,
                                     emp_id = personal.driver,
+                                    date = DateTime.Now,
                                     distance = personal.distance,
                                     location = personal.location,
                                     mileage = personal.mileage,
@@ -624,7 +726,7 @@ namespace TripExpenseNew.PersonalPage
                                 var placemarks = await Geocoding.Default.GetPlacemarksAsync(g_location.Latitude, g_location.Longitude);
                                 var zipcode = placemarks?.FirstOrDefault()?.PostalCode ?? "N/A";
 
-                                List<PersonalDBModel> db_personals = await DB_Personal.GetByTrip(trip_start);
+                                List<PersonalDBModel> db_personals = await DB_Personal.GetByTrip(trip_start.ToString("yyyyMMddHHmmss"));
                                 List<PersonalModel> personals = db_personals.Select(s => new PersonalModel()
                                 {
                                     job_id = s.job_id,
@@ -637,7 +739,7 @@ namespace TripExpenseNew.PersonalPage
                                     location_mode = s.location_mode,
                                     speed = s.speed,
                                     mileage = personal.mileage,
-                                    trip = trip_start,
+                                    trip = trip_start.ToString("yyyyMMddHHmmss"),
                                     status = s.status,
                                     driver = s.driver,
                                     cash = s.cash,
@@ -646,13 +748,13 @@ namespace TripExpenseNew.PersonalPage
                                 string message = await _Personal.Inserts(personals);
                                 if (message == "Success")
                                 {
-                                    await DB_Personal.Delete(trip_start);
+                                    await DB_Personal.Delete(trip_start.ToString("yyyyMMddHHmmss"));
 
                                     data_personal = new PersonalModel()
                                     {
                                         driver = emp_id,
                                         date = DateTime.Now,
-                                        job_id = start.job,
+                                        job_id = start.job_id,
                                         distance = totalDistance,
                                         latitude = g_location.Latitude,
                                         longitude = g_location.Longitude,
@@ -661,7 +763,7 @@ namespace TripExpenseNew.PersonalPage
                                         location_mode = "",
                                         speed = speed,
                                         mileage = personal.mileage,
-                                        trip = trip_start,
+                                        trip = trip_start.ToString("yyyyMMddHHmmss"),
                                         status = "STOP",
                                         cash = 0
                                     };
@@ -674,6 +776,8 @@ namespace TripExpenseNew.PersonalPage
                                             driver = data_personal.driver,
                                             speed = data_personal.speed,
                                             emp_id = data_personal.driver,
+                                            job_id = data_personal.job_id,
+                                            date = data_personal.date,
                                             distance = data_personal.distance,
                                             location = data_personal.location,
                                             mileage = data_personal.mileage,
@@ -685,13 +789,46 @@ namespace TripExpenseNew.PersonalPage
 
                                         message = await LastTrip.UpdateByTrip(lastTrip);
 
-                                        int act = await ActivePersonal.Delete(trip_start);
+                                        int act = await ActivePersonal.Delete(trip_start.ToString("yyyyMMddHHmmss"));
                                     }
                                 }
 
+                                #region Add Location
+
+                                if (loc.Item1 != personal.location && personal.location != "CTL(HQ)" && personal.location != "CTL(KBO)" && personal.location != "CTL(RBO)") // Insert New Location
+                                {
+                                    if (personal.IsCustomer)
+                                    {
+                                        LocationCustomerModel locationCustomer = new LocationCustomerModel()
+                                        {
+                                            emp_id = emp_id,
+                                            latitude = g_location.Latitude,
+                                            longitude = g_location.Longitude,
+                                            location = start.location_name,
+                                            location_id = DateTime.Now.ToString("yyyyMMddHHmmssfff"),
+                                            zipcode = zipcode,
+                                        };
+                                        await LocationCustomer.Insert(locationCustomer);
+                                    }
+                                    else
+                                    {
+                                        LocationOtherModel locationOther = new LocationOtherModel()
+                                        {
+                                            emp_id = emp_id,
+                                            latitude = g_location.Latitude,
+                                            longitude = g_location.Longitude,
+                                            location = start.location_name,
+                                            location_id = DateTime.Now.ToString("yyyyMMddHHmmssfff"),
+                                            zipcode = zipcode,
+                                        };
+                                        await LocationOther.Insert(locationOther);
+                                    }
+                                }
+                                #endregion
+
                                 #region GET PASSENGER
-                                CultureInfo usCulture = new CultureInfo("en-US");
-                                List<PassengerPersonalViewModel> passenger_personals = await PassengerPersonal.GetPassengerPersonalByDriver(data_personal.driver, data_personal.trip.ToString("yyyy-MM-dd HH:mm:ss", usCulture));
+                                //CultureInfo usCulture = new CultureInfo("en-US");
+                                List<PassengerPersonalViewModel> passenger_personals = await PassengerPersonal.GetPassengerPersonalByDriver(data_personal.driver, data_personal.trip);
 
                                 List<string> emp_list = passenger_personals.Where(w => w.status == "STOP").Select(s => s.passenger).ToList();
                                 List<string> emps = passenger_personals.Where(w => !emp_list.Contains(w.passenger)).Select(s => s.passenger).ToList();
@@ -723,6 +860,8 @@ namespace TripExpenseNew.PersonalPage
                                             driver = data_personal.driver,
                                             speed = 0,
                                             emp_id = emps[i],
+                                            job_id = data_personal.job_id,
+                                            date = DateTime.Now,
                                             distance = 0,
                                             location = data_personal.location,
                                             mileage = 0,
@@ -830,6 +969,10 @@ namespace TripExpenseNew.PersonalPage
 
                 #endregion
 
+                double speed = g_location?.Speed.HasValue ?? false ? g_location.Speed.Value * 3.6 : 0;
+                var placemarks = await Geocoding.Default.GetPlacemarksAsync(g_location.Latitude, g_location.Longitude);
+                var zipcode = placemarks?.FirstOrDefault()?.PostalCode ?? "N/A";
+
                 string chkinlocation = "";
                 double cash = 0;
 
@@ -844,21 +987,31 @@ namespace TripExpenseNew.PersonalPage
 
                     if (result_customer != null)
                     {
-                        chkinlocation = result_customer.ToString();
-                        isChkIn = true;
-                    }
-                    else
-                    {
-                        MainThread.BeginInvokeOnMainThread(async () =>
+                        if (result_customer.ToString().Trim() != "")
                         {
-                            await DisplayAlert("", "กรุณากรอกข้อมูล", "OK");
-                        });
+                            chkinlocation = result_customer.ToString();
+                            isChkIn = true;
+
+                            if (loc.Item1 != result_customer.ToString() && result_customer.ToString() != "CTL(HQ)" && result_customer.ToString() != "CTL(KBO)" && result_customer.ToString() != "CTL(RBO)") // Insert New Location Customer
+                            {
+                                LocationCustomerModel locationCustomer = new LocationCustomerModel()
+                                {
+                                    emp_id = emp_id,
+                                    latitude = g_location.Latitude,
+                                    longitude = g_location.Longitude,
+                                    location = result_customer.ToString(),
+                                    location_id = DateTime.Now.ToString("yyyyMMddHHmmssfff"),
+                                    zipcode = zipcode,
+                                };
+                                await LocationCustomer.Insert(locationCustomer);
+                            }
+                        }
                     }
                 }
 
                 if (result.ToString() == "Other")
                 {
-                    if (loc.Item2 == true)
+                    if (loc.Item2 == false)
                     {
                         chkinlocation = loc.Item1;
                     }
@@ -866,17 +1019,26 @@ namespace TripExpenseNew.PersonalPage
 
                     if (result_other != null)
                     {
-                        chkinlocation = result_other.ToString();
-                        isChkIn = true;
-                    }
-                    else
-                    {
-                        MainThread.BeginInvokeOnMainThread(async () =>
+                        if (result_other.ToString().Trim() != "")
                         {
-                            await DisplayAlert("", "กรุณากรอกข้อมูล", "OK");
-                        });
+                            chkinlocation = result_other.ToString();
+                            isChkIn = true;
+
+                            if (loc.Item1 != result_other.ToString() && result_other.ToString() != "CTL(HQ)" && result_other.ToString() != "CTL(KBO)" && result_other.ToString() != "CTL(RBO)")
+                            {
+                                LocationOtherModel locationOther = new LocationOtherModel()
+                                {
+                                    emp_id = emp_id,
+                                    latitude = g_location.Latitude,
+                                    longitude = g_location.Longitude,
+                                    location = result_other.ToString(),
+                                    location_id = DateTime.Now.ToString("yyyyMMddHHmmssfff"),
+                                    zipcode = zipcode,
+                                };
+                                await LocationOther.Insert(locationOther);
+                            }
+                        }
                     }
-                    
                 }
 
                 if (result.ToString() == "Gas Station")
@@ -906,16 +1068,12 @@ namespace TripExpenseNew.PersonalPage
                 }
 
                 if (isChkIn)
-                {
-                    double speed = g_location?.Speed.HasValue ?? false ? g_location.Speed.Value * 3.6 : 0;
-                    var placemarks = await Geocoding.Default.GetPlacemarksAsync(g_location.Latitude, g_location.Longitude);
-                    var zipcode = placemarks?.FirstOrDefault()?.PostalCode ?? "N/A";
-
+                {                   
                     PersonalModel personal = new PersonalModel()
                     {
                         driver = emp_id,
                         date = DateTime.Now,
-                        job_id = start.job,
+                        job_id = start.job_id,
                         distance = totalDistance,
                         latitude = g_location.Latitude,
                         longitude = g_location.Longitude,
@@ -924,7 +1082,7 @@ namespace TripExpenseNew.PersonalPage
                         location_mode = "",
                         speed = speed,
                         mileage = 0,
-                        trip = trip_start,
+                        trip = trip_start.ToString("yyyyMMddHHmmss"),
                         status = "CHECK IN",
                         cash = cash
                     };
@@ -950,7 +1108,9 @@ namespace TripExpenseNew.PersonalPage
                         {
                             driver = personal.driver,
                             speed = personal.speed,
+                            job_id=personal.job_id,
                             emp_id = personal.driver,
+                            date = DateTime.Now,
                             distance = personal.distance,
                             location = personal.location,
                             mileage = personal.mileage,
@@ -964,8 +1124,8 @@ namespace TripExpenseNew.PersonalPage
 
                     }
                     #region GET PASSENGER
-                    CultureInfo usCulture = new CultureInfo("en-US");
-                    List<PassengerPersonalViewModel> passenger_personals = await PassengerPersonal.GetPassengerPersonalByDriver(personal.driver, personal.trip.ToString("yyyy-MM-dd HH:mm:ss", usCulture));
+                    //CultureInfo usCulture = new CultureInfo("en-US");
+                    List<PassengerPersonalViewModel> passenger_personals = await PassengerPersonal.GetPassengerPersonalByDriver(personal.driver, personal.trip);
 
                     List<string> emp_list = passenger_personals.Where(w => w.status == "STOP").Select(s => s.passenger).ToList();
 
@@ -999,6 +1159,8 @@ namespace TripExpenseNew.PersonalPage
                                     driver = emp_id,
                                     speed = 0,
                                     emp_id = emps[i],
+                                    job_id = personal.job_id,
+                                    date = DateTime.Now,
                                     distance = 0,
                                     location = personal.location,
                                     mileage = 0,
@@ -1093,6 +1255,8 @@ namespace TripExpenseNew.PersonalPage
                         driver = data_personal.driver,
                         speed = 0,
                         emp_id = emp.emp_id,
+                        job_id= data_personal.job_id,
+                        date = DateTime.Now,
                         distance = 0,
                         location = data_personal.location,
                         mileage = 0,
@@ -1153,7 +1317,9 @@ namespace TripExpenseNew.PersonalPage
                         {
                             driver = passengerPersonal.driver,
                             speed = 0,
+                            job_id= passengerPersonal.job_id,
                             emp_id = passengerPersonal.passenger,
+                            date = DateTime.Now,
                             distance = 0,
                             location = passengerPersonal.location,
                             mileage = 0,

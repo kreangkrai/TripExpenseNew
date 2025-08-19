@@ -316,7 +316,7 @@ namespace TripExpenseNew
                     location_mode = "CUSTOMER",
                     speed = speed,
                     mileage = 1234,
-                    trip = DateTime.Now,
+                    trip = DateTime.Now.ToString("yyyyMMddHHmmss"),
                     status = "START"
                 };
                 string message = await Personal.Insert(personal);

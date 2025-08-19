@@ -9,6 +9,7 @@ using TripExpenseNew.DBInterface;
 using TripExpenseNew.DBModels;
 using TripExpenseNew.Interface;
 using TripExpenseNew.Models;
+using TripExpenseNew.PersonalPage;
 
 public partial class Home_Page : ContentPage
 {
@@ -18,6 +19,7 @@ public partial class Home_Page : ContentPage
     private ILastTrip LastTrip;
     private ILogin Login;
     LoginModel emp_id = new LoginModel();
+    List<LastTripViewModel> trips = new List<LastTripViewModel>();
     public Home_Page(ILastTrip _LastTrip, ILogin _Login)
     {
         InitializeComponent();
@@ -31,11 +33,20 @@ public partial class Home_Page : ContentPage
         try
         {
             emp_id = await Login.GetLogin(1);
-            List<LastTripViewModel> trips = await GetLastTrip();
+            trips = await GetLastTrip();
+            trips = trips.OrderByDescending(o=>o.trip).ToList();
             if (trips.Count > 0)
             {
+                if (trips[0].status == true) // In Use Trip
+                {
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        AddTripBtn.Text = "CONTINUE";
+                    });                   
+                }
+
                 _sheetHeight = LastTripBTS.HeightRequest > 0 ? LastTripBTS.HeightRequest : 300;
-                if (trips[trips.Count - 1].driver_name.Length > 25)
+                if (trips[0].driver_name.Length > 25)
                 {
                     lbl_name.FontSize = 30;
                     lbl_lastname.FontSize = 30;
@@ -46,13 +57,13 @@ public partial class Home_Page : ContentPage
                     lbl_lastname.FontSize = 34;
                 }
 
-                lbl_name.Text = trips[trips.Count - 1].emp_name.Split(' ')[0];
-                lbl_lastname.Text = trips[trips.Count - 1].emp_name.Split(' ')[1];
+                lbl_name.Text = trips[0].emp_name.Split(' ')[0];
+                lbl_lastname.Text = trips[0].emp_name.Split(' ')[1];
 
-                txt_last_location.Text = trips[trips.Count - 1].location;
-                txt_last_date.Text = trips[trips.Count - 1].trip.ToString("dd/MM/yyyy HH:mm:ss");
-                txt_last_distance.Text = trips[trips.Count - 1].distance.ToString("#.#") + " km";
-                txt_last_mileage.Text = trips[trips.Count - 1].mileage.ToString();
+                txt_last_location.Text = trips[0].location;
+                txt_last_date.Text = trips[0].date.ToString("dd/MM/yyyy HH:mm:ss");
+                txt_last_distance.Text = trips[0].distance.ToString("#.#") + " km";
+                txt_last_mileage.Text = trips[0].mileage.ToString();              
             }
         }
         catch (Exception ex)
@@ -76,7 +87,36 @@ public partial class Home_Page : ContentPage
     }
     private async void OnGoToModePageClicked(object sender, EventArgs e)
     {
-        await Navigation.PushAsync(new ModePage());
+        if (trips.Count == 0)
+        {
+            await Navigation.PushAsync(new ModePage());
+        }
+        else
+        {
+            if (trips[0].status == true)
+            {
+                if (trips[0].mode == "PERSONAL")
+                {
+                    PersonalPopupStartModel personal = new PersonalPopupStartModel()
+                    {
+                        IsCustomer = false,
+                        job_id = trips[0].job_id,
+                        location = null,
+                        trip = trips[0].trip,
+                        location_name = trips[0].location,
+                        mileage = trips[0].mileage,
+                        distance = trips[0].distance,
+                        IsContinue = true
+                    };
+
+                    await Navigation.PushAsync(new Personal(personal));
+                }
+            }
+            else
+            {
+                await Navigation.PushAsync(new ModePage());
+            }
+        }
     }
 
     private void OnTapOpenBottomSheet(object sender, EventArgs e)
