@@ -6,4 +6,9 @@ public partial class PersonalForceStop : ContentPage
 	{
 		InitializeComponent();
 	}
+
+    private void PersonalCancel_Clicked(object sender, EventArgs e)
+    {
+
+    }
 }
