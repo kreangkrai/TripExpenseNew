@@ -51,14 +51,14 @@ namespace TripExpenseNew.Services
             return message;
         }
 
-        public async Task<string> DeleteByTrip(DateTime trip)
+        public async Task<string> DeleteByTrip(string trip)
         {
             var response = await _httpClient.DeleteAsync(URL + $"/api/LastTrip/deletebytrip?trip={trip}");
             var message = await response.Content.ReadAsStringAsync();
             return message;
         }
 
-        public async Task<List<LastTripViewModel>> GetByTrip(DateTime trip)
+        public async Task<List<LastTripViewModel>> GetByTrip(string trip)
         {
             var response = await _httpClient.GetAsync(URL + $"/api/LastTrip/getbytrip?trip={trip}");
             var content = await response.Content.ReadAsStringAsync();

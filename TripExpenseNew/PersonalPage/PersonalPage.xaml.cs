@@ -7,6 +7,7 @@ using TripExpenseNew.Interface;
 using TripExpenseNew.Models;
 using TripExpenseNew.Services;
 using TripExpenseNew.CustomPopup;
+using TripExpenseNew.ViewModels;
 #if IOS
 using UserNotifications;
 
@@ -133,6 +134,8 @@ public partial class PersonalPage : ContentPage
                 //await Shell.Current.GoToAsync("Personal");
                 personal.location = g_location;
                 personal.IsContinue = false;
+                personal.trip_start = DateTime.Now;
+                personal.job_id = personal.job_id != null ? personal.job_id : "";
                 await Navigation.PushAsync(new Personal(personal));
             }
             else
@@ -231,21 +234,44 @@ public partial class PersonalPage : ContentPage
         {
             if (location != null)
             {
-                MainThread.BeginInvokeOnMainThread(async () =>
+                MainThread.BeginInvokeOnMainThread(() =>
                 {
-                    PersonalStart.IsEnabled = true;
-                    PersonalStart.TextColor = Colors.White;
-                    PersonalStart.BackgroundColor = Color.FromArgb("#297CC1");
-                    await Task.Delay(10);
-                    PersonalStart.BackgroundColor = Color.FromArgb("#297CC0");
-                    PersonalStart.Text = "START";
+                    if (BindingContext is ButtonPersonalStart viewModel)
+                    {
+                        viewModel.ButtonPersonalStartText = "START";
+                    }
+                    else
+                    {
+                        PersonalStart.IsEnabled = true;
+                        PersonalStart.TextColor = Colors.White;
+                        PersonalStart.BackgroundColor = Color.FromArgb("#297CC0");
+                        PersonalStart.Text = "START";
+                    }
                 });
+
 
                 FindLocationService findLocation = new FindLocationService();
                 loc = findLocation.FindLocation(GetLocationCTL, GetLocationOthers, GetLocationCustomers, location);
 
                 g_location = location;
                 Console.WriteLine($"ALL ==> Lat: {location.Latitude}, Lon: {location.Longitude}");
+            }
+            else
+            {
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    if (BindingContext is ButtonPersonalStart viewModel)
+                    {
+                        viewModel.ButtonPersonalStartText = "Processing..";
+                    }
+                    else
+                    {
+                        PersonalStart.IsEnabled = false;
+                        PersonalStart.TextColor = Colors.White;
+                        PersonalStart.BackgroundColor = Colors.Grey;
+                        PersonalStart.Text = "Processing..";
+                    }
+                });
             }
 
             #region STOP

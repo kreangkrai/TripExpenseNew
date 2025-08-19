@@ -98,6 +98,8 @@ namespace TripExpenseNew.PersonalPage
             Mileage = new DBService.MileageService();
 
             totalDistance = start.distance;
+            trip_start = start.trip_start;
+            g_location = start.location;
 
             WeakReferenceMessenger.Default.Register<LocationData>(this, async (send, data) =>
             {
@@ -204,8 +206,7 @@ namespace TripExpenseNew.PersonalPage
                 await RequestNotificationPermission();
                 await SendNotification("สวัสดี", "นี่คือการแจ้งเตือนจาก MAUI!");
 
-                previousLocation = null;
-                totalDistance = 0;
+                previousLocation = null;               
 
 #if IOS
                 // ตรวจสอบ Location Services ด้วย CLLocationManager
@@ -267,7 +268,8 @@ namespace TripExpenseNew.PersonalPage
         private async Task UpdateLocationDataAsync(Location location)
         {
             try
-            {
+            {                
+
                 if (previousLocation != null)
                 {
                     totalDistance += CalculateDistance(previousLocation, location);
@@ -280,9 +282,7 @@ namespace TripExpenseNew.PersonalPage
                 {
                     var placemarks = await Geocoding.Default.GetPlacemarksAsync(location.Latitude, location.Longitude);
                     var zipcode = placemarks?.FirstOrDefault()?.PostalCode ?? "N/A";
-
-                    DateTime _start = DateTime.Now;
-                    trip_start = _start;
+                  
                     if (start.IsContinue)
                     {
                         data_personal = new PersonalModel()
@@ -302,13 +302,40 @@ namespace TripExpenseNew.PersonalPage
                             status = "CONTINUE",
                             cash = 0
                         };
+
+                        isStart = true;
+                        string message = await _Personal.Insert(data_personal);
+
+
+                        #region Show Passenger
+                        List<LastTripViewModel> last_trip = await LastTrip.GetByTrip(start.trip);
+                        last_trip = last_trip.Where(w=>w.emp_id != emp_id && w.status == true).ToList();
+                        if (last_trip.Count > 0)
+                        {
+                            for (int i = 0; i < last_trip.Count; i++)
+                            {
+                                PassengerItems passengerItem = new PassengerItems()
+                                {
+                                    TextPassenger = $"{last_trip[i].emp_name}",
+                                    IconDatePassengerSource = "clock.png",
+                                    TextDatePassenger = $"Date: {last_trip[i].date.ToString("dd/MM/yyyy HH:mm:ss")}"
+                                };
+
+                                passengerItems.Add(passengerItem);
+                            }
+                            PassengerCollectionView.ItemsSource = passengerItems;
+                            frame_passenger.IsVisible = true;
+                            Current_Passenger.Text = $"Current Passenger : ({passengerItems.Count})";
+                        }
+                        #endregion
+
                     }
                     else
                     {
                         data_personal = new PersonalModel()
                         {
                             driver = emp_id,
-                            date = _start,
+                            date = DateTime.Now,
                             job_id = start.job_id,
                             distance = totalDistance,
                             latitude = location.Latitude,
@@ -322,29 +349,33 @@ namespace TripExpenseNew.PersonalPage
                             status = "START",
                             cash = 0
                         };
+
+                        isStart = true;
+                        string message = await _Personal.Insert(data_personal);
+
+                        // Insert Last Trip to Server DB
+                        LastTripModel lastTrip = new LastTripModel()
+                        {
+                            driver = data_personal.driver,
+                            speed = data_personal.speed,
+                            job_id = data_personal.job_id,
+                            emp_id = data_personal.driver,
+                            trip_start = trip_start,
+                            date = DateTime.Now,
+                            distance = data_personal.distance,
+                            location = data_personal.location,
+                            latitude = data_personal.latitude,
+                            longitude = data_personal.longitude,
+                            mileage = data_personal.mileage,
+                            mode = "PERSONAL",
+                            status = true,
+                            trip = data_personal.trip,
+                            car_id = data_personal.driver
+                        };
+
+                        message = await LastTrip.Insert(lastTrip);
                     }
 
-                    isStart = true;
-                    string message = await _Personal.Insert(data_personal);
-
-                    // Insert Last Trip to Server DB
-                    LastTripModel lastTrip = new LastTripModel()
-                    {
-                        driver = data_personal.driver,
-                        speed = data_personal.speed,
-                        job_id= data_personal.job_id,
-                        emp_id = data_personal.driver,
-                        date = DateTime.Now,
-                        distance = data_personal.distance,
-                        location = data_personal.location,
-                        mileage = data_personal.mileage,
-                        mode = "PERSONAL",
-                        status = true,
-                        trip = data_personal.trip,
-                        car_id = data_personal.driver
-                    };
-
-                    string l = await LastTrip.Insert(lastTrip);
 
                     // Insert Active Personal to Local DB
                     ActivePersonalModel active_personal = new ActivePersonalModel()
@@ -381,7 +412,7 @@ namespace TripExpenseNew.PersonalPage
                             IconLocationSource = "route.png",
                             TextLocation = $"Location: {ap.location}",
                             IconDateSource = "clock.png",
-                            TextDate = $"Date: {ap.date.ToString("yyyy-MM-dd HH:mm:ss")}"
+                            TextDate = $"Date: {ap.date.ToString("dd/MM/yyyy HH:mm:ss")}"
                         };
 
                         tripItems.Add(trip_item);
@@ -461,7 +492,7 @@ namespace TripExpenseNew.PersonalPage
 
                     #endregion
 
-                    Console.WriteLine($"ALL ==> {message} Lat: {location.Latitude}, Lon: {location.Longitude}, Speed: {speed}, Distance: {totalDistance}, Zipcode: {zipcode}");
+                    Console.WriteLine($"ALL ==> Lat: {location.Latitude}, Lon: {location.Longitude}, Speed: {speed}, Distance: {totalDistance}, Zipcode: {zipcode}");
                 }
                 else
                 {
@@ -490,7 +521,7 @@ namespace TripExpenseNew.PersonalPage
                                         zipcode = "",
                                         location_mode = "",
                                         speed = speed,
-                                        mileage = 0,
+                                        mileage = start.mileage,
                                         trip = trip_start.ToString("yyyyMMddHHmmss"),
                                         status = "INACTIVE",
                                         cash = 0
@@ -503,9 +534,12 @@ namespace TripExpenseNew.PersonalPage
                                         speed = personal.speed,
                                         job_id = personal.job_id,
                                         emp_id = personal.driver,
+                                        trip_start = trip_start,
                                         date = DateTime.Now,
                                         distance = personal.distance,
                                         location = personal.location,
+                                        latitude = personal.latitude,
+                                        longitude = personal.longitude,
                                         mileage = personal.mileage,
                                         mode = "PERSONAL",
                                         status = true,
@@ -547,7 +581,7 @@ namespace TripExpenseNew.PersonalPage
                                 zipcode = "",
                                 location_mode = "",
                                 speed = speed,
-                                mileage = 0,
+                                mileage = start.mileage,
                                 trip = trip_start.ToString("yyyyMMddHHmmss"),
                                 status = "NA",
                                 cash = 0
@@ -592,9 +626,12 @@ namespace TripExpenseNew.PersonalPage
                                     speed = personal.speed,
                                     job_id = personal.job_id,
                                     emp_id = personal.driver,
+                                    trip_start = trip_start,
                                     date = DateTime.Now,
                                     distance = personal.distance,
                                     location = personal.location,
+                                    latitude = personal.latitude,
+                                    longitude = personal.longitude,
                                     mileage = personal.mileage,
                                     mode = "PERSONAL",
                                     status = true,
@@ -625,7 +662,7 @@ namespace TripExpenseNew.PersonalPage
                                         IconLocationSource = "route.png",
                                         TextLocation = $"Location: {ap.location}",
                                         IconDateSource = "clock.png",
-                                        TextDate = $"Date: {ap.date.ToString("yyyy-MM-dd HH:mm:ss")}"
+                                        TextDate = $"Date: {ap.date.ToString("dd/MM/yyyy HH:mm:ss")}"
                                     };
 
                                     tripItems.Add(trip_item);
@@ -651,6 +688,7 @@ namespace TripExpenseNew.PersonalPage
                     trip_distance.Text = totalDistance.ToString("#.#") + " km";
                     trip_duration.Text = duration.ToString(@"hh\:mm\:ss");
                 });
+
                 g_location = location;
             }
             catch (Exception ex)
@@ -736,7 +774,7 @@ namespace TripExpenseNew.PersonalPage
                                     longitude = s.longitude,
                                     location = personal.location,
                                     zipcode = s.zipcode,
-                                    location_mode = s.location_mode,
+                                    location_mode = personal.IsCustomer ? "CUSTOMER" : "OTHER",
                                     speed = s.speed,
                                     mileage = personal.mileage,
                                     trip = trip_start.ToString("yyyyMMddHHmmss"),
@@ -760,7 +798,7 @@ namespace TripExpenseNew.PersonalPage
                                         longitude = g_location.Longitude,
                                         location = personal.location,
                                         zipcode = zipcode,
-                                        location_mode = "",
+                                        location_mode = personal.IsCustomer ? "CUSTOMER" : "OTHER",
                                         speed = speed,
                                         mileage = personal.mileage,
                                         trip = trip_start.ToString("yyyyMMddHHmmss"),
@@ -777,9 +815,12 @@ namespace TripExpenseNew.PersonalPage
                                             speed = data_personal.speed,
                                             emp_id = data_personal.driver,
                                             job_id = data_personal.job_id,
+                                            trip_start = trip_start,
                                             date = data_personal.date,
                                             distance = data_personal.distance,
                                             location = data_personal.location,
+                                            latitude = data_personal.latitude,
+                                            longitude = data_personal.longitude,
                                             mileage = data_personal.mileage,
                                             mode = "PERSONAL",
                                             status = false,
@@ -861,9 +902,12 @@ namespace TripExpenseNew.PersonalPage
                                             speed = 0,
                                             emp_id = emps[i],
                                             job_id = data_personal.job_id,
+                                            trip_start = trip_start,
                                             date = DateTime.Now,
                                             distance = 0,
                                             location = data_personal.location,
+                                            latitude = data_personal.latitude,
+                                            longitude = data_personal.longitude,
                                             mileage = 0,
                                             mode = "PASSENGER PERSONAL",
                                             status = false,
@@ -975,6 +1019,7 @@ namespace TripExpenseNew.PersonalPage
 
                 string chkinlocation = "";
                 double cash = 0;
+                string location_mode = "";
 
                 bool isChkIn = false;
                 if (result.ToString() == "Customer")
@@ -1007,6 +1052,7 @@ namespace TripExpenseNew.PersonalPage
                             }
                         }
                     }
+                    location_mode = "CUSTOMER";
                 }
 
                 if (result.ToString() == "Other")
@@ -1039,6 +1085,7 @@ namespace TripExpenseNew.PersonalPage
                             }
                         }
                     }
+                    location_mode = "OTHER";
                 }
 
                 if (result.ToString() == "Gas Station")
@@ -1064,7 +1111,8 @@ namespace TripExpenseNew.PersonalPage
                         {
                             await DisplayAlert("", "กรุณากรอกข้อมูล", "OK");
                         });
-                    }                   
+                    }
+                    location_mode = "GAS";
                 }
 
                 if (isChkIn)
@@ -1079,9 +1127,9 @@ namespace TripExpenseNew.PersonalPage
                         longitude = g_location.Longitude,
                         location = chkinlocation,
                         zipcode = zipcode,
-                        location_mode = "",
+                        location_mode = location_mode,
                         speed = speed,
-                        mileage = 0,
+                        mileage = start.mileage,
                         trip = trip_start.ToString("yyyyMMddHHmmss"),
                         status = "CHECK IN",
                         cash = cash
@@ -1110,9 +1158,12 @@ namespace TripExpenseNew.PersonalPage
                             speed = personal.speed,
                             job_id=personal.job_id,
                             emp_id = personal.driver,
+                            trip_start = trip_start,
                             date = DateTime.Now,
                             distance = personal.distance,
                             location = personal.location,
+                            latitude = personal.latitude,
+                            longitude = personal.longitude,
                             mileage = personal.mileage,
                             mode = "PERSONAL",
                             status = true,
@@ -1160,9 +1211,12 @@ namespace TripExpenseNew.PersonalPage
                                     speed = 0,
                                     emp_id = emps[i],
                                     job_id = personal.job_id,
+                                    trip_start = trip_start,
                                     date = DateTime.Now,
                                     distance = 0,
                                     location = personal.location,
+                                    latitude = personal.latitude,
+                                    longitude = personal.longitude,
                                     mileage = 0,
                                     mode = "PASSENGER PERSONAL",
                                     status = true,
@@ -1198,7 +1252,7 @@ namespace TripExpenseNew.PersonalPage
                             IconLocationSource = "route.png",
                             TextLocation = $"Location: {ap.location}",
                             IconDateSource = "clock.png",
-                            TextDate = $"Date: {ap.date.ToString("yyyy-MM-dd HH:mm:ss")}"
+                            TextDate = $"Date: {ap.date.ToString("dd/MM/yyyy HH:mm:ss")}"
                         };
 
                         tripItems.Add(trip_item);
@@ -1224,7 +1278,7 @@ namespace TripExpenseNew.PersonalPage
                     {
                         TextPassenger = $"{emp.name}",
                         IconDatePassengerSource = "clock.png",
-                        TextDatePassenger = $"Date: {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}"
+                        TextDatePassenger = $"Date: {DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")}"
                     };
 
                     passengerItems.Add(passengerItem);
@@ -1256,9 +1310,12 @@ namespace TripExpenseNew.PersonalPage
                         speed = 0,
                         emp_id = emp.emp_id,
                         job_id= data_personal.job_id,
+                        trip_start = trip_start,
                         date = DateTime.Now,
                         distance = 0,
                         location = data_personal.location,
+                        latitude = data_personal.latitude,
+                        longitude = data_personal.longitude,
                         mileage = 0,
                         mode = "PASSENGER PERSONAL",
                         status = true,
@@ -1270,10 +1327,10 @@ namespace TripExpenseNew.PersonalPage
 
                     if (message == "Success")
                     {
-                        MainThread.BeginInvokeOnMainThread(async () =>
-                        {
-                            await DisplayAlert("", message, "OK");
-                        });
+                        //MainThread.BeginInvokeOnMainThread(async () =>
+                        //{
+                        //    await DisplayAlert("", message, "OK");
+                        //});
                     }
                     else
                     {
@@ -1283,6 +1340,9 @@ namespace TripExpenseNew.PersonalPage
                         });
                     }
                     #endregion
+
+                    frame_passenger.IsVisible = true;
+                    Current_Passenger.Text = $"Current Passenger : ({passengerItems.Count})";
                 }
             }
         }
@@ -1319,9 +1379,12 @@ namespace TripExpenseNew.PersonalPage
                             speed = 0,
                             job_id= passengerPersonal.job_id,
                             emp_id = passengerPersonal.passenger,
+                            trip_start = trip_start,
                             date = DateTime.Now,
                             distance = 0,
                             location = passengerPersonal.location,
+                            latitude = passengerPersonal.latitude,
+                            longitude = passengerPersonal.longitude,
                             mileage = 0,
                             mode = "PASSENGER PERSONAL",
                             status = false,
@@ -1332,6 +1395,12 @@ namespace TripExpenseNew.PersonalPage
                         message = await LastTrip.UpdateByTrip(lastTrip_passenger);
 
                         passengerItems.Remove(passengerItem);
+                        Current_Passenger.Text = $"Current Passenger : ({passengerItems.Count})";
+                    }
+
+                    if (passengerItems.Count == 0)
+                    {
+                        frame_passenger.IsVisible = false;
                     }
                 }
             }

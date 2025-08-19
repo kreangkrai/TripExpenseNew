@@ -8,7 +8,7 @@
     shell:Shell.NavBarIsVisible="False">
     <VerticalStackLayout
         Padding="30,0"
-        Spacing="20"
+        Spacing="15"
         VerticalOptions="Center">
         <!--  LABEL | STOP TRIP  -->
         <Label
@@ -33,10 +33,10 @@
                 VerticalOptions="Center" />
             <!--  ENTRY | Trip Name  -->
             <Border
-                Padding="5"
                 BackgroundColor="#E7E7E7"
                 Stroke="#C8C8C8"
                 StrokeShape="RoundRectangle 5"
+                HeightRequest="50"
                 StrokeThickness="2">
                 <Label
                     x:Name="Text_TripName"
@@ -132,8 +132,9 @@
                     ClearButtonVisibility="WhileEditing"
                     FontSize="18"
                     Keyboard="Text"
+                    HeightRequest="50"
                     Placeholder=" Ex. CTL-(HQ)"
-                    Text="{Binding Text}" />
+                    Text="" />
             </Border>
         </VerticalStackLayout>
 
@@ -150,20 +151,20 @@
                 VerticalOptions="Center" />
             <!--  ENTRY | Mileage Start  -->
             <Border
-                Grid.Column="1"
-                Padding="4"
-                BackgroundColor="#E7E7E7"
-                Stroke="#C8C8C8"
-                StrokeShape="RoundRectangle 5"
-                StrokeThickness="2">
-                <Label
+                    Grid.Column="1"
+                    Stroke="#C8C8C8"
+                    StrokeShape="RoundRectangle 5"
+                    StrokeThickness="2">
+                <Entry
                     x:Name="Text_MileageStart"
                     Margin="2"
-                    Padding="5"
                     CharacterSpacing="1"
+                    ClearButtonVisibility="WhileEditing"
                     FontSize="18"
-                    HorizontalOptions="Center"
-                    Text="{Binding Text}" />
+                    Keyboard="Numeric"
+                    IsEnabled="False"
+                    HeightRequest="50"
+                    Text="" />
             </Border>
         </Grid>
 
@@ -188,13 +189,14 @@
                     x:Name="Text_MileageStop"
                     Margin="2"
                     CharacterSpacing="1"
+                    HeightRequest="50"
                     ClearButtonVisibility="WhileEditing"
                     FontSize="18"
                     HorizontalOptions="Center"
                     HorizontalTextAlignment="Center"
                     Keyboard="Numeric"
                     Placeholder=" Ex. 123456"
-                    Text="{Binding Text}" />
+                    Text="" />
             </Border>
         </Grid>
 
@@ -221,6 +223,7 @@
                 CharacterSpacing="5"
                 FontSize="20"
                 Format="HH:mm"
+                HeightRequest="50"
                 HorizontalOptions="Center"
                 TextColor="#297CC0"
                 Time="{Binding SelectedTime, Mode=TwoWay}" />
@@ -238,7 +241,8 @@
                 Padding="10,15"
                 BackgroundColor="#14AE5C"
                 CharacterSpacing="2"
-                CornerRadius="10"
+                CornerRadius="30"
+                HeightRequest="60"
                 FontAttributes="Bold"
                 FontSize="22"
                 HorizontalOptions="Fill"
@@ -260,9 +264,10 @@
                 BackgroundColor="#EC221F"
                 CharacterSpacing="2"
                 Clicked="PersonalForceStopCancel_Clicked"
-                CornerRadius="10"
+                CornerRadius="30"
                 FontAttributes="Bold"
                 FontSize="22"
+                HeightRequest="60"
                 HorizontalOptions="Fill"
                 Text="Cancel"
                 VerticalOptions="Center">

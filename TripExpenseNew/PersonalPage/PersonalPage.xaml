@@ -49,7 +49,7 @@
             HeightRequest="80"
             HorizontalOptions="Center"
             IsEnabled="False"
-            Text="Processing.."
+            Text="{Binding ButtonPersonalStartText}"
             TextColor="White"
             VerticalOptions="Center"
             WidthRequest="300" />

@@ -10,6 +10,7 @@ using TripExpenseNew.DBModels;
 using TripExpenseNew.Interface;
 using TripExpenseNew.Models;
 using TripExpenseNew.PersonalPage;
+using TripExpenseNew.ViewModels;
 
 public partial class Home_Page : ContentPage
 {
@@ -39,13 +40,93 @@ public partial class Home_Page : ContentPage
             {
                 if (trips[0].status == true) // In Use Trip
                 {
+                    if (trips[0].trip_start.Date == DateTime.Now.Date)
+                    {
+                        if (trips[0].mode.Contains("PASSENGER"))
+                        {
+                            MainThread.BeginInvokeOnMainThread(() =>
+                            {
+                                if (BindingContext is ButtonTrip viewModel)
+                                {
+                                    viewModel.ButtonTripText = "DROP OFF";
+                                    AddTripBtn.BackgroundColor = Colors.Red;
+                                    Button_Active.BackgroundColor = Colors.Red;
+                                    Text_Status.Text = "Do you want to drop off now?";
+                                    Text_Active.Text = "In Use";
+                                }
+                                else
+                                {
+                                    AddTripBtn.Text = "DROP OFF";
+                                    AddTripBtn.BackgroundColor = Colors.Red;
+                                    Button_Active.BackgroundColor = Colors.Red;
+                                    Text_Status.Text = "Do you want to drop off now?";
+                                    Text_Active.Text = "In Use";
+                                }
+                            });
+                        }
+
+                        else
+                        {
+                            MainThread.BeginInvokeOnMainThread(() =>
+                            {
+                                if (BindingContext is ButtonTrip viewModel)
+                                {
+                                    viewModel.ButtonTripText = "CONTINUE";
+                                    AddTripBtn.BackgroundColor = Colors.Orange;
+                                    Button_Active.BackgroundColor = Colors.Orange;
+                                    Text_Status.Text = "Please press CONTINUE for start trip";
+                                    Text_Active.Text = "In Use";
+                                }
+                                else
+                                {
+                                    AddTripBtn.Text = "CONTINUE";
+                                    AddTripBtn.BackgroundColor = Colors.Orange;
+                                    Button_Active.BackgroundColor = Colors.Orange;
+                                    Text_Status.Text = "Please press CONTINUE for start trip";
+                                    Text_Active.Text = "In Use";
+                                }
+                            });
+                        }                                                  
+                    }
+                    else
+                    {
+                        MainThread.BeginInvokeOnMainThread(() =>
+                        {
+                            if (BindingContext is ButtonTrip viewModel)
+                            {
+                                viewModel.ButtonTripText = "STOP";
+                                AddTripBtn.BackgroundColor = Colors.Red;
+                                Button_Active.BackgroundColor = Colors.Red;
+                                Text_Status.Text = "Please press STOP for stop trip";
+                                Text_Active.Text = "In Use";
+                            }
+                            else
+                            {
+                                AddTripBtn.Text = "STOP";
+                                AddTripBtn.BackgroundColor = Colors.Red;
+                                Button_Active.BackgroundColor = Colors.Red;
+                                Text_Status.Text = "Please press STOP for stop trip";
+                                Text_Active.Text = "In Use";
+                            }
+                        });
+                    }
+                }
+                else
+                {
                     MainThread.BeginInvokeOnMainThread(() =>
                     {
-                        AddTripBtn.Text = "CONTINUE";
-                    });                   
+                        if (BindingContext is ButtonTrip viewModel)
+                        {
+                            viewModel.ButtonTripText = "ADD TRIP";
+                        }
+                        else
+                        {
+                            AddTripBtn.Text = "ADD TRIP";
+                            AddTripBtn.BackgroundColor = Color.FromArgb("#297CC0");
+                        }
+                    });
                 }
 
-                _sheetHeight = LastTripBTS.HeightRequest > 0 ? LastTripBTS.HeightRequest : 300;
                 if (trips[0].driver_name.Length > 25)
                 {
                     lbl_name.FontSize = 30;
@@ -63,7 +144,22 @@ public partial class Home_Page : ContentPage
                 txt_last_location.Text = trips[0].location;
                 txt_last_date.Text = trips[0].date.ToString("dd/MM/yyyy HH:mm:ss");
                 txt_last_distance.Text = trips[0].distance.ToString("#.#") + " km";
-                txt_last_mileage.Text = trips[0].mileage.ToString();              
+                txt_last_mileage.Text = trips[0].mileage.ToString();
+            }
+            else
+            {
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    if (BindingContext is ButtonTrip viewModel)
+                    {
+                        viewModel.ButtonTripText = "ADD TRIP";
+                    }
+                    else
+                    {
+                        AddTripBtn.Text = "ADD TRIP";
+                        AddTripBtn.BackgroundColor = Color.FromArgb("#297CC0");
+                    }
+                });
             }
         }
         catch (Exception ex)
@@ -95,21 +191,48 @@ public partial class Home_Page : ContentPage
         {
             if (trips[0].status == true)
             {
-                if (trips[0].mode == "PERSONAL")
+                if (trips[0].trip_start.Date == DateTime.Now.Date)
                 {
-                    PersonalPopupStartModel personal = new PersonalPopupStartModel()
+                    if (trips[0].mode == "PERSONAL")
                     {
-                        IsCustomer = false,
-                        job_id = trips[0].job_id,
-                        location = null,
-                        trip = trips[0].trip,
-                        location_name = trips[0].location,
-                        mileage = trips[0].mileage,
-                        distance = trips[0].distance,
-                        IsContinue = true
-                    };
+                        PersonalPopupStartModel personal = new PersonalPopupStartModel()
+                        {
+                            IsCustomer = false,
+                            job_id = trips[0].job_id,
+                            location = new Location(trips[0].latitude, trips[0].longitude),
+                            trip = trips[0].trip,
+                            location_name = trips[0].location,
+                            mileage = trips[0].mileage,
+                            distance = trips[0].distance,
+                            IsContinue = true,
+                            trip_start = trips[0].trip_start
+                        };
 
-                    await Navigation.PushAsync(new Personal(personal));
+                        await Navigation.PushAsync(new Personal(personal));
+                    }
+                    if (trips[0].mode == "COMPANY")
+                    {
+
+                    }
+
+                    if (trips[0].mode == "OTHER")
+                    {
+
+                    }
+
+                    if (trips[0].mode == "PASSENGER PERSONAL")
+                    {
+                        await Navigation.PushAsync(new PersonalForceStop());
+                    }
+
+                    if (trips[0].mode == "PASSENGER COMPANY")
+                    {
+
+                    }
+                }
+                else
+                {
+                    //Force Stop
                 }
             }
             else
@@ -118,55 +241,6 @@ public partial class Home_Page : ContentPage
             }
         }
     }
-
-    private void OnTapOpenBottomSheet(object sender, EventArgs e)
-    {
-        if (!_isOpen)
-        {
-            _isOpen = true;
-            LastTripBTS.IsVisible = true;
-            AnimateBottomSheet(0); // เลื่อนขึ้นมา
-        }
-    }
-
-    private void OnCloseBottomSheet(object sender, EventArgs e)
-    {
-        AnimateBottomSheet(_sheetHeight); // เลื่อนลงไปล่างสุด
-        _isOpen = false;
-    }
-
-    private void OnPanUpdated(object sender, PanUpdatedEventArgs e)
-    {
-        switch (e.StatusType)
-        {
-            case GestureStatus.Started:
-                _startY = LastTripBTS.TranslationY;
-                break;
-            case GestureStatus.Running:
-                double newY = Math.Max(_startY + e.TotalY, 0); // จำกัดไม่ให้เลื่อนเกินขอบบน
-                newY = Math.Min(newY, _sheetHeight); // จำกัดไม่ให้เลื่อนเกินล่าง
-                LastTripBTS.TranslationY = newY;
-                break;
-            case GestureStatus.Completed:
-                if (LastTripBTS.TranslationY > _sheetHeight / 2)
-                {
-                    AnimateBottomSheet(_sheetHeight); // ปิดถ้าเลื่อนเกินครึ่ง
-                    _isOpen = false;
-                }
-                else
-                {
-                    AnimateBottomSheet(0); // เปิดถ้าเลื่อนไม่เกินครึ่ง
-                }
-                break;
-        }
-    }
-
-    private void AnimateBottomSheet(double targetY)
-    {
-        uint duration = 250; // ระยะเวลาแอนิเมชัน (ms)
-        LastTripBTS.TranslateTo(0, targetY, duration, Easing.CubicInOut);
-    }
-
     private async void AddTripBtn_Clicked(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync("MainPage");

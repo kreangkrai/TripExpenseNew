@@ -13,6 +13,7 @@ namespace TripExpenseNew.Models
         public bool IsContinue {  get; set; }
         public string location_name { get; set; }
         public string job_id {  get; set; }
+        public DateTime trip_start { get; set; }
         public int mileage { get; set; }
         public Location location { get; set; }
         public string trip {  get; set; }

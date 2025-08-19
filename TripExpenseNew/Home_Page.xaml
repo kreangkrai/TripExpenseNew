@@ -10,8 +10,8 @@
         <Grid
             Padding="20,3"
             ColumnDefinitions=".30*,.40*,.30*"
-            RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto"
-            RowSpacing="1">
+            RowDefinitions="Auto,Auto,Auto,Auto,Auto,*"
+            RowSpacing="10">
           
             <!--  LABEL | NAME & SURNAME  -->
             <ContentView Grid.Row="0" Grid.ColumnSpan="2" Padding="5">
@@ -70,6 +70,7 @@
             <Border
                 Grid.Row="1"
                 Grid.Column="1"
+                x:Name="Button_Active"
                 Grid.ColumnSpan="1"
                 BackgroundColor="#14AE5C"
                 HeightRequest="40"
@@ -79,11 +80,12 @@
                 <Label
                     CharacterSpacing="2"
                     FontAttributes="Bold"
+                    x:Name="Text_Active"
                     FontSize="20"
                     HorizontalOptions="Center"
                     SemanticProperties.HeadingLevel="Level2"
                     Style="{StaticResource Headline}"
-                    Text="Active"
+                    Text="Idle"
                     TextColor="#FFFFFF"
                     VerticalOptions="Center" />
             </Border>
@@ -94,6 +96,7 @@
                     <Image
                         Aspect="AspectFit"
                         HeightRequest="60"
+                        x:Name="img_status"
                         SemanticProperties.Description="dot net bot in a race car number eight"
                         Source="car.png"
                         VerticalOptions="End" />
@@ -101,6 +104,7 @@
                     <!--  LABEL | Ready to start a trip?  -->
                     <Label
                         CharacterSpacing="1"
+                        x:Name="Text_Status"
                         FontFamily="Rajdhani-SemiBold"
                         FontSize="Large"
                         HorizontalOptions="Center"
@@ -117,13 +121,13 @@
                         BackgroundColor="#297CC0"
                         CharacterSpacing="03"
                         Clicked="OnGoToModePageClicked"
-                        CornerRadius="20"
+                        CornerRadius="30"
                         FontAttributes="Bold"
                         FontSize="Large"
                         HeightRequest="60"
                         HorizontalOptions="Fill"
                         SemanticProperties.Hint="Counts the number of times you click"
-                        Text="ADD TRIP"
+                        Text="{Binding ButtonTripText}"
                         VerticalOptions="Center"
                         WidthRequest="300" />
                 </StackLayout>
@@ -248,26 +252,6 @@
                         Text=""
                         VerticalOptions="Center" />
 
-                    <!--  BUTTON | View More  -->
-                    <Button
-                        x:Name="ViewMoreBtn"
-                        Grid.Row="6"
-                        Grid.ColumnSpan="3"
-                        Padding="5"
-                        BackgroundColor="Transparent"
-                        BorderColor="#3C9BCB"
-                        BorderWidth="2"
-                        CharacterSpacing="03"
-                        CornerRadius="20"
-                        FontAttributes="Bold"
-                        FontSize="Medium"
-                        HeightRequest="50"
-                        HorizontalOptions="Fill"
-                        SemanticProperties.Hint="Counts the number of times you click"
-                        Text="View More"
-                        TextColor="#3C9BCB"
-                        VerticalOptions="Center"
-                        WidthRequest="200" />
                 </Grid>
             </ContentView>
 
@@ -281,58 +265,16 @@
                 BorderColor="#3C9BCB"
                 BorderWidth="2"
                 CharacterSpacing="02"
-                CornerRadius="20"
+                CornerRadius="30"
                 FontAttributes="Bold"
                 FontSize="Medium"
-                HeightRequest="50"
+                HeightRequest="60"
                 HorizontalOptions="Fill"
                 SemanticProperties.Hint="Counts the number of times you click"
                 Text="TRIP HISTORY"
                 TextColor="#3C9BCB"
-                VerticalOptions="Center"
+                VerticalOptions="End"               
                 WidthRequest="300" />
-
-            <!--  Bottom Sheet  -->
-            <ContentView
-                x:Name="LastTripBTS"
-                Grid.Row="4"
-                Grid.RowSpan="3"
-                Grid.ColumnSpan="3"
-                Padding="5"
-                BackgroundColor="White"
-                IsVisible="False"
-                TranslationY="0">
-                <ContentView.GestureRecognizers>
-                    <PanGestureRecognizer PanUpdated="OnPanUpdated" />
-                </ContentView.GestureRecognizers>
-                <VerticalStackLayout Spacing="15">
-                    <BoxView
-                        Margin="0,5"
-                        HeightRequest="5"
-                        HorizontalOptions="Center"
-                        WidthRequest="50"
-                        Color="Gray" />
-                    <Label
-                        CharacterSpacing="1"
-                        FontFamily="Rajdhani-Bold.ttf"
-                        FontSize="28"
-                        SemanticProperties.HeadingLevel="Level2"
-                        Style="{StaticResource Headline}"
-                        Text="SERVER NAME"
-                        TextColor="#1C4698" />
-
-
-                    <Button
-                        Margin="0,0"
-                        BackgroundColor="#B2B2B2"
-                        CharacterSpacing="03"
-                        Clicked="OnCloseBottomSheet"
-                        FontAttributes="Bold"
-                        FontSize="Medium"
-                        Text="Close" />
-
-                </VerticalStackLayout>
-            </ContentView>
         </Grid>
     </ScrollView>
 </ContentPage>

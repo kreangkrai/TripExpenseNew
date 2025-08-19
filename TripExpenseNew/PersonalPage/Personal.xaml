@@ -232,19 +232,22 @@
             <Label
                 Grid.Row="7"
                 Grid.ColumnSpan="4"
+                x:Name="Current_Passenger"
                 FontAttributes="Bold"
                 FontFamily="Rajdhani-Bold"
                 FontSize="24"
                 HorizontalOptions="Start"
                 SemanticProperties.HeadingLevel="Level2"
                 Style="{StaticResource Headline}"
-                Text="Current Passenger :"
+                Text="Current Passenger : (0)"
                 TextColor="#1C4698"
                 VerticalOptions="Center" />
 
             <!--  CollectionView | Current Passenger:  -->
             <Frame
                 Padding="5" Grid.Row="8"
+                x:Name="frame_passenger"
+                IsVisible="False"
                 Grid.ColumnSpan="4"
                 Margin="1"
                 BackgroundColor= "White"
