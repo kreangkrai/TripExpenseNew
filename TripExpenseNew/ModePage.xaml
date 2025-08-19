@@ -76,6 +76,7 @@
                     BorderColor="#297CC0"
                     BorderWidth="3"
                     CharacterSpacing="3"
+                    Clicked="PersonalForceStop_Clicked"
                     CornerRadius="20"
                     FontAttributes="Bold"
                     FontSize="28"
@@ -103,6 +104,8 @@
                     TextColor="#297CC0"
                     VerticalOptions="Center"
                     WidthRequest="300" />
+
+                <!--  BUTTON | Cancel  -->
                 <Button
                     x:Name="CancelBtn"
                     Padding="10,5"
