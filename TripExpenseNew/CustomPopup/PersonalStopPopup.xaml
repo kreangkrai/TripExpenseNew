@@ -10,7 +10,7 @@
         Padding="0"
         BackgroundColor="White"
         WidthRequest="300"
-        HeightRequest="480"
+        HeightRequest="500"
         Stroke="Transparent"
         StrokeShape="{RoundRectangle CornerRadius='20'}">
         <Grid
@@ -138,7 +138,7 @@
                         CharacterSpacing="1"
                         ClearButtonVisibility="WhileEditing"
                         FontSize="18"
-                        HeightRequest="10"
+                        HeightRequest="40"
                         Keyboard="Text"
                         Placeholder=" Ex. CTL-(HQ)"
                         Text="{Binding Text}" />
@@ -170,6 +170,7 @@
                         ClearButtonVisibility="WhileEditing"
                         FontSize="18"
                         Keyboard="Numeric"
+                        HeightRequest="40"
                         Placeholder=" Ex. 123456"
                         Text="{Binding Text}" />
                 </Border>

@@ -273,7 +273,7 @@
                 SemanticProperties.Hint="Counts the number of times you click"
                 Text="TRIP HISTORY"
                 TextColor="#3C9BCB"
-                VerticalOptions="End"               
+                VerticalOptions="Center"               
                 WidthRequest="300" />
         </Grid>
     </ScrollView>

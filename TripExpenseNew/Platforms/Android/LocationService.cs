@@ -58,6 +58,7 @@ namespace TripExpenseNew.Platforms.Android
                     .Build();
 
                 StartForeground(1000, notification);
+
                 int trackingInterval = intent.GetIntExtra("TrackingInterval", 5000); // ค่าเริ่มต้น 5 วินาที
                 Console.WriteLine($"เริ่มติดตามตำแหน่งด้วยช่วงเวลา: {trackingInterval}ms");
                 Task.Run(() => StartTrackingAsync(cancellationTokenSource.Token, trackingInterval));
@@ -73,14 +74,23 @@ namespace TripExpenseNew.Platforms.Android
 
         public override void OnDestroy()
         {
-            if (cancellationTokenSource != null)
+            try
             {
-                cancellationTokenSource.Cancel();
-                cancellationTokenSource.Dispose();
-                cancellationTokenSource = null;
-                Console.WriteLine("CancellationTokenSource ถูกยกเลิกและกำจัดแล้ว");
+                base.OnDestroy();
+                if (cancellationTokenSource != null)
+                {
+                    cancellationTokenSource.Cancel();
+                    cancellationTokenSource.Dispose();
+                    cancellationTokenSource = null;
+                    DateTime n = DateTime.Now;
+                    Console.WriteLine($"CancellationTokenSource ถูกยกเลิกและกำจัดแล้ว {n}");
+                }
             }
-            base.OnDestroy();
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            
         }
         private async Task StartTrackingAsync(CancellationToken cancellationToken,int trackingInterval)
         {

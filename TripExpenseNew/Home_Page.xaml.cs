@@ -14,18 +14,17 @@ using TripExpenseNew.ViewModels;
 
 public partial class Home_Page : ContentPage
 {
-    private bool _isOpen = false;
-    private double _startY;
-    private double _sheetHeight;
     private ILastTrip LastTrip;
     private ILogin Login;
+    private IEmployee Employee;
     LoginModel emp_id = new LoginModel();
     List<LastTripViewModel> trips = new List<LastTripViewModel>();
-    public Home_Page(ILastTrip _LastTrip, ILogin _Login)
+    public Home_Page(ILastTrip _LastTrip, ILogin _Login, IEmployee _Employee)
     {
         InitializeComponent();
         LastTrip = _LastTrip;
         Login = _Login;
+        Employee = _Employee;
     }
 
     protected override async void OnAppearing()
@@ -33,9 +32,15 @@ public partial class Home_Page : ContentPage
         base.OnAppearing();
         try
         {
+            List<EmployeeModel> employees = await Employee.GetEmployees();
             emp_id = await Login.GetLogin(1);
             trips = await GetLastTrip();
-            trips = trips.OrderByDescending(o=>o.trip).ToList();
+            trips = trips.OrderByDescending(o => o.trip).ToList();
+
+            string name = employees.Where(w => w.emp_id == emp_id.emp_id).FirstOrDefault().name;
+            lbl_name.Text = name.Split(' ')[0];
+            lbl_lastname.Text = name.Split(' ')[1];
+
             if (trips.Count > 0)
             {
                 if (trips[0].status == true) // In Use Trip
@@ -86,7 +91,7 @@ public partial class Home_Page : ContentPage
                                     Text_Active.Text = "In Use";
                                 }
                             });
-                        }                                                  
+                        }
                     }
                     else
                     {
@@ -126,20 +131,6 @@ public partial class Home_Page : ContentPage
                         }
                     });
                 }
-
-                if (trips[0].driver_name.Length > 25)
-                {
-                    lbl_name.FontSize = 30;
-                    lbl_lastname.FontSize = 30;
-                }
-                else
-                {
-                    lbl_name.FontSize = 34;
-                    lbl_lastname.FontSize = 34;
-                }
-
-                lbl_name.Text = trips[0].emp_name.Split(' ')[0];
-                lbl_lastname.Text = trips[0].emp_name.Split(' ')[1];
 
                 txt_last_location.Text = trips[0].location;
                 txt_last_date.Text = trips[0].date.ToString("dd/MM/yyyy HH:mm:ss");
@@ -222,7 +213,7 @@ public partial class Home_Page : ContentPage
 
                     if (trips[0].mode == "PASSENGER PERSONAL")
                     {
-                        await Navigation.PushAsync(new PersonalForceStop());
+                        
                     }
 
                     if (trips[0].mode == "PASSENGER COMPANY")
@@ -232,7 +223,7 @@ public partial class Home_Page : ContentPage
                 }
                 else
                 {
-                    //Force Stop
+                    await Navigation.PushAsync(new PersonalForceStop(trips[0]));
                 }
             }
             else
@@ -252,6 +243,6 @@ public partial class Home_Page : ContentPage
         if (result)
         {
             await Shell.Current.GoToAsync("Login_Page");
-        }        
+        }
     }
 }

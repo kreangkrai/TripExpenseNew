@@ -38,5 +38,9 @@
         Title="Home"
         ContentTemplate="{DataTemplate pages:Home_Page}"
         Route="Home_Page" />
-
+    
+    <ShellContent
+    Title="PersonalForceStop"
+    ContentTemplate="{DataTemplate pages_:PersonalForceStop}"
+    Route="PersonalForceStop" />
 </Shell>

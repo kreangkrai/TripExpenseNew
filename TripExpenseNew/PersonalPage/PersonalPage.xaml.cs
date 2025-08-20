@@ -49,7 +49,10 @@ public partial class PersonalPage : ContentPage
         Mileage = _Mileage;
         WeakReferenceMessenger.Default.Register<LocationData>(this, (send, data) =>
         {
-            UpdateLocationDataAsync(data.Location);
+            if (send != null)
+            {
+                UpdateLocationDataAsync(data.Location);
+            }
             
         });
     }
@@ -74,14 +77,15 @@ public partial class PersonalPage : ContentPage
             status = await Permissions.RequestAsync<Permissions.LocationAlways>();
             if (status != PermissionStatus.Granted)
             {
+                AppInfo.ShowSettingsUI();
                 return;
             }
         }
 
-        if (!await LocalNotificationCenter.Current.AreNotificationsEnabled())
-        {
-            await LocalNotificationCenter.Current.RequestNotificationPermission();
-        }
+        //if (!await LocalNotificationCenter.Current.AreNotificationsEnabled())
+        //{
+        //    await LocalNotificationCenter.Current.RequestNotificationPermission();
+        //}
 
         GetLocationCTL.Add(new LocationOtherModel()
         {
@@ -216,9 +220,9 @@ public partial class PersonalPage : ContentPage
                         await MainThread.InvokeOnMainThreadAsync(() => UpdateLocationDataAsync(location));
                     });
 #elif ANDROID
-                    intent = new Intent(Platform.AppContext, typeof(TripExpenseNew.Platforms.Android.LocationService));
-                    intent.PutExtra("TrackingInterval",3000);
-                    Platform.AppContext.StartForegroundService(intent);                   
+                intent = new Intent(Platform.AppContext, typeof(TripExpenseNew.Platforms.Android.LocationService));
+                intent.PutExtra("TrackingInterval", 5000);
+                Platform.AppContext.StartForegroundService(intent);
 #endif
             }
         }
@@ -279,8 +283,8 @@ public partial class PersonalPage : ContentPage
             locationService?.StopUpdatingLocation();
             locationService = null;
 #elif ANDROID
-                                intent = new Intent(Platform.AppContext, typeof(TripExpenseNew.Platforms.Android.LocationService));
-                                Platform.AppContext.StopService(intent);
+            //intent = new Intent(Platform.AppContext, typeof(TripExpenseNew.Platforms.Android.LocationService));
+            //Platform.AppContext.StopService(intent);
 #endif
             #endregion
         }

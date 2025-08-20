@@ -109,11 +109,13 @@ namespace TripExpenseNew.PersonalPage
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            OnStartTracking();
+            
             tracking = await Tracking.GetTracking();
             interval = tracking.time_interval;
             tracking_db = tracking.time_tracking;
             start_tracking = DateTime.Now;
+
+            OnStartTracking();
 #if IOS
             try
             {
@@ -228,11 +230,8 @@ namespace TripExpenseNew.PersonalPage
         // ตรวจสอบสถานะ service และเริ่มใหม่
         intent = new Intent(Platform.AppContext, typeof(TripExpenseNew.Platforms.Android.LocationService));
         intent.PutExtra("TrackingInterval", interval * 1000);
-
-        // หยุด service ก่อน (ถ้ายังทำงานอยู่) เพื่อให้แน่ใจว่าเริ่มใหม่ในสถานะสะอาด
-        Platform.AppContext.StopService(intent);
-        await Task.Delay(100); // รอให้ service หยุดสมบูรณ์
         Platform.AppContext.StartForegroundService(intent);
+
 #endif
 
                 var status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
@@ -272,7 +271,11 @@ namespace TripExpenseNew.PersonalPage
 
                 if (previousLocation != null)
                 {
-                    totalDistance += CalculateDistance(previousLocation, location);
+                    double dist = CalculateDistance(previousLocation, location);
+                    if (dist >= 0.1)
+                    {
+                        totalDistance += CalculateDistance(previousLocation, location);
+                    }
                 }
                 previousLocation = location;
 
@@ -282,7 +285,7 @@ namespace TripExpenseNew.PersonalPage
                 {
                     var placemarks = await Geocoding.Default.GetPlacemarksAsync(location.Latitude, location.Longitude);
                     var zipcode = placemarks?.FirstOrDefault()?.PostalCode ?? "N/A";
-                  
+
                     if (start.IsContinue)
                     {
                         data_personal = new PersonalModel()
@@ -309,7 +312,7 @@ namespace TripExpenseNew.PersonalPage
 
                         #region Show Passenger
                         List<LastTripViewModel> last_trip = await LastTrip.GetByTrip(start.trip);
-                        last_trip = last_trip.Where(w=>w.emp_id != emp_id && w.status == true).ToList();
+                        last_trip = last_trip.Where(w => w.emp_id != emp_id && w.status == true).ToList();
                         if (last_trip.Count > 0)
                         {
                             for (int i = 0; i < last_trip.Count; i++)
@@ -374,6 +377,73 @@ namespace TripExpenseNew.PersonalPage
                         };
 
                         message = await LastTrip.Insert(lastTrip);
+
+                        #region Add Location
+                        if (start.location_name != "" && start.location_name != "CTL(HQ)" && start.location_name != "CTL(KBO)" && start.location_name != "CTL(RBO)")
+                        {
+                            if (start.IsCustomer)
+                            {
+                                LocationCustomerModel locationCustomer = new LocationCustomerModel()
+                                {
+                                    emp_id = emp_id,
+                                    latitude = location.Latitude,
+                                    longitude = location.Longitude,
+                                    location = start.location_name,
+                                    location_id = DateTime.Now.ToString("yyyyMMddHHmmssfff"),
+                                    zipcode = zipcode,
+                                };
+                                await LocationCustomer.Insert(locationCustomer);
+                            }
+                            else
+                            {
+                                LocationOtherModel locationOther = new LocationOtherModel()
+                                {
+                                    emp_id = emp_id,
+                                    latitude = location.Latitude,
+                                    longitude = location.Longitude,
+                                    location = start.location_name,
+                                    location_id = DateTime.Now.ToString("yyyyMMddHHmmssfff"),
+                                    zipcode = zipcode,
+                                };
+
+                                await LocationOther.Insert(locationOther);
+                            }
+                        }
+                        else
+                        {
+                            double dist = CalculateDistance(start.location, location);
+                            if (dist > 0.1)
+                            {
+                                if (start.IsCustomer)
+                                {
+                                    LocationCustomerModel locationCustomer = new LocationCustomerModel()
+                                    {
+                                        emp_id = emp_id,
+                                        latitude = location.Latitude,
+                                        longitude = location.Longitude,
+                                        location = start.location_name,
+                                        location_id = DateTime.Now.ToString("yyyyMMddHHmmssfff"),
+                                        zipcode = zipcode,
+                                    };
+                                    await LocationCustomer.Insert(locationCustomer);
+                                }
+                                else
+                                {
+                                    LocationOtherModel locationOther = new LocationOtherModel()
+                                    {
+                                        emp_id = emp_id,
+                                        latitude = location.Latitude,
+                                        longitude = location.Longitude,
+                                        location = start.location_name,
+                                        location_id = DateTime.Now.ToString("yyyyMMddHHmmssfff"),
+                                        zipcode = zipcode,
+                                    };
+                                    await LocationOther.Insert(locationOther);
+                                }
+                            }
+                        }
+
+                        #endregion
                     }
 
 
@@ -422,76 +492,7 @@ namespace TripExpenseNew.PersonalPage
 
                     #endregion
 
-                    if (start.location_name != "" && start.location_name != "CTL(HQ)" && start.location_name != "CTL(KBO)" && start.location_name != "CTL(RBO)")
-                    {
-                        if (start.IsCustomer)
-                        {
-                            LocationCustomerModel locationCustomer = new LocationCustomerModel()
-                            {
-                                emp_id = emp_id,
-                                latitude = location.Latitude,
-                                longitude = location.Longitude,
-                                location = start.location_name,
-                                location_id = DateTime.Now.ToString("yyyyMMddHHmmssfff"),
-                                zipcode = zipcode,
-                            };
-                            await LocationCustomer.Insert(locationCustomer);                          
-                        }
-                        else
-                        {
-                            LocationOtherModel locationOther = new LocationOtherModel()
-                            {
-                                emp_id = emp_id,
-                                latitude = location.Latitude,
-                                longitude = location.Longitude,
-                                location = start.location_name,
-                                location_id = DateTime.Now.ToString("yyyyMMddHHmmssfff"),
-                                zipcode = zipcode,
-                            };
-
-                            await LocationOther.Insert(locationOther);
-                        }
-                    }
-                    else
-                    {
-                        double dist = CalculateDistance(start.location, location);
-                        if (dist > 0.3)
-                        {
-                            if (start.IsCustomer)
-                            {
-                                LocationCustomerModel locationCustomer = new LocationCustomerModel()
-                                {
-                                    emp_id = emp_id,
-                                    latitude = location.Latitude,
-                                    longitude = location.Longitude,
-                                    location = start.location_name,
-                                    location_id = DateTime.Now.ToString("yyyyMMddHHmmssfff"),
-                                    zipcode = zipcode,
-                                };
-                                await LocationCustomer.Insert(locationCustomer);                                
-                            }
-                            else
-                            {
-                                LocationOtherModel locationOther = new LocationOtherModel()
-                                {
-                                    emp_id = emp_id,
-                                    latitude = location.Latitude,
-                                    longitude = location.Longitude,
-                                    location = start.location_name,
-                                    location_id = DateTime.Now.ToString("yyyyMMddHHmmssfff"),
-                                    zipcode = zipcode,
-                                };
-                                await LocationOther.Insert(locationOther);
-                            }
-                        }
-                    }
-
-                    #region Add Location
-
-
-
-                    #endregion
-
+                    Text_Detail.Text = $"Active Trip Detail : ({tripItems.Count})";
                     Console.WriteLine($"ALL ==> Lat: {location.Latitude}, Lon: {location.Longitude}, Speed: {speed}, Distance: {totalDistance}, Zipcode: {zipcode}");
                 }
                 else
@@ -502,7 +503,7 @@ namespace TripExpenseNew.PersonalPage
                         //INACTIVE
 
                         double dist = CalculateDistance(g_location, location);
-                        if (dist < 0.3)
+                        if (dist < 0.1)  // Check ditance beteween point to point less than 100 meter
                         {
                             int minute_inactive = (int)(DateTime.Now - lastInactive).TotalMinutes;
                             if (minute_inactive >= 2)  // Inactive Each 2 Minute
@@ -1174,6 +1175,8 @@ namespace TripExpenseNew.PersonalPage
                         message = await LastTrip.UpdateByTrip(lastTrip);
 
                     }
+                   
+
                     #region GET PASSENGER
                     //CultureInfo usCulture = new CultureInfo("en-US");
                     List<PassengerPersonalViewModel> passenger_personals = await PassengerPersonal.GetPassengerPersonalByDriver(personal.driver, personal.trip);
@@ -1259,7 +1262,7 @@ namespace TripExpenseNew.PersonalPage
                     }
 
                     TripCollectionView.ItemsSource = tripItems;
-
+                    Text_Detail.Text = $"Active Trip Detail : ({tripItems.Count})";
                     #endregion
                 }
             }
@@ -1267,83 +1270,93 @@ namespace TripExpenseNew.PersonalPage
 
         private async void AddPassengerBtn_Clicked(object sender, EventArgs e)
         {
-            var result = await this.ShowPopupAsync(new PersonalPassengerPopup());
-
-            if (result != null)
+            try
             {
-                if (result is EmployeeModel emp)
+                var result = await this.ShowPopupAsync(new PersonalPassengerPopup());
+
+                if (result != null)
                 {
-                    #region Show Passenger          
-                    PassengerItems passengerItem = new PassengerItems()
+                    if (result is EmployeeModel emp)
                     {
-                        TextPassenger = $"{emp.name}",
-                        IconDatePassengerSource = "clock.png",
-                        TextDatePassenger = $"Date: {DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")}"
-                    };
-
-                    passengerItems.Add(passengerItem);
-                    PassengerCollectionView.ItemsSource = passengerItems;
-
-                    #endregion
-
-                    #region ADD PASSENGER
-                    PassengerPersonalModel passengerPersonal = new PassengerPersonalModel()
-                    {
-                        date = DateTime.Now,
-                        driver = emp_id,
-                        trip = data_personal.trip,
-                        job_id = data_personal.job_id,
-                        latitude = data_personal.latitude,
-                        longitude = data_personal.longitude,
-                        location = data_personal.location,
-                        location_mode = data_personal.location_mode,
-                        passenger = emp.emp_id,
-                        status = "START",
-                        zipcode = data_personal.zipcode
-                    };
-                    string message = await PassengerPersonal.Insert(passengerPersonal);
-
-                    // Insert Last Trip to Server DB
-                    LastTripModel lastTrip = new LastTripModel()
-                    {
-                        driver = data_personal.driver,
-                        speed = 0,
-                        emp_id = emp.emp_id,
-                        job_id= data_personal.job_id,
-                        trip_start = trip_start,
-                        date = DateTime.Now,
-                        distance = 0,
-                        location = data_personal.location,
-                        latitude = data_personal.latitude,
-                        longitude = data_personal.longitude,
-                        mileage = 0,
-                        mode = "PASSENGER PERSONAL",
-                        status = true,
-                        trip = data_personal.trip,
-                        car_id = ""
-                    };
-
-                    message = await LastTrip.Insert(lastTrip);
-
-                    if (message == "Success")
-                    {
-                        //MainThread.BeginInvokeOnMainThread(async () =>
-                        //{
-                        //    await DisplayAlert("", message, "OK");
-                        //});
-                    }
-                    else
-                    {
-                        MainThread.BeginInvokeOnMainThread(async () =>
+                        #region Show Passenger          
+                        PassengerItems passengerItem = new PassengerItems()
                         {
-                            await DisplayAlert("", "Error", "OK");
-                        });
-                    }
-                    #endregion
+                            TextPassenger = $"{emp.name}",
+                            IconDatePassengerSource = "clock.png",
+                            TextDatePassenger = $"Date: {DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")}"
+                        };
 
-                    frame_passenger.IsVisible = true;
-                    Current_Passenger.Text = $"Current Passenger : ({passengerItems.Count})";
+                        passengerItems.Add(passengerItem);
+                        PassengerCollectionView.ItemsSource = passengerItems;
+
+                        #endregion
+
+                        #region ADD PASSENGER
+                        PassengerPersonalModel passengerPersonal = new PassengerPersonalModel()
+                        {
+                            date = DateTime.Now,
+                            driver = emp_id,
+                            trip = data_personal.trip,
+                            job_id = data_personal.job_id,
+                            latitude = data_personal.latitude,
+                            longitude = data_personal.longitude,
+                            location = data_personal.location,
+                            location_mode = data_personal.location_mode,
+                            passenger = emp.emp_id,
+                            status = "START",
+                            zipcode = data_personal.zipcode
+                        };
+                        string message = await PassengerPersonal.Insert(passengerPersonal);
+
+                        // Insert Last Trip to Server DB
+                        LastTripModel lastTrip = new LastTripModel()
+                        {
+                            driver = data_personal.driver,
+                            speed = 0,
+                            emp_id = emp.emp_id,
+                            job_id = data_personal.job_id,
+                            trip_start = trip_start,
+                            date = DateTime.Now,
+                            distance = 0,
+                            location = data_personal.location,
+                            latitude = data_personal.latitude,
+                            longitude = data_personal.longitude,
+                            mileage = 0,
+                            mode = "PASSENGER PERSONAL",
+                            status = true,
+                            trip = data_personal.trip,
+                            car_id = ""
+                        };
+
+                        message = await LastTrip.Insert(lastTrip);
+
+                        if (message == "Success")
+                        {
+                            //MainThread.BeginInvokeOnMainThread(async () =>
+                            //{
+                            //    await DisplayAlert("", message, "OK");
+                            //});
+                        }
+                        else
+                        {
+                            MainThread.BeginInvokeOnMainThread(async () =>
+                            {
+                                await DisplayAlert("", "Error", "OK");
+                            });
+                        }
+                        #endregion
+
+                        frame_passenger.IsVisible = true;
+                        Current_Passenger.Text = $"Current Passenger : ({passengerItems.Count})";
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                MainThread.BeginInvokeOnMainThread(async () =>
+                {
+                    await DisplayAlert("", ex.Message, "OK");
+                });
             }
         }
 
