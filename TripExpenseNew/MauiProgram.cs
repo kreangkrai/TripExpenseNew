@@ -50,6 +50,7 @@ namespace TripExpenseNew
             builder.Services.AddTransient<ITracking, TrackingService>();
             builder.Services.AddTransient<IVersion, VersionService>();
             builder.Services.AddTransient<ICurrentTime, CurrentTimeService>();
+            builder.Services.AddTransient<IInternet, InternetService>();
 
             builder.Services.AddTransient<MainPage>();
             builder.Services.AddTransient<Personal>();

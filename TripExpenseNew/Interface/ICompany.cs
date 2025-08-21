@@ -8,5 +8,6 @@ namespace TripExpenseNew.Interface
         Task<string> Insert(List<CompanyModel> datas);
         Task<List<CompanyViewModel>> GetCompanyDriverByMonth(string driver, string month);
         Task<List<CompanyViewModel>> GetCompanyCarByMonth(string car, string month);
+        Task<List<CompanyViewModel>> GetCompanyDriverHistoryByTrip(string driver, string trip);
     }
 }

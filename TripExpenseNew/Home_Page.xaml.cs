@@ -5,6 +5,8 @@ using Microsoft.Maui.Controls;
 using Microsoft.Maui.Primitives;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
+using System.Threading.Tasks;
 using TripExpenseNew.DBInterface;
 using TripExpenseNew.DBModels;
 using TripExpenseNew.Interface;
@@ -17,6 +19,7 @@ public partial class Home_Page : ContentPage
     private ILastTrip LastTrip;
     private ILogin Login;
     private IEmployee Employee;
+    CultureInfo cultureinfo = new CultureInfo("en-us");
     LoginModel emp_id = new LoginModel();
     List<LastTripViewModel> trips = new List<LastTripViewModel>();
     public Home_Page(ILastTrip _LastTrip, ILogin _Login, IEmployee _Employee)
@@ -115,9 +118,12 @@ public partial class Home_Page : ContentPage
                             }
                         });
                     }
+                    txt_last_mileage.Text = trips[0].mileage_start.ToString();
                 }
                 else
                 {
+                    txt_last_mileage.Text = trips[0].mileage_stop.ToString();
+
                     MainThread.BeginInvokeOnMainThread(() =>
                     {
                         if (BindingContext is ButtonTrip viewModel)
@@ -133,9 +139,8 @@ public partial class Home_Page : ContentPage
                 }
 
                 txt_last_location.Text = trips[0].location;
-                txt_last_date.Text = trips[0].date.ToString("dd/MM/yyyy HH:mm:ss");
-                txt_last_distance.Text = trips[0].distance.ToString("#.#") + " km";
-                txt_last_mileage.Text = trips[0].mileage.ToString();
+                txt_last_date.Text = trips[0].date.ToString("dd/MM/yyyy HH:mm:ss", cultureinfo);
+                txt_last_distance.Text = trips[0].distance.ToString("#.#") + " km";              
             }
             else
             {
@@ -193,7 +198,7 @@ public partial class Home_Page : ContentPage
                             location = new Location(trips[0].latitude, trips[0].longitude),
                             trip = trips[0].trip,
                             location_name = trips[0].location,
-                            mileage = trips[0].mileage,
+                            mileage = trips[0].mileage_start,
                             distance = trips[0].distance,
                             IsContinue = true,
                             trip_start = trips[0].trip_start
@@ -244,5 +249,13 @@ public partial class Home_Page : ContentPage
         {
             await Shell.Current.GoToAsync("Login_Page");
         }
+    }
+
+    private async void HistoryBtn_Clicked(object sender, EventArgs e)
+    {
+        List<LastTripViewModel> lastTrips = await LastTrip.GetByEmp(emp_id.emp_id);
+        lastTrips = lastTrips.Where(w=>w.trip_start.Date >= DateTime.Now.AddDays(-60)).ToList();
+        lastTrips = lastTrips.OrderByDescending(o=>o.trip_start).ToList();
+        await Navigation.PushAsync(new HistoryPage(lastTrips));
     }
 }

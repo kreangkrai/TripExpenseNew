@@ -17,17 +17,19 @@ public partial class Login_Page : ContentPage
     private ILogin Login;
     private IServer Server;
     private IEmployee Employee;
+    private IInternet Internet;
     private bool _isOpen = false;
     private double _startY;
     private double _sheetHeight;
 
-    public Login_Page(IAuthen _Authen,ILogin _Login, IServer _Server, IEmployee _Employee)
+    public Login_Page(IAuthen _Authen,ILogin _Login, IServer _Server, IEmployee _Employee,IInternet _Internet)
 	{
         InitializeComponent();
         Authen = _Authen;
         Login = _Login;
         Server = _Server;
         Employee = _Employee;
+        Internet = _Internet;
         ServerModel servers = Server.Get(1).Result;
         if (servers == null)
         {
@@ -134,32 +136,43 @@ public partial class Login_Page : ContentPage
 
     private async void ConnectBtn_Clicked(object sender, EventArgs e)
     {
-        if (txt_server.Text.Trim() != "")
+        bool internet = await Internet.CheckServerConnection("/api/CurrentTime/get");
+        if (internet)
         {
-            int message = await Server.Save(new ServerModel()
+            if (txt_server.Text.Trim() != "")
             {
-                Id = 1,
-                server = txt_server.Text.Trim()
-            });
+                int message = await Server.Save(new ServerModel()
+                {
+                    Id = 1,
+                    server = txt_server.Text.Trim()
+                });
 
-            Server = new ServerService();
-            Authen = new AuthenService();
-            Employee = new EmployeeService();
+                Server = new ServerService();
+                Authen = new AuthenService();
+                Employee = new EmployeeService();
 
-            ServerModel servers = Server.Get(1).Result;
-            if (servers != null)
-            {
-                LogInBtn.IsEnabled = true;
-                AnimateBottomSheet(_sheetHeight); // เลื่อนลงไปล่างสุด
-                _isOpen = false;
+                ServerModel servers = Server.Get(1).Result;
+                if (servers != null)
+                {
+                    LogInBtn.IsEnabled = true;
+                    AnimateBottomSheet(_sheetHeight); // เลื่อนลงไปล่างสุด
+                    _isOpen = false;
+                }
+
             }
-
+            else
+            {
+                MainThread.BeginInvokeOnMainThread(async () =>
+                {
+                    await DisplayAlert("", "กรุณาใส่ url server", "ตกลง");
+                });
+            }
         }
         else
         {
             MainThread.BeginInvokeOnMainThread(async () =>
             {
-                await DisplayAlert("", "กรุณาใส่ url server","ตกลง");
+                await DisplayAlert("", "Cann't connect to server", "OK");
             });
         }
     }

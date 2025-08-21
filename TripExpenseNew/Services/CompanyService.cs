@@ -14,9 +14,9 @@ namespace TripExpenseNew.Services
         private IConnectAPI API;
         private readonly string URL;
         private readonly HttpClient _httpClient;
-        public CompanyService(IConnectAPI _API)
+        public CompanyService()
         {
-            API = _API;
+            API = new ConnectAPIService();
             URL = API.ConnectAPI();
             var handler = new HttpClientHandler
             {
@@ -58,6 +58,14 @@ namespace TripExpenseNew.Services
         public async Task<List<CompanyViewModel>> GetCompanyCarByMonth(string car, string month)
         {
             var response = await _httpClient.GetAsync(URL + $"/api/Company/getcarbymonth?car={car}&month={month}");
+            var content = await response.Content.ReadAsStringAsync();
+            List<CompanyViewModel> companies = JsonConvert.DeserializeObject<List<CompanyViewModel>>(content);
+            return companies;
+        }
+
+        public async Task<List<CompanyViewModel>> GetCompanyDriverHistoryByTrip(string driver, string trip)
+        {
+            var response = await _httpClient.GetAsync(URL + $"/api/Company/getdriverhistorybytrip?driver={driver}&trip={trip}");
             var content = await response.Content.ReadAsStringAsync();
             List<CompanyViewModel> companies = JsonConvert.DeserializeObject<List<CompanyViewModel>>(content);
             return companies;

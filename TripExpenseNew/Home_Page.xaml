@@ -261,6 +261,7 @@
                 Grid.Row="5"
                 Grid.ColumnSpan="3"
                 Padding="5"
+                Clicked="HistoryBtn_Clicked"
                 BackgroundColor="Transparent"
                 BorderColor="#3C9BCB"
                 BorderWidth="2"
