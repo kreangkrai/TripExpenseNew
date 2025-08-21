@@ -28,6 +28,7 @@ public partial class PersonalPage : ContentPage
     private ILocationOther LocationOther;
     private ILogin Login;
     private IMileage Mileage;
+    private IInternet Internet;
     private CancellationTokenSource cancellationTokenSource;
     private bool isTracking = true;
     Tuple<string, bool> loc = new Tuple<string, bool> ("",false);
@@ -40,13 +41,14 @@ public partial class PersonalPage : ContentPage
 #elif ANDROID
         private Intent intent = new Intent();
 #endif
-    public PersonalPage(ILocationCustomer _LocationCustomer, ILogin _Login, ILocationOther _LocationOther, IMileage _Mileage)
+    public PersonalPage(ILocationCustomer _LocationCustomer, ILogin _Login, ILocationOther _LocationOther, IMileage _Mileage, IInternet _Internet)
 	{
 		InitializeComponent();
         Login = _Login;
         LocationCustomer = _LocationCustomer;
         LocationOther = _LocationOther;
         Mileage = _Mileage;
+        Internet = _Internet;
         WeakReferenceMessenger.Default.Register<LocationData>(this, (send, data) =>
         {
             if (send != null)
@@ -127,29 +129,40 @@ public partial class PersonalPage : ContentPage
     }
     private async void PersonalStart_Clicked(object sender, EventArgs e)
     {
-        MileageDBModel mileage = await Mileage.GetMileage(1);
-
-        var result = await this.ShowPopupAsync(new PersonalStartPopup(loc.Item1,loc.Item2,mileage.mileage));
-
-        if (result is PersonalPopupStartModel personal)
+        bool internet = await Internet.CheckServerConnection("/api/CurrentTime/get");
+        if (internet)
         {
-            if (personal.location_name != null && personal.location_name != "" && personal.mileage != 0)
+            MileageDBModel mileage = await Mileage.GetMileage(1);
+
+            var result = await this.ShowPopupAsync(new PersonalStartPopup(loc.Item1, loc.Item2, mileage.mileage));
+
+            if (result is PersonalPopupStartModel personal)
             {
-                //await Shell.Current.GoToAsync("Personal");
-                personal.location = g_location;
-                personal.IsContinue = false;
-                personal.trip_start = DateTime.Now;
-                personal.job_id = personal.job_id != null ? personal.job_id : "";
-                await Navigation.PushAsync(new Personal(personal));
-            }
-            else
-            {
-                MainThread.BeginInvokeOnMainThread(async () =>
+                if (personal.location_name != null && personal.location_name != "" && personal.mileage != 0)
                 {
-                    await DisplayAlert("", "กรุณาใส่ข้อมูล", "ตกลง");
-                });
+                    //await Shell.Current.GoToAsync("Personal");
+                    personal.location = g_location;
+                    personal.IsContinue = false;
+                    personal.trip_start = DateTime.Now;
+                    personal.job_id = personal.job_id != null ? personal.job_id : "";
+                    await Navigation.PushAsync(new Personal(personal));
+                }
+                else
+                {
+                    MainThread.BeginInvokeOnMainThread(async () =>
+                    {
+                        await DisplayAlert("", "กรุณาใส่ข้อมูล", "ตกลง");
+                    });
+                }
             }
-        }               
+        }
+        else
+        {
+            MainThread.BeginInvokeOnMainThread(async () =>
+            {
+                await DisplayAlert("", "Cann't connect to server", "OK");
+            });
+        }
     }
 
     private async void PersonalCancel_Clicked(object sender, EventArgs e)

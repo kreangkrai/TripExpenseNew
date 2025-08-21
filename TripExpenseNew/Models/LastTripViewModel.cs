@@ -18,7 +18,8 @@
         public string location { get; set; }
         public double latitude { get; set; }
         public double longitude { get; set; }
-        public int mileage { get; set; }
+        public int mileage_start { get; set; }
+        public int mileage_stop { get; set; }
         public string mode { get; set; }
         public bool status { get; set; }
     }

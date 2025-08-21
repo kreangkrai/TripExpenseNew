@@ -61,5 +61,13 @@ namespace TripExpenseNew.Services
             List<PassengerPersonalViewModel> passengers = JsonConvert.DeserializeObject<List<PassengerPersonalViewModel>>(content);
             return passengers;
         }
+
+        public async Task<List<PassengerPersonalViewModel>> GetPassengerPersonalHistoryByTrip(string passenger, string trip)
+        {
+            var response = await _httpClient.GetAsync(URL + $"/api/PassengerPersonal/getdriverhistorybytrip?passenger={passenger}&trip={trip}");
+            var content = await response.Content.ReadAsStringAsync();
+            List<PassengerPersonalViewModel> passengers = JsonConvert.DeserializeObject<List<PassengerPersonalViewModel>>(content);
+            return passengers;
+        }
     }
 }

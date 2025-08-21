@@ -7,5 +7,6 @@ namespace TripExpenseNew.Interface
         Task<string> Insert(PersonalModel data);
         Task<string> Inserts(List<PersonalModel> datas);
         Task<List<PersonalViewModel>> GetPersonalByMonth(string driver,string month);
+        Task<List<PersonalViewModel>> GetPersonalHistoryByTrip(string driver, string trip);
     }
 }

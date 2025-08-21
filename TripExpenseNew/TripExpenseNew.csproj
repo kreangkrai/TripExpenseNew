@@ -116,6 +116,9 @@
 	  <MauiXaml Update="CustomPopup\ProgressPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="HistoryPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Home_Page.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
