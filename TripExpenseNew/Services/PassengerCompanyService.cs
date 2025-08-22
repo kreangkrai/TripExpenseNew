@@ -64,7 +64,7 @@ namespace TripExpenseNew.Services
 
         public async Task<List<PassengerCompanyViewModel>> GetPassengerCompanyHistoryByTrip(string passenger, string trip)
         {
-            var response = await _httpClient.GetAsync(URL + $"/api/PassengerCompany/getdriverhistorybytrip?passenger={passenger}&trip={trip}");
+            var response = await _httpClient.GetAsync(URL + $"/api/PassengerCompany/getpassengerhistorybytrip?passenger={passenger}&trip={trip}");
             var content = await response.Content.ReadAsStringAsync();
             List<PassengerCompanyViewModel> passengers = JsonConvert.DeserializeObject<List<PassengerCompanyViewModel>>(content);
             return passengers;

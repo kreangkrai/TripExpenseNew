@@ -1,5 +1,8 @@
-﻿using System.Collections.ObjectModel;
+﻿using CommunityToolkit.Maui.Views;
+using CommunityToolkit.Mvvm.DependencyInjection;
+using System.Collections.ObjectModel;
 using System.Globalization;
+using TripExpenseNew.CustomPopup;
 using TripExpenseNew.Interface;
 using TripExpenseNew.Models;
 using TripExpenseNew.Services;
@@ -52,31 +55,64 @@ public partial class HistoryPage : ContentPage
         await Shell.Current.GoToAsync("Home_Page");
     }
 
-    private async void HistoryTripCollectionView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    private async void OnItemTapped(object sender, EventArgs e)
     {
-        if (e.CurrentSelection.FirstOrDefault() is HistoryItems selectedTrip)
+        if (sender is Frame frame && frame.BindingContext is HistoryItems selectedTrip)
         {
-            LastTripViewModel lastTrip = lastTrips.Where(w=>w.trip_start.ToString("dd/MM/yyyy HH:mm:ss", cultureinfo) == selectedTrip.TextTrip).FirstOrDefault();
+            LastTripViewModel lastTrip = lastTrips.Where(w => w.trip_start.ToString("dd/MM/yyyy HH:mm:ss", cultureinfo) == selectedTrip.TextTrip).FirstOrDefault();
             if (lastTrip.mode == "PERSONAL")
             {
                 List<PersonalViewModel> datas = await Personal.GetPersonalHistoryByTrip(lastTrip.driver, lastTrip.trip);
+                datas = datas.OrderBy(o => o.date).ToList();
+                await this.ShowPopupAsync(new PersonalHistoryPopup(datas));
             }
             if (lastTrip.mode == "COMPANY")
             {
                 List<CompanyViewModel> datas = await Company.GetCompanyDriverHistoryByTrip(lastTrip.driver, lastTrip.trip);
+
             }
             if (lastTrip.mode == "PASSENGER PERSONAL")
             {
                 List<PassengerPersonalViewModel> datas = await PassengerPersonal.GetPassengerPersonalHistoryByTrip(lastTrip.driver, lastTrip.trip);
+                datas = datas.OrderBy(o => o.date).ToList();
+                await this.ShowPopupAsync(new PassengerPersonalHistoryPopup(datas));
             }
             if (lastTrip.mode == "PASSENGER COMPANY")
             {
                 List<PassengerCompanyViewModel> datas = await PassengerCompany.GetPassengerCompanyHistoryByTrip(lastTrip.driver, lastTrip.trip);
             }
-
-            //await Shell.Current.GoToAsync($"//TripDetailPage?tripId={selectedTrip.Id}");
         }
+    }
+    private void HistoryTripCollectionView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        //if (e.CurrentSelection.FirstOrDefault() is HistoryItems selectedTrip)
+        //{
+        //    LastTripViewModel lastTrip = lastTrips.Where(w=>w.trip_start.ToString("dd/MM/yyyy HH:mm:ss", cultureinfo) == selectedTrip.TextTrip).FirstOrDefault();
+        //    if (lastTrip.mode == "PERSONAL")
+        //    {
+        //        List<PersonalViewModel> datas = await Personal.GetPersonalHistoryByTrip(lastTrip.driver, lastTrip.trip);
+        //        datas = datas.OrderBy(o=>o.date).ToList();
+        //        await this.ShowPopupAsync(new PersonalHistoryPopup(datas));
+        //    }
+        //    if (lastTrip.mode == "COMPANY")
+        //    {
+        //        List<CompanyViewModel> datas = await Company.GetCompanyDriverHistoryByTrip(lastTrip.driver, lastTrip.trip);
+                
+        //    }
+        //    if (lastTrip.mode == "PASSENGER PERSONAL")
+        //    {
+        //        List<PassengerPersonalViewModel> datas = await PassengerPersonal.GetPassengerPersonalHistoryByTrip(lastTrip.driver, lastTrip.trip);
+        //        datas = datas.OrderBy(o => o.date).ToList();
+        //        await this.ShowPopupAsync(new PassengerPersonalHistoryPopup(datas));
+        //    }
+        //    if (lastTrip.mode == "PASSENGER COMPANY")
+        //    {
+        //        List<PassengerCompanyViewModel> datas = await PassengerCompany.GetPassengerCompanyHistoryByTrip(lastTrip.driver, lastTrip.trip);
+        //    }
 
-        HistoryTripCollectionView.SelectedItem = null;
+        //    //await Shell.Current.GoToAsync($"//TripDetailPage?tripId={selectedTrip.Id}");
+        //}
+
+        //HistoryTripCollectionView.SelectedItem = null;
     }
 }

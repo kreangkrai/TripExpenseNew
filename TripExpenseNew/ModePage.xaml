@@ -28,12 +28,12 @@
                 <Label
                     CharacterSpacing="1"
                     FontFamily="Rajdhani-SemiBold"
-                    FontSize="30"
+                    FontSize="40"
                     HorizontalOptions="Center"
                     SemanticProperties.HeadingLevel="Level2"
                     Style="{StaticResource Headline}"
                     Text="SELECT MODE"
-                    TextColor="#000000"
+                    TextColor="#1C4698"
                     VerticalOptions="Center" />
 
                 <!--  BUTTON | Personal Car  -->
@@ -44,11 +44,12 @@
                     CharacterSpacing="3"
                     Clicked="PersonalCar_Clicked"
                     CornerRadius="20"
+                    FontFamily="Rajdhani-SemiBold"
                     FontAttributes="Bold"
                     FontSize="28"
                     HeightRequest="80"
                     HorizontalOptions="Center"
-                    Text="Personal Car"
+                    Text="PERSONAL CAR"
                     VerticalOptions="Center"
                     WidthRequest="300" />
 
@@ -61,29 +62,11 @@
                     Clicked="CompanyCar_Clicked"
                     CornerRadius="20"
                     FontAttributes="Bold"
+                    FontFamily="Rajdhani-SemiBold"
                     FontSize="28"
                     HeightRequest="80"
                     HorizontalOptions="Center"
-                    Text="Company Car"
-                    VerticalOptions="Center"
-                    WidthRequest="300" />
-
-                <!--  BUTTON | Passenger  -->
-                <Button
-                    x:Name="PassengerBtn"
-                    Padding="10,5"
-                    BackgroundColor="Transparent"
-                    BorderColor="#297CC0"
-                    BorderWidth="3"
-                    CharacterSpacing="3"
-                    Clicked="PersonalForceStop_Clicked"
-                    CornerRadius="20"
-                    FontAttributes="Bold"
-                    FontSize="28"
-                    HeightRequest="80"
-                    HorizontalOptions="Center"
-                    Text="Passenger"
-                    TextColor="#297CC0"
+                    Text="COMPANY CAR"
                     VerticalOptions="Center"
                     WidthRequest="300" />
 
@@ -91,17 +74,16 @@
                 <Button
                     x:Name="PublicBtn"
                     Padding="10,5"
-                    BackgroundColor="Transparent"
-                    BorderColor="#297CC0"
-                    BorderWidth="3"
+                    BackgroundColor="#297CC0"
                     CharacterSpacing="03"
                     CornerRadius="20"
                     FontAttributes="Bold"
                     FontSize="28"
                     HeightRequest="80"
+                    FontFamily="Rajdhani-SemiBold"
                     HorizontalOptions="Center"
-                    Text="Public"
-                    TextColor="#297CC0"
+                    Text="PUBLIC"
+                    TextColor="White"
                     VerticalOptions="Center"
                     WidthRequest="300" />
 
@@ -116,10 +98,11 @@
                     Clicked="CancelBtn_Clicked"
                     CornerRadius="20"
                     FontAttributes="Bold"
-                    FontSize="20"
+                    FontSize="28"
+                    FontFamily="Rajdhani-SemiBold"
                     HeightRequest="80"
                     HorizontalOptions="Center"
-                    Text="Cancel"
+                    Text="CANCEL"
                     TextColor="White"
                     VerticalOptions="Center"
                     WidthRequest="300" />

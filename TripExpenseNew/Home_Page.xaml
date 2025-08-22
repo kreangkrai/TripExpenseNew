@@ -73,14 +73,13 @@
                 x:Name="Button_Active"
                 Grid.ColumnSpan="1"
                 BackgroundColor="#14AE5C"
-                HeightRequest="40"
-                Stroke="#778899"
-                StrokeShape="RoundRectangle 20"
-                StrokeThickness="2">
+                HeightRequest="40"               
+                StrokeShape="RoundRectangle 20">
                 <Label
                     CharacterSpacing="2"
                     FontAttributes="Bold"
                     x:Name="Text_Active"
+                        FontFamily="Rajdhani-SemiBold"
                     FontSize="20"
                     HorizontalOptions="Center"
                     SemanticProperties.HeadingLevel="Level2"
@@ -98,7 +97,6 @@
                         HeightRequest="60"
                         x:Name="img_status"
                         SemanticProperties.Description="dot net bot in a race car number eight"
-                        Source="car.png"
                         VerticalOptions="End" />
 
                     <!--  LABEL | Ready to start a trip?  -->
@@ -119,14 +117,14 @@
                         x:Name="AddTripBtn"
                         Padding="5"
                         BackgroundColor="#297CC0"
-                        CharacterSpacing="03"
+                        CharacterSpacing="3"
                         Clicked="OnGoToModePageClicked"
+                        FontFamily="Rajdhani-SemiBold"
                         CornerRadius="30"
                         FontAttributes="Bold"
-                        FontSize="Large"
+                        FontSize="32"
                         HeightRequest="60"
                         HorizontalOptions="Fill"
-                        SemanticProperties.Hint="Counts the number of times you click"
                         Text="{Binding ButtonTripText}"
                         VerticalOptions="Center"
                         WidthRequest="300" />
@@ -251,31 +249,33 @@
                         Style="{StaticResource Headline}"
                         Text=""
                         VerticalOptions="Center" />
-
                 </Grid>
             </ContentView>
 
-            <!--  BUTTON | Trip History  -->
-            <Button
-                x:Name="HistoryBtn"
+
+            <ContentView 
                 Grid.Row="5"
-                Grid.ColumnSpan="3"
-                Padding="5"
+                Grid.ColumnSpan="3">
+                <!--  BUTTON | Trip History  -->
+                <Button
+                x:Name="HistoryBtn"            
                 Clicked="HistoryBtn_Clicked"
-                BackgroundColor="Transparent"
-                BorderColor="#3C9BCB"
-                BorderWidth="2"
-                CharacterSpacing="02"
+                BackgroundColor="#E8E8E8"
+                FontFamily="Rajdhani-SemiBold"
+                BorderColor="#A3A2A2"               
+                BorderWidth="0"
+                CharacterSpacing="3"
                 CornerRadius="30"
                 FontAttributes="Bold"
-                FontSize="Medium"
+                FontSize="24"
                 HeightRequest="60"
                 HorizontalOptions="Fill"
-                SemanticProperties.Hint="Counts the number of times you click"
                 Text="TRIP HISTORY"
-                TextColor="#3C9BCB"
+                TextColor="Black"
                 VerticalOptions="Center"               
                 WidthRequest="300" />
+            </ContentView>
+            <!-- 3C9BCB-->
         </Grid>
     </ScrollView>
 </ContentPage>

@@ -11,6 +11,7 @@ using TripExpenseNew.DBInterface;
 using TripExpenseNew.DBModels;
 using TripExpenseNew.Interface;
 using TripExpenseNew.Models;
+using TripExpenseNew.PassengerPage;
 using TripExpenseNew.PersonalPage;
 using TripExpenseNew.ViewModels;
 
@@ -50,7 +51,7 @@ public partial class Home_Page : ContentPage
                 {
                     if (trips[0].trip_start.Date == DateTime.Now.Date)
                     {
-                        if (trips[0].mode.Contains("PASSENGER"))
+                        if (trips[0].mode.Contains("PASSENGER PERSONAL"))
                         {
                             MainThread.BeginInvokeOnMainThread(() =>
                             {
@@ -59,20 +60,43 @@ public partial class Home_Page : ContentPage
                                     viewModel.ButtonTripText = "DROP OFF";
                                     AddTripBtn.BackgroundColor = Colors.Red;
                                     Button_Active.BackgroundColor = Colors.Red;
-                                    Text_Status.Text = "Do you want to drop off now?";
+                                    Text_Status.Text = $"You are a passenger of \n{trips[0].driver_name} \n Do you want to drop off now?";
                                     Text_Active.Text = "In Use";
+                                    img_status.Source = "passenger.png";
                                 }
                                 else
                                 {
                                     AddTripBtn.Text = "DROP OFF";
                                     AddTripBtn.BackgroundColor = Colors.Red;
                                     Button_Active.BackgroundColor = Colors.Red;
-                                    Text_Status.Text = "Do you want to drop off now?";
+                                    Text_Status.Text = $"You are a passenger of \n{trips[0].driver_name} \n Do you want to drop off now?";
                                     Text_Active.Text = "In Use";
                                 }
                             });
                         }
-
+                        else if (trips[0].mode.Contains("PASSENGER COMPANY"))
+                        {
+                            MainThread.BeginInvokeOnMainThread(() =>
+                            {
+                                if (BindingContext is ButtonTrip viewModel)
+                                {
+                                    viewModel.ButtonTripText = "DROP OFF";
+                                    AddTripBtn.BackgroundColor = Colors.Red;
+                                    Button_Active.BackgroundColor = Colors.Red;
+                                    Text_Status.Text = $"You are a passenger of \n{trips[0].driver_name} \n Do you want to drop off now?";
+                                    Text_Active.Text = "In Use";
+                                    img_status.Source = "passenger.png";
+                                }
+                                else
+                                {
+                                    AddTripBtn.Text = "DROP OFF";
+                                    AddTripBtn.BackgroundColor = Colors.Red;
+                                    Button_Active.BackgroundColor = Colors.Red;
+                                    Text_Status.Text = $"You are a passenger of \n{trips[0].driver_name} \n Do you want to drop off now?";
+                                    Text_Active.Text = "In Use";
+                                }
+                            });
+                        }
                         else
                         {
                             MainThread.BeginInvokeOnMainThread(() =>
@@ -84,6 +108,7 @@ public partial class Home_Page : ContentPage
                                     Button_Active.BackgroundColor = Colors.Orange;
                                     Text_Status.Text = "Please press CONTINUE for start trip";
                                     Text_Active.Text = "In Use";
+                                    img_status.Source = "driver.png";
                                 }
                                 else
                                 {
@@ -92,6 +117,7 @@ public partial class Home_Page : ContentPage
                                     Button_Active.BackgroundColor = Colors.Orange;
                                     Text_Status.Text = "Please press CONTINUE for start trip";
                                     Text_Active.Text = "In Use";
+                                    img_status.Source = "driver.png";
                                 }
                             });
                         }
@@ -107,6 +133,7 @@ public partial class Home_Page : ContentPage
                                 Button_Active.BackgroundColor = Colors.Red;
                                 Text_Status.Text = "Please press STOP for stop trip";
                                 Text_Active.Text = "In Use";
+                                img_status.Source = "driver.png";
                             }
                             else
                             {
@@ -115,6 +142,7 @@ public partial class Home_Page : ContentPage
                                 Button_Active.BackgroundColor = Colors.Red;
                                 Text_Status.Text = "Please press STOP for stop trip";
                                 Text_Active.Text = "In Use";
+                                img_status.Source = "driver.png";
                             }
                         });
                     }
@@ -129,11 +157,14 @@ public partial class Home_Page : ContentPage
                         if (BindingContext is ButtonTrip viewModel)
                         {
                             viewModel.ButtonTripText = "ADD TRIP";
+                            AddTripBtn.BackgroundColor = Color.FromArgb("#297CC0");
+                            img_status.Source = "car.png";
                         }
                         else
                         {
                             AddTripBtn.Text = "ADD TRIP";
                             AddTripBtn.BackgroundColor = Color.FromArgb("#297CC0");
+                            img_status.Source = "car.png";
                         }
                     });
                 }
@@ -149,11 +180,14 @@ public partial class Home_Page : ContentPage
                     if (BindingContext is ButtonTrip viewModel)
                     {
                         viewModel.ButtonTripText = "ADD TRIP";
+                        AddTripBtn.BackgroundColor = Color.FromArgb("#297CC0");
+                        img_status.Source = "car.png";
                     }
                     else
                     {
                         AddTripBtn.Text = "ADD TRIP";
                         AddTripBtn.BackgroundColor = Color.FromArgb("#297CC0");
+                        img_status.Source = "car.png";
                     }
                 });
             }
@@ -218,7 +252,7 @@ public partial class Home_Page : ContentPage
 
                     if (trips[0].mode == "PASSENGER PERSONAL")
                     {
-                        
+                        await Navigation.PushAsync(new PassengerPersonalStopPage(trips[0]));
                     }
 
                     if (trips[0].mode == "PASSENGER COMPANY")

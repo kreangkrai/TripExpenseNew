@@ -21,11 +21,6 @@ using System.Globalization;
 #if IOS
 using UserNotifications;
 using Microsoft.Maui.Maps;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Reflection.Emit;
-using static Microsoft.Maui.ApplicationModel.Permissions;
-
-
 
 #endif
 
