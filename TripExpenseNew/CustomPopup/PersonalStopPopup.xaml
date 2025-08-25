@@ -9,15 +9,14 @@
     <Border
         Padding="0"
         BackgroundColor="White"
-        WidthRequest="300"
-        HeightRequest="500"
+        WidthRequest="350"
         Stroke="Transparent"
         StrokeShape="{RoundRectangle CornerRadius='20'}">
         <Grid
             Padding="20,20"
             ColumnDefinitions=".50*,.50*"
             ColumnSpacing="10"
-            RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto"
+            RowDefinitions="Auto,Auto,Auto,Auto,Auto"
             RowSpacing="15">
 
             <!--  LABEL | START TRIP  -->
@@ -107,18 +106,6 @@
                 Grid.Row="2"
                 Grid.ColumnSpan="2"
                 Spacing="5">
-                <!--  LABEL | Customer/Location:  -->
-                <Label
-                         CharacterSpacing="1"
-                         x:Name="Text_mileage"
-                         Grid.Row="0"
-                         Grid.ColumnSpan="2"
-                         FontAttributes="None"
-                         FontSize="20"
-                         HorizontalOptions="Start"
-                         TextColor="Blue"
-                         Text="Mileage Start:"
-                         VerticalOptions="Center" />
 
                 <Label
                     CharacterSpacing="1"
@@ -147,18 +134,30 @@
 
             <!--  Mileage  -->
             <VerticalStackLayout
-                Grid.Row="4"
+                Grid.Row="3"
                 Grid.ColumnSpan="2"
                 Spacing="5">
+                <!--  LABEL | Customer/Location:  -->
+                <Label
+         CharacterSpacing="1"
+         x:Name="Text_mileage"
+         Grid.Row="0"
+         Grid.ColumnSpan="2"
+         FontAttributes="None"
+         FontSize="20"
+         HorizontalOptions="Start"
+         TextColor="#297CC0"
+         Text="Mileage Start:"
+         VerticalOptions="Center" />
                 <!--  LABEL | Job  -->
                 <Label
                     CharacterSpacing="1"
                     FontAttributes="None"
                     FontSize="20"
                     HorizontalOptions="Start"
-                    Text="Mileage:"
+                    Text="Mileage Stop:"
                     VerticalOptions="Center" />
-                <!--  ENTRY | USERNAME  -->
+                <!--  ENTRY | Mileage Stop  -->
                 <Border
                     Stroke="#C8C8C8"
                     StrokeShape="RoundRectangle 5"
@@ -179,7 +178,7 @@
             <!--  BUTTON | Cancel  -->
             <Button
                 x:Name="CancelBtn"
-                Grid.Row="5"
+                Grid.Row="4"
                 Padding="10,15"
                 BackgroundColor="#EC221F"
                 CharacterSpacing="2"
@@ -202,7 +201,7 @@
             <!--  BUTTON | OK  -->
             <Button
                 x:Name="OKBtn"
-                Grid.Row="5"
+                Grid.Row="4"
                 Grid.Column="1"
                 Padding="10,15"
                 BackgroundColor="#14AE5C"

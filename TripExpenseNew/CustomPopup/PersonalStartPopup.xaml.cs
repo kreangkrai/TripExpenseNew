@@ -24,13 +24,13 @@ public partial class PersonalStartPopup : Popup
         Text_Mileage.Text = mileage.ToString();
         if (Iscustomer)
         {
-            CustomerBtn.BackgroundColor = Colors.Blue;
+            CustomerBtn.BackgroundColor = Color.FromArgb("#297CC0");
             OtherBtn.BackgroundColor = Colors.Grey;
         }
         else
         {
             CustomerBtn.BackgroundColor = Colors.Grey;
-            OtherBtn.BackgroundColor = Colors.Blue;
+            OtherBtn.BackgroundColor = Color.FromArgb("#297CC0");
         }
     }
 
@@ -55,7 +55,7 @@ public partial class PersonalStartPopup : Popup
     {
         Iscustomer = true;
 
-        CustomerBtn.BackgroundColor = Colors.Blue;
+        CustomerBtn.BackgroundColor = Color.FromArgb("#297CC0");
         OtherBtn.BackgroundColor = Colors.Grey;
     }
 
@@ -63,6 +63,6 @@ public partial class PersonalStartPopup : Popup
     {
         Iscustomer = false;
         CustomerBtn.BackgroundColor = Colors.Grey;
-        OtherBtn.BackgroundColor = Colors.Blue;
+        OtherBtn.BackgroundColor = Color.FromArgb("#297CC0");
     }
 }

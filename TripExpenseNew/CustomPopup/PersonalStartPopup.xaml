@@ -9,7 +9,7 @@
     <Border
         Padding="0"
         BackgroundColor="White"
-        WidthRequest="300"
+        WidthRequest="350"
         Stroke="Transparent"
         StrokeShape="{RoundRectangle CornerRadius='20'}">
         <Grid
@@ -62,7 +62,7 @@
                     CharacterSpacing="2"
                     CornerRadius="10"
                     FontAttributes="Bold"
-                    FontSize="22"
+                    FontSize="18"
                     HorizontalOptions="Fill"
                     Text="Customer"
                     VerticalOptions="Center">
@@ -86,7 +86,7 @@
                     CharacterSpacing="2"
                     CornerRadius="10"
                     FontAttributes="Bold"
-                    FontSize="22"
+                    FontSize="18"
                     HorizontalOptions="Fill"
                     Text="Other"
                     VerticalOptions="Center">
@@ -171,7 +171,7 @@
                     FontAttributes="None"
                     FontSize="20"
                     HorizontalOptions="Start"
-                    Text="Mileage:"
+                    Text="Mileage Start:"
                     VerticalOptions="Center" />
                 <!--  ENTRY | USERNAME  -->
                 <Border

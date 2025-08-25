@@ -10,7 +10,7 @@
             ColumnDefinitions="*"
             ColumnSpacing="5"
             RowDefinitions="Auto,*,Auto"
-            RowSpacing="5">
+            RowSpacing="10">
             <!--  LABEL | ACTIVE TRIP  -->
             <Label
                 Grid.Row="0"

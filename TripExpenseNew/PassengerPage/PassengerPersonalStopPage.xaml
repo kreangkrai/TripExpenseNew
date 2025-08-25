@@ -43,6 +43,7 @@
                     Margin="2"
                     Padding="4"
                     CharacterSpacing="1"
+                    VerticalOptions="Center"
                     FontSize="18"
                     Text="{Binding Text}" />
             </Border>
@@ -70,6 +71,7 @@
             Margin="2"
             Padding="4"
             CharacterSpacing="1"
+            VerticalOptions="Center"
             FontSize="18"
             Text="{Binding Text}" />
             </Border>
@@ -186,14 +188,15 @@
                 StrokeThickness="2" />
             <TimePicker
                 x:Name="timePicker"
+                PropertyChanged="timePicker_PropertyChanged"
                 Grid.Column="1"
                 CharacterSpacing="5"
                 FontSize="20"
                 Format="HH:mm"
+             
                 HeightRequest="50"
                 HorizontalOptions="Center"
-                TextColor="#297CC0"
-                Time="{Binding SelectedTime, Mode=TwoWay}" />
+                TextColor="#297CC0" />
             <Label Text="{Binding SelectedTime, StringFormat='Selected Time: {0:HH:mm}'}" />
         </Grid>
 
@@ -229,7 +232,7 @@
             <Button
                 x:Name="CancelBtn"
                 Padding="10,15"
-                BackgroundColor="#EC221F"
+                BackgroundColor="#FF474C"
                 CharacterSpacing="2"
                 Clicked="CancelBtn_Clicked"
                 CornerRadius="30"

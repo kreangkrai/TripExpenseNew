@@ -48,7 +48,8 @@ public partial class PassengerPersonalStopPage : ContentPage
     List<LocationCustomerModel> GetLocationCustomers = new List<LocationCustomerModel>();
     List<LocationOtherModel> GetLocationOthers = new List<LocationOtherModel>();
     List<LocationOtherModel> GetLocationCTL = new List<LocationOtherModel>();
-
+    DateTime now = DateTime.Now;
+    TimePicker time_select = new TimePicker();
 #if IOS
     private Platforms.iOS.LocationService locationService;
 #elif ANDROID
@@ -80,7 +81,7 @@ public partial class PassengerPersonalStopPage : ContentPage
         mileage_start = _trip.mileage_start;
         emp_id = _trip.emp_id;
         trip = _trip;
-        timePicker.Time = new TimeSpan(17, 30, 0); // ตั้งเวลาเริ่มต้นเป็น 17:30
+        timePicker.Time = new TimeSpan(now.Hour,now.Minute,0);
     }
 
     protected override async void OnAppearing()
@@ -227,13 +228,13 @@ public partial class PassengerPersonalStopPage : ContentPage
                 IsCustomer = loc.Item2;
                 if (IsCustomer) // Customer
                 {
-                    CustomerBtn.BackgroundColor = Colors.Blue;
-                    OtherBtn.BackgroundColor = Colors.Grey;
+                    CustomerBtn.BackgroundColor = Color.FromArgb("#297CC0");
+                    OtherBtn.BackgroundColor = Colors.LightGrey;
                 }
                 else
                 {
-                    CustomerBtn.BackgroundColor = Colors.Grey;
-                    OtherBtn.BackgroundColor = Colors.Blue;
+                    CustomerBtn.BackgroundColor = Colors.LightGrey;
+                    OtherBtn.BackgroundColor = Color.FromArgb("#297CC0");
                 }
             }
             else
@@ -260,16 +261,16 @@ public partial class PassengerPersonalStopPage : ContentPage
     private void OtherBtn_Clicked(object sender, EventArgs e)
     {
         IsCustomer = false;
-        CustomerBtn.BackgroundColor = Colors.Grey;
-        OtherBtn.BackgroundColor = Colors.Blue;
+        CustomerBtn.BackgroundColor = Colors.LightGrey;
+        OtherBtn.BackgroundColor = Color.FromArgb("#297CC0");
     }
 
     private void CustomerBtn_Clicked(object sender, EventArgs e)
     {
         IsCustomer = true;
 
-        CustomerBtn.BackgroundColor = Colors.Blue;
-        OtherBtn.BackgroundColor = Colors.Grey;
+        CustomerBtn.BackgroundColor = Color.FromArgb("#297CC0");
+        OtherBtn.BackgroundColor = Colors.LightGrey;
     }
 
     private async void ConfirmBtn_Clicked(object sender, EventArgs e)
@@ -283,7 +284,7 @@ public partial class PassengerPersonalStopPage : ContentPage
                 var popup = new ProgressPopup();
                 this.ShowPopup(popup);
 
-                DateTime date = new DateTime(trip.trip_start.Year, trip.trip_start.Month, trip.trip_start.Day, timePicker.Time.Hours, timePicker.Time.Minutes, timePicker.Time.Seconds);
+                DateTime date = new DateTime(trip.trip_start.Year, trip.trip_start.Month, trip.trip_start.Day, time_select.Time.Hours, time_select.Time.Minutes, time_select.Time.Seconds);
 
                 double speed = g_location?.Speed.HasValue ?? false ? g_location.Speed.Value * 3.6 : 0;
                 var placemarks = await Geocoding.Default.GetPlacemarksAsync(g_location.Latitude, g_location.Longitude);
@@ -364,5 +365,34 @@ public partial class PassengerPersonalStopPage : ContentPage
 #endif
 
         await Shell.Current.GoToAsync("Home_Page");
+    }
+
+    private void timePicker_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(TimePicker.Time))
+        {
+            var timePicker = sender as TimePicker;
+            var selectedTime = timePicker.Time;
+            var currentTime = now.TimeOfDay;
+            if (trip.trip_start.Date == now.Date)
+            {
+                if (selectedTime <= currentTime.Add(new TimeSpan(0, 3, 0)))
+                {
+
+                    time_select.Time = selectedTime;
+                }
+                else
+                {
+                    MainThread.BeginInvokeOnMainThread(async () =>
+                    {
+                        await DisplayAlert("", "เวลาไม่ถูกต้อง", "ตกลง");
+                    });
+                }
+            }
+            else
+            {
+                time_select.Time = selectedTime;
+            }
+        }
     }
 }

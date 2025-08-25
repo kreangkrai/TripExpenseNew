@@ -24,13 +24,13 @@ public partial class PersonalStopPopup : Popup
         Text_mileage.Text = $"Mileage Start: {mileage}";
         if (Iscustomer)
         {
-            CustomerBtn.BackgroundColor = Colors.Blue;
+            CustomerBtn.BackgroundColor = Color.FromArgb("#297CC0");
             OtherBtn.BackgroundColor = Colors.Grey;
         }
         else
         {
             CustomerBtn.BackgroundColor = Colors.Grey;
-            OtherBtn.BackgroundColor = Colors.Blue;
+            OtherBtn.BackgroundColor = Color.FromArgb("#297CC0");
         }
     }
     private void CancelBtn_Clicked(object sender, EventArgs e)
@@ -53,7 +53,7 @@ public partial class PersonalStopPopup : Popup
     {
         Iscustomer = true;
 
-        CustomerBtn.BackgroundColor = Colors.Blue;
+        CustomerBtn.BackgroundColor = Color.FromArgb("#297CC0");
         OtherBtn.BackgroundColor = Colors.Grey;
     }
 
@@ -61,6 +61,6 @@ public partial class PersonalStopPopup : Popup
     {
         Iscustomer = false;
         CustomerBtn.BackgroundColor = Colors.Grey;
-        OtherBtn.BackgroundColor = Colors.Blue;
+        OtherBtn.BackgroundColor = Color.FromArgb("#297CC0");
     }
 }

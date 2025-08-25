@@ -228,7 +228,7 @@
                 HeightRequest="50"
                 HorizontalOptions="Center"
                 TextColor="#297CC0"
-                Time="{Binding SelectedTime, Mode=TwoWay}" />
+                PropertyChanged="timePicker_PropertyChanged"/>
             <Label Text="{Binding SelectedTime, StringFormat='Selected Time: {0:HH:mm}'}" />
         </Grid>
 

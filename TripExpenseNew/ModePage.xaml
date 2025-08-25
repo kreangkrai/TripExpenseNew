@@ -91,8 +91,8 @@
                 <Button
                     x:Name="CancelBtn"
                     Padding="10,5"
-                    BackgroundColor="Red"
-                    BorderColor="Red"
+                    BackgroundColor="#FF474C"
+                    BorderColor="#FF474C"
                     BorderWidth="3"
                     CharacterSpacing="03"
                     Clicked="CancelBtn_Clicked"

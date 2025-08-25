@@ -60,35 +60,24 @@
                 FontFamily="Rajdhani-Bold"
                 FontSize="24"
                 HorizontalOptions="Start"
-                SemanticProperties.HeadingLevel="Level2"
-                Style="{StaticResource Headline}"
                 Text="Status:"
                 TextColor="#000000"
                 VerticalOptions="Center" />
 
-            <!--  BORDER | STATUS (Active, Inactive, In Progress)  -->
-            <Border
+            <!--   STATUS (Active, Inactive, In Progress)  -->
+               <Label
                 Grid.Row="1"
                 Grid.Column="1"
-                x:Name="Button_Active"
-                Grid.ColumnSpan="1"
-                BackgroundColor="#14AE5C"
-                HeightRequest="40"               
-                StrokeShape="RoundRectangle 20">
-                <Label
-                    CharacterSpacing="2"
+                    CharacterSpacing="1"
                     FontAttributes="Bold"
                     x:Name="Text_Active"
-                        FontFamily="Rajdhani-SemiBold"
-                    FontSize="20"
-                    HorizontalOptions="Center"
-                    SemanticProperties.HeadingLevel="Level2"
-                    Style="{StaticResource Headline}"
-                    Text="Idle"
-                    TextColor="#FFFFFF"
+                        FontFamily="Rajdhani-Bold"
+                    FontSize="28"
+                    HorizontalOptions="Start"
+                    Text=""
+                    TextColor="#14AE5C"
                     VerticalOptions="Center" />
-            </Border>
-
+           
             <ContentView Grid.Row="3" Grid.ColumnSpan="3">
                 <StackLayout Spacing="15">
                     <!--  IMAGE | CAR  -->

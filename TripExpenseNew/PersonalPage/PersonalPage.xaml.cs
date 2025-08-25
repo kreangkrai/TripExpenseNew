@@ -295,7 +295,7 @@ public partial class PersonalPage : ContentPage
 #if IOS
             locationService?.StopUpdatingLocation();
             locationService = null;
-#elif ANDROID
+//#elif ANDROID
             //intent = new Intent(Platform.AppContext, typeof(TripExpenseNew.Platforms.Android.LocationService));
             //Platform.AppContext.StopService(intent);
 #endif

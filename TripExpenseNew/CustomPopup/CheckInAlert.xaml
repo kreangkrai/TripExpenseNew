@@ -4,16 +4,14 @@
                xmlns:toolkit="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
                x:Class="TripExpenseNew.CustomPopup.CheckInAlert"
                x:Name="this"
-               Size="300,270"
                Color="Transparent">
     <Frame BackgroundColor="White"
            CornerRadius="10"
            Padding="10"
            VerticalOptions="Center"
+           WidthRequest="350"
            HorizontalOptions="Center"
-           HasShadow="False"
-           WidthRequest="300"
-           HeightRequest="270">
+           HasShadow="False">
         <VerticalStackLayout Spacing="5">
             <Label Text="{Binding Title, Source={x:Reference this}}"
                    FontSize="28"
@@ -25,44 +23,67 @@
                    LineBreakMode="WordWrap" />
             <VerticalStackLayout  Spacing="10" VerticalOptions="Center" HorizontalOptions="Fill" Padding="5">
                 <Button Text="Customer"
-                        FontSize="20"
+                        FontSize="22"
                         TextColor="White"
                         CharacterSpacing="1"
                         BackgroundColor="#297CC0"
                         FontAttributes="Bold"
                         FontFamily="Rajdhani-Bold"
-                        HeightRequest="50"
+                        HeightRequest="60"
                         ContentLayout="Right,5"
                         ImageSource="industrial.png"
-                        MaximumHeightRequest="50"
-                        Style="{StaticResource ButtonStyle}"
-                        Clicked="OnCustomerButtonClicked" HorizontalOptions="Fill"/>
+                        MaximumHeightRequest="60"
+                        Clicked="OnCustomerButtonClicked" HorizontalOptions="Fill">
+                    <Button.Shadow>
+                        <Shadow
+                        Brush="Black"
+                        Opacity="0.2"
+                        Radius="5"
+                        Offset="0,2" />
+                    </Button.Shadow>
+                </Button>
+                
                 <Button Text="Other"
-                        FontSize="20"
+                        FontSize="22"
                         CharacterSpacing="1"
                         TextColor="White"
                         BackgroundColor="#14AE5C"
                         FontAttributes="Bold"
                         FontFamily="Rajdhani-Bold"
                         ContentLayout="Right,5"
-                        HeightRequest="50"
+                        HeightRequest="60"
                         ImageSource="house_building.png"
-                        MaximumHeightRequest="50"
-                        Style="{StaticResource ButtonStyle}"
-                        Clicked="OnOtherButtonClicked" HorizontalOptions="Fill"/>
+                        MaximumHeightRequest="60"
+                        Clicked="OnOtherButtonClicked" HorizontalOptions="Fill">
+                <Button.Shadow>
+                    <Shadow
+                        Brush="Black"
+                        Opacity="0.2"
+                        Radius="5"
+                        Offset="0,2" />
+                </Button.Shadow>
+            </Button>
+                
                 <Button Text="Gas Station"
-                        FontSize="20"
+                        FontSize="22"
                         CharacterSpacing="1"
                         TextColor="White"
                         BackgroundColor="#CFB53E"
                         FontAttributes="Bold"
-                        HeightRequest="50"
+                        HeightRequest="60"
                         FontFamily="Rajdhani-Bold"
                         ContentLayout="Right,5"
                         ImageSource="car_oil.png"
-                        MaximumHeightRequest="50"
-                    Style="{StaticResource ButtonStyle}"
-                    Clicked="OnGasButtonClicked" HorizontalOptions="Fill" />
+                        MaximumHeightRequest="60"
+                    Clicked="OnGasButtonClicked" HorizontalOptions="Fill" >
+                    <Button.Shadow>
+                        <Shadow
+                        Brush="Black"
+                        Opacity="0.2"
+                        Radius="5"
+                        Offset="0,2" />
+                    </Button.Shadow>
+                </Button>
             </VerticalStackLayout>
         </VerticalStackLayout>
     </Frame>

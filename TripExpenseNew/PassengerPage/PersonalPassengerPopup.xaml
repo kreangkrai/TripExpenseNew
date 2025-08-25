@@ -11,21 +11,22 @@
 
     <Grid
     Padding="20,20"
-    ColumnDefinitions=".50*"
-    ColumnSpacing="1"
+    ColumnDefinitions=".50*,.50*"
+    ColumnSpacing="10"
     RowDefinitions="Auto,Auto,Auto"
     RowSpacing="5">
         <Label
-    Grid.Row="0"
-    CharacterSpacing="1"
-    FontAttributes="Bold"
-    FontFamily="Rajdhani-Bold"
-    FontSize="32"
-    HorizontalOptions="Center"
-    Text="ADD PASSENGER"
-    TextColor="#1C4698"
-    VerticalOptions="Center" />
-        <Grid Grid.Row="1" HeightRequest="200" WidthRequest="300" Margin="1">
+            Grid.Row="0"
+            Grid.ColumnSpan="2"
+            CharacterSpacing="1"
+            FontAttributes="Bold"
+            FontFamily="Rajdhani-Bold"
+            FontSize="32"
+            HorizontalOptions="Center"
+            Text="ADD PASSENGER"
+            TextColor="#1C4698"
+            VerticalOptions="Center" />
+        <Grid Grid.Row="1" Grid.ColumnSpan="2" HeightRequest="200" WidthRequest="300" Margin="1">
             <!-- <ContentPage.BindingContext>
                 <vm:EmployeeItems />
             </ContentPage.BindingContext> -->
@@ -37,14 +38,30 @@
                Text="{Binding SearchText}"
                FontSize="16" />
                 <!-- CollectionView สำหรับแสดงรายชื่อ -->
+                <!--  -->
                 <CollectionView ItemsSource="{Binding FilteredEmployees}"
                     SelectionMode="Single"
                     SelectionChanged="OnCollectionViewSelectionChanged">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="local:EmployeeModel">
                             <Grid Padding="5" RowSpacing="3">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Normal">
+                                            <VisualState.Setters>
+                                                <Setter Property="BackgroundColor" Value="Transparent" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                        <VisualState x:Name="Selected">
+                                            <VisualState.Setters>
+                                                <Setter Property="BackgroundColor" Value="#D3D3D3" />
+                                                <!-- Highlight color -->
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
                                 <Label Text="{Binding name}"
-                           FontSize="16"
+                           FontSize="18"
                            FontFamily="Rajdhani-Medium"/>
                             </Grid>
                         </DataTemplate>
@@ -53,27 +70,55 @@
             </VerticalStackLayout>
         </Grid>
 
+        
         <!--  BUTTON | Cancel  -->
         <Button
-                Grid.Row="2"
-        x:Name="CancelBtn"
-        Padding="10,10"
-        BackgroundColor="#EC2210"
-        CharacterSpacing="2"
-        Clicked="CancelBtn_Clicked"
-        CornerRadius="5"
-        FontAttributes="Bold"
-        FontSize="22"
-        HeightRequest="60"
-        HorizontalOptions="Fill"
-        Text="Cancel"
-        VerticalOptions="Center">
+    x:Name="CancelBtn"
+    Grid.Row="2"
+    Padding="10,15"
+    BackgroundColor="#EC221F"
+    CharacterSpacing="2"
+    Clicked="CancelBtn_Clicked"
+    CornerRadius="10"
+            HeightRequest="60"
+    FontAttributes="Bold"
+    FontSize="22"
+            TextColor="White"
+    HorizontalOptions="Fill"
+    Text="Cancel"
+    VerticalOptions="Center">
             <Button.Shadow>
                 <Shadow
-                Brush="Black"
-                Opacity="0.2"
-                Radius="20"
-                Offset="0,10" />
+            Brush="Black"
+            Opacity="0.2"
+            Radius="5"
+            Offset="0,4" />
+            </Button.Shadow>
+        </Button>
+
+        <!--  BUTTON | Add  -->
+        <Button
+    x:Name="AddBtn"
+    Grid.Row="2"
+    Grid.Column="1"
+    Padding="10,15"
+            Clicked="AddBtn_Clicked"
+            IsEnabled="False"
+    BackgroundColor="#14AE5C"
+    CharacterSpacing="2"
+    CornerRadius="10"
+    FontAttributes="Bold"
+            HeightRequest="60"
+    FontSize="22"
+    HorizontalOptions="Fill"
+    Text="Add"
+    VerticalOptions="Center">
+            <Button.Shadow>
+                <Shadow
+            Brush="Black"
+            Opacity="0.2"
+            Radius="5"
+            Offset="0,4" />
             </Button.Shadow>
         </Button>
     </Grid>
