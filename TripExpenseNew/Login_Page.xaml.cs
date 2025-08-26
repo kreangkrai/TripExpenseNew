@@ -3,6 +3,7 @@ using CommunityToolkit.Maui.Views;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Primitives;
 using Plugin.LocalNotification;
+using System;
 using TripExpenseNew.CustomPopup;
 using TripExpenseNew.DBInterface;
 using TripExpenseNew.DBModels;
@@ -136,7 +137,7 @@ public partial class Login_Page : ContentPage
 
     private async void ConnectBtn_Clicked(object sender, EventArgs e)
     {
-        bool internet = await Internet.CheckServerConnection("/api/CurrentTime/get");
+        bool internet = await CheckServerConnection($"{txt_server.Text}/api/CurrentTime/get");
         if (internet)
         {
             if (txt_server.Text.Trim() != "")
@@ -177,6 +178,22 @@ public partial class Login_Page : ContentPage
         }
     }
 
+    public async Task<bool> CheckServerConnection(string serverUrl)
+    {
+        try
+        {
+            using var client = new HttpClient
+            {
+                Timeout = TimeSpan.FromSeconds(10)
+            };
+            var response = await client.GetAsync(serverUrl);
+            return response.IsSuccessStatusCode;
+        }
+        catch
+        {
+            return false;
+        }
+    }
     private async void LogInBtn_Clicked(object sender, EventArgs e)
     {
         if (txt_name.Text.Trim().Length > 0 && txt_password.Text.Trim().Length > 0)

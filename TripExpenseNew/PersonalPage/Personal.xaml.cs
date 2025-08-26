@@ -251,7 +251,11 @@ namespace TripExpenseNew.PersonalPage
                     status = await Permissions.RequestAsync<Permissions.LocationAlways>();
                     if (status != PermissionStatus.Granted)
                     {
-                        Console.WriteLine("ไม่ได้รับอนุญาต Background Location");
+                        bool confirm = await DisplayAlert("", "Please select type of location permission to Always.", "OK","Cancel");
+                        if (confirm || ! confirm)
+                        {
+                            AppInfo.ShowSettingsUI();
+                        }
                         return;
                     }
                 }
@@ -1409,86 +1413,96 @@ namespace TripExpenseNew.PersonalPage
 
         private async void OnDropOffPassengerItemClicked(object sender, EventArgs e)
         {
-            if (sender is Button button && button.CommandParameter is PassengerItems passengerItem)
+            try
             {
-                List<PassengerPersonalViewModel> passenger_personals = await PassengerPersonal.GetPassengerPersonalByDriver(emp_id, data_personal.trip);
-
-                List<string> emp_list = passenger_personals.Where(w => w.status == "STOP").Select(s => s.passenger).ToList();
-
-                List<string> emps = passenger_personals.Where(w => !emp_list.Contains(w.passenger)).Select(s => s.passenger_name).ToList();
-                emps = emps.Distinct().ToList();
-
-                if (emps.Contains(passengerItem.TextPassenger)) // Check Passenger
+                if (sender is Button button && button.CommandParameter is PassengerItems passengerItem)
                 {
+                    List<PassengerPersonalViewModel> passenger_personals = await PassengerPersonal.GetPassengerPersonalByDriver(emp_id, data_personal.trip);
 
-                    bool confirm = await DisplayAlert("Confirm Drop Off", $"Drop Off: {passengerItem.TextPassenger}?", "Yes", "No");
-                    if (confirm)
+                    List<string> emp_list = passenger_personals.Where(w => w.status == "STOP").Select(s => s.passenger).ToList();
+
+                    List<string> emps = passenger_personals.Where(w => !emp_list.Contains(w.passenger)).Select(s => s.passenger_name).ToList();
+                    emps = emps.Distinct().ToList();
+
+                    if (emps.Contains(passengerItem.TextPassenger)) // Check Passenger
                     {
-                        EmployeeModel emp = await Employee.GetEmployeeByName(passengerItem.TextPassenger);
-                        PassengerPersonalModel passengerPersonal = new PassengerPersonalModel()
-                        {
-                            date = DateTime.Now,
-                            driver = emp_id,
-                            trip = data_personal.trip,
-                            job_id = data_personal.job_id,
-                            latitude = data_personal.latitude,
-                            longitude = data_personal.longitude,
-                            location = data_personal.location,
-                            location_mode = data_personal.location_mode,
-                            passenger = emp.emp_id,
-                            status = "STOP",
-                            zipcode = data_personal.zipcode
-                        };
-                        string message = await PassengerPersonal.Insert(passengerPersonal);
 
-                        if (message == "Success")
+                        bool confirm = await DisplayAlert("Confirm Drop Off", $"Drop Off: {passengerItem.TextPassenger}?", "Yes", "No");
+                        if (confirm)
                         {
-                            LastTripModel lastTrip_passenger = new LastTripModel()
+                            EmployeeModel emp = await Employee.GetEmployeeByName(passengerItem.TextPassenger);
+                            PassengerPersonalModel passengerPersonal = new PassengerPersonalModel()
                             {
-                                driver = passengerPersonal.driver,
-                                speed = 0,
-                                job_id = passengerPersonal.job_id,
-                                emp_id = passengerPersonal.passenger,
-                                trip_start = trip_start,
                                 date = DateTime.Now,
-                                distance = 0,
-                                location = passengerPersonal.location,
-                                latitude = passengerPersonal.latitude,
-                                longitude = passengerPersonal.longitude,
-                                mileage_start = 0,
-                                mileage_stop = 0,
-                                mode = "PASSENGER PERSONAL",
-                                status = false,
-                                trip = passengerPersonal.trip,
-                                car_id = ""
+                                driver = emp_id,
+                                trip = data_personal.trip,
+                                job_id = data_personal.job_id,
+                                latitude = data_personal.latitude,
+                                longitude = data_personal.longitude,
+                                location = data_personal.location,
+                                location_mode = data_personal.location_mode,
+                                passenger = emp.emp_id,
+                                status = "STOP",
+                                zipcode = data_personal.zipcode
                             };
+                            string message = await PassengerPersonal.Insert(passengerPersonal);
 
-                            message = await LastTrip.UpdateByTrip(lastTrip_passenger);
+                            if (message == "Success")
+                            {
+                                LastTripModel lastTrip_passenger = new LastTripModel()
+                                {
+                                    driver = passengerPersonal.driver,
+                                    speed = 0,
+                                    job_id = passengerPersonal.job_id,
+                                    emp_id = passengerPersonal.passenger,
+                                    trip_start = trip_start,
+                                    date = DateTime.Now,
+                                    distance = 0,
+                                    location = passengerPersonal.location,
+                                    latitude = passengerPersonal.latitude,
+                                    longitude = passengerPersonal.longitude,
+                                    mileage_start = 0,
+                                    mileage_stop = 0,
+                                    mode = "PASSENGER PERSONAL",
+                                    status = false,
+                                    trip = passengerPersonal.trip,
+                                    car_id = ""
+                                };
 
-                            passengerItems.Remove(passengerItem);
-                            Current_Passenger.Text = $"Current Passenger : ({passengerItems.Count})";
+                                message = await LastTrip.UpdateByTrip(lastTrip_passenger);
+
+                                passengerItems.Remove(passengerItem);
+                                Current_Passenger.Text = $"Current Passenger : ({passengerItems.Count})";
+                            }
+
+                            if (passengerItems.Count == 0)
+                            {
+                                frame_passenger.IsVisible = false;
+                            }
                         }
-
+                    }
+                    else
+                    {
+                        passengerItems.Remove(passengerItem);
+                        Current_Passenger.Text = $"Current Passenger : ({passengerItems.Count})";
                         if (passengerItems.Count == 0)
                         {
                             frame_passenger.IsVisible = false;
                         }
-                    }
-                }
-                else
-                {
-                    passengerItems.Remove(passengerItem);
-                    Current_Passenger.Text = $"Current Passenger : ({passengerItems.Count})";
-                    if (passengerItems.Count == 0)
-                    {
-                        frame_passenger.IsVisible = false;
-                    }
 
-                    MainThread.BeginInvokeOnMainThread(async () =>
-                    {
-                        await DisplayAlert("", $"{passengerItem.TextPassenger} dropped off.", "OK");
-                    });
+                        MainThread.BeginInvokeOnMainThread(async () =>
+                        {
+                            await DisplayAlert("", $"{passengerItem.TextPassenger} dropped off.", "OK");
+                        });
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                MainThread.BeginInvokeOnMainThread(async () =>
+                {
+                    await DisplayAlert("", ex.Message, "OK");
+                });
             }
         }
     }

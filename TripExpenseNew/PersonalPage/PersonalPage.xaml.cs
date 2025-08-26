@@ -79,7 +79,15 @@ public partial class PersonalPage : ContentPage
             status = await Permissions.RequestAsync<Permissions.LocationAlways>();
             if (status != PermissionStatus.Granted)
             {
-                AppInfo.ShowSettingsUI();
+                MainThread.BeginInvokeOnMainThread(async () =>
+                {
+                    bool confirm = await DisplayAlert("", "Please select type of location permission to Always.", "OK","Cancel");
+                    if (confirm || ! confirm)
+                    {
+                        AppInfo.ShowSettingsUI();
+                    }
+                });
+                
                 return;
             }
         }

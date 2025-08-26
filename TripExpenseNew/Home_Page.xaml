@@ -23,8 +23,6 @@
                         FontFamily="Rajdhani-Bold"
                         FontSize="45"
                         HorizontalOptions="Start"
-                        SemanticProperties.HeadingLevel="Level2"
-                        Style="{StaticResource Headline}"
                         Text=""
                         TextColor="#000000" />
                     <!--  LABEL | SURNAME  -->
@@ -34,24 +32,24 @@
                         FontFamily="Rajdhani-Bold"
                         FontSize="34"
                         HorizontalOptions="Start"
-                        SemanticProperties.HeadingLevel="Level2"
-                        Style="{StaticResource Headline}"
                         Text=""
                         TextColor="#000000" />
                 </StackLayout>
             </ContentView>
-            
-            <!--  BUTTON | LOG OUT  -->
-            <ImageButton Source="power_off.png" 
-                         WidthRequest="50"
-                         HeightRequest="50"                       
-                         Padding="10,5"
-                         Grid.Row="0" 
-                         Grid.Column="2"
+
+            <ContentView Grid.Row="0" Grid.Column="2" Padding="5" >
+                <!--  BUTTON | LOG OUT  -->
+                <ImageButton Source="turn_off.png" 
+                         Padding="15"
+                         Grid.Row="0"
+                         HeightRequest="60"
+                         WidthRequest="60"
+                         Aspect="AspectFit"
                          HorizontalOptions="End"
                          VerticalOptions="Start"
                          Clicked="ImageButton_Clicked" >
-            </ImageButton>
+                </ImageButton>
+            </ContentView>
             <!--  LABEL | STATUS  -->
             <Label
                 Grid.Row="1"
@@ -95,8 +93,7 @@
                         FontFamily="Rajdhani-SemiBold"
                         FontSize="Large"
                         HorizontalOptions="Center"
-                        SemanticProperties.HeadingLevel="Level2"
-                        Style="{StaticResource Headline}"
+                        HorizontalTextAlignment="Center"
                         Text="Ready to start a trip?"
                         TextColor="#000000"
                         VerticalOptions="Center" />
@@ -136,8 +133,6 @@
                         FontFamily="Rajdhani-Bold"
                         FontSize="24"
                         HorizontalOptions="Start"
-                        SemanticProperties.HeadingLevel="Level2"
-                        Style="{StaticResource Headline}"
                         Text="Last Trip Detail:"
                         TextColor="#000000"
                         VerticalOptions="Center" />
@@ -168,8 +163,6 @@
                         FontFamily="Rajdhani-SemiBold"
                         FontSize="22"
                         HorizontalOptions="Start"
-                        SemanticProperties.HeadingLevel="Level2"
-                        Style="{StaticResource Headline}"
                         Text=""
                         VerticalOptions="Center" />
 
@@ -190,8 +183,6 @@
                         FontFamily="Rajdhani-SemiBold"
                         FontSize="22"
                         HorizontalOptions="Start"
-                        SemanticProperties.HeadingLevel="Level2"
-                        Style="{StaticResource Headline}"
                         Text=""
                         VerticalOptions="Center" />
 
@@ -212,8 +203,6 @@
                         FontFamily="Rajdhani-SemiBold"
                         FontSize="22"
                         HorizontalOptions="Start"
-                        SemanticProperties.HeadingLevel="Level2"
-                        Style="{StaticResource Headline}"
                         Text=""
                         VerticalOptions="Center" />
 
@@ -234,8 +223,6 @@
                         FontFamily="Rajdhani-SemiBold"
                         FontSize="22"
                         HorizontalOptions="Start"
-                        SemanticProperties.HeadingLevel="Level2"
-                        Style="{StaticResource Headline}"
                         Text=""
                         VerticalOptions="Center" />
                 </Grid>

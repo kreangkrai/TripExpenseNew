@@ -108,7 +108,7 @@ public partial class Home_Page : ContentPage
                                     viewModel.ButtonTripText = "CONTINUE";
                                     AddTripBtn.BackgroundColor = Colors.Orange;
                                     Text_Active.TextColor = Colors.Orange;
-                                    Text_Status.Text = "Please press CONTINUE for start trip";
+                                    Text_Status.Text = "Please press CONTINUE\nfor start trip";
                                     Text_Active.Text = "IN USE";
                                     img_status.Source = "driver.png";
                                 }
@@ -117,7 +117,7 @@ public partial class Home_Page : ContentPage
                                     AddTripBtn.Text = "CONTINUE";
                                     AddTripBtn.BackgroundColor = Colors.Orange;
                                     Text_Active.TextColor = Colors.Orange;
-                                    Text_Status.Text = "Please press CONTINUE for start trip";
+                                    Text_Status.Text = "Please press CONTINUE\n for start trip";
                                     Text_Active.Text = "IN USE";
                                     img_status.Source = "driver.png";
                                 }
@@ -133,7 +133,7 @@ public partial class Home_Page : ContentPage
                                 viewModel.ButtonTripText = "STOP";
                                 AddTripBtn.BackgroundColor = Color.FromArgb("#FF474C");
                                 Text_Active.TextColor = Color.FromArgb("#FF474C");
-                                Text_Status.Text = "Please press STOP for stop trip";
+                                Text_Status.Text = "Please press STOP\nfor stop trip";
                                 Text_Active.Text = "IN USE";
                                 img_status.Source = "driver.png";
                             }
@@ -142,7 +142,7 @@ public partial class Home_Page : ContentPage
                                 AddTripBtn.Text = "STOP";
                                 AddTripBtn.BackgroundColor = Color.FromArgb("#FF474C");
                                 Text_Active.TextColor = Color.FromArgb("#FF474C");
-                                Text_Status.Text = "Please press STOP for stop trip";
+                                Text_Status.Text = "Please press STOP\nfor stop trip";
                                 Text_Active.Text = "IN USE";
                                 img_status.Source = "driver.png";
                             }
