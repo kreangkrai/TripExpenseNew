@@ -23,7 +23,6 @@
             FontSize="Large"
             HeightRequest="100"
             HorizontalOptions="Center"
-            SemanticProperties.Hint="Counts the number of times you click"
             Text="ENTERPRISE"
             VerticalOptions="Center"
             WidthRequest="300" />
@@ -33,7 +32,6 @@
             BackgroundColor="LightGrey"
             CharacterSpacing="03"
             CornerRadius="50"
-            SemanticProperties.Hint="Counts the number of times you click"
             Text="GENERAL"
             VerticalOptions="End"
             HeightRequest="100"

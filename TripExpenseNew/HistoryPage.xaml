@@ -20,7 +20,6 @@
                 FontFamily="Rajdhani-Bold"
                 FontSize="32"
                 HorizontalOptions="Center"
-                SemanticProperties.HeadingLevel="Level2"
                 Text="TRIP HISTORY"
                 TextColor="#1C4698"
                 VerticalOptions="Center" />

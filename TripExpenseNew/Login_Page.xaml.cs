@@ -201,26 +201,36 @@ public partial class Login_Page : ContentPage
             var popup = new ProgressPopup();
             this.ShowPopup(popup);
             try
-            {
+            {                
                 AuthenModel authen = await Authen.ActiveDirectoryAuthenticate(txt_name.Text, txt_password.Text);
                 if (authen.authen == true)
                 {
                     List<EmployeeModel> employees = await Employee.GetEmployees();
-                    LoginModel login = new LoginModel()
+                    if (employees.Any(a => a.name == authen.user))
                     {
-                        Id = 1,
-                        name = txt_name.Text.Trim(),
-                        password = txt_password.Text.Trim(),
-                        emp_id = employees.Where(w => w.name.ToLower() == authen.user.ToLower()).Select(s=>s.emp_id).FirstOrDefault()
-                    };
-                    await Login.Save(login);
-                    await Shell.Current.GoToAsync("Home_Page");
+                        LoginModel login = new LoginModel()
+                        {
+                            Id = 1,
+                            name = txt_name.Text.Trim(),
+                            password = txt_password.Text.Trim(),
+                            emp_id = employees.Where(w => w.name.ToLower() == authen.user.ToLower()).Select(s => s.emp_id).FirstOrDefault()
+                        };
+                        await Login.Save(login);
+                        await Shell.Current.GoToAsync("Home_Page");
+                    }
+                    else
+                    {
+                        MainThread.BeginInvokeOnMainThread(async () =>
+                        {
+                            await DisplayAlert("", "Not Authorized", "OK");
+                        });
+                    }
                 }
                 else
                 {
                     MainThread.BeginInvokeOnMainThread(async () =>
                     {
-                        await DisplayAlert("", "ชื่อหรือรหัสผ่านไม่ถูกต้อง", "ตกลง");
+                        await DisplayAlert("", "Name or Password is incorrect ", "OK");
                     });
                 }
             }
@@ -228,7 +238,7 @@ public partial class Login_Page : ContentPage
             {
                 MainThread.BeginInvokeOnMainThread(async () =>
                 {
-                    await DisplayAlert("", ex.Message, "ตกลง");
+                    await DisplayAlert("", ex.Message, "OK");
                 });
             }
             await popup.CloseAsync();
@@ -237,7 +247,7 @@ public partial class Login_Page : ContentPage
         {
             MainThread.BeginInvokeOnMainThread(async () =>
             {
-                await DisplayAlert("", "กรุณากรอกให้ครบ", "ตกลง");
+                await DisplayAlert("", "กรุณากรอกให้ครบ", "OK");
             });
         }
     }

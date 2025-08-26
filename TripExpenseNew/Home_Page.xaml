@@ -38,17 +38,20 @@
             </ContentView>
 
             <ContentView Grid.Row="0" Grid.Column="2" Padding="5" >
-                <!--  BUTTON | LOG OUT  -->
-                <ImageButton Source="turn_off.png" 
-                         Padding="15"
-                         Grid.Row="0"
-                         HeightRequest="60"
-                         WidthRequest="60"
-                         Aspect="AspectFit"
-                         HorizontalOptions="End"
-                         VerticalOptions="Start"
-                         Clicked="ImageButton_Clicked" >
-                </ImageButton>
+                <!--  BUTTON | Check In  -->
+                <Button
+                    x:Name="CheckInBtn"
+                    Clicked="ImageButton_Clicked"
+                    Padding="15"
+                    BackgroundColor="Transparent"
+                    TextColor="Black"
+                    FontAttributes="Bold"
+                    FontSize="22"
+                    HeightRequest="60"
+                    HorizontalOptions="End"
+                    VerticalOptions="Start"
+                    ImageSource="turn_off.png"
+                    Text="" />
             </ContentView>
             <!--  LABEL | STATUS  -->
             <Label
@@ -83,7 +86,6 @@
                         Aspect="AspectFit"
                         HeightRequest="60"
                         x:Name="img_status"
-                        SemanticProperties.Description="dot net bot in a race car number eight"
                         VerticalOptions="End" />
 
                     <!--  LABEL | Ready to start a trip?  -->

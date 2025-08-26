@@ -29,8 +29,6 @@
             FontFamily="Rajdhani-Bold"
             FontSize="32"
             HorizontalOptions="Center"
-            SemanticProperties.HeadingLevel="Level2"
-            Style="{StaticResource Headline}"
             Text="PERSONAL CAR"
             TextColor="#1C4698"
             VerticalOptions="Center" />

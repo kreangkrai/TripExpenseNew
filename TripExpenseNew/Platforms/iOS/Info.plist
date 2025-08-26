@@ -32,7 +32,7 @@
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>
-		<string>location</string>		
+		<string>location</string>
 	</array>
 	<key>NSUserNotificationUsageDescription</key>
 	<string>Allow this app to send you notifications</string>
@@ -51,5 +51,7 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>CFBundleDisplayName</key>
+	<string>TripExpense</string>
 </dict>
 </plist>

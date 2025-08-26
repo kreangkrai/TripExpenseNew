@@ -30,8 +30,6 @@
                     FontFamily="Rajdhani-SemiBold"
                     FontSize="40"
                     HorizontalOptions="Center"
-                    SemanticProperties.HeadingLevel="Level2"
-                    Style="{StaticResource Headline}"
                     Text="SELECT MODE"
                     TextColor="#1C4698"
                     VerticalOptions="Center" />

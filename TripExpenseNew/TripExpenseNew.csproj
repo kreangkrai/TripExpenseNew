@@ -20,7 +20,7 @@
 		<Nullable>disable</Nullable>
 
 		<!-- Display name -->
-		<ApplicationTitle>TripExpenseNew</ApplicationTitle>
+		<ApplicationTitle>TripExpense</ApplicationTitle>
 
 		<!-- App Identifier -->
 		<ApplicationId>com.companyname.tripexpensenew</ApplicationId>
