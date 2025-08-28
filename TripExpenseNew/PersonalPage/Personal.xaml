@@ -41,7 +41,9 @@
                 TextColor="#1C4698"
                 VerticalOptions="Center" />
 
-            <!--  INFO | Duration  -->
+            <!--  INFO | 
+            
+            -->
             <Frame
                 Grid.Row="3"
                 Grid.Column="0"
@@ -73,7 +75,7 @@
                         FontFamily="Rajdhani-Bold"
                         FontSize="24"
                         HorizontalOptions="Center"
-                        Text="00:00:00"
+                        Text="00:00"
                         TextColor="#000000"
                         VerticalOptions="Center" />
 

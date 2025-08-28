@@ -6,13 +6,15 @@
     xmlns:shell="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     Color="Transparent">
+   
     <Border
         Padding="0"
         BackgroundColor="White"
         WidthRequest="350"
         Stroke="Transparent"
         StrokeShape="{RoundRectangle CornerRadius='20'}">
-        <Grid
+        <ScrollView>
+            <Grid
             Padding="20,20"
             ColumnDefinitions=".50*,.50*"
             ColumnSpacing="10"
@@ -214,7 +216,7 @@
             </Button>
 
             <!--  BUTTON | OK  -->
-            <Button
+                <Button
                 x:Name="OKBtn"
                 Grid.Row="5"
                 Grid.Column="1"
@@ -228,16 +230,17 @@
                 HorizontalOptions="Fill"
                 Text="OK"
                 VerticalOptions="Center">
-                <Button.Shadow>
-                    <Shadow
+                    <Button.Shadow>
+                        <Shadow
                         Brush="Black"
                         Opacity="0.2"
                         Radius="15"
                         Offset="0,4" />
-                </Button.Shadow>
-            </Button>
-
-        </Grid>
+                    </Button.Shadow>
+                </Button>
+            </Grid>
+        </ScrollView>
     </Border>
+   
 </toolkit:Popup>
 

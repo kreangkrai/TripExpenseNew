@@ -94,5 +94,14 @@ namespace TripExpenseNew.Services
             List<string> emps = JsonConvert.DeserializeObject<List<string>>(content);
             return emps;
         }
+
+        public async Task<List<LastTripViewModel>> GetByCar(string car)
+        {
+            HttpResponseMessage response = await _httpClient.GetAsync(URL + $"/api/LastTrip/getbycar?car={car}");
+            response.EnsureSuccessStatusCode();
+            var content = await response.Content.ReadAsStringAsync();
+            List<LastTripViewModel> trips = JsonConvert.DeserializeObject<List<LastTripViewModel>>(content);
+            return trips;
+        }
     }
 }

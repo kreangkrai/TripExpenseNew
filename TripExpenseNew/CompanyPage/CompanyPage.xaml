@@ -4,18 +4,20 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:shell="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:zxing="clr-namespace:ZXing.Net.Maui.Controls;assembly=ZXing.Net.MAUI.Controls"
     Title="CompanyPage"
     shell:Shell.NavBarIsVisible="False">
+
     <Grid
         Padding="10,10"
         ColumnDefinitions="*"
         RowDefinitions="Auto,Auto,Auto,Auto,Auto"
         RowSpacing="25"
         VerticalOptions="Center">
-
+      
         <!--  IMAGE | pickupcar.gif  -->
         <Image
-            Grid.Row="1"
+            Grid.Row="0"
             Aspect="AspectFit"
             HeightRequest="180"
             IsAnimationPlaying="True"
@@ -23,7 +25,7 @@
 
         <!--  LABEL | COMPANY CAR  -->
         <Label
-            Grid.Row="0"
+            Grid.Row="1"
             CharacterSpacing="1"
             FontAttributes="Bold"
             FontFamily="Rajdhani-Bold"
@@ -33,14 +35,11 @@
             TextColor="#1C4698"
             VerticalOptions="Center" />
 
-        <!--  BUTTON | SCAN QR  -->
-        <!--
-            x:Name="ScanQR"
-            Clicked="ScanQR_Clicked"
-        -->
         <Button
             Grid.Row="2"
             Padding="10,5"
+            x:Name="ScanQR"
+            Clicked="ScanQR_Clicked"
             BackgroundColor="#297CC0"
             CharacterSpacing="3"
             CornerRadius="20"
@@ -51,17 +50,14 @@
             IsEnabled="False"
             Text="SCAN QR"
             TextColor="White"
+            ImageSource="scan.png"
+            ContentLayout="Right,10"
             VerticalOptions="Center"
             WidthRequest="300" />
-
-        <!--  BUTTON | START  -->
-        <!--
-            x:Name="CompanyStart"
-            Clicked="CompanyStart_Clicked"
-        -->
         <Button
             Grid.Row="3"
             Padding="10,5"
+            x:Name="Btn_Start"
             BackgroundColor="#297CC0"
             CharacterSpacing="3"
             CornerRadius="20"
@@ -75,11 +71,6 @@
             VerticalOptions="Center"
             WidthRequest="300" />
 
-        <!--  BUTTON | CANCEL  -->
-        <!--
-            x:Name="CompanyCancel"
-            Clicked="CompanyCancel_Clicked"
-        -->
         <Button
             x:Name="CompanyCancel"
             Grid.Row="4"

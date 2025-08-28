@@ -12,6 +12,7 @@
         WidthRequest="350"
         Stroke="Transparent"
         StrokeShape="{RoundRectangle CornerRadius='20'}">
+        <ScrollView>
         <Grid
             Padding="20,20"
             ColumnDefinitions=".50*,.50*"
@@ -199,7 +200,7 @@
             </Button>
 
             <!--  BUTTON | OK  -->
-            <Button
+                <Button
                 x:Name="OKBtn"
                 Grid.Row="4"
                 Grid.Column="1"
@@ -213,16 +214,16 @@
                 HorizontalOptions="Fill"
                 Text="OK"
                 VerticalOptions="Center">
-                <Button.Shadow>
-                    <Shadow
+                    <Button.Shadow>
+                        <Shadow
                         Brush="Black"
                         Opacity="0.2"
                         Radius="15"
                         Offset="0,4" />
-                </Button.Shadow>
-            </Button>
-
-        </Grid>
+                    </Button.Shadow>
+                </Button>
+            </Grid>
+        </ScrollView>
     </Border>
 </toolkit:Popup>
 

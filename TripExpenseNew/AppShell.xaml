@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:pages="clr-namespace:TripExpenseNew"
     xmlns:pages_="clr-namespace:TripExpenseNew.PersonalPage"
+    xmlns:pages_company="clr-namespace:TripExpenseNew.CompanyPage"
     Title="TripExpenseNew"
     Shell.FlyoutBehavior="Disabled">
 
@@ -43,4 +44,9 @@
     Title="PersonalForceStop"
     ContentTemplate="{DataTemplate pages_:PersonalForceStop}"
     Route="PersonalForceStop" />
+
+    <ShellContent
+    Title="CompanyPage"
+    ContentTemplate="{DataTemplate pages_company:CompanyPage}"
+    Route="CompanyPage" />
 </Shell>

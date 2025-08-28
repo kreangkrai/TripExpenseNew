@@ -9,7 +9,7 @@ using TripExpenseNew.DBService;
 using TripExpenseNew.Interface;
 using TripExpenseNew.PersonalPage;
 using TripExpenseNew.Services;
-
+using ZXing.Net.Maui.Controls;
 namespace TripExpenseNew
 {
     public static class MauiProgram
@@ -22,6 +22,7 @@ namespace TripExpenseNew
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
                 .UseLocalNotification()
+                .UseBarcodeReader()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -59,6 +60,7 @@ namespace TripExpenseNew
             builder.Services.AddTransient<Initial_Page>();
             builder.Services.AddTransient<Login_Page>();
             builder.Services.AddTransient<Home_Page>();
+            builder.Services.AddTransient<CompanyPage.CompanyPage>();
 
             builder.Services.AddSingleton<IServer, ServerService>();
             builder.Services.AddSingleton<ILogin, LoginService>();
