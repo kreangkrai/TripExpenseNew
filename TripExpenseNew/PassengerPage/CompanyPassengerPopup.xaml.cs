@@ -1,5 +1,4 @@
 ﻿using CommunityToolkit.Maui.Views;
-using System.Threading.Tasks;
 using TripExpenseNew.Interface;
 using TripExpenseNew.Models;
 using TripExpenseNew.Services;
@@ -7,13 +6,13 @@ using TripExpenseNew.ViewModels;
 
 namespace TripExpenseNew.PassengerPage;
 
-public partial class PersonalPassengerPopup : Popup
+public partial class CompanyPassengerPopup : Popup
 {
     private IEmployee Employee;
     private ILastTrip LastTrip;
     EmployeeModel _emp = new EmployeeModel();
     List<EmployeeModel> employees = new List<EmployeeModel>();
-    public PersonalPassengerPopup()
+    public CompanyPassengerPopup()
     {
         InitializeComponent();
     }

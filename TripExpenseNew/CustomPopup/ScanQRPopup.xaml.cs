@@ -3,6 +3,7 @@ using Microsoft.Maui.Controls;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
+using TripExpenseNew.ViewModels;
 using ZXing;
 using ZXing.Net.Maui;
 using ZXing.Net.Maui.Controls;
@@ -35,9 +36,22 @@ public partial class ScanQRPopup : Popup
         {
             foreach (var barcode in e.Results)
             {
-                Confirm.Text = barcode.Value;
-                Confirm.BackgroundColor = Microsoft.Maui.Graphics.Color.FromArgb("#297CC0");
-                Confirm.IsEnabled = true;
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    if (BindingContext is ButtonScanQRResult viewModel)
+                    {
+                        viewModel.ButtonScanQRResultText = barcode.Value;
+                        Confirm.BackgroundColor = Microsoft.Maui.Graphics.Color.FromArgb("#297CC0");
+                        Confirm.IsEnabled = true;
+                    }
+                    else
+                    {
+                        Confirm.Text = barcode.Value;
+                        Confirm.BackgroundColor = Microsoft.Maui.Graphics.Color.FromArgb("#297CC0");
+                        Confirm.IsEnabled = true;
+                    }
+                });
+                
             }
         });
     }

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Threading.Tasks;
+using TripExpenseNew.CompanyPage;
 using TripExpenseNew.DBInterface;
 using TripExpenseNew.DBModels;
 using TripExpenseNew.Interface;
@@ -248,10 +249,25 @@ public partial class Home_Page : ContentPage
                     }
                     if (trips[0].mode == "COMPANY")
                     {
+                        CompanyPopupStartModel company = new CompanyPopupStartModel()
+                        {
+                            IsCustomer = false,
+                            job_id = trips[0].job_id,
+                            location = new Location(trips[0].latitude, trips[0].longitude),
+                            trip = trips[0].trip,
+                            location_name = trips[0].location,
+                            mileage = trips[0].mileage_start,
+                            distance = trips[0].distance,
+                            IsContinue = true,
+                            trip_start = trips[0].trip_start,
+                            car_id = trips[0].car_id,
+                            borrower = "059197"
+                        };
 
+                        await Navigation.PushAsync(new Company(company));
                     }
 
-                    if (trips[0].mode == "OTHER")
+                    if (trips[0].mode == "PUBLIC")
                     {
 
                     }

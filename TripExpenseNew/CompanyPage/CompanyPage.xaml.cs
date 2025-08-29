@@ -32,6 +32,7 @@ public partial class CompanyPage : ContentPage
     private IInternet Internet;
     private ICar Car;
     private ILastTrip LastTrip;
+    private IMileage Mileage;
     private CancellationTokenSource cancellationTokenSource;
     private bool isTracking = true;
     Tuple<string, bool> loc = new Tuple<string, bool>("", false);
@@ -45,7 +46,7 @@ public partial class CompanyPage : ContentPage
         private Intent intent = new Intent();
 #endif
 
-    public CompanyPage(ILocationCustomer _LocationCustomer, ILogin _Login, ILocationOther _LocationOther, IInternet _Internet, ICar _Car, ILastTrip _LastTrip)
+    public CompanyPage(ILocationCustomer _LocationCustomer, ILogin _Login, ILocationOther _LocationOther, IInternet _Internet, ICar _Car, ILastTrip _LastTrip, IMileage _Mileage)
     {
         InitializeComponent();
         Login = _Login;
@@ -54,6 +55,8 @@ public partial class CompanyPage : ContentPage
         Internet = _Internet;
         Car = _Car;
         LastTrip = _LastTrip;
+        Mileage = _Mileage;
+
         WeakReferenceMessenger.Default.Register<LocationData>(this, (send, data) =>
         {
             if (send != null)
@@ -269,8 +272,19 @@ public partial class CompanyPage : ContentPage
                 LastTripViewModel trip = trips.Where(w => w.status == true).LastOrDefault();
                 if (trip == null)
                 {
-                    Btn_Start.IsEnabled = true;
-                    Btn_Start.Text = "START";
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        if (BindingContext is ButtonCompanyStart viewModel)
+                        {
+                            viewModel.ButtonCompanyStartText = "START";
+                            Btn_Start.IsEnabled = true;
+                        }
+                        else
+                        {
+                            Btn_Start.IsEnabled = true;
+                            Btn_Start.Text = "START";
+                        }
+                    });                   
                 }
                 else
                 {
@@ -295,6 +309,46 @@ public partial class CompanyPage : ContentPage
             MainThread.BeginInvokeOnMainThread(async () =>
             {
                 await DisplayAlert("", "Invalid QR Code", "ตกลง");
+            });
+        }
+    }
+
+    private async void Btn_Start_Clicked(object sender, EventArgs e)
+    {
+        bool internet = await Internet.CheckServerConnection("/api/CurrentTime/get");
+        if (internet)
+        {
+            MileageDBModel mileage = await Mileage.GetMileage(1);
+            string car_id = "CAR#37";
+
+            var result = await this.ShowPopupAsync(new CompanyStartPopup(loc.Item1, loc.Item2, mileage.mileage, car_id));
+
+            if (result is CompanyPopupStartModel company)
+            {
+                if (company.location_name != null && company.location_name != "" && company.mileage != 0)
+                {
+                    company.location = g_location;
+                    company.IsContinue = false;
+                    company.trip_start = DateTime.Now;
+                    company.job_id = company.job_id != null ? company.job_id : "";
+                    company.car_id = company.car_id;
+                    company.borrower = "059197";
+                    await Navigation.PushAsync(new Company(company));
+                }
+                else
+                {
+                    MainThread.BeginInvokeOnMainThread(async () =>
+                    {
+                        await DisplayAlert("", "กรุณาใส่ข้อมูล", "ตกลง");
+                    });
+                }
+            }
+        }
+        else
+        {
+            MainThread.BeginInvokeOnMainThread(async () =>
+            {
+                await DisplayAlert("", "Cann't connect to server", "OK");
             });
         }
     }

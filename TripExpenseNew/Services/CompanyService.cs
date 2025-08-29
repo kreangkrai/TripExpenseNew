@@ -36,7 +36,7 @@ namespace TripExpenseNew.Services
             return message;
         }
 
-        public async Task<string> Insert(List<CompanyModel> datas)
+        public async Task<string> Inserts(List<CompanyModel> datas)
         {
             var json = JsonConvert.SerializeObject(datas);
             var buffer = Encoding.UTF8.GetBytes(json);

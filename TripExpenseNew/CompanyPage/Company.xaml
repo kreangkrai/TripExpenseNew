@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
-    x:Class="TripExpenseNew.PersonalPage.Personal"
+    x:Class="TripExpenseNew.CompanyPage.Company"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:shell="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-    Title="Personal"
+    Title="Company"
     shell:Shell.NavBarIsVisible="False">
 
     <ScrollView>
@@ -32,12 +32,13 @@
             <Label
                 Grid.Row="1"
                 Grid.ColumnSpan="4"
+                x:Name="Text_Car"
                 CharacterSpacing="1"
                 FontAttributes="Bold"
                 FontFamily="Rajdhani-Bold"
                 FontSize="24"
                 HorizontalOptions="Center"
-                Text="(Personal Car)"
+                Text="(Company Car)"
                 TextColor="#1C4698"
                 VerticalOptions="Center" />
 

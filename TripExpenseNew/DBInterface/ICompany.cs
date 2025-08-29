@@ -10,7 +10,7 @@ namespace TripExpenseNew.DBInterface
     public interface ICompany
     {
         Task<int> Insert(CompanyDBModel company);
-        Task<int> Delete(DateTime trip);
-        Task<List<CompanyDBModel>> GetByTrip(DateTime trip);
+        Task<int> Delete(string trip);
+        Task<List<CompanyDBModel>> GetByTrip(string trip);
     }
 }
