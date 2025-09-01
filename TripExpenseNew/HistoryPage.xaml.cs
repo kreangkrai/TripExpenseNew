@@ -71,7 +71,8 @@ public partial class HistoryPage : ContentPage
                 if (lastTrip.mode == "COMPANY")
                 {
                     List<CompanyViewModel> datas = await Company.GetCompanyDriverHistoryByTrip(lastTrip.emp_id, lastTrip.trip);
-
+                    datas = datas.OrderBy(o => o.date).ToList();
+                    await this.ShowPopupAsync(new CompanyHistoryPopup(datas));
                 }
                 if (lastTrip.mode == "PASSENGER PERSONAL")
                 {
@@ -82,6 +83,12 @@ public partial class HistoryPage : ContentPage
                 if (lastTrip.mode == "PASSENGER COMPANY")
                 {
                     List<PassengerCompanyViewModel> datas = await PassengerCompany.GetPassengerCompanyHistoryByTrip(lastTrip.emp_id, lastTrip.trip);
+                    datas = datas.OrderBy(o => o.date).ToList();
+                    await this.ShowPopupAsync(new PassengerCompanyHistoryPopup(datas));
+                }
+                if (lastTrip.mode == "PUBLIC")
+                {
+
                 }
             }
         }

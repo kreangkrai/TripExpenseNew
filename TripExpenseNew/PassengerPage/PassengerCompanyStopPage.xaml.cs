@@ -1,71 +1,88 @@
-﻿using CommunityToolkit.Maui.Views;
-using System.Threading.Tasks;
-using TripExpenseNew.CustomPopup;
-using ZXing.Net.Maui;
-using TripExpenseNew.Interface;
-using TripExpenseNew.DBInterface;
+﻿using System.Globalization;
 using TripExpenseNew.Models;
+using TripExpenseNew.DBInterface;
+using TripExpenseNew.DBModels;
+using TripExpenseNew.Interface;
 using CommunityToolkit.Mvvm.Messaging;
 using TripExpenseNew.Services;
-using TripExpenseNew.DBModels;
-using TripExpenseNew.ViewModels;
+using TripExpenseNew.DBService;
+using TripExpenseNew.CustomPopup;
+using CommunityToolkit.Maui.Views;
+
+
 #if IOS
+using CoreLocation;
 using UserNotifications;
+using Microsoft.Maui.Maps;
 
 #endif
 
 #if ANDROID
 using Android.Content;
 using Microsoft.Maui.ApplicationModel;
-#endif
-#if IOS
-using CoreLocation;
-#endif
 
-namespace TripExpenseNew.CompanyPage;
+#endif
+namespace TripExpenseNew.PassengerPage;
 
-public partial class CompanyPage : ContentPage
+public partial class PassengerCompanyStopPage : ContentPage
 {
     private ILocationCustomer LocationCustomer;
     private ILocationOther LocationOther;
     private ILogin Login;
-    private IInternet Internet;
-    private ICar Car;
-    private ILastTrip LastTrip;
     private IMileage Mileage;
-    private IBorrower Borrower;
+    private DBInterface.ICompany DB_Company;
+    private Interface.ICompany _Company;
+    private ILastTrip LastTrip;
+    private DBInterface.IActiveCompany ActiveCompany;
+    private IPassengerCompany PassengerCompany;
+    private IInternet Internet;
     private CancellationTokenSource cancellationTokenSource;
     private bool isTracking = true;
     Tuple<string, bool> loc = new Tuple<string, bool>("", false);
     Location g_location = null;
+    bool IsCustomer = false;
+    LastTripViewModel trip = new LastTripViewModel();
+    string emp_id = "";
+    CultureInfo cultureinfo = new CultureInfo("en-us");
+
     List<LocationCustomerModel> GetLocationCustomers = new List<LocationCustomerModel>();
     List<LocationOtherModel> GetLocationOthers = new List<LocationOtherModel>();
     List<LocationOtherModel> GetLocationCTL = new List<LocationOtherModel>();
+    DateTime now = DateTime.Now;
+    TimePicker time_select = new TimePicker();
 #if IOS
     private Platforms.iOS.LocationService locationService;
 #elif ANDROID
-        private Intent intent = new Intent();
+    private Intent intent = new Intent();
 #endif
 
-    public CompanyPage(ILocationCustomer _LocationCustomer, ILogin _Login, ILocationOther _LocationOther, IInternet _Internet, ICar _Car, ILastTrip _LastTrip, IMileage _Mileage, IBorrower _Borrower)
+    int mileage_start = 0;
+    public PassengerCompanyStopPage(LastTripViewModel _trip)
     {
         InitializeComponent();
-        Login = _Login;
-        LocationCustomer = _LocationCustomer;
-        LocationOther = _LocationOther;
-        Internet = _Internet;
-        Car = _Car;
-        LastTrip = _LastTrip;
-        Mileage = _Mileage;
-        Borrower = _Borrower;
+        Login = new LoginService();
+        LocationCustomer = new LocationCustomerService();
+        LocationOther = new LocationOtherService();
+        Mileage = new MileageService();
+        DB_Company = new DBService.CompanyService();
+        _Company = new Services.CompanyService();
+        LastTrip = new LastTripService();
+        ActiveCompany = new ActiveCompanyService();
+        PassengerCompany = new PassengerCompanyService();
+        Internet = new InternetService();
         WeakReferenceMessenger.Default.Register<LocationData>(this, (send, data) =>
         {
-            if (send != null)
-            {
-                UpdateLocationDataAsync(data.Location);
-            }
+            UpdateLocationDataAsync(data.Location);
 
         });
+
+        Text_TripName.Text = _trip.trip;
+        Text_Driver.Text = _trip.driver_name;
+        Text_Car.Text = _trip.car_id;
+        mileage_start = _trip.mileage_start;
+        emp_id = _trip.emp_id;
+        trip = _trip;
+        timePicker.Time = new TimeSpan(now.Hour, now.Minute, 0);
     }
 
     protected override async void OnAppearing()
@@ -87,23 +104,9 @@ public partial class CompanyPage : ContentPage
             status = await Permissions.RequestAsync<Permissions.LocationAlways>();
             if (status != PermissionStatus.Granted)
             {
-                MainThread.BeginInvokeOnMainThread(async () =>
-                {
-                    bool confirm = await DisplayAlert("", "Please select type of location permission to Always.", "OK", "Cancel");
-                    if (confirm || !confirm)
-                    {
-                        AppInfo.ShowSettingsUI();
-                    }
-                });
-
                 return;
             }
         }
-
-        //if (!await LocalNotificationCenter.Current.AreNotificationsEnabled())
-        //{
-        //    await LocalNotificationCenter.Current.RequestNotificationPermission();
-        //}
 
         GetLocationCTL.Add(new LocationOtherModel()
         {
@@ -142,10 +145,6 @@ public partial class CompanyPage : ContentPage
 #endif
 
         await GetLocation();
-    }
-    private async void CompanyCancel_Clicked(object sender, EventArgs e)
-    {
-        await Shell.Current.GoToAsync("Home_Page");
     }
 
     private async Task GetLocation()
@@ -222,36 +221,35 @@ public partial class CompanyPage : ContentPage
         {
             if (location != null)
             {
-                MainThread.BeginInvokeOnMainThread(() =>
-                {
-                    if (BindingContext is ButtonScanQR scan)
-                    {
-                        scan.ButtonScanQRText = "SCAN QR";
-                    }
-                    else
-                    {
-                        ScanQR.IsEnabled = true;
-                        ScanQR.TextColor = Colors.White;
-                        ScanQR.BackgroundColor = Color.FromArgb("#297CC0");
-                        ScanQR.Text = "SCAN QR";
-                    }
-                });
-
 
                 FindLocationService findLocation = new FindLocationService();
                 loc = findLocation.FindLocation(GetLocationCTL, GetLocationOthers, GetLocationCustomers, location);
 
                 g_location = location;
-                Console.WriteLine($"ALL ==> Lat: {location.Latitude}, Lon: {location.Longitude}");
+                IsCustomer = loc.Item2;
+                if (IsCustomer) // Customer
+                {
+                    CustomerBtn.BackgroundColor = Color.FromArgb("#297CC0");
+                    OtherBtn.BackgroundColor = Colors.LightGrey;
+                }
+                else
+                {
+                    CustomerBtn.BackgroundColor = Colors.LightGrey;
+                    OtherBtn.BackgroundColor = Color.FromArgb("#297CC0");
+                }
+            }
+            else
+            {
+
             }
 
             #region STOP
 #if IOS
             locationService?.StopUpdatingLocation();
             locationService = null;
-            //#elif ANDROID
-            //intent = new Intent(Platform.AppContext, typeof(TripExpenseNew.Platforms.Android.LocationService));
-            //Platform.AppContext.StopService(intent);
+#elif ANDROID
+            intent = new Intent(Platform.AppContext, typeof(TripExpenseNew.Platforms.Android.LocationService));
+            Platform.AppContext.StopService(intent);
 #endif
             #endregion
         }
@@ -260,48 +258,92 @@ public partial class CompanyPage : ContentPage
             Console.WriteLine($"UpdateLocationDataAsync Error: {ex}");
         }
     }
-    private async void ScanQR_Clicked(object sender, EventArgs e)
-    {
-        var result = await this.ShowPopupAsync(new ScanQRPopup());
 
-        if (result != null)
+    private void OtherBtn_Clicked(object sender, EventArgs e)
+    {
+        IsCustomer = false;
+        CustomerBtn.BackgroundColor = Colors.LightGrey;
+        OtherBtn.BackgroundColor = Color.FromArgb("#297CC0");
+    }
+
+    private void CustomerBtn_Clicked(object sender, EventArgs e)
+    {
+        IsCustomer = true;
+
+        CustomerBtn.BackgroundColor = Color.FromArgb("#297CC0");
+        OtherBtn.BackgroundColor = Colors.LightGrey;
+    }
+
+    private async void ConfirmBtn_Clicked(object sender, EventArgs e)
+    {
+        if (Text_Location.Text.Trim() != "")
         {
-            CarModel car = await Car.GetByCar(result.ToString().Replace("#","%23"));
-            if (car.car_id != null)
+            bool internet = await Internet.CheckServerConnection("/api/CurrentTime/get");
+            if (internet)
             {
-                List<LastTripViewModel> trips = await LastTrip.GetByCar(result.ToString().Replace("#", "%23"));                
-                LastTripViewModel trip = trips.Where(w => w.status == true).LastOrDefault();
-                if (trip == null)
+
+                var popup = new ProgressPopup();
+                this.ShowPopup(popup);
+
+                DateTime date = new DateTime(trip.trip_start.Year, trip.trip_start.Month, trip.trip_start.Day, time_select.Time.Hours, time_select.Time.Minutes, time_select.Time.Seconds);
+
+                double speed = g_location?.Speed.HasValue ?? false ? g_location.Speed.Value * 3.6 : 0;
+                var placemarks = await Geocoding.Default.GetPlacemarksAsync(g_location.Latitude, g_location.Longitude);
+                var zipcode = placemarks?.FirstOrDefault()?.PostalCode ?? "N/A";
+
+                string message = "";
+
+                #region ADD PASSENGER
+
+                PassengerCompanyModel passengerCompany = new PassengerCompanyModel()
                 {
-                    MainThread.BeginInvokeOnMainThread(() =>
-                    {
-                        if (BindingContext is ButtonCompanyStart viewModel)
-                        {
-                            viewModel.ButtonCompanyStartText = "START";
-                            Btn_Start.IsEnabled = true;
-                        }
-                        else
-                        {
-                            Btn_Start.IsEnabled = true;
-                            Btn_Start.Text = "START";
-                        }
-                    });                   
-                }
-                else
+                    date = date,
+                    driver = trip.driver,
+                    trip = trip.trip,
+                    job_id = trip.job_id,
+                    latitude = g_location.Latitude,
+                    longitude = g_location.Longitude,
+                    location = Text_Location.Text,
+                    location_mode = IsCustomer ? "CUSTOMER" : "OTHER",
+                    passenger = emp_id,
+                    status = "STOP",
+                    zipcode = zipcode,
+                    car_id = trip.car_id
+                };
+                message = await PassengerCompany.Insert(passengerCompany);
+
+                LastTripModel lastTrip_passenger = new LastTripModel()
                 {
-                    Btn_Start.IsEnabled = false;
-                    Btn_Start.Text = "Processing..";
-                    MainThread.BeginInvokeOnMainThread(async () =>
-                    {
-                        await DisplayAlert("COMPANY CAR", $"This car {trip.license_plate} using by\n {trip.driver_name}", "OK");
-                    });
-                }
+                    driver = trip.driver,
+                    speed = 0,
+                    emp_id = emp_id,
+                    job_id = trip.job_id,
+                    trip_start = trip.trip_start,
+                    date = date,
+                    distance = 0,
+                    location = Text_Location.Text,
+                    latitude = g_location.Latitude,
+                    longitude = g_location.Longitude,
+                    mileage_start = 0,
+                    mileage_stop = 0,
+                    mode = "PASSENGER COMPANY",
+                    status = false,
+                    trip = trip.trip,
+                    car_id = trip.car_id
+                };
+
+                message = await LastTrip.UpdateByTrip(lastTrip_passenger);
+
+                #endregion
+
+                await popup.CloseAsync();
+                await Shell.Current.GoToAsync("Home_Page");
             }
             else
             {
                 MainThread.BeginInvokeOnMainThread(async () =>
                 {
-                    await DisplayAlert("", "Car not found!", "OK");
+                    await DisplayAlert("", "Cann't connect to server", "OK");
                 });
             }
         }
@@ -309,51 +351,50 @@ public partial class CompanyPage : ContentPage
         {
             MainThread.BeginInvokeOnMainThread(async () =>
             {
-                await DisplayAlert("", "Invalid QR Code", "ตกลง");
+                await DisplayAlert("", "กรุณาใส่ข้อมูล", "ตกลง");
             });
         }
     }
 
-    private async void Btn_Start_Clicked(object sender, EventArgs e)
+    private async void CancelBtn_Clicked(object sender, EventArgs e)
     {
-        bool internet = await Internet.CheckServerConnection("/api/CurrentTime/get");
-        if (internet)
+#if IOS
+        locationService?.StopUpdatingLocation();
+        locationService = null;
+#elif ANDROID
+        intent = new Intent(Platform.AppContext, typeof(TripExpenseNew.Platforms.Android.LocationService));
+        Platform.AppContext.StopService(intent);
+#endif
+
+        await Shell.Current.GoToAsync("Home_Page");
+    }
+
+    private void timePicker_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(TimePicker.Time))
         {
-            MileageDBModel mileage = await Mileage.GetMileage(1);
-
-            string car_id = "CAR#37";
-
-            BorrowerViewModel borrower_id = await Borrower.GetBorrowerByCar(car_id);
-
-            var result = await this.ShowPopupAsync(new CompanyStartPopup(loc.Item1, loc.Item2, mileage.mileage, car_id));
-
-            if (result is CompanyPopupStartModel company)
+            var timePicker = sender as TimePicker;
+            var selectedTime = timePicker.Time;
+            var currentTime = now.TimeOfDay;
+            if (trip.trip_start.Date == now.Date)
             {
-                if (company.location_name != null && company.location_name != "" && company.mileage != 0)
+                if (selectedTime <= currentTime.Add(new TimeSpan(0, 3, 0)))
                 {
-                    company.location = g_location;
-                    company.IsContinue = false;
-                    company.trip_start = DateTime.Now;
-                    company.job_id = company.job_id != null ? company.job_id : "";
-                    company.car_id = company.car_id;
-                    company.borrower = borrower_id.borrower;
-                    await Navigation.PushAsync(new Company(company));
+
+                    time_select.Time = selectedTime;
                 }
                 else
                 {
                     MainThread.BeginInvokeOnMainThread(async () =>
                     {
-                        await DisplayAlert("", "กรุณาใส่ข้อมูล", "ตกลง");
+                        await DisplayAlert("", "เวลาไม่ถูกต้อง", "ตกลง");
                     });
                 }
             }
-        }
-        else
-        {
-            MainThread.BeginInvokeOnMainThread(async () =>
+            else
             {
-                await DisplayAlert("", "Cann't connect to server", "OK");
-            });
+                time_select.Time = selectedTime;
+            }
         }
     }
 }

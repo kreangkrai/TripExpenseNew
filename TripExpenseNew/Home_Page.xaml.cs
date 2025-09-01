@@ -279,12 +279,23 @@ public partial class Home_Page : ContentPage
 
                     if (trips[0].mode == "PASSENGER COMPANY")
                     {
-
+                        await Navigation.PushAsync(new PassengerCompanyStopPage(trips[0]));
                     }
                 }
                 else
                 {
-                    await Navigation.PushAsync(new PersonalForceStop(trips[0]));
+                    if (trips[0].mode == "PERSONAL")
+                    {
+                        await Navigation.PushAsync(new PersonalForceStop(trips[0]));
+                    }
+                    if (trips[0].mode == "COMPANY")
+                    {
+                        await Navigation.PushAsync(new CompanyForceStop(trips[0]));
+                    }
+                    if (trips[0].mode == "PUBLIC")
+                    {
+                        //wait
+                    }
                 }
             }
             else
