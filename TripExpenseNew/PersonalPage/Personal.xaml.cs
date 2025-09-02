@@ -504,7 +504,7 @@ namespace TripExpenseNew.PersonalPage
                     #endregion
 
                     Text_Detail.Text = $"Active Trip Detail : ({tripItems.Count})";
-                    Console.WriteLine($"ALL ==> Lat: {location.Latitude}, Lon: {location.Longitude}, Speed: {speed}, Distance: {totalDistance}, Zipcode: {zipcode}");                   
+                    //Console.WriteLine($"ALL ==> Lat: {location.Latitude}, Lon: {location.Longitude}, Speed: {speed}, Distance: {totalDistance}, Zipcode: {zipcode}");                   
                 }
                 else
                 {
@@ -534,7 +534,7 @@ namespace TripExpenseNew.PersonalPage
                                         zipcode = "",
                                         location_mode = "",
                                         speed = speed,
-                                        mileage = start.mileage,
+                                        mileage = 0,
                                         trip = trip_start.ToString("yyyyMMddHHmmss", cultureinfo),
                                         status = "INACTIVE",
                                         cash = 0
@@ -596,7 +596,7 @@ namespace TripExpenseNew.PersonalPage
                                 zipcode = "",
                                 location_mode = "",
                                 speed = speed,
-                                mileage = start.mileage,
+                                mileage = 0,
                                 trip = trip_start.ToString("yyyyMMddHHmmss", cultureinfo),
                                 status = "NA",
                                 cash = 0
@@ -688,7 +688,7 @@ namespace TripExpenseNew.PersonalPage
                                 TripCollectionView.ItemsSource = tripItems;
 
                                 #endregion
-                                Console.WriteLine($"ALL ==> {m} Lat: {location.Latitude}, Lon: {location.Longitude}, Speed: {speed}, Distance: {totalDistance}");
+                                //Console.WriteLine($"ALL ==> {m} Lat: {location.Latitude}, Lon: {location.Longitude}, Speed: {speed}, Distance: {totalDistance}");
                                 start_tracking = DateTime.Now;
                             }
 

@@ -43,6 +43,8 @@ public partial class CompanyPage : ContentPage
     List<LocationCustomerModel> GetLocationCustomers = new List<LocationCustomerModel>();
     List<LocationOtherModel> GetLocationOthers = new List<LocationOtherModel>();
     List<LocationOtherModel> GetLocationCTL = new List<LocationOtherModel>();
+
+    string car_id = "";
 #if IOS
     private Platforms.iOS.LocationService locationService;
 #elif ANDROID
@@ -268,10 +270,11 @@ public partial class CompanyPage : ContentPage
 
         if (result != null)
         {
-            CarModel car = await Car.GetByCar(result.ToString().Replace("#","%23"));
+            car_id = result.ToString();
+            CarModel car = await Car.GetByCar(car_id.Replace("#","%23"));
             if (car.car_id != null)
             {
-                List<LastTripViewModel> trips = await LastTrip.GetByCar(result.ToString().Replace("#", "%23"));                
+                List<LastTripViewModel> trips = await LastTrip.GetByCar(car_id.Replace("#", "%23"));                
                 LastTripViewModel trip = trips.Where(w => w.status == true).LastOrDefault();
                 if (trip == null)
                 {
@@ -323,7 +326,7 @@ public partial class CompanyPage : ContentPage
         {
             MileageDBModel mileage = await Mileage.GetMileage(1);
 
-            string car_id = "CAR#37";
+            //car_id = "CAR#37";
 
             BorrowerViewModel borrower_id = await Borrower.GetBorrowerByCar(car_id);
 

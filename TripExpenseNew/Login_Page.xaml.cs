@@ -4,6 +4,7 @@ using Microsoft.Maui.Controls;
 using Microsoft.Maui.Primitives;
 using Plugin.LocalNotification;
 using System;
+using System.Net.Http;
 using TripExpenseNew.CustomPopup;
 using TripExpenseNew.DBInterface;
 using TripExpenseNew.DBModels;
@@ -184,15 +185,18 @@ public partial class Login_Page : ContentPage
     {
         try
         {
-            using var client = new HttpClient
+            var handler = new HttpClientHandler
             {
-                Timeout = TimeSpan.FromSeconds(10)
+                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
             };
+            var client = new HttpClient(handler);
+                         
             var response = await client.GetAsync(serverUrl);
             return response.IsSuccessStatusCode;
         }
-        catch
+        catch(Exception ex)
         {
+            Console.WriteLine(ex.Message);
             return false;
         }
     }
