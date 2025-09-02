@@ -27,7 +27,7 @@ namespace TripExpenseNew.Platforms.Android
                 // ตรวจสอบสิทธิ์ตำแหน่ง
                 if (ContextCompat.CheckSelfPermission(this, Manifest.Permission.AccessFineLocation) != Permission.Granted)
                 {
-                    Console.WriteLine("ไม่มีสิทธิ์เข้าถึงตำแหน่ง");
+                    //Console.WriteLine("ไม่มีสิทธิ์เข้าถึงตำแหน่ง");
                     StopSelf();
                     return StartCommandResult.NotSticky;
                 }
@@ -60,7 +60,7 @@ namespace TripExpenseNew.Platforms.Android
                 StartForeground(1000, notification);
 
                 int trackingInterval = intent.GetIntExtra("TrackingInterval", 5000); // ค่าเริ่มต้น 5 วินาที
-                Console.WriteLine($"เริ่มติดตามตำแหน่งด้วยช่วงเวลา: {trackingInterval}ms");
+                //Console.WriteLine($"เริ่มติดตามตำแหน่งด้วยช่วงเวลา: {trackingInterval}ms");
                 Task.Run(() => StartTrackingAsync(cancellationTokenSource.Token, trackingInterval));
             }
             catch (Exception ex)
@@ -82,8 +82,8 @@ namespace TripExpenseNew.Platforms.Android
                     cancellationTokenSource.Cancel();
                     cancellationTokenSource.Dispose();
                     cancellationTokenSource = null;
-                    DateTime n = DateTime.Now;
-                    Console.WriteLine($"CancellationTokenSource ถูกยกเลิกและกำจัดแล้ว {n}");
+                    //DateTime n = DateTime.Now;
+                    //Console.WriteLine($"CancellationTokenSource ถูกยกเลิกและกำจัดแล้ว {n}");
                 }
             }
             catch (Exception ex)

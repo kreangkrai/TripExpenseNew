@@ -201,7 +201,11 @@ public partial class Home_Page : ContentPage
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Error", $"Failed to load data: {ex.Message}", "OK");
+            MainThread.BeginInvokeOnMainThread(async () =>
+            {
+                await DisplayAlert("Error", $"Failed to load data: {ex.Message}", "OK");
+            });
+           
         }
     }
     private async Task<List<LastTripViewModel>> GetLastTrip()

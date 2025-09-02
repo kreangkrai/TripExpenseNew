@@ -18,10 +18,12 @@ using CommunityToolkit.Mvvm.DependencyInjection;
 using TripExpenseNew.PassengerPage;
 using TripExpenseNew.CustomPopup;
 using System.Globalization;
+using TripExpenseNew.CustomCompanyPopup;
 
 #if IOS
 using UserNotifications;
 using Microsoft.Maui.Maps;
+
 
 #endif
 
@@ -386,7 +388,8 @@ namespace TripExpenseNew.CompanyPage
                             mode = "COMPANY",
                             status = true,
                             trip = data_company.trip,
-                            car_id = data_company.car_id,                            
+                            car_id = data_company.car_id,
+                            borrower_id = data_company.borrower
                         };
 
                         message = await LastTrip.Insert(lastTrip);
@@ -565,7 +568,8 @@ namespace TripExpenseNew.CompanyPage
                                         mode = "COMPANY",
                                         status = true,
                                         trip = company.trip,
-                                        car_id = company.car_id
+                                        car_id = company.car_id,
+                                        borrower_id = company.borrower
                                     };
 
                                     string l = await LastTrip.UpdateByTrip(lastTrip);
@@ -665,7 +669,8 @@ namespace TripExpenseNew.CompanyPage
                                     mode = "COMPANY",
                                     status = true,
                                     trip = company.trip,
-                                    car_id = company.car_id
+                                    car_id = company.car_id,
+                                    borrower_id = company.borrower
                                 };
 
                                 string l = await LastTrip.UpdateByTrip(lastTrip);
@@ -818,8 +823,7 @@ namespace TripExpenseNew.CompanyPage
                                         driver = s.driver,
                                         cash = s.cash,
                                         fleetcard = s.fleetcard,
-                                        //borrower = s.borrower,
-                                        borrower = "059197",
+                                        borrower = s.borrower,
                                         car_id = s.car_id
                                     }).ToList();
 
@@ -866,10 +870,12 @@ namespace TripExpenseNew.CompanyPage
                                                 longitude = data_company.longitude,
                                                 mileage_start = mileage_start,
                                                 mileage_stop = data_company.mileage,
-                                                mode = "PERSONAL",
+                                                mode = "COMPANY",
                                                 status = false,
                                                 trip = data_company.trip,
-                                                car_id = data_company.car_id,                                                
+                                                car_id = data_company.car_id,
+                                                borrower_id = data_company.borrower
+                                                
                                             };
 
                                             message = await LastTrip.UpdateByTrip(lastTrip);
@@ -958,7 +964,9 @@ namespace TripExpenseNew.CompanyPage
                                                 mode = "PASSENGER COMPANY",
                                                 status = false,
                                                 trip = data_company.trip,
-                                                car_id = data_company.car_id
+                                                car_id = data_company.car_id,
+                                                borrower_id = ""
+                                                
                                             };
 
                                             mes = await LastTrip.UpdateByTrip(lastTrip_passenger);
@@ -1263,7 +1271,8 @@ namespace TripExpenseNew.CompanyPage
                                     mode = "COMPANY",
                                     status = true,
                                     trip = data_company.trip,
-                                    car_id = data_company.driver
+                                    car_id = data_company.driver,
+                                    borrower_id = data_company.borrower
                                 };
 
                                 message = await LastTrip.UpdateByTrip(lastTrip);
@@ -1319,7 +1328,8 @@ namespace TripExpenseNew.CompanyPage
                                             mode = "PASSENGER COMPANY",
                                             status = true,
                                             trip = data_company.trip,
-                                            car_id = data_company.car_id
+                                            car_id = data_company.car_id,
+                                            borrower_id = ""
                                         };
 
                                         message = await LastTrip.UpdateByTrip(lastTrip_passenger);
@@ -1447,7 +1457,8 @@ namespace TripExpenseNew.CompanyPage
                                     mode = "PASSENGER COMPANY",
                                     status = true,
                                     trip = data_company.trip,
-                                    car_id = data_company.car_id
+                                    car_id = data_company.car_id,
+                                    borrower_id = ""
                                 };
 
                                 message = await LastTrip.Insert(lastTrip);
@@ -1559,7 +1570,8 @@ namespace TripExpenseNew.CompanyPage
                                             mode = "PASSENGER COMPANY",
                                             status = false,
                                             trip = passengerCompany.trip,
-                                            car_id = passengerCompany.car_id
+                                            car_id = passengerCompany.car_id,
+                                            borrower_id = ""
                                         };
 
                                         message = await LastTrip.UpdateByTrip(lastTrip_passenger);

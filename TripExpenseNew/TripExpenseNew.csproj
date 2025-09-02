@@ -89,15 +89,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="CustomPopup\PersonalStopPopup.xaml.cs">
+	  <Compile Update="CustomPersonalPopup\PersonalStopPopup.xaml.cs">
 	    <DependentUpon>PersonalStopPopup.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="AddPassengerPersonal_Page.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
 	  <MauiXaml Update="CompanyPage\Company.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -107,55 +104,58 @@
 	  <MauiXaml Update="CompanyPage\CompanyPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="CustomPopup\CompanyCheckInAlert.xaml">
+	  <MauiXaml Update="CustomCompanyPopup\CompanyCheckInAlert.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="CustomPopup\CompanyCheckinCustomerPopup.xaml">
+	  <MauiXaml Update="CustomCompanyPopup\CompanyCheckinCustomerPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="CustomPopup\CompanyCheckinGasCashPopup.xaml">
+	  <MauiXaml Update="CustomPersonalPopup\CheckInAlert.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="CustomPopup\CompanyCheckinGasFleetCardPopup.xaml">
+	  <MauiXaml Update="CustomCompanyPopup\CompanyCheckinGasCashPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="CustomPopup\CompanyCheckinOtherPopup.xaml">
+	  <MauiXaml Update="CustomCompanyPopup\CompanyCheckinGasFleetCardPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="CustomPopup\CompanyHistoryPopup.xaml">
+	  <MauiXaml Update="CustomCompanyPopup\CompanyCheckinOtherPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="CustomPopup\CompanyStartPopup.xaml">
+	  <MauiXaml Update="CustomCompanyPopup\CompanyHistoryPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="CustomPopup\CompanyStopPopup.xaml">
+	  <MauiXaml Update="CustomCompanyPopup\CompanyStartPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="CustomCompanyPopup\CompanyStopPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="CustomPopup\HistoryPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="CustomPopup\PassengerCompanyHistoryPopup.xaml">
+	  <MauiXaml Update="CustomPassengerPopup\PassengerCompanyHistoryPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="CustomPopup\PassengerPersonalHistoryPopup.xaml">
+	  <MauiXaml Update="CustomPassengerPopup\PassengerPersonalHistoryPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="CustomPopup\PersonalCheckinCustomerPopup.xaml">
+	  <MauiXaml Update="CustomPersonalPopup\PersonalCheckinCustomerPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="CustomPopup\PersonalCheckinGasPopup.xaml">
+	  <MauiXaml Update="CustomPersonalPopup\PersonalCheckinGasPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="CustomPopup\PersonalCheckinOtherPopup.xaml">
+	  <MauiXaml Update="CustomPersonalPopup\PersonalCheckinOtherPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="CustomPopup\PersonalHistoryPopup.xaml">
+	  <MauiXaml Update="CustomPersonalPopup\PersonalHistoryPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="CustomPopup\PersonalStartPopup.xaml">
+	  <MauiXaml Update="CustomPersonalPopup\PersonalStartPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="CustomPopup\PersonalStopPopup.xaml">
+	  <MauiXaml Update="CustomPersonalPopup\PersonalStopPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="CustomPopup\ProgressPopup.xaml">
@@ -186,9 +186,6 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="PassengerPage\PersonalPassengerPopup.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="CustomPopup\CheckInAlert.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="PersonalPage\Personal.xaml">

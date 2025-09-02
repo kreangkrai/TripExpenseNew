@@ -142,6 +142,8 @@ public partial class Login_Page : ContentPage
         {
             if (txt_server.Text.Trim() != "")
             {
+                var popup = new ProgressPopup();
+                this.ShowPopup(popup);
                 int message = await Server.Save(new ServerModel()
                 {
                     Id = 1,
@@ -159,7 +161,7 @@ public partial class Login_Page : ContentPage
                     AnimateBottomSheet(_sheetHeight); // เลื่อนลงไปล่างสุด
                     _isOpen = false;
                 }
-
+                await popup.CloseAsync();
             }
             else
             {

@@ -18,6 +18,8 @@ using CommunityToolkit.Mvvm.DependencyInjection;
 using TripExpenseNew.PassengerPage;
 using TripExpenseNew.CustomPopup;
 using System.Globalization;
+using TripExpenseNew.CustomPersonalPopup;
+
 #if IOS
 using UserNotifications;
 using Microsoft.Maui.Maps;
@@ -379,7 +381,8 @@ namespace TripExpenseNew.PersonalPage
                             mode = "PERSONAL",
                             status = true,
                             trip = data_personal.trip,
-                            car_id = data_personal.driver
+                            car_id = data_personal.driver,
+                            borrower_id = ""
                         };
 
                         message = await LastTrip.Insert(lastTrip);
@@ -555,7 +558,8 @@ namespace TripExpenseNew.PersonalPage
                                         mode = "PERSONAL",
                                         status = true,
                                         trip = personal.trip,
-                                        car_id = personal.driver
+                                        car_id = personal.driver,
+                                        borrower_id = ""
                                     };
 
                                     string l = await LastTrip.UpdateByTrip(lastTrip);
@@ -648,7 +652,8 @@ namespace TripExpenseNew.PersonalPage
                                     mode = "PERSONAL",
                                     status = true,
                                     trip = personal.trip,
-                                    car_id = personal.driver
+                                    car_id = personal.driver,
+                                    borrower_id = ""
                                 };
 
                                 string l = await LastTrip.UpdateByTrip(lastTrip);
@@ -845,7 +850,8 @@ namespace TripExpenseNew.PersonalPage
                                                 mode = "PERSONAL",
                                                 status = false,
                                                 trip = data_personal.trip,
-                                                car_id = data_personal.driver
+                                                car_id = data_personal.driver,
+                                                borrower_id = ""
                                             };
 
                                             message = await LastTrip.UpdateByTrip(lastTrip);
@@ -933,7 +939,8 @@ namespace TripExpenseNew.PersonalPage
                                                 mode = "PASSENGER PERSONAL",
                                                 status = false,
                                                 trip = data_personal.trip,
-                                                car_id = ""
+                                                car_id = "",
+                                                borrower_id = ""
                                             };
 
                                             mes = await LastTrip.UpdateByTrip(lastTrip_passenger);
@@ -1203,7 +1210,8 @@ namespace TripExpenseNew.PersonalPage
                                     mode = "PERSONAL",
                                     status = true,
                                     trip = data_personal.trip,
-                                    car_id = data_personal.driver
+                                    car_id = data_personal.driver,
+                                    borrower_id = ""
                                 };
 
                                 message = await LastTrip.UpdateByTrip(lastTrip);
@@ -1259,7 +1267,8 @@ namespace TripExpenseNew.PersonalPage
                                             mode = "PASSENGER PERSONAL",
                                             status = true,
                                             trip = data_personal.trip,
-                                            car_id = ""
+                                            car_id = "",
+                                            borrower_id = ""
                                         };
 
                                         message = await LastTrip.UpdateByTrip(lastTrip_passenger);
@@ -1386,7 +1395,8 @@ namespace TripExpenseNew.PersonalPage
                                     mode = "PASSENGER PERSONAL",
                                     status = true,
                                     trip = data_personal.trip,
-                                    car_id = ""
+                                    car_id = "",
+                                    borrower_id = ""
                                 };
 
                                 message = await LastTrip.Insert(lastTrip);
@@ -1497,7 +1507,8 @@ namespace TripExpenseNew.PersonalPage
                                             mode = "PASSENGER PERSONAL",
                                             status = false,
                                             trip = passengerPersonal.trip,
-                                            car_id = ""
+                                            car_id = "",
+                                            borrower_id = ""
                                         };
 
                                         message = await LastTrip.UpdateByTrip(lastTrip_passenger);

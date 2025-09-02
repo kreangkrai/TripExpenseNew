@@ -22,5 +22,7 @@
         public int mileage_stop { get; set; }
         public string mode { get; set; }
         public bool status { get; set; }
+        public string borrower_id { get; set; }
+        public string borrower_name { get; set; }
     }
 }

@@ -53,7 +53,6 @@ namespace TripExpenseNew
             builder.Services.AddTransient<ICurrentTime, CurrentTimeService>();
             builder.Services.AddTransient<IInternet, InternetService>();
 
-            builder.Services.AddTransient<MainPage>();
             builder.Services.AddTransient<Personal>();
             builder.Services.AddTransient<PersonalPage.PersonalPage>();
             builder.Services.AddTransient<ModePage>();

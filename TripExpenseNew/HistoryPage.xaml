@@ -35,8 +35,7 @@
             <ScrollView>
             <StackLayout>
                     <CollectionView x:Name="HistoryTripCollectionView" 
-                                    SelectionMode="Single"
-                                    SelectionChanged="HistoryTripCollectionView_SelectionChanged">
+                                    SelectionMode="Single">
                         <CollectionView.ItemsLayout>
                             <LinearItemsLayout Orientation="Vertical" ItemSpacing="5" />
                         </CollectionView.ItemsLayout>
