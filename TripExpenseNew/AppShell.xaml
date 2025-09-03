@@ -4,8 +4,9 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:pages="clr-namespace:TripExpenseNew"
-    xmlns:pages_="clr-namespace:TripExpenseNew.PersonalPage"
+    xmlns:pages_personal="clr-namespace:TripExpenseNew.PersonalPage"
     xmlns:pages_company="clr-namespace:TripExpenseNew.CompanyPage"
+    xmlns:pages_public="clr-namespace:TripExpenseNew.PublicPage"
     Title="TripExpenseNew"
     Shell.FlyoutBehavior="Disabled">
 
@@ -22,12 +23,12 @@
 
     <ShellContent
         Title="Personal"
-        ContentTemplate="{DataTemplate pages_:Personal}"
+        ContentTemplate="{DataTemplate pages_personal:Personal}"
         Route="Personal" />
 
     <ShellContent
         Title="PersonalPage"
-        ContentTemplate="{DataTemplate pages_:PersonalPage}"
+        ContentTemplate="{DataTemplate pages_personal:PersonalPage}"
         Route="PersonalPage" />
 
     <ShellContent
@@ -37,11 +38,16 @@
     
     <ShellContent
     Title="PersonalForceStop"
-    ContentTemplate="{DataTemplate pages_:PersonalForceStop}"
+    ContentTemplate="{DataTemplate pages_personal:PersonalForceStop}"
     Route="PersonalForceStop" />
 
     <ShellContent
     Title="CompanyPage"
     ContentTemplate="{DataTemplate pages_company:CompanyPage}"
     Route="CompanyPage" />
-</Shell>
+
+    <ShellContent
+     Title="PublicPage"
+     ContentTemplate="{DataTemplate pages_public:PublicPage}"
+     Route="PublicPage" />
+    </Shell>

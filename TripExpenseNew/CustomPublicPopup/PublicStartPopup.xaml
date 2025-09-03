@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup
+    x:Class="TripExpenseNew.CustomPublicPopup.PublicStartPopup"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:shell="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    Color="Transparent">
+
+    <Border
+        Padding="0"
+        BackgroundColor="White"
+        WidthRequest="350"
+        Stroke="Transparent"
+        StrokeShape="{RoundRectangle CornerRadius='20'}">
+        <ScrollView>
+            <Grid
+            Padding="20,20"
+            ColumnDefinitions=".50*,.50*"
+            ColumnSpacing="10"
+            RowDefinitions="Auto,Auto,Auto,Auto,Auto"
+            RowSpacing="15">
+
+                <!--  LABEL | START TRIP  -->
+                <Label
+                Grid.Row="0"
+                Grid.ColumnSpan="2"
+                CharacterSpacing="1"
+                FontAttributes="Bold"
+                FontFamily="Rajdhani-Bold"
+                FontSize="32"
+                HorizontalOptions="Center"
+                Text="START TRIP"
+                TextColor="#1C4698"
+                VerticalOptions="Center" />
+
+                <!--  Location Type  -->
+                <Grid
+                Grid.Row="1"
+                Grid.ColumnSpan="2"
+                ColumnDefinitions=".50*,.50*"
+                ColumnSpacing="10"
+                RowDefinitions="Auto,Auto"
+                RowSpacing="5"
+                VerticalOptions="Center">
+
+                    <!--  LABEL | Location Type:  -->
+                    <Label
+                    CharacterSpacing="1"
+                    Grid.ColumnSpan="2"
+                    FontAttributes="None"
+                    FontSize="20"
+                    HorizontalOptions="Start"
+                    Text="Location Type:"
+                    VerticalOptions="Center" />
+
+                    <!--  BUTTON | CUSTOMER  -->
+                    <Button
+                    x:Name="CustomerBtn"
+                    Clicked="CustomerBtn_Clicked"
+                    Grid.Row="1"
+                    Padding="10,15"
+                    BackgroundColor="#BEBEBE"
+                    CharacterSpacing="2"
+                    CornerRadius="10"
+                    FontAttributes="Bold"
+                    FontSize="18"
+                    HorizontalOptions="Fill"
+                    Text="Customer"
+                    VerticalOptions="Center">
+                        <Button.Shadow>
+                            <Shadow
+                            Brush="Black"
+                            Opacity="0.2"
+                            Radius="15"
+                            Offset="0,4" />
+                        </Button.Shadow>
+                    </Button>
+
+                    <!--  BUTTON | OTHER  -->
+                    <Button
+                    x:Name="OtherBtn"
+                    Clicked="OtherBtn_Clicked"
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Padding="10,15"
+                    BackgroundColor="#BEBEBE"
+                    CharacterSpacing="2"
+                    CornerRadius="10"
+                    FontAttributes="Bold"
+                    FontSize="18"
+                    HorizontalOptions="Fill"
+                    Text="Other"
+                    VerticalOptions="Center">
+                        <Button.Shadow>
+                            <Shadow
+                            Brush="Black"
+                            Opacity="0.2"
+                            Radius="15"
+                            Offset="0,4" />
+                        </Button.Shadow>
+                    </Button>
+                </Grid>
+
+                <!--  CUSTOMER/LOCATION  -->
+                <VerticalStackLayout
+                Grid.Row="2"
+                Grid.ColumnSpan="2"
+                Spacing="5">
+                    <!--  LABEL | Customer/Location:  -->
+                    <Label
+                    CharacterSpacing="1"
+                    FontAttributes="None"
+                    FontSize="20"
+                    HorizontalOptions="Start"
+                    Text="Start Location:"
+                    VerticalOptions="Center" />
+                    <!--  ENTRY | USERNAME  -->
+                    <Border
+                    Stroke="#C8C8C8"
+                    StrokeShape="RoundRectangle 5"
+                    StrokeThickness="2">
+                        <Entry
+                        Margin="2"
+                        x:Name="Text_Location"
+                        CharacterSpacing="1"
+                        ClearButtonVisibility="WhileEditing"
+                        FontSize="18"
+                        Keyboard="Text"
+                        Placeholder=" Ex. CTL-(HQ)"
+                        Text="" />
+                    </Border>
+                </VerticalStackLayout>
+
+                <!--  Job  (Can Search own job)  -->
+                <VerticalStackLayout
+                Grid.Row="3"
+                Grid.ColumnSpan="2"
+                Spacing="5">
+                    <!--  LABEL | Job  -->
+                    <Label
+                    CharacterSpacing="1"                    
+                    FontAttributes="None"
+                    FontSize="20"
+                    HorizontalOptions="Start"
+                    Text="Job:"
+                    VerticalOptions="Center" />
+                    <!--  ENTRY | USERNAME  -->
+                    <Border
+                    Stroke="#C8C8C8"
+                    StrokeShape="RoundRectangle 5"
+                    StrokeThickness="2">
+                        <Entry
+                        Margin="2"
+                        CharacterSpacing="1"
+                        x:Name="Text_Job"
+                        ClearButtonVisibility="WhileEditing"
+                        FontSize="18"
+                        Keyboard="Text"
+                        Placeholder=" Ex. J99-0000"
+                        Text="" />
+                    </Border>
+                </VerticalStackLayout>
+
+                <!--  BUTTON | Cancel  -->
+                <Button
+                x:Name="CancelBtn"
+                Grid.Row="4"
+                Padding="10,15"
+                BackgroundColor="#EC221F"
+                CharacterSpacing="2"
+                Clicked="CancelBtn_Clicked"
+                CornerRadius="10"
+                FontAttributes="Bold"
+                FontSize="22"
+                HorizontalOptions="Fill"
+                Text="Cancel"
+                VerticalOptions="Center">
+                    <Button.Shadow>
+                        <Shadow
+                        Brush="Black"
+                        Opacity="0.2"
+                        Radius="15"
+                        Offset="0,4" />
+                    </Button.Shadow>
+                </Button>
+
+                <!--  BUTTON | OK  -->
+                <Button
+                x:Name="OKBtn"
+                Grid.Row="4"
+                Grid.Column="1"
+                Padding="10,15"
+                BackgroundColor="#14AE5C"
+                CharacterSpacing="2"
+                Clicked="OKBtn_Clicked"
+                CornerRadius="10"
+                FontAttributes="Bold"
+                FontSize="22"
+                HorizontalOptions="Fill"
+                Text="OK"
+                VerticalOptions="Center">
+                    <Button.Shadow>
+                        <Shadow
+                        Brush="Black"
+                        Opacity="0.2"
+                        Radius="15"
+                        Offset="0,4" />
+                    </Button.Shadow>
+                </Button>
+            </Grid>
+        </ScrollView>
+    </Border>
+
+</toolkit:Popup>

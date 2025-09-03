@@ -1,0 +1,46 @@
+﻿using SQLite;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using TripExpenseNew.DBInterface;
+using TripExpenseNew.DBModels;
+
+namespace TripExpenseNew.DBService
+{
+    public class PublicService : IPublic
+    {
+        private readonly SQLiteAsyncConnection database;
+        public PublicService()
+        {
+            string dbPath = DBPath.GetDatabasePath();
+            database = new SQLiteAsyncConnection(dbPath);
+            database.CreateTableAsync<PublicDBModel>().Wait();
+        }
+        public async Task<int> Delete(string trip)
+        {
+            var itemsToDelete = await database.Table<PublicDBModel>()
+               .Where(w => w.trip == trip)
+               .ToListAsync();
+
+            int rowsDeleted = 0;
+            foreach (var item in itemsToDelete)
+            {
+                rowsDeleted += await database.DeleteAsync(item);
+            }
+
+            return rowsDeleted;
+        }
+
+        public Task<List<PublicDBModel>> GetByTrip(string trip)
+        {
+            return database.Table<PublicDBModel>().Where(w => w.trip == trip).ToListAsync();
+        }
+
+        public Task<int> Insert(PublicDBModel p)
+        {
+            return database.InsertAsync(p);
+        }
+    }
+}

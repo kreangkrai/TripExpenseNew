@@ -1,12 +1,15 @@
 ﻿namespace TripExpenseNew.Models
 {
-    public class OtherModel
+    public class PublicViewModel
     {
         public int id { get; set; }
         public string passenger { get; set; }
+        public string passenger_name { get; set; }
         public string job_id { get; set; }
         public string trip { get; set; }
         public DateTime date { get; set; }
+        public double distance { get; set; }
+        public double speed { get; set; }
         public string status { get; set; }
         public double latitude { get; set; }
         public double longitude { get; set; }

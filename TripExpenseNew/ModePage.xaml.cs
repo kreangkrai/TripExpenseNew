@@ -19,13 +19,13 @@ public partial class ModePage : ContentPage
         await Shell.Current.GoToAsync("CompanyPage");
         //await Navigation.PushAsync(new CompanyPage());
     }
-    private async void PersonalForceStop_Clicked(object sender, EventArgs e)
-    {
-        await Shell.Current.GoToAsync("PersonalForceStop");
-        //await Navigation.PushAsync(new PersonalForceStop());
-    }
     private async void CancelBtn_Clicked(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync("Home_Page");
+    }
+
+    private async void PublicBtn_Clicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync("PublicPage");
     }
 }

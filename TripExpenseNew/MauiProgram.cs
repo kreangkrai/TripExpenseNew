@@ -44,7 +44,7 @@ namespace TripExpenseNew
             builder.Services.AddTransient<ILastTrip, LastTripService>();
             builder.Services.AddTransient<ILocationCustomer, LocationCustomerService>();
             builder.Services.AddTransient<ILocationOther, LocationOtherService>();
-            builder.Services.AddTransient<IOther, OtherService>();
+            builder.Services.AddTransient<Interface.IPublic, Services.PublicService>();
             builder.Services.AddTransient<IPassengerCompany, PassengerCompanyService>();
             builder.Services.AddTransient<IPassengerPersonal, PassengerPersonalService>();
             builder.Services.AddTransient<Interface.IPersonal, Services.PersonalService>();
@@ -60,14 +60,17 @@ namespace TripExpenseNew
             builder.Services.AddTransient<Login_Page>();
             builder.Services.AddTransient<Home_Page>();
             builder.Services.AddTransient<CompanyPage.CompanyPage>();
+            builder.Services.AddTransient<PublicPage.PublicPage>();
 
             builder.Services.AddSingleton<IServer, ServerService>();
             builder.Services.AddSingleton<ILogin, LoginService>();
             builder.Services.AddSingleton<IActivePersonal, ActivePersonalService>();
             builder.Services.AddSingleton<IActiveCompany, ActiveCompanyService>();
+            builder.Services.AddSingleton<IActivePublic, ActivePublicService>();
             builder.Services.AddSingleton<DBInterface.IPersonal, DBService.PersonalService>();
             builder.Services.AddSingleton<DBInterface.ICompany,DBService.CompanyService>();
             builder.Services.AddSingleton<DBInterface.IMileage, DBService.MileageService>();
+            builder.Services.AddSingleton<DBInterface.IPublic, DBService.PublicService>();
 
             return builder.Build();
         }

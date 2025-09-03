@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="TripExpenseNew.PublicPage.PublicForceStop"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:shell="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    shell:Shell.NavBarIsVisible="False">
+    <VerticalStackLayout
+        Padding="30,0"
+        Spacing="15"
+        VerticalOptions="Center">
+        <!--  LABEL | STOP TRIP  -->
+        <Label
+            CharacterSpacing="2"
+            FontAttributes="Bold"
+            FontFamily="Rajdhani-Bold"
+            FontSize="32"
+            HorizontalOptions="Center"
+            Text="STOP TRIP"
+            TextColor="#1C4698"
+            VerticalOptions="Center" />
+
+        <!--  Trip Name  -->
+        <VerticalStackLayout Spacing="5">
+            <!--  LABEL | Trip Name:  -->
+            <Label
+                CharacterSpacing="1"
+                FontAttributes="Bold"
+                FontSize="20"
+                HorizontalOptions="Start"
+                Text="Trip Name:"
+                VerticalOptions="Center" />
+            <!--  ENTRY | Trip Name  -->
+            <Border
+                BackgroundColor="#E7E7E7"
+                Stroke="#C8C8C8"
+                StrokeShape="RoundRectangle 5"
+                HeightRequest="50"
+                StrokeThickness="2">
+                <Label
+                    x:Name="Text_TripName"
+                    Margin="2"
+                    Padding="4"
+                    CharacterSpacing="1"
+                    FontSize="18"
+                    Text="" />
+            </Border>
+        </VerticalStackLayout>
+
+        <!--  Location Type  -->
+        <Grid
+            ColumnDefinitions=".50*,.50*"
+            ColumnSpacing="10"
+            RowDefinitions="Auto,Auto"
+            RowSpacing="5"
+            VerticalOptions="Center">
+            <!--  LABEL | Location Type:  -->
+            <Label
+                Grid.ColumnSpan="2"
+                CharacterSpacing="1"
+                FontAttributes="Bold"
+                FontSize="20"
+                HorizontalOptions="Start"
+                Text="Location Type:"
+                VerticalOptions="Center" />
+            <!--  BUTTON | CUSTOMER  -->
+            <Button
+                x:Name="CustomerBtn"
+                Grid.Row="0"
+                Padding="10,15"
+                Clicked="CustomerBtn_Clicked"
+                BackgroundColor="#BEBEBE"
+                CharacterSpacing="2"
+                CornerRadius="10"
+                FontAttributes="Bold"
+                FontSize="22"
+                HorizontalOptions="Fill"
+                Text="Customer"
+                VerticalOptions="Center">
+                <Button.Shadow>
+                    <Shadow
+                        Brush="Black"
+                        Opacity="0.2"
+                        Radius="15"
+                        Offset="0,4" />
+                </Button.Shadow>
+            </Button>
+
+            <!--  BUTTON | OTHER  -->
+            <Button
+                x:Name="OtherBtn"
+                Grid.Row="0"
+                Grid.Column="1"
+                Padding="10,15"
+                Clicked="OtherBtn_Clicked"
+                BackgroundColor="#BEBEBE"
+                CharacterSpacing="2"
+                CornerRadius="10"
+                FontAttributes="Bold"
+                FontSize="22"
+                HorizontalOptions="Fill"
+                Text="Other"
+                VerticalOptions="Center">
+                <Button.Shadow>
+                    <Shadow
+                        Brush="Black"
+                        Opacity="0.2"
+                        Radius="15"
+                        Offset="0,4" />
+                </Button.Shadow>
+            </Button>
+        </Grid>
+
+        <!--  STOP LOCATION  -->
+        <VerticalStackLayout Spacing="5">
+            <!--  LABEL | Stop Location:  -->
+            <Label
+                CharacterSpacing="1"
+                FontAttributes="Bold"
+                FontSize="20"
+                HorizontalOptions="Start"
+                Text="Stop Location:"
+                VerticalOptions="Center" />
+            <!--  ENTRY | Stop Location:  -->
+            <Border
+                Stroke="#C8C8C8"
+                StrokeShape="RoundRectangle 5"
+                StrokeThickness="2">
+                <Entry
+                    x:Name="Text_Location"
+                    Margin="2"
+                    CharacterSpacing="1"
+                    ClearButtonVisibility="WhileEditing"
+                    FontSize="18"
+                    Keyboard="Text"
+                    HeightRequest="50"
+                    Placeholder=" Ex. CTL-(HQ)"
+                    Text="" />
+            </Border>
+        </VerticalStackLayout>
+
+        <!--  Stop Time  -->
+        <Grid ColumnDefinitions=".50*,.50*" ColumnSpacing="10">
+            <!--  LABEL | Stop Time:  -->
+            <Label
+                CharacterSpacing="1"
+                FontAttributes="Bold"
+                FontSize="20"
+                HorizontalOptions="Start"
+                Text="Stop Time:"
+                VerticalOptions="Center" />
+
+            <!--  ENTRY | Stop Time  -->
+            <Border
+                Grid.Column="1"
+                Stroke="#C8C8C8"
+                StrokeShape="RoundRectangle 5"
+                StrokeThickness="2" />
+            <TimePicker
+                x:Name="timePicker"
+                Grid.Column="1"
+                CharacterSpacing="5"
+                FontSize="20"
+                Format="HH:mm"
+                HeightRequest="50"
+                HorizontalOptions="Center"
+                TextColor="#297CC0"
+                PropertyChanged="timePicker_PropertyChanged"/>
+            <Label Text="{Binding SelectedTime, StringFormat='Selected Time: {0:HH:mm}'}" />
+        </Grid>
+
+        <!--  BUTTON  -->
+        <VerticalStackLayout
+            Grid.Row="4"
+            Grid.ColumnSpan="2"
+            Spacing="15">
+            <!--  BUTTON | Confirm  -->
+            <Button
+                x:Name="ConfirmBtn"
+                Padding="10,15"
+                Clicked="ConfirmBtn_Clicked"
+                BackgroundColor="#14AE5C"
+                CharacterSpacing="2"
+                CornerRadius="30"
+                HeightRequest="60"
+                FontAttributes="Bold"
+                FontSize="22"
+                HorizontalOptions="Fill"
+                Text="Confirm"
+                VerticalOptions="Center">
+                <Button.Shadow>
+                    <Shadow
+                        Brush="Black"
+                        Opacity="0.2"
+                        Radius="15"
+                        Offset="0,4" />
+                </Button.Shadow>
+            </Button>
+
+            <!--  BUTTON | Cancel  -->
+            <Button
+                x:Name="CancelBtn"
+                Padding="10,15"
+                BackgroundColor="#EC221F"
+                CharacterSpacing="2"
+                Clicked="CancelBtn_Clicked"
+                CornerRadius="30"
+                FontAttributes="Bold"
+                FontSize="22"
+                HeightRequest="60"
+                HorizontalOptions="Fill"
+                Text="Cancel"
+                VerticalOptions="Center">
+                <Button.Shadow>
+                    <Shadow
+                        Brush="Black"
+                        Opacity="0.2"
+                        Radius="15"
+                        Offset="0,4" />
+                </Button.Shadow>
+            </Button>
+
+        </VerticalStackLayout>
+    </VerticalStackLayout>
+</ContentPage>

@@ -9,7 +9,7 @@
         public int mileage_start { get; set; }
         public string main_location { get; set; }
         public string borrower { get; set; }
-        public DateTime borrower_date { get; set; }
+        public DateTime borrow_date { get; set; }
         public DateTime plan_return_date { get; set; }
         public DateTime actual_return_date { get; set; }
         public string customer { get; set; }

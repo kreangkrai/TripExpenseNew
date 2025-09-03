@@ -318,7 +318,7 @@ public partial class CompanyForceStop : ContentPage
                         status = "STOP",
                         cash = 0,
                         car_id = trip.car_id,
-                        borrower = "059197",
+                        borrower = trip.borrower_id,
                         fleetcard = 0
                     };
                     message = await _Company.Insert(data_company);
@@ -342,7 +342,8 @@ public partial class CompanyForceStop : ContentPage
                             mode = "COMPANY",
                             status = false,
                             trip = data_company.trip,
-                            car_id = data_company.car_id
+                            car_id = data_company.car_id,
+                            borrower_id = data_company.borrower
                         };
 
                         message = await LastTrip.UpdateByTrip(lastTrip);

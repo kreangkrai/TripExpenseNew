@@ -1,4 +1,4 @@
-﻿namespace TripExpenseNew.PersonalPage;
+﻿namespace TripExpenseNew.PublicPage;
 
 using TripExpenseNew.DBInterface;
 using TripExpenseNew.DBModels;
@@ -24,24 +24,23 @@ using Microsoft.Maui.ApplicationModel;
 
 #endif
 
-public partial class PersonalForceStop : ContentPage
+public partial class PublicForceStop : ContentPage
 {
     private ILocationCustomer LocationCustomer;
     private ILocationOther LocationOther;
     private ILogin Login;
     private IMileage Mileage;
-    private DBInterface.IPersonal DB_Personal;
-    private Interface.IPersonal _Personal;
+    private DBInterface.IPublic DB_Public;
+    private Interface.IPublic _Public;
     private ILastTrip LastTrip;
-    private DBInterface.IActivePersonal ActivePersonal;
-    private IPassengerPersonal PassengerPersonal;
+    private DBInterface.IActivePublic ActivePublic;
     private IInternet Internet;
     private CancellationTokenSource cancellationTokenSource;
     private bool isTracking = true;
     Tuple<string, bool> loc = new Tuple<string, bool>("", false);
     Location g_location = null;
     bool IsCustomer = false;
-    LastTripViewModel trip = new LastTripViewModel ();
+    LastTripViewModel trip = new LastTripViewModel();
     string emp_id = "";
     CultureInfo cultureinfo = new CultureInfo("en-us");
 
@@ -56,19 +55,17 @@ public partial class PersonalForceStop : ContentPage
     private Intent intent = new Intent();
 #endif
 
-    int mileage_start = 0;
-    public PersonalForceStop(LastTripViewModel _trip)
+    public PublicForceStop(LastTripViewModel _trip)
     {
         InitializeComponent();
         Login = new LoginService();
         LocationCustomer = new LocationCustomerService();
         LocationOther = new LocationOtherService();
         Mileage = new MileageService();
-        DB_Personal = new DBService.PersonalService();
-        _Personal = new Services.PersonalService();
+        DB_Public = new DBService.PublicService();
+        _Public = new Services.PublicService();
         LastTrip = new LastTripService();
-        ActivePersonal = new ActivePersonalService();
-        PassengerPersonal = new PassengerPersonalService();
+        ActivePublic = new ActivePublicService();
         Internet = new InternetService();
         WeakReferenceMessenger.Default.Register<LocationData>(this, (send, data) =>
         {
@@ -77,11 +74,9 @@ public partial class PersonalForceStop : ContentPage
         });
 
         Text_TripName.Text = _trip.trip;
-        Text_MileageStart.Text = _trip.mileage_start.ToString();
-        mileage_start = _trip.mileage_start;
         emp_id = _trip.emp_id;
         trip = _trip;
-        timePicker.Time = new TimeSpan(17,30,0);
+        timePicker.Time = new TimeSpan(17, 30, 0);
     }
 
     protected override async void OnAppearing()
@@ -220,7 +215,6 @@ public partial class PersonalForceStop : ContentPage
         {
             if (location != null)
             {
-
                 FindLocationService findLocation = new FindLocationService();
                 loc = findLocation.FindLocation(GetLocationCTL, GetLocationOthers, GetLocationCustomers, location);
 
@@ -278,14 +272,11 @@ public partial class PersonalForceStop : ContentPage
 
     private async void ConfirmBtn_Clicked(object sender, EventArgs e)
     {
-        if (Text_Location.Text.Trim() != "" && Text_MileageStop.Text.Trim() != "")
+        if (Text_Location.Text.Trim() != "")
         {
             bool internet = await Internet.CheckServerConnection("/api/CurrentTime/get");
             if (internet)
             {
-                int mileage_stop = Int32.Parse(Text_MileageStop.Text);
-                if (mileage_stop >= mileage_start)
-                {
                     var popup = new ProgressPopup();
                     this.ShowPopup(popup);
 
@@ -295,14 +286,14 @@ public partial class PersonalForceStop : ContentPage
                     var placemarks = await Geocoding.Default.GetPlacemarksAsync(g_location.Latitude, g_location.Longitude);
                     var zipcode = placemarks?.FirstOrDefault()?.PostalCode ?? "N/A";
 
-                    PersonalModel data_personal = new PersonalModel();
+                PublicModel data_public = new PublicModel();
                     string message = "Success";
 
-                    await DB_Personal.Delete(trip.trip);
+                    await DB_Public.Delete(trip.trip);
 
-                    data_personal = new PersonalModel()
+                    data_public = new PublicModel()
                     {
-                        driver = emp_id,
+                        passenger = emp_id,
                         date = date,
                         job_id = trip.job_id,
                         distance = trip.distance,
@@ -312,39 +303,37 @@ public partial class PersonalForceStop : ContentPage
                         zipcode = zipcode,
                         location_mode = IsCustomer ? "CUSTOMER" : "OTHER",
                         speed = speed,
-                        mileage = mileage_stop,
                         trip = trip.trip,
-                        status = "STOP",
-                        cash = 0
+                        status = "STOP"
                     };
-                    message = await _Personal.Insert(data_personal);
+                    message = await _Public.Insert(data_public);
 
                     if (message == "Success")
                     {
                         LastTripModel lastTrip = new LastTripModel()
                         {
-                            driver = data_personal.driver,
-                            speed = data_personal.speed,
-                            emp_id = data_personal.driver,
-                            job_id = data_personal.job_id,
+                            driver = "",
+                            speed = data_public.speed,
+                            emp_id = data_public.passenger,
+                            job_id = data_public.job_id,
                             trip_start = trip.trip_start,
-                            date = data_personal.date,
-                            distance = data_personal.distance,
-                            location = data_personal.location,
-                            latitude = data_personal.latitude,
-                            longitude = data_personal.longitude,
-                            mileage_start = data_personal.mileage,
-                            mileage_stop = mileage_stop,
-                            mode = "PERSONAL",
+                            date = data_public.date,
+                            distance = data_public.distance,
+                            location = data_public.location,
+                            latitude = data_public.latitude,
+                            longitude = data_public.longitude,
+                            mileage_start = 0,
+                            mileage_stop = 0,
+                            mode = "PUBLIC",
                             status = false,
-                            trip = data_personal.trip,
-                            car_id = data_personal.driver,
+                            trip = data_public.trip,
+                            car_id = "",
                             borrower_id = ""
                         };
 
                         message = await LastTrip.UpdateByTrip(lastTrip);
 
-                        int act = await ActivePersonal.Delete(trip.trip);
+                        int act = await ActivePublic.Delete(trip.trip);
                     }
 
 
@@ -381,70 +370,6 @@ public partial class PersonalForceStop : ContentPage
                     }
                     #endregion
 
-                    #region GET PASSENGER
-                    //CultureInfo usCulture = new CultureInfo("en-US");
-                    List<PassengerPersonalViewModel> passenger_personals = await PassengerPersonal.GetPassengerPersonalByDriver(data_personal.driver, data_personal.trip);
-
-                    List<string> emp_list = passenger_personals.Where(w => w.status == "STOP").Select(s => s.passenger).ToList();
-                    List<string> emps = passenger_personals.Where(w => !emp_list.Contains(w.passenger)).Select(s => s.passenger).ToList();
-                    emps = emps.Distinct().ToList();
-
-                    if (emps.Count > 0)
-                    {
-                        #region ADD PASSENGER
-                        for (int i = 0; i < emps.Count; i++)
-                        {
-                            PassengerPersonalModel passengerPersonal = new PassengerPersonalModel()
-                            {
-                                date = data_personal.date,
-                                driver = data_personal.driver,
-                                trip = data_personal.trip,
-                                job_id = data_personal.job_id,
-                                latitude = data_personal.latitude,
-                                longitude = data_personal.longitude,
-                                location = data_personal.location,
-                                location_mode = data_personal.location_mode,
-                                passenger = emps[i],
-                                status = "STOP",
-                                zipcode = data_personal.zipcode
-                            };
-                            string mes = await PassengerPersonal.Insert(passengerPersonal);
-
-                            LastTripModel lastTrip_passenger = new LastTripModel()
-                            {
-                                driver = data_personal.driver,
-                                speed = 0,
-                                emp_id = emps[i],
-                                job_id = data_personal.job_id,
-                                trip_start = trip.trip_start,
-                                date = date,
-                                distance = 0,
-                                location = data_personal.location,
-                                latitude = data_personal.latitude,
-                                longitude = data_personal.longitude,
-                                mileage_start = 0,
-                                mileage_stop = 0,
-                                mode = "PASSENGER PERSONAL",
-                                status = false,
-                                trip = data_personal.trip,
-                                car_id = ""
-                            };
-
-                            mes = await LastTrip.UpdateByTrip(lastTrip_passenger);
-                        }
-                        #endregion
-                    }
-                    #endregion
-
-                    #region Update Last Mileage
-                    MileageDBModel db_mileage = new MileageDBModel()
-                    {
-                        Id = 1,
-                        mileage = mileage_stop
-                    };
-                    int id = await Mileage.Save(db_mileage);
-                    #endregion
-
                     #region Stop
 #if IOS
                     locationService?.StopUpdatingLocation();
@@ -456,14 +381,6 @@ public partial class PersonalForceStop : ContentPage
                     #endregion
                     await popup.CloseAsync();
                     await Shell.Current.GoToAsync("Home_Page");
-                }
-                else
-                {
-                    MainThread.BeginInvokeOnMainThread(async () =>
-                    {
-                        await DisplayAlert("", "กรุณาใส่ข้อมูลให้ถูกต้อง", "ตกลง");
-                    });
-                }
             }
             else
             {
@@ -472,7 +389,7 @@ public partial class PersonalForceStop : ContentPage
                     await DisplayAlert("", "Cann't connect to server", "OK");
                 });
             }
-            
+
         }
         else
         {

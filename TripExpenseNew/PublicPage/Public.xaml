@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="TripExpenseNew.PublicPage.Public"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:shell="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    Title="Personal"
+    shell:Shell.NavBarIsVisible="False">
+
+    <ScrollView>
+        <Grid
+            Padding="20,20"
+            ColumnDefinitions=".25*,.25*,.25*,.25*"
+            ColumnSpacing="15"
+            RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+            RowSpacing="20">
+
+            <!--  LABEL | ACTIVE TRIP  -->
+            <Label
+                Grid.Row="0"
+                Grid.ColumnSpan="4"
+                CharacterSpacing="1"
+                FontAttributes="Bold"
+                FontFamily="Rajdhani-Bold"
+                FontSize="32"
+                HorizontalOptions="Center"
+                Text="ACTIVE TRIP"
+                TextColor="#1C4698"
+                VerticalOptions="Center" />
+            <!--  LABEL | (Personal Car)  -->
+            <Label
+                Grid.Row="1"
+                Grid.ColumnSpan="4"
+                CharacterSpacing="1"
+                FontAttributes="Bold"
+                FontFamily="Rajdhani-Bold"
+                FontSize="24"
+                HorizontalOptions="Center"
+                Text="(Public)"
+                TextColor="#1C4698"
+                VerticalOptions="Center" />
+
+            <!--  INFO | 
+            
+            -->
+            <Frame
+                Grid.Row="3"
+                Grid.Column="0"
+                Padding="5,5"
+                Grid.ColumnSpan="2"
+                BorderColor="#BCBCBC"
+                CornerRadius="20">
+                <Grid
+                    Padding="1,1"
+                    ColumnDefinitions="*"
+                    RowDefinitions="Auto,Auto,Auto">
+
+                    <!--  IMAGE | clock  -->
+                    <Image
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Aspect="AspectFit"
+                        HeightRequest="30"
+                        HorizontalOptions="Center"
+                        Source="clock.png"
+                        VerticalOptions="Center" />
+
+                    <!--  LABEL | Time  -->
+                    <Label
+                        Grid.Row="1"
+                        Grid.ColumnSpan="3"
+                        x:Name="trip_duration"
+                        CharacterSpacing="1"
+                        FontFamily="Rajdhani-Bold"
+                        FontSize="24"
+                        HorizontalOptions="Center"
+                        Text="00:00"
+                        TextColor="#000000"
+                        VerticalOptions="Center" />
+
+                    <!--  LABEL | Duration  -->
+                    <Label
+                        Grid.Row="2"
+                        Grid.ColumnSpan="3"                        
+                        CharacterSpacing="1"
+                        FontFamily="Rajdhani-Medium"
+                        FontSize="16"
+                        HorizontalOptions="Center"
+                        Text="Duration"
+                        TextColor="#535353"
+                        VerticalOptions="Center" />
+                </Grid>
+            </Frame>
+            <!--  //////////////////////////////////////////////  -->
+
+            <!--  INFO | Distance  -->
+            <Frame
+                Grid.Row="3"
+                Grid.Column="2"
+                Grid.ColumnSpan="2"
+                Padding="5,5"
+                BorderColor="#BCBCBC"
+                CornerRadius="20">
+                <Grid
+                    Padding="0,0"
+                    ColumnDefinitions="*"
+                    RowDefinitions="Auto,Auto,Auto">
+
+                    <!--  IMAGE | destination  -->
+                    <Image
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Aspect="AspectFit"
+                        HeightRequest="30"
+                        HorizontalOptions="Center"
+                        Source="destination.png"
+                        VerticalOptions="Center" />
+
+                    <!--  LABEL | Time  -->
+                    <Label
+                        Grid.Row="1"
+                        Grid.ColumnSpan="3"
+                        x:Name="trip_distance"
+                        CharacterSpacing="1"
+                        FontFamily="Rajdhani-Bold"
+                        FontSize="24"
+                        HorizontalOptions="Center"
+                        Text="0 km"
+                        TextColor="#000000"
+                        VerticalOptions="Center" />
+
+                    <!--  LABEL | Distance  -->
+                    <Label
+                        Grid.Row="2"
+                        Grid.ColumnSpan="3"
+                        CharacterSpacing="1"
+                        FontFamily="Rajdhani-Medium"
+                        FontSize="16"
+                        HorizontalOptions="Center"
+                        Text="Distance"
+                        TextColor="#535353"
+                        VerticalOptions="Center" />
+                </Grid>
+            </Frame>
+            <!--  //////////////////////////////////////////////  -->
+
+            <!--  LABEL | Active Trip Detail:  -->
+            <Label
+                Grid.Row="4"
+                Grid.ColumnSpan="4"
+                x:Name="Text_Detail"
+                FontAttributes="Bold"
+                FontFamily="Rajdhani-Bold"
+                FontSize="24"
+                HorizontalOptions="Start"
+                Text="Active Trip Detail:"
+                TextColor="#1C4698"
+                VerticalOptions="Center" />
+
+            <!--  Collection View | Active Trip Detail:  -->
+            <Frame
+                Padding="5" Grid.Row="5"
+                Grid.ColumnSpan="4"
+                Margin="1"
+                BackgroundColor= "White"
+                CornerRadius="5"
+                BorderColor="DimGrey"
+                HasShadow="False">
+                <StackLayout>
+                    <CollectionView x:Name="TripCollectionView" HeightRequest="250">
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Vertical" ItemSpacing="3" />
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame
+                                    Margin="1"
+                                    Padding="5,1"
+                                    BackgroundColor= "{Binding FrameColor}"
+                                    CornerRadius="5"                          
+                                    HasShadow="False">
+                                    <Grid RowDefinitions="Auto,Auto,Auto" Padding="1" RowSpacing="1">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Label Grid.Row="0"  Grid.ColumnSpan="2" Text="{Binding TextStatus}" VerticalOptions="Center" FontSize="20" FontFamily="Rajdhani-Bold"/>
+                                        <Image Grid.Row="1"  Grid.Column="0" Source="{Binding IconLocationSource}" WidthRequest="16" HeightRequest="16" Margin="10,0" />
+                                        <Label Grid.Row="1"  Grid.Column="1" Padding="1" Text="{Binding TextLocation}" VerticalOptions="Center"  FontSize="16" FontFamily="Rajdhani-Medium"/>
+                                        <Image Grid.Row="2"  Grid.Column="0" Source="{Binding IconDateSource}" WidthRequest="16" HeightRequest="16" Margin="10,0" />
+                                        <Label Grid.Row="2"  Grid.Column="1" Padding="1" Text="{Binding TextDate}" VerticalOptions="Center" FontSize="16" FontFamily="Rajdhani-Medium" />
+                                    </Grid>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </StackLayout>
+            </Frame>
+            <!--  BUTTON | Check In  -->
+            <Button
+                x:Name="CheckInBtn"
+                Clicked="CheckInBtn_Clicked"
+                Grid.Row="6"
+                Grid.ColumnSpan="4"
+                Padding="10,5"
+                BackgroundColor="#297CC0"
+                CharacterSpacing="1"
+                ContentLayout="Right,10"
+                CornerRadius="20"
+                FontAttributes="Bold"
+                FontSize="22"
+                HeightRequest="60"
+                HorizontalOptions="Fill"
+                ImageSource="check_in.png"
+                Text="Check-in"
+                VerticalOptions="Center" />
+           
+            <!--  BUTTON | Stop Trip  -->
+            <Button
+                x:Name="StopTripBtn"
+                Grid.Row="7"
+                Grid.ColumnSpan="4"
+                Padding="10,5"
+                Clicked="StopTripBtn_Clicked"
+                BackgroundColor="#EC221F"
+                CharacterSpacing="1"
+                ContentLayout="Right,10"
+                CornerRadius="20"
+                FontAttributes="Bold"
+                FontSize="22"
+                HeightRequest="60"
+                HorizontalOptions="Fill"
+                ImageSource="stop_trip.png"
+                Text="STOP TRIP"
+                VerticalOptions="Center" />
+        </Grid>
+    </ScrollView>
+</ContentPage>

@@ -6,6 +6,7 @@ using TripExpenseNew.CustomCompanyPopup;
 using TripExpenseNew.CustomPassengerPopup;
 using TripExpenseNew.CustomPersonalPopup;
 using TripExpenseNew.CustomPopup;
+using TripExpenseNew.CustomPublicPopup;
 using TripExpenseNew.Interface;
 using TripExpenseNew.Models;
 using TripExpenseNew.Services;
@@ -16,6 +17,7 @@ public partial class HistoryPage : ContentPage
 {
     private IPersonal Personal;
     private ICompany Company;
+    private IPublic Public;
     private IPassengerPersonal PassengerPersonal;
     private IPassengerCompany PassengerCompany;
     CultureInfo cultureinfo = new CultureInfo("en-us");
@@ -27,6 +29,7 @@ public partial class HistoryPage : ContentPage
         lastTrips = _lastTrips;
         Personal = new PersonalService();
         Company = new CompanyService();
+        Public = new PublicService();
         PassengerPersonal = new PassengerPersonalService();
         PassengerCompany = new PassengerCompanyService();
 	}
@@ -91,7 +94,9 @@ public partial class HistoryPage : ContentPage
                 }
                 if (lastTrip.mode == "PUBLIC")
                 {
-
+                    List<PublicViewModel> datas = await Public.GetPublicHistoryByTrip(lastTrip.emp_id, lastTrip.trip);
+                    datas = datas.OrderBy(o => o.date).ToList();
+                    await this.ShowPopupAsync(new PublicHistoryPopup(datas));
                 }
             }
         }

@@ -14,6 +14,7 @@ using TripExpenseNew.Interface;
 using TripExpenseNew.Models;
 using TripExpenseNew.PassengerPage;
 using TripExpenseNew.PersonalPage;
+using TripExpenseNew.PublicPage;
 using TripExpenseNew.ViewModels;
 
 public partial class Home_Page : ContentPage
@@ -265,7 +266,7 @@ public partial class Home_Page : ContentPage
                             IsContinue = true,
                             trip_start = trips[0].trip_start,
                             car_id = trips[0].car_id,
-                            borrower = "059197"
+                            borrower = trips[0].borrower_id
                         };
 
                         await Navigation.PushAsync(new Company(company));
@@ -273,7 +274,18 @@ public partial class Home_Page : ContentPage
 
                     if (trips[0].mode == "PUBLIC")
                     {
-
+                        PublicPopupStartModel p = new PublicPopupStartModel()
+                        {
+                            IsCustomer = false,
+                            job_id = trips[0].job_id,
+                            location = new Location(trips[0].latitude, trips[0].longitude),
+                            trip = trips[0].trip,
+                            location_name = trips[0].location,
+                            distance = trips[0].distance,
+                            IsContinue = true,
+                            trip_start = trips[0].trip_start,                           
+                        };
+                        await Navigation.PushAsync(new Public(p));
                     }
 
                     if (trips[0].mode == "PASSENGER PERSONAL")
@@ -298,7 +310,7 @@ public partial class Home_Page : ContentPage
                     }
                     if (trips[0].mode == "PUBLIC")
                     {
-                        //wait
+                        await Navigation.PushAsync(new PublicForceStop(trips[0]));
                     }
                 }
             }

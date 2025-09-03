@@ -72,6 +72,7 @@
                 <Button
                     x:Name="PublicBtn"
                     Padding="10,5"
+                    Clicked="PublicBtn_Clicked"
                     BackgroundColor="#297CC0"
                     CharacterSpacing="03"
                     CornerRadius="20"

@@ -271,10 +271,11 @@ public partial class CompanyPage : ContentPage
         if (result != null)
         {
             car_id = result.ToString();
-            CarModel car = await Car.GetByCar(car_id.Replace("#","%23"));
+            //car_id.Replace("#", "%23")
+            CarModel car = await Car.GetByCar(car_id);
             if (car.car_id != null)
             {
-                List<LastTripViewModel> trips = await LastTrip.GetByCar(car_id.Replace("#", "%23"));                
+                List<LastTripViewModel> trips = await LastTrip.GetByCar(car_id);                
                 LastTripViewModel trip = trips.Where(w => w.status == true).LastOrDefault();
                 if (trip == null)
                 {
@@ -326,7 +327,7 @@ public partial class CompanyPage : ContentPage
         {
             MileageDBModel mileage = await Mileage.GetMileage(1);
 
-            //car_id = "CAR#37";
+           // car_id = "CAR37";
 
             BorrowerViewModel borrower_id = await Borrower.GetBorrowerByCar(car_id);
 
