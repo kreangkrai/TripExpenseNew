@@ -29,6 +29,7 @@
 
         <Button
             x:Name="GeneralBtn"
+            Clicked="GeneralBtn_Clicked"
             BackgroundColor="LightGrey"
             CharacterSpacing="03"
             CornerRadius="50"

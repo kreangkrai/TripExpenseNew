@@ -53,6 +53,7 @@ namespace TripExpenseNew.CompanyPage
         private ILocationOther LocationOther;
         private IMileage Mileage;
         private IInternet Internet;
+        private ICar Car;
         private Location previousLocation = null;
         private Location g_location = null;
         private Location last_location_for_passenger = null;
@@ -99,6 +100,7 @@ namespace TripExpenseNew.CompanyPage
             LocationOther = new LocationOtherService();
             Mileage = new DBService.MileageService();
             Internet = new InternetService();
+            Car = new CarService();
             totalDistance = start.distance;
             trip_start = start.trip_start;
             g_location = start.location;
@@ -1042,6 +1044,7 @@ namespace TripExpenseNew.CompanyPage
         {
             try
             {
+                bool chkin_fleetcard = false;
                 var popup = new CompanyCheckInAlert { Title = "CHECK IN", Message = "Please Select type of check in?" };
                 var result = await Shell.Current.ShowPopupAsync(popup);
 
@@ -1122,6 +1125,7 @@ namespace TripExpenseNew.CompanyPage
                                 }
                             }
                             location_mode = "CUSTOMER";
+                            chkin_fleetcard = false;
                         }
 
                         if (result.ToString() == "Other")
@@ -1155,6 +1159,7 @@ namespace TripExpenseNew.CompanyPage
                                 }
                             }
                             location_mode = "OTHER";
+                            chkin_fleetcard = false;
                         }
 
                         if (result.ToString() == "Gas Station (cash)")
@@ -1183,6 +1188,7 @@ namespace TripExpenseNew.CompanyPage
                                 });
                             }
                             location_mode = "GAS";
+                            chkin_fleetcard = false;
                         }
 
                         if (result.ToString() == "Gas Station (fleetcard)")
@@ -1211,6 +1217,7 @@ namespace TripExpenseNew.CompanyPage
                                 });
                             }
                             location_mode = "GAS";
+                            chkin_fleetcard = true;
                         }
 
                         if (isChkIn)
@@ -1271,12 +1278,23 @@ namespace TripExpenseNew.CompanyPage
                                     mode = "COMPANY",
                                     status = true,
                                     trip = data_company.trip,
-                                    car_id = data_company.driver,
+                                    car_id = data_company.car_id,
                                     borrower_id = data_company.borrower
                                 };
 
                                 message = await LastTrip.UpdateByTrip(lastTrip);
 
+                            }
+
+                            // Update Balance Fleet Card
+
+                            if (chkin_fleetcard)
+                            {
+                                CarModel car = await Car.GetByCar(data_company.car_id);
+                                double old_balance = car.balance;
+                                double new_balance = old_balance - fleet;
+
+                                string m = await Car.UpdateBalance(data_company.car_id, new_balance);
                             }
 
 

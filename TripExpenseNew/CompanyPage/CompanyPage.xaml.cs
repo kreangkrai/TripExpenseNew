@@ -327,31 +327,40 @@ public partial class CompanyPage : ContentPage
         {
             MileageDBModel mileage = await Mileage.GetMileage(1);
 
-           // car_id = "CAR37";
+            //car_id = "CAR99";
 
             BorrowerViewModel borrower_id = await Borrower.GetBorrowerByCar(car_id);
-
-            var result = await this.ShowPopupAsync(new CompanyStartPopup(loc.Item1, loc.Item2, mileage.mileage, car_id));
-
-            if (result is CompanyPopupStartModel company)
+            if (borrower_id.borrow_id != null)
             {
-                if (company.location_name != null && company.location_name != "" && company.mileage != 0)
+                var result = await this.ShowPopupAsync(new CompanyStartPopup(loc.Item1, loc.Item2, mileage.mileage, car_id));
+
+                if (result is CompanyPopupStartModel company)
                 {
-                    company.location = g_location;
-                    company.IsContinue = false;
-                    company.trip_start = DateTime.Now;
-                    company.job_id = company.job_id != null ? company.job_id : "";
-                    company.car_id = company.car_id;
-                    company.borrower = borrower_id.borrower;
-                    await Navigation.PushAsync(new Company(company));
-                }
-                else
-                {
-                    MainThread.BeginInvokeOnMainThread(async () =>
+                    if (company.location_name != null && company.location_name != "" && company.mileage != 0)
                     {
-                        await DisplayAlert("", "กรุณาใส่ข้อมูล", "ตกลง");
-                    });
+                        company.location = g_location;
+                        company.IsContinue = false;
+                        company.trip_start = DateTime.Now;
+                        company.job_id = company.job_id != null ? company.job_id : "";
+                        company.car_id = company.car_id;
+                        company.borrower = borrower_id.borrower;
+                        await Navigation.PushAsync(new Company(company));
+                    }
+                    else
+                    {
+                        MainThread.BeginInvokeOnMainThread(async () =>
+                        {
+                            await DisplayAlert("", "กรุณาใส่ข้อมูล", "OK");
+                        });
+                    }
                 }
+            }
+            else
+            {
+                MainThread.BeginInvokeOnMainThread(async () =>
+                {
+                    await DisplayAlert("", "ไม่มีข้อมูลการยืมรถ", "OK");
+                });
             }
         }
         else

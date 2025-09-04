@@ -7,5 +7,6 @@ namespace TripExpenseNew.Interface
         Task<string> Insert(CarModel car);
         Task<List<CarModel>> GetCars();
         Task<CarModel> GetByCar(string car_id);
+        Task<string> UpdateBalance(string car_id,double balance);
     }
 }

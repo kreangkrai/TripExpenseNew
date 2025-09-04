@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <toolkit:Popup
-    x:Class="TripExpenseNew.CustomPublicPopup.PublicHistoryPopup"
+    x:Class="TripExpenseNew.CustomGeneralPopup.GeneralHistoryPopup"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:shell="http://schemas.microsoft.com/dotnet/2021/maui"
@@ -15,8 +15,8 @@
         <Grid
             Padding="20,20"
             ColumnDefinitions=".50*,.50*"
-            RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
-            RowSpacing="15">
+            RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+            RowSpacing="10">
 
             <!--  LABEL | TRIP NAME  -->
             <Label
@@ -103,10 +103,58 @@
                 HorizontalOptions="Start"
                 Text=""
                 VerticalOptions="Center" />
-         
-            <!--  LABEL | Distance:  -->
+
+            <!--  LABEL | Mileage Start:  -->
             <Label
                 Grid.Row="4"
+                Grid.Column="0"
+                Grid.ColumnSpan="1"
+                CharacterSpacing="0"
+                FontFamily="Rajdhani-Bold"
+                FontSize="22"
+                HorizontalOptions="Start"
+                Text="Mileage Start:"
+                VerticalOptions="Start" />
+            <!--  LABEL | Mileage Start  -->
+            <Label
+                Grid.Row="4"
+                Grid.Column="2"
+                Grid.ColumnSpan="1"
+                x:Name="Text_MileageStart"
+                CharacterSpacing="0"
+                FontFamily="Rajdhani-Medium"
+                FontSize="22"
+                HorizontalOptions="Start"
+                Text=""
+                VerticalOptions="Start" />
+
+            <!--  LABEL | Mileage Stop:  -->
+            <Label
+                Grid.Row="5"
+                Grid.Column="0"
+                Grid.ColumnSpan="1"
+                CharacterSpacing="0"
+                FontFamily="Rajdhani-Bold"
+                FontSize="22"
+                HorizontalOptions="Start"
+                Text="Mileage Stop:"
+                VerticalOptions="Start" />
+            <!--  LABEL | Mileage Stop  -->
+            <Label
+                Grid.Row="5"
+                Grid.Column="2"
+                Grid.ColumnSpan="2"
+                x:Name="Text_MileageStop"
+                CharacterSpacing="0"
+                FontFamily="Rajdhani-Medium"
+                FontSize="22"
+                HorizontalOptions="Start"
+                Text=""
+                VerticalOptions="Start" />
+
+            <!--  LABEL | Distance:  -->
+            <Label
+                Grid.Row="6"
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
                 CharacterSpacing="0"
@@ -117,7 +165,7 @@
                 VerticalOptions="Start" />
             <!--  LABEL | Distance  -->
             <Label
-                Grid.Row="4"
+                Grid.Row="6"
                 Grid.Column="2"
                 Grid.ColumnSpan="2"
                 x:Name="Text_Distance"
@@ -130,7 +178,7 @@
 
             <!--  LABEL | Route Trip Detail:  -->
             <Label
-                Grid.Row="5"
+                Grid.Row="7"
                 Grid.Column="0"
                 Grid.ColumnSpan="3"
                 CharacterSpacing="0"
@@ -140,88 +188,10 @@
                 Text="Route Trip Detail:"
                 VerticalOptions="Start" />
 
-            <!--  Collection View | Route Trip Detail:  -->
-            <Frame
-                Grid.Row="6"
-                Grid.ColumnSpan="2"
-                Margin="1"
-                Padding="5"
-                BackgroundColor="White"
-                BorderColor="DimGrey"
-                CornerRadius="5"
-                HasShadow="False">
-                <ScrollView>
-                    <StackLayout>
-                        <CollectionView x:Name="TripCollectionView" HeightRequest="200">
-                            <CollectionView.ItemsLayout>
-                                <LinearItemsLayout ItemSpacing="3" Orientation="Vertical" />
-                            </CollectionView.ItemsLayout>
-                            <CollectionView.ItemTemplate>
-                                <DataTemplate>
-                                    <Frame
-                                        Margin="1"
-                                        Padding="5,1"
-                                        BackgroundColor="{Binding FrameColor}"
-                                        CornerRadius="5"
-                                        HasShadow="False">
-                                        <Grid
-                                            Padding="1"
-                                            RowDefinitions="Auto,Auto,Auto"
-                                            RowSpacing="1">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto" />
-                                                <ColumnDefinition Width="Auto" />
-                                            </Grid.ColumnDefinitions>
-                                            <Label
-                                                Grid.Row="0"
-                                                Grid.ColumnSpan="2"
-                                                FontFamily="Rajdhani-Bold"
-                                                FontSize="20"
-                                                Text="{Binding TextStatus}"
-                                                VerticalOptions="Center" />
-                                            <Image
-                                                Grid.Row="1"
-                                                Grid.Column="0"
-                                                Margin="10,0"
-                                                HeightRequest="16"
-                                                Source="{Binding IconLocationSource}"
-                                                WidthRequest="16" />
-                                            <Label
-                                                Grid.Row="1"
-                                                Grid.Column="1"
-                                                Padding="1"
-                                                FontFamily="Rajdhani-Medium"
-                                                FontSize="16"
-                                                Text="{Binding TextLocation}"
-                                                VerticalOptions="Center" />
-                                            <Image
-                                                Grid.Row="2"
-                                                Grid.Column="0"
-                                                Margin="10,0"
-                                                HeightRequest="16"
-                                                Source="{Binding IconDateSource}"
-                                                WidthRequest="16" />
-                                            <Label
-                                                Grid.Row="2"
-                                                Grid.Column="1"
-                                                Padding="1"
-                                                FontFamily="Rajdhani-Medium"
-                                                FontSize="16"
-                                                Text="{Binding TextDate}"
-                                                VerticalOptions="Center" />
-                                        </Grid>
-                                    </Frame>
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
-                    </StackLayout>
-                </ScrollView>
-            </Frame>
-
             <!--  BUTTON | Close  -->
             <Button
                 x:Name="CloseBtn"
-                Grid.Row="7"
+                Grid.Row="8"
                 Grid.ColumnSpan="4"
                 Clicked="CloseBtn_Clicked"
                 BackgroundColor="#EC221F"

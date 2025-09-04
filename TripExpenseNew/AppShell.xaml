@@ -7,12 +7,13 @@
     xmlns:pages_personal="clr-namespace:TripExpenseNew.PersonalPage"
     xmlns:pages_company="clr-namespace:TripExpenseNew.CompanyPage"
     xmlns:pages_public="clr-namespace:TripExpenseNew.PublicPage"
+    xmlns:pages_general="clr-namespace:TripExpenseNew.GeneralPage"
     Title="TripExpenseNew"
     Shell.FlyoutBehavior="Disabled">
 
 
     <ShellContent
-        Title="Initial"
+        Title="Initial_Page"
         ContentTemplate="{DataTemplate pages:Initial_Page}"
         Route="Initial_Page" />
 
@@ -50,4 +51,10 @@
      Title="PublicPage"
      ContentTemplate="{DataTemplate pages_public:PublicPage}"
      Route="PublicPage" />
-    </Shell>
+
+    <ShellContent
+  Title="GeneralPage"
+  ContentTemplate="{DataTemplate pages_general:GeneralPage}"
+  Route="GeneralPage" />
+    
+</Shell>

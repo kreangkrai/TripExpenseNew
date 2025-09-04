@@ -14,9 +14,9 @@ namespace TripExpenseNew.Services
         private IConnectAPI API;
         private readonly string URL;
         private readonly HttpClient _httpClient;
-        public CarService(IConnectAPI _API)
+        public CarService()
         {
-            API = _API;
+            API = new ConnectAPIService();
             URL = API.ConnectAPI();
             var handler = new HttpClientHandler
             {
@@ -47,6 +47,13 @@ namespace TripExpenseNew.Services
             var byteContent = new ByteArrayContent(buffer);
             byteContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
             var response = await _httpClient.PostAsync(URL + "/api/Car/insert", byteContent);
+            var message = await response.Content.ReadAsStringAsync();
+            return message;
+        }
+
+        public async Task<string> UpdateBalance(string car_id, double balance)
+        {
+            var response = await _httpClient.PutAsync(URL + $"/api/Car/updatebalance?car_id={car_id}&balance={balance}", null);
             var message = await response.Content.ReadAsStringAsync();
             return message;
         }

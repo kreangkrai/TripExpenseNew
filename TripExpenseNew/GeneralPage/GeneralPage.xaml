@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
-    x:Class="TripExpenseNew.PublicPage.PublicPage"
+    x:Class="TripExpenseNew.GeneralPage.GeneralPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:shell="http://schemas.microsoft.com/dotnet/2021/maui"
-    Title="StartPublic_Page"
+    Title="StartGeneral_Page"
     shell:Shell.NavBarIsVisible="False">
     <Grid
         Padding="10,10"
@@ -17,9 +17,9 @@
         <Image
             Grid.Row="1"
             Aspect="AspectFit"
-            HeightRequest="150"
+            HeightRequest="180"
             IsAnimationPlaying="True"
-            Source="passenger.png" />
+            Source="minicar.gif" />
 
         <!--  LABEL | PERSONAL CAR  -->
         <Label
@@ -29,25 +29,25 @@
             FontFamily="Rajdhani-Bold"
             FontSize="32"
             HorizontalOptions="Center"
-            Text="PUBLIC"
+            Text="GENERAL"
             TextColor="#1C4698"
             VerticalOptions="Center" />
 
         <!--  BUTTON | START  -->
         <Button
-            x:Name="PublicStart"
+            x:Name="GeneralStart"
             Grid.Row="2"
             Padding="10,5"
             BackgroundColor="#297CC0"
             CharacterSpacing="3"
-            Clicked="PublicStart_Clicked"
+            Clicked="GeneralStart_Clicked"
             CornerRadius="20"
             FontAttributes="Bold"
             FontSize="24"
             HeightRequest="80"
             HorizontalOptions="Center"
             IsEnabled="False"
-            Text="{Binding ButtonPublicStartText}"
+            Text="{Binding ButtonGeneralStartText}"
             TextColor="White"
             VerticalOptions="Center"
             WidthRequest="300" />
@@ -55,12 +55,12 @@
 
         <!--  BUTTON | CANCEL  -->
         <Button
-            x:Name="PublicCancel"
+            x:Name="GeneralCancel"
             Grid.Row="3"
             Padding="10,5"
             BackgroundColor="#EB4D53"
             CharacterSpacing="3"
-            Clicked="PublicCancel_Clicked"
+            Clicked="GeneralCancel_Clicked"
             CornerRadius="20"
             FontAttributes="Bold"
             FontSize="24"

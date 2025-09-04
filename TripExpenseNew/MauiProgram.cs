@@ -61,6 +61,7 @@ namespace TripExpenseNew
             builder.Services.AddTransient<Home_Page>();
             builder.Services.AddTransient<CompanyPage.CompanyPage>();
             builder.Services.AddTransient<PublicPage.PublicPage>();
+            builder.Services.AddTransient<GeneralPage.GeneralPage>();
 
             builder.Services.AddSingleton<IServer, ServerService>();
             builder.Services.AddSingleton<ILogin, LoginService>();

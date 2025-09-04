@@ -888,7 +888,7 @@ namespace TripExpenseNew.PublicPage
         {
             try
             {
-                var popup = new CheckInAlert { Title = "CHECK IN", Message = "Please Select type of check in?" };
+                var popup = new PublicCheckInAlert { Title = "CHECK IN", Message = "Please Select type of check in?" };
                 var result = await Shell.Current.ShowPopupAsync(popup);
 
                 if (result != null)
