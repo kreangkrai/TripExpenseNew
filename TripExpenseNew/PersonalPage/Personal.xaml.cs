@@ -111,25 +111,14 @@ namespace TripExpenseNew.PersonalPage
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            
+
             tracking = await Tracking.GetTracking();
             interval = tracking.time_interval;
             tracking_db = tracking.time_tracking;
             start_tracking = DateTime.Now;
 
             OnStartTracking();
-#if IOS
-            try
-            {
-                locationService = new Platforms.iOS.LocationService(interval);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"LocationService Initialization Error: {ex}");
-            }
-#endif
         }
-
         async Task RequestNotificationPermission()
         {
             if (!await LocalNotificationCenter.Current.AreNotificationsEnabled())
@@ -969,8 +958,7 @@ namespace TripExpenseNew.PersonalPage
                                     #endregion
 
                                     previousLocation = null;
-                                    totalDistance = 0;
-                                    isStart = false;
+                                    totalDistance = 0;  
                                     trip_start = DateTime.MinValue;
                                     await Shell.Current.GoToAsync("Home_Page");
 

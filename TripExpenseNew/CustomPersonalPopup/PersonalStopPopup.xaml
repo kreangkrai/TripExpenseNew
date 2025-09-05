@@ -7,12 +7,11 @@
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     Color="Transparent">
     <Border
-        Padding="0"
+        Padding="0,5"
         BackgroundColor="White"
-        WidthRequest="350"
         Stroke="Transparent"
-        StrokeShape="{RoundRectangle CornerRadius='20'}">
-        <ScrollView>
+        StrokeShape="{RoundRectangle CornerRadius='20'}"
+        WidthRequest="350">
         <Grid
             Padding="20,20"
             ColumnDefinitions=".50*,.50*"
@@ -42,12 +41,12 @@
                 RowDefinitions="Auto,Auto"
                 RowSpacing="5"
                 VerticalOptions="Center">
-              
+
                 <!--  LABEL | Location Type:  -->
                 <Label
-                    CharacterSpacing="1"
                     Grid.Row="0"
                     Grid.ColumnSpan="2"
+                    CharacterSpacing="1"
                     FontAttributes="None"
                     FontSize="20"
                     HorizontalOptions="Start"
@@ -57,11 +56,11 @@
                 <!--  BUTTON | CUSTOMER  -->
                 <Button
                     x:Name="CustomerBtn"
-                    Clicked="CustomerBtn_Clicked"
                     Grid.Row="1"
                     Padding="10,15"
                     BackgroundColor="#BEBEBE"
                     CharacterSpacing="2"
+                    Clicked="CustomerBtn_Clicked"
                     CornerRadius="10"
                     FontAttributes="Bold"
                     FontSize="22"
@@ -80,12 +79,12 @@
                 <!--  BUTTON | OTHER  -->
                 <Button
                     x:Name="OtherBtn"
-                    Clicked="OtherBtn_Clicked"
                     Grid.Row="1"
                     Grid.Column="1"
                     Padding="10,15"
                     BackgroundColor="#BEBEBE"
                     CharacterSpacing="2"
+                    Clicked="OtherBtn_Clicked"
                     CornerRadius="10"
                     FontAttributes="Bold"
                     FontSize="22"
@@ -121,8 +120,8 @@
                     StrokeShape="RoundRectangle 5"
                     StrokeThickness="2">
                     <Entry
-                        Margin="1"
                         x:Name="Text_Location"
+                        Margin="1"
                         CharacterSpacing="1"
                         ClearButtonVisibility="WhileEditing"
                         FontSize="18"
@@ -140,16 +139,16 @@
                 Spacing="5">
                 <!--  LABEL | Customer/Location:  -->
                 <Label
-         CharacterSpacing="1"
-         x:Name="Text_mileage"
-         Grid.Row="0"
-         Grid.ColumnSpan="2"
-         FontAttributes="None"
-         FontSize="20"
-         HorizontalOptions="Start"
-         TextColor="#297CC0"
-         Text="Mileage Start:"
-         VerticalOptions="Center" />
+                    x:Name="Text_mileage"
+                    Grid.Row="0"
+                    Grid.ColumnSpan="2"
+                    CharacterSpacing="1"
+                    FontAttributes="None"
+                    FontSize="20"
+                    HorizontalOptions="Start"
+                    Text="Mileage Start:"
+                    TextColor="#297CC0"
+                    VerticalOptions="Center" />
                 <!--  LABEL | Job  -->
                 <Label
                     CharacterSpacing="1"
@@ -164,13 +163,13 @@
                     StrokeShape="RoundRectangle 5"
                     StrokeThickness="2">
                     <Entry
+                        x:Name="Text_Mileage"
                         Margin="1"
                         CharacterSpacing="1"
-                        x:Name="Text_Mileage"
                         ClearButtonVisibility="WhileEditing"
                         FontSize="18"
-                        Keyboard="Numeric"
                         HeightRequest="40"
+                        Keyboard="Numeric"
                         Placeholder=" Ex. 123456"
                         Text="{Binding Text}" />
                 </Border>
@@ -200,7 +199,7 @@
             </Button>
 
             <!--  BUTTON | OK  -->
-                <Button
+            <Button
                 x:Name="OKBtn"
                 Grid.Row="4"
                 Grid.Column="1"
@@ -214,16 +213,15 @@
                 HorizontalOptions="Fill"
                 Text="OK"
                 VerticalOptions="Center">
-                    <Button.Shadow>
-                        <Shadow
+                <Button.Shadow>
+                    <Shadow
                         Brush="Black"
                         Opacity="0.2"
                         Radius="15"
                         Offset="0,4" />
-                    </Button.Shadow>
-                </Button>
-            </Grid>
-        </ScrollView>
+                </Button.Shadow>
+            </Button>
+        </Grid>
     </Border>
 </toolkit:Popup>
 

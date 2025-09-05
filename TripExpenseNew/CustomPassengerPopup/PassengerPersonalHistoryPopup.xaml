@@ -10,7 +10,8 @@
         Padding="0"
         BackgroundColor="White"
         Stroke="Transparent"
-        StrokeShape="{RoundRectangle CornerRadius='20'}"       >
+        StrokeShape="{RoundRectangle CornerRadius='20'}"
+        WidthRequest="350">
         <Grid
             Padding="20,20"
             ColumnDefinitions=".30*,*"

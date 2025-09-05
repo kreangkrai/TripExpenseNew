@@ -6,15 +6,14 @@
     xmlns:shell="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     Color="Transparent">
-   
+
     <Border
-        Padding="0"
+        Padding="0,5"
         BackgroundColor="White"
-        WidthRequest="350"
         Stroke="Transparent"
-        StrokeShape="{RoundRectangle CornerRadius='20'}">
-        <ScrollView>
-            <Grid
+        StrokeShape="{RoundRectangle CornerRadius='20'}"
+        WidthRequest="350">
+        <Grid
             Padding="20,20"
             ColumnDefinitions=".50*,.50*"
             ColumnSpacing="10"
@@ -46,8 +45,8 @@
 
                 <!--  LABEL | Location Type:  -->
                 <Label
-                    CharacterSpacing="1"
                     Grid.ColumnSpan="2"
+                    CharacterSpacing="1"
                     FontAttributes="None"
                     FontSize="20"
                     HorizontalOptions="Start"
@@ -57,11 +56,11 @@
                 <!--  BUTTON | CUSTOMER  -->
                 <Button
                     x:Name="CustomerBtn"
-                    Clicked="CustomerBtn_Clicked"
                     Grid.Row="1"
                     Padding="10,15"
                     BackgroundColor="#BEBEBE"
                     CharacterSpacing="2"
+                    Clicked="CustomerBtn_Clicked"
                     CornerRadius="10"
                     FontAttributes="Bold"
                     FontSize="18"
@@ -80,12 +79,12 @@
                 <!--  BUTTON | OTHER  -->
                 <Button
                     x:Name="OtherBtn"
-                    Clicked="OtherBtn_Clicked"
                     Grid.Row="1"
                     Grid.Column="1"
                     Padding="10,15"
                     BackgroundColor="#BEBEBE"
                     CharacterSpacing="2"
+                    Clicked="OtherBtn_Clicked"
                     CornerRadius="10"
                     FontAttributes="Bold"
                     FontSize="18"
@@ -121,8 +120,8 @@
                     StrokeShape="RoundRectangle 5"
                     StrokeThickness="2">
                     <Entry
-                        Margin="2"
                         x:Name="Text_Location"
+                        Margin="2"
                         CharacterSpacing="1"
                         ClearButtonVisibility="WhileEditing"
                         FontSize="18"
@@ -139,7 +138,7 @@
                 Spacing="5">
                 <!--  LABEL | Job  -->
                 <Label
-                    CharacterSpacing="1"                    
+                    CharacterSpacing="1"
                     FontAttributes="None"
                     FontSize="20"
                     HorizontalOptions="Start"
@@ -151,9 +150,9 @@
                     StrokeShape="RoundRectangle 5"
                     StrokeThickness="2">
                     <Entry
+                        x:Name="Text_Job"
                         Margin="2"
                         CharacterSpacing="1"
-                        x:Name="Text_Job"
                         ClearButtonVisibility="WhileEditing"
                         FontSize="18"
                         Keyboard="Text"
@@ -181,9 +180,9 @@
                     StrokeShape="RoundRectangle 5"
                     StrokeThickness="2">
                     <Entry
+                        x:Name="Text_Mileage"
                         Margin="2"
                         CharacterSpacing="1"
-                        x:Name="Text_Mileage"
                         ClearButtonVisibility="WhileEditing"
                         FontSize="18"
                         Keyboard="Numeric"
@@ -216,7 +215,7 @@
             </Button>
 
             <!--  BUTTON | OK  -->
-                <Button
+            <Button
                 x:Name="OKBtn"
                 Grid.Row="5"
                 Grid.Column="1"
@@ -230,17 +229,16 @@
                 HorizontalOptions="Fill"
                 Text="OK"
                 VerticalOptions="Center">
-                    <Button.Shadow>
-                        <Shadow
+                <Button.Shadow>
+                    <Shadow
                         Brush="Black"
                         Opacity="0.2"
                         Radius="15"
                         Offset="0,4" />
-                    </Button.Shadow>
-                </Button>
-            </Grid>
-        </ScrollView>
+                </Button.Shadow>
+            </Button>
+        </Grid>
     </Border>
-   
+
 </toolkit:Popup>
 

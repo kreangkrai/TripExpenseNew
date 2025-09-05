@@ -6,7 +6,7 @@ namespace TripExpenseNew.CustomCompanyPopup;
 public partial class CompanyStopPopup : Popup
 {
     private bool Iscustomer = false;
-
+    string car = "";
     public CompanyStopPopup(string location, bool isCustomer, int mileage,string car_id)
     {
         InitializeComponent();
@@ -19,10 +19,11 @@ public partial class CompanyStopPopup : Popup
         {
             Text_Location.IsEnabled = false;
         }
-
+        car = car_id;
         Iscustomer = isCustomer;
         Text_mileage.Text = $"Mileage Start: {mileage}";
-        Text_Car.Text = car_id;
+        //Text_Car.Text = car_id;
+        Text_Car.Text = $"Car: {car}";
         if (Iscustomer)
         {
             CustomerBtn.BackgroundColor = Color.FromArgb("#297CC0");
@@ -46,7 +47,7 @@ public partial class CompanyStopPopup : Popup
             IsCustomer = Iscustomer,
             location = Text_Location.Text,
             mileage = Text_Mileage.Text != null ? Convert.ToInt32(Text_Mileage.Text) : 0,
-            car_id = Text_Car.Text
+            car_id = car
         };
         Close(company);
     }

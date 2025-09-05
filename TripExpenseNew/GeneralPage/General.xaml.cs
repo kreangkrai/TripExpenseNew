@@ -10,18 +10,16 @@ using TripExpenseNew.Interface;
 using TripExpenseNew.DBInterface;
 using TripExpenseNew.DBModels;
 using TripExpenseNew.Services;
-using Plugin.LocalNotification;
 using TripExpenseNew.ViewModels;
 using System.Collections.ObjectModel;
 using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.DependencyInjection;
-using TripExpenseNew.PassengerPage;
 using TripExpenseNew.CustomPopup;
 using System.Globalization;
 using TripExpenseNew.CustomPersonalPopup;
 using TripExpenseNew.CustomGeneralPopup;
 #if IOS
-using UserNotifications;
+using CoreLocation;
 using Microsoft.Maui.Maps;
 
 #endif
@@ -30,48 +28,43 @@ using Microsoft.Maui.Maps;
 using Android.Content;
 using Microsoft.Maui.ApplicationModel;
 using System.Reflection.Emit;
+#endif
 
-#endif
-#if IOS
-using CoreLocation;
-#endif
 
 namespace TripExpenseNew.GeneralPage
 {
     public partial class General : ContentPage
-    {
-        private IInternet Internet;
+    {   
         private Location previousLocation = null;
         private Location g_location = null;
         private double totalDistance = 0;
-        string emp_id = "";
-        private int mileage_start = 0;
+        string emp_id = "EM001";
         GeneralPopupStartModel start = new GeneralPopupStartModel();
         bool isStart = false;
-        bool isWaitStop = false;
         DateTime trip_start = DateTime.MinValue;
-        DateTime start_tracking = DateTime.MinValue;
         CultureInfo cultureinfo = new CultureInfo("en-us");
         List<ActivePersonalModel> act_general = new List<ActivePersonalModel>();
-        TrackingModel tracking = new TrackingModel();
         private ObservableCollection<TripItems> tripItems = new ObservableCollection<TripItems>();
-        int interval = 0;
-        int tracking_db = 0;
+        int interval = 10;
 #if IOS
         private Platforms.iOS.LocationService locationService;
 #elif ANDROID
         private Intent intent = new Intent();
 #endif
 
-        public General(GeneralPopupStartModel _start)
+        GeneralPopupStartModel _start = new GeneralPopupStartModel()
+        {
+            trip_start = DateTime.Now,
+            distance = 0,
+            location_name = "Home"
+        };
+        public General()
         {
             InitializeComponent();
             start = _start;         
-            Internet = new InternetService();
             totalDistance = start.distance;
             trip_start = start.trip_start;
             g_location = start.location;
-            mileage_start = start.mileage;
 
             WeakReferenceMessenger.Default.Register<LocationData>(this, async (send, data) =>
             {
@@ -81,93 +74,8 @@ namespace TripExpenseNew.GeneralPage
         protected override void OnAppearing()
         {
             base.OnAppearing();
-
-            interval = tracking.time_interval;
-            start_tracking = DateTime.Now;
-
             OnStartTracking();
-#if IOS
-            try
-            {
-                locationService = new Platforms.iOS.LocationService(interval);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"LocationService Initialization Error: {ex}");
-            }
-#endif
         }
-
-        async Task RequestNotificationPermission()
-        {
-            if (!await LocalNotificationCenter.Current.AreNotificationsEnabled())
-            {
-                await LocalNotificationCenter.Current.RequestNotificationPermission();
-            }
-        }
-
-        public async Task SendNotification(string title, string message)
-        {
-#if IOS
-            try
-            {
-                // ขอสิทธิ์
-                var center = UNUserNotificationCenter.Current;
-                var (approved, error) = await center.RequestAuthorizationAsync(UNAuthorizationOptions.Alert | UNAuthorizationOptions.Sound | UNAuthorizationOptions.Badge);
-                if (!approved)
-                {
-                    Console.WriteLine("Notification permission denied");
-                    return;
-                }
-
-                // สร้างการแจ้งเตือน
-                var content = new UNMutableNotificationContent
-                {
-                    Title = title,
-                    Body = message,
-                    Badge = 1,
-                    Sound = UNNotificationSound.Default
-                };
-
-                // กำหนดเวลา
-                var trigger = UNTimeIntervalNotificationTrigger.CreateTrigger(2, false);
-                var request = UNNotificationRequest.FromIdentifier(((int)DateTime.Now.Ticks).ToString(), content, trigger);
-
-                // ส่งการแจ้งเตือน
-                await center.AddNotificationRequestAsync(request);
-                Console.WriteLine("Native iOS notification sent!");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error sending native notification: {ex.Message}");
-            }
-#else
-            // ใช้ Plugin.LocalNotification สำหรับ Android
-            try
-            {
-                var notification = new NotificationRequest
-                {
-                    NotificationId = (int)DateTime.Now.Ticks,
-                    Title = title,
-                    Description = message,
-                    BadgeNumber = 1,
-                    Schedule = new NotificationRequestSchedule
-                    {
-                        NotifyTime = DateTime.Now.AddSeconds(2)
-                    }
-                };
-
-                Console.WriteLine("Sending notification...");
-                await LocalNotificationCenter.Current.Show(notification);
-                Console.WriteLine("Notification sent!");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error sending notification: {ex.Message}");
-            }
-#endif
-        }
-
         private async void OnStartTracking()
         {
             try
@@ -177,11 +85,11 @@ namespace TripExpenseNew.GeneralPage
 
 #if IOS
                 // ตรวจสอบ Location Services ด้วย CLLocationManager
-                if (!CLLocationManager.LocationServicesEnabled)
-                {
-                    Console.WriteLine("Location Services ถูกปิด กรุณาเปิดใน Settings");
-                    return;
-                }
+                //if (!CLLocationManager.LocationServicesEnabled)
+                //{
+                //    Console.WriteLine("Location Services ถูกปิด กรุณาเปิดใน Settings");
+                //    return;
+                //}
 
                 if (locationService == null)
                 {
@@ -251,7 +159,7 @@ namespace TripExpenseNew.GeneralPage
 
                 if (!isStart)
                 {
-                    ActivePersonalModel ap = new ActivePersonalModel()
+                    ActivePersonalModel ac = new ActivePersonalModel()
                     {
                         driver = emp_id,
                         distance = totalDistance,
@@ -262,44 +170,45 @@ namespace TripExpenseNew.GeneralPage
                         date = DateTime.Now
                     };
 
-                    act_general.Add(ap);
+                    act_general.Add(ac);
 
                     isStart = true;
-                }
 
 
-                #region Show Active Personal
-                tripItems = new ObservableCollection<TripItems>();
 
-                foreach (var ap in act_general)
-                {
-                    Color color = new Color();
-                    if (ap.status == "START")
+                    #region Show Active Personal
+                    tripItems = new ObservableCollection<TripItems>();
+
+                    foreach (var ap in act_general)
                     {
-                        color = Color.FromRgb(255, 255, 255);
+                        Color color = new Color();
+                        if (ap.status == "START")
+                        {
+                            color = Color.FromRgb(255, 255, 255);
+                        }
+                        else
+                        {
+                            color = Color.FromRgb(255, 255, 255);
+                        }
+                        TripItems trip_item = new TripItems()
+                        {
+                            FrameColor = color,
+                            TextStatus = ap.status,
+                            IconLocationSource = "route.png",
+                            TextLocation = $"Location: {ap.location}",
+                            IconDateSource = "clock.png",
+                            TextDate = $"Date: {ap.date.ToString("dd/MM/yyyy HH:mm:ss", cultureinfo)}"
+                        };
+
+                        tripItems.Add(trip_item);
                     }
-                    else
-                    {
-                        color = Color.FromRgb(255, 255, 255);
-                    }
-                    TripItems trip_item = new TripItems()
-                    {
-                        FrameColor = color,
-                        TextStatus = ap.status,
-                        IconLocationSource = "route.png",
-                        TextLocation = $"Location: {ap.location}",
-                        IconDateSource = "clock.png",
-                        TextDate = $"Date: {ap.date.ToString("dd/MM/yyyy HH:mm:ss", cultureinfo)}"
-                    };
 
-                    tripItems.Add(trip_item);
+                    TripCollectionView.ItemsSource = tripItems;
+
+                    #endregion
+
+                    Text_Detail.Text = $"Active Trip Detail : ({tripItems.Count})";
                 }
-
-                TripCollectionView.ItemsSource = tripItems;
-
-                #endregion
-
-                Text_Detail.Text = $"Active Trip Detail : ({tripItems.Count})";
 
                 await MainThread.InvokeOnMainThreadAsync(() =>
                 {
@@ -310,6 +219,7 @@ namespace TripExpenseNew.GeneralPage
                 });
 
                 g_location = location;
+
             }
             catch (Exception ex)
             {
@@ -341,86 +251,58 @@ namespace TripExpenseNew.GeneralPage
         {
             try
             {
-                bool internet = await Internet.CheckServerConnection("/api/CurrentTime/get");
-                if (internet)
+                var result = await this.ShowPopupAsync(new GeneralStopPopup(start.mileage));
+
+                if (result != null)
                 {
-                    isWaitStop = true;
-
-                    var result = await this.ShowPopupAsync(new GeneralStopPopup(start.mileage));
-
-                    if (result != null)
+                    if (result is GeneralPopupStopModel general)
                     {
-                        if (result is GeneralPopupStopModel general)
+                        if (general.location != null && general.location != "")
                         {
-                            if (general.location != null && general.location != "" && general.mileage != 0)
-                            {
-                                if (general.mileage >= start.mileage)
-                                {
-                                    var popup = new ProgressPopup();
-                                    this.ShowPopup(popup);                                
 
-                                    #region Stop
+                            var popup = new ProgressPopup();
+                            this.ShowPopup(popup);
+
+                            #region Stop
 #if IOS
                                     locationService?.StopUpdatingLocation();
                                     locationService = null; // รีเซ็ต locationService
 #elif ANDROID
-            intent = new Intent(Platform.AppContext, typeof(TripExpenseNew.Platforms.Android.LocationService));
-            Platform.AppContext.StopService(intent);
+                            intent = new Intent(Platform.AppContext, typeof(TripExpenseNew.Platforms.Android.LocationService));
+                            Platform.AppContext.StopService(intent);
 #endif
-                                    #endregion
+                            #endregion
 
-                                    GeneralViewModel data = new GeneralViewModel()
-                                    {
-                                        mileage_start = start.mileage,
-                                        mileage_stop  = general.mileage,
-                                        emp_id = "EMP001",
-                                        emp_name = "GUEST",
-                                        date = DateTime.Now.ToString("dd/MM/yyyy",cultureinfo),
-                                        trip = start.trip,
-                                        distance = totalDistance,
-                                        location = general.location,
-                                    };
-                                    var resule = await this.ShowPopupAsync(new GeneralHistoryPopup(data));
-
-                                    if (resule == null)
-                                    {
-                                        await Shell.Current.GoToAsync("Initial_Page");
-                                    }
-
-                                    previousLocation = null;
-                                    totalDistance = 0;
-                                    isStart = false;
-                                    trip_start = DateTime.MinValue;
-                                    await popup.CloseAsync();
-                                }
-                                else
-                                {
-                                    MainThread.BeginInvokeOnMainThread(async () =>
-                                    {
-                                        await DisplayAlert("", "กรุณาใส่ข้อมูลไมล์ให้ถูกต้อง", "ตกลง");
-                                    });
-                                }
-                            }
-                            else
+                            GeneralViewModel data = new GeneralViewModel()
                             {
-                                MainThread.BeginInvokeOnMainThread(async () =>
-                                {
-                                    await DisplayAlert("", "กรุณาใส่ข้อมูล", "ตกลง");
-                                });
+                                emp_id = "EMP001",
+                                emp_name = "GUEST",
+                                date = DateTime.Now.ToString("dd/MM/yyyy", cultureinfo),
+                                trip = start.trip,
+                                distance = totalDistance,
+                                location = general.location,
+                            };
+                            var resule = await this.ShowPopupAsync(new GeneralHistoryPopup(data));
+
+                            if (resule == null)
+                            {
+                                await Shell.Current.GoToAsync("///Initial_Page");
                             }
+
+                            previousLocation = null;
+                            totalDistance = 0;
+                            isStart = false;
+                            trip_start = DateTime.MinValue;
+                            await popup.CloseAsync();
+                        }
+                        else
+                        {
+                            MainThread.BeginInvokeOnMainThread(async () =>
+                            {
+                                await DisplayAlert("", "กรุณาใส่ข้อมูล", "ตกลง");
+                            });
                         }
                     }
-                    else
-                    {
-                        isWaitStop = false;
-                    }
-                }
-                else
-                {
-                    MainThread.BeginInvokeOnMainThread(async () =>
-                    {
-                        await DisplayAlert("", "Cann't connect to server", "OK");
-                    });
                 }
             }
             catch (Exception ex)
@@ -438,80 +320,72 @@ namespace TripExpenseNew.GeneralPage
 
                 if (result != null)
                 {
-                    bool internet = await Internet.CheckServerConnection("/api/CurrentTime/get");
-                    if (internet)
+
+                    string chkinlocation = "";
+
+                    bool isChkIn = false;
+                    if (result.ToString() == "Location")
                     {
-                        string chkinlocation = "";
+                        var result_location = await this.ShowPopupAsync(new GeneralCheckinLocationPopup());
 
-                        bool isChkIn = false;
-                        if (result.ToString() == "Location")
+                        if (result_location != null)
                         {
-                            var result_location = await this.ShowPopupAsync(new GeneralCheckinLocationPopup());
-
-                            if (result_location != null)
+                            if (result_location.ToString().Trim() != "")
                             {
-                                if (result_location.ToString().Trim() != "")
-                                {
-                                    chkinlocation = result_location.ToString();
-                                    isChkIn = true;
-                                }
+                                chkinlocation = result_location.ToString();
+                                isChkIn = true;
                             }
                         }
-
-                        if (isChkIn)
-                        {
-                            ActivePersonalModel ac = new ActivePersonalModel()
-                            {
-                                driver = emp_id,
-                                distance = totalDistance,
-                                location = chkinlocation,
-                                mileage = 0,
-                                status = "CHECK IN",
-                                trip = start.trip,
-                                date = DateTime.Now,
-                            };
-                            act_general.Add(ac);
-                        }
-
-                        #region Show Active Personal
-                        tripItems = new ObservableCollection<TripItems>();
-                        foreach (var ap in act_general)
-                        {
-                            Color color = new Color();
-                            if (ap.status == "START")
-                            {
-                                color = Color.FromRgb(255, 255, 255);
-                            }
-                            else
-                            {
-                                color = Color.FromRgb(255, 255, 255);
-                            }
-                            TripItems trip_item = new TripItems()
-                            {
-                                FrameColor = color,
-                                TextStatus = ap.status,
-                                IconLocationSource = "route.png",
-                                TextLocation = $"Location: {ap.location}",
-                                IconDateSource = "clock.png",
-                                TextDate = $"Date: {ap.date.ToString("dd/MM/yyyy HH:mm:ss", cultureinfo)}"
-                            };
-
-                            tripItems.Add(trip_item);
-                        }
-
-                        TripCollectionView.ItemsSource = tripItems;
-                        Text_Detail.Text = $"Active Trip Detail : ({tripItems.Count})";
-
-                        #endregion
                     }
-                }
-                else
-                {
-                    MainThread.BeginInvokeOnMainThread(async () =>
+
+                    if (isChkIn)
                     {
-                        await DisplayAlert("", "Cann't connect to server", "OK");
-                    });
+                        ActivePersonalModel ac = new ActivePersonalModel()
+                        {
+                            driver = emp_id,
+                            distance = totalDistance,
+                            location = chkinlocation,
+                            mileage = 0,
+                            status = "CHECK IN",
+                            trip = start.trip,
+                            date = DateTime.Now,
+                        };
+                        act_general.Add(ac);
+                    }
+
+                    #region Show Active Personal
+                    tripItems = new ObservableCollection<TripItems>();
+                    foreach (var ap in act_general)
+                    {
+                        Color color = new Color();
+                        if (ap.status == "START")
+                        {
+                            color = Color.FromRgb(255, 255, 255);
+                        }
+                        else
+                        {
+                            color = Color.FromRgb(255, 255, 255);
+                        }
+                        TripItems trip_item = new TripItems()
+                        {
+                            FrameColor = color,
+                            TextStatus = ap.status,
+                            IconLocationSource = "route.png",
+                            TextLocation = $"Location: {ap.location}",
+                            IconDateSource = "clock.png",
+                            TextDate = $"Date: {ap.date.ToString("dd/MM/yyyy HH:mm:ss", cultureinfo)}"
+                        };
+
+                        tripItems.Add(trip_item);
+                    }
+
+                    TripCollectionView.ItemsSource = tripItems;
+                    Text_Detail.Text = $"Active Trip Detail : ({tripItems.Count})";
+
+                    #endregion
+
                 }
+
             }
             catch (Exception ex)
             {

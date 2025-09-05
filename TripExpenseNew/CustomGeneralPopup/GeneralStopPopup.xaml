@@ -10,20 +10,14 @@
         Padding="0"
         BackgroundColor="White"
         WidthRequest="350"
+        VerticalOptions="Center"
         Stroke="Transparent"
         StrokeShape="{RoundRectangle CornerRadius='20'}">
-        <ScrollView>
-            <Grid
-            Padding="20,20"
-            ColumnDefinitions=".50*,.50*"
-            ColumnSpacing="10"
-            RowDefinitions="Auto,Auto,Auto,Auto"
-            RowSpacing="15">
-
+            <VerticalStackLayout
+                Spacing="15"
+                Padding="20">
                 <!--  LABEL | START TRIP  -->
                 <Label
-                Grid.Row="0"
-                Grid.ColumnSpan="2"
                 CharacterSpacing="1"
                 FontAttributes="Bold"
                 FontFamily="Rajdhani-Bold"
@@ -35,10 +29,7 @@
 
                 <!--  CUSTOMER/LOCATION  -->
                 <VerticalStackLayout
-                Grid.Row="1"
-                Grid.ColumnSpan="2"
                 Spacing="5">
-
                     <Label
                     CharacterSpacing="1"
                     FontAttributes="None"
@@ -60,57 +51,16 @@
                         HeightRequest="40"
                         Keyboard="Text"
                         Placeholder=" Ex. CTL-(HQ)"
-                        Text="{Binding Text}" />
+                        Text="" />
                     </Border>
                 </VerticalStackLayout>
 
-                <!--  Mileage  -->
-                <VerticalStackLayout
-                Grid.Row="2"
-                Grid.ColumnSpan="2"
-                Spacing="5">
-                    <!--  LABEL | Customer/Location:  -->
-                    <Label
-         CharacterSpacing="1"
-         x:Name="Text_mileage"
-         Grid.Row="0"
-         Grid.ColumnSpan="2"
-         FontAttributes="None"
-         FontSize="20"
-         HorizontalOptions="Start"
-         TextColor="#297CC0"
-         Text="Mileage Start:"
-         VerticalOptions="Center" />
-                    <!--  LABEL | Job  -->
-                    <Label
-                    CharacterSpacing="1"
-                    FontAttributes="None"
-                    FontSize="20"
-                    HorizontalOptions="Start"
-                    Text="Mileage Stop:"
-                    VerticalOptions="Center" />
-                    <!--  ENTRY | Mileage Stop  -->
-                    <Border
-                    Stroke="#C8C8C8"
-                    StrokeShape="RoundRectangle 5"
-                    StrokeThickness="2">
-                        <Entry
-                        Margin="1"
-                        CharacterSpacing="1"
-                        x:Name="Text_Mileage"
-                        ClearButtonVisibility="WhileEditing"
-                        FontSize="18"
-                        Keyboard="Numeric"
-                        HeightRequest="40"
-                        Placeholder=" Ex. 123456"
-                        Text="{Binding Text}" />
-                    </Border>
-                </VerticalStackLayout>
-
-                <!--  BUTTON | Cancel  -->
-                <Button
+                <Grid
+                    ColumnDefinitions=".50*,.50*"
+                    ColumnSpacing="10">
+                    <!--  BUTTON | Cancel  -->
+                    <Button
                 x:Name="CancelBtn"
-                Grid.Row="3"
                     Grid.Column="0"
                 Padding="10,15"
                 BackgroundColor="#EC221F"
@@ -122,19 +72,18 @@
                 HorizontalOptions="Fill"
                 Text="Cancel"
                 VerticalOptions="Center">
-                    <Button.Shadow>
-                        <Shadow
+                        <Button.Shadow>
+                            <Shadow
                         Brush="Black"
                         Opacity="0.2"
                         Radius="15"
                         Offset="0,4" />
-                    </Button.Shadow>
-                </Button>
+                        </Button.Shadow>
+                    </Button>
 
-                <!--  BUTTON | OK  -->
-                <Button
+                    <!--  BUTTON | OK  -->
+                    <Button
                 x:Name="OKBtn"
-                Grid.Row="3"
                 Grid.Column="1"
                 Padding="10,15"
                 BackgroundColor="#14AE5C"
@@ -146,15 +95,15 @@
                 HorizontalOptions="Fill"
                 Text="OK"
                 VerticalOptions="Center">
-                    <Button.Shadow>
-                        <Shadow
+                        <Button.Shadow>
+                            <Shadow
                         Brush="Black"
                         Opacity="0.2"
                         Radius="15"
                         Offset="0,4" />
-                    </Button.Shadow>
-                </Button>
-            </Grid>
-        </ScrollView>
+                        </Button.Shadow>
+                    </Button>
+                </Grid>
+            </VerticalStackLayout>
     </Border>
 </toolkit:Popup>

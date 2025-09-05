@@ -16,6 +16,7 @@ namespace TripExpenseNew
             Routing.RegisterRoute("CompanyPage", typeof(CompanyPage.CompanyPage));
             Routing.RegisterRoute("PublicPage", typeof(PublicPage.PublicPage));
             Routing.RegisterRoute("GeneralPage", typeof(GeneralPage.GeneralPage));
+            Routing.RegisterRoute("General", typeof(GeneralPage.General));
         }
     }
 }

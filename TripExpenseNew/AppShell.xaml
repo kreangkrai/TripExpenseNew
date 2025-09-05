@@ -56,5 +56,10 @@
   Title="GeneralPage"
   ContentTemplate="{DataTemplate pages_general:GeneralPage}"
   Route="GeneralPage" />
-    
+
+    <ShellContent
+Title="General"
+ContentTemplate="{DataTemplate pages_general:General}"
+Route="General" />
+
 </Shell>

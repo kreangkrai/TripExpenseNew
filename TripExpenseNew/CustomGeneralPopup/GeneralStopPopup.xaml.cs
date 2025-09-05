@@ -8,8 +8,7 @@ public partial class GeneralStopPopup : Popup
     public GeneralStopPopup(int mileage)
     {
         InitializeComponent();
-        Text_Location.Text = "";      
-        Text_mileage.Text = $"Mileage Start: {mileage}";     
+        Text_Location.Text = "";  
     }
     private void CancelBtn_Clicked(object sender, EventArgs e)
     {
@@ -21,7 +20,6 @@ public partial class GeneralStopPopup : Popup
         GeneralPopupStopModel g = new GeneralPopupStopModel()
         {
             location = Text_Location.Text,
-            mileage = Text_Mileage.Text != null ? Convert.ToInt32(Text_Mileage.Text) : 0
         };
         Close(g);
     }

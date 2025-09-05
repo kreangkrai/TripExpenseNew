@@ -13,7 +13,6 @@
         WidthRequest="350"
         Stroke="Transparent"
         StrokeShape="{RoundRectangle CornerRadius='20'}">
-        <ScrollView>
             <Grid
             Padding="20,20"
             ColumnDefinitions=".50*,.50*"
@@ -209,7 +208,6 @@
                     </Button.Shadow>
                 </Button>
             </Grid>
-        </ScrollView>
     </Border>
 
 </toolkit:Popup>

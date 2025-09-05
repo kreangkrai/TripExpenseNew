@@ -119,18 +119,8 @@ namespace TripExpenseNew.CompanyPage
             interval = tracking.time_interval;
             tracking_db = tracking.time_tracking;
             start_tracking = DateTime.Now;
-            Text_Car.Text = $"(Company Car {start.car_id})";
+            Text_Car.Text = $"(Company Car: {start.car_id})";
             OnStartTracking();
-#if IOS
-            try
-            {
-                locationService = new Platforms.iOS.LocationService(interval);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"LocationService Initialization Error: {ex}");
-            }
-#endif
         }
 
         async Task RequestNotificationPermission()
@@ -998,7 +988,6 @@ namespace TripExpenseNew.CompanyPage
 
                                     previousLocation = null;
                                     totalDistance = 0;
-                                    isStart = false;
                                     trip_start = DateTime.MinValue;
                                     await Shell.Current.GoToAsync("Home_Page");
 

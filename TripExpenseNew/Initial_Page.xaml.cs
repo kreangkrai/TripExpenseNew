@@ -14,6 +14,6 @@ public partial class Initial_Page : ContentPage
 
     private async void GeneralBtn_Clicked(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("GeneralPage");
+        await Shell.Current.GoToAsync("General");
     }
 }

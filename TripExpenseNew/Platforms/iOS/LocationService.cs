@@ -42,6 +42,7 @@ namespace TripExpenseNew.Platforms.iOS
                     locationManager.RequestWhenInUseAuthorization();
                     locationManager.RequestAlwaysAuthorization();
                     locationManager.StartUpdatingLocation();
+                    Console.WriteLine($"===== {DateTime.Now} Start ======");
                 }
                 else
                 {
@@ -60,6 +61,7 @@ namespace TripExpenseNew.Platforms.iOS
             try
             {
                 locationManager?.StopUpdatingLocation();
+                Console.WriteLine($"===== {DateTime.Now} Stop ======");
             }
             catch (Exception ex)
             {
@@ -73,6 +75,7 @@ namespace TripExpenseNew.Platforms.iOS
             {
                 locationManager?.Dispose();
                 locationManager = null;
+                Console.WriteLine($"===== {DateTime.Now} Dispose ======");
             }
             catch (Exception ex)
             {
@@ -91,6 +94,7 @@ namespace TripExpenseNew.Platforms.iOS
 
             public override async void LocationsUpdated(CLLocationManager manager, CLLocation[] locations)
             {
+                Console.WriteLine($"============ {DateTime.Now}===============");
                 try
                 {
                     foreach (var loc in locations)
@@ -105,7 +109,9 @@ namespace TripExpenseNew.Platforms.iOS
                             service.lastUpdateTime = DateTime.Now;
                             //WeakReferenceMessenger.Default.Send(new LocationData { Location = location });
                             await Task.Delay((int)service.updateInterval.TotalMilliseconds);
+                            //Console.WriteLine($"===== {DateTime.Now} Update ======");
                         }
+                        
                     }
                 }
                 catch (Exception ex)

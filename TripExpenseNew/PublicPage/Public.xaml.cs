@@ -110,16 +110,6 @@ namespace TripExpenseNew.PublicPage
             start_tracking = DateTime.Now;
 
             OnStartTracking();
-#if IOS
-            try
-            {
-                locationService = new Platforms.iOS.LocationService(interval);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"LocationService Initialization Error: {ex}");
-            }
-#endif
         }
 
         async Task RequestNotificationPermission()
@@ -850,7 +840,6 @@ namespace TripExpenseNew.PublicPage
 
                                 previousLocation = null;
                                 totalDistance = 0;
-                                isStart = false;
                                 trip_start = DateTime.MinValue;
                                 await Shell.Current.GoToAsync("Home_Page");
 

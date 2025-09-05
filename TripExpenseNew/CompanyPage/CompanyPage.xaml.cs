@@ -327,7 +327,7 @@ public partial class CompanyPage : ContentPage
         {
             MileageDBModel mileage = await Mileage.GetMileage(1);
 
-            //car_id = "CAR99";
+            car_id = "CAR99";
 
             BorrowerViewModel borrower_id = await Borrower.GetBorrowerByCar(car_id);
             if (borrower_id.borrow_id != null)

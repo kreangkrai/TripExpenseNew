@@ -15,52 +15,28 @@
         <Grid
             Padding="20,20"
             ColumnDefinitions=".50*,.50*"
-            RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+            RowDefinitions="Auto,Auto,Auto,Auto,Auto"
             RowSpacing="10">
 
             <!--  LABEL | TRIP NAME  -->
             <Label
                 Grid.Row="0"
-                Grid.Column="0"
-                Grid.ColumnSpan="4"
+                Grid.ColumnSpan="2"
                 x:Name="Text_Trip"
                 CharacterSpacing="1"
                 FontAttributes="Bold"
                 FontFamily="Rajdhani-Bold"
                 FontSize="28"
                 HorizontalOptions="Center"
-                Text=""
+                Text="Summary"
                 TextColor="#1C4698"
                 HorizontalTextAlignment="Center"
                 VerticalTextAlignment="Center"
                 VerticalOptions="Center" />
 
-            <!--  LABEL | Job:  -->
-            <Label
-                Grid.Row="1"
-                Grid.Column="0"
-                CharacterSpacing="0"
-                FontFamily="Rajdhani-Bold"
-                FontSize="22"
-                HorizontalOptions="Start"
-                Text="Job:"
-                VerticalOptions="Start" />
-            <!--  LABEL | Job  -->
-            <Label
-                Grid.Row="1"
-                Grid.Column="1"
-                Grid.ColumnSpan="3"
-                x:Name="Text_Job"
-                CharacterSpacing="0"
-                FontFamily="Rajdhani-Medium"
-                FontSize="22"
-                HorizontalOptions="Start"
-                Text=""
-                VerticalOptions="Center" />
-
             <!--  LABEL | Date:  -->
             <Label
-                Grid.Row="2"
+                Grid.Row="1"
                 Grid.Column="0"
                 CharacterSpacing="0"
                 FontFamily="Rajdhani-Bold"
@@ -70,7 +46,7 @@
                 VerticalOptions="Start" />
             <!--  LABEL | Date  -->
             <Label
-                Grid.Row="2"
+                Grid.Row="1"
                 Grid.Column="1"
                 Grid.ColumnSpan="3"
                 x:Name="Text_Date"
@@ -83,7 +59,7 @@
 
             <!--  LABEL | Mode:  -->
             <Label
-                Grid.Row="3"
+                Grid.Row="2"
                 Grid.Column="0"
                 CharacterSpacing="0"
                 FontFamily="Rajdhani-Bold"
@@ -93,7 +69,7 @@
                 VerticalOptions="Start" />
             <!--  LABEL | Mode  -->
             <Label
-                Grid.Row="3"
+                Grid.Row="2"
                 Grid.Column="1"
                 Grid.ColumnSpan="3"
                 x:Name="Text_Mode"
@@ -104,59 +80,10 @@
                 Text=""
                 VerticalOptions="Center" />
 
-            <!--  LABEL | Mileage Start:  -->
-            <Label
-                Grid.Row="4"
-                Grid.Column="0"
-                Grid.ColumnSpan="1"
-                CharacterSpacing="0"
-                FontFamily="Rajdhani-Bold"
-                FontSize="22"
-                HorizontalOptions="Start"
-                Text="Mileage Start:"
-                VerticalOptions="Start" />
-            <!--  LABEL | Mileage Start  -->
-            <Label
-                Grid.Row="4"
-                Grid.Column="2"
-                Grid.ColumnSpan="1"
-                x:Name="Text_MileageStart"
-                CharacterSpacing="0"
-                FontFamily="Rajdhani-Medium"
-                FontSize="22"
-                HorizontalOptions="Start"
-                Text=""
-                VerticalOptions="Start" />
-
-            <!--  LABEL | Mileage Stop:  -->
-            <Label
-                Grid.Row="5"
-                Grid.Column="0"
-                Grid.ColumnSpan="1"
-                CharacterSpacing="0"
-                FontFamily="Rajdhani-Bold"
-                FontSize="22"
-                HorizontalOptions="Start"
-                Text="Mileage Stop:"
-                VerticalOptions="Start" />
-            <!--  LABEL | Mileage Stop  -->
-            <Label
-                Grid.Row="5"
-                Grid.Column="2"
-                Grid.ColumnSpan="2"
-                x:Name="Text_MileageStop"
-                CharacterSpacing="0"
-                FontFamily="Rajdhani-Medium"
-                FontSize="22"
-                HorizontalOptions="Start"
-                Text=""
-                VerticalOptions="Start" />
-
             <!--  LABEL | Distance:  -->
             <Label
-                Grid.Row="6"
+                Grid.Row="3"
                 Grid.Column="0"
-                Grid.ColumnSpan="2"
                 CharacterSpacing="0"
                 FontFamily="Rajdhani-Bold"
                 FontSize="22"
@@ -165,9 +92,8 @@
                 VerticalOptions="Start" />
             <!--  LABEL | Distance  -->
             <Label
-                Grid.Row="6"
-                Grid.Column="2"
-                Grid.ColumnSpan="2"
+                Grid.Row="3"
+                Grid.Column="1"
                 x:Name="Text_Distance"
                 CharacterSpacing="0"
                 FontFamily="Rajdhani-Medium"
@@ -176,22 +102,10 @@
                 Text=""
                 VerticalOptions="Center" />
 
-            <!--  LABEL | Route Trip Detail:  -->
-            <Label
-                Grid.Row="7"
-                Grid.Column="0"
-                Grid.ColumnSpan="3"
-                CharacterSpacing="0"
-                FontFamily="Rajdhani-Bold"
-                FontSize="22"
-                HorizontalOptions="Start"
-                Text="Route Trip Detail:"
-                VerticalOptions="Start" />
-
             <!--  BUTTON | Close  -->
             <Button
                 x:Name="CloseBtn"
-                Grid.Row="8"
+                Grid.Row="4"
                 Grid.ColumnSpan="4"
                 Clicked="CloseBtn_Clicked"
                 BackgroundColor="#EC221F"

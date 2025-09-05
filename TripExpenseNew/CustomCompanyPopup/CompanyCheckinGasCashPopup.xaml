@@ -8,7 +8,8 @@
     Color="Transparent">
     <Border
         Margin="5"
-        Padding="0"
+        Padding="0,5"
+        WidthRequest="350"
         BackgroundColor="White"
         Stroke="Transparent"
         StrokeShape="{RoundRectangle CornerRadius='20'}">
@@ -18,8 +19,7 @@
             ColumnSpacing="10"
             RowDefinitions="Auto,Auto,Auto,Auto,Auto"
             RowSpacing="15"
-            VerticalOptions="Center"
-            WidthRequest="350">
+            VerticalOptions="Center">
 
             <!--  LABEL HEADER  -->
             <VerticalStackLayout
@@ -56,7 +56,7 @@
                 <!--  LABEL | Location Name:  -->
                 <Label
                     CharacterSpacing="1"
-                    FontAttributes="Bold"
+                    FontAttributes="None"
                     FontSize="20"
                     HorizontalOptions="Start"
                     Text="Location Name:"
@@ -114,7 +114,7 @@
                 <!--  LABEL | Amount to Pay  -->
                 <Label
                     CharacterSpacing="1"                  
-                    FontAttributes="Bold"
+                    FontAttributes="None"
                     FontSize="20"
                     HorizontalOptions="Start"
                     Text="Amount to Pay:"

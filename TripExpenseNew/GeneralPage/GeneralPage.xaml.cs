@@ -11,24 +11,22 @@ using TripExpenseNew.CustomPopup;
 using TripExpenseNew.ViewModels;
 using TripExpenseNew.CustomPersonalPopup;
 using TripExpenseNew.CustomGeneralPopup;
+
 #if IOS
 using UserNotifications;
-
+using CoreLocation;
 #endif
 
 #if ANDROID
 using Android.Content;
 using Microsoft.Maui.ApplicationModel;
 #endif
-#if IOS
-using CoreLocation;
-#endif
+
 namespace TripExpenseNew.GeneralPage;
 
 public partial class GeneralPage : ContentPage
 {
     private IInternet Internet;
-    private CancellationTokenSource cancellationTokenSource;
     private bool isTracking = true;
     Location g_location = null;
 #if IOS
@@ -83,23 +81,6 @@ public partial class GeneralPage : ContentPage
             }
         }
 
-        //if (!await LocalNotificationCenter.Current.AreNotificationsEnabled())
-        //{
-        //    await LocalNotificationCenter.Current.RequestNotificationPermission();
-        //}
-
-#if IOS
-        try
-        {
-            locationService = new Platforms.iOS.LocationService(5);
-        }
-        catch (Exception ex)
-        {
-            //LocationLabel.Text = $"เกิดข้อผิดพลาดในการเริ่มต้น LocationService: {ex.Message}";
-            Console.WriteLine($"LocationService Initialization Error: {ex}");
-        }
-#endif
-
         await GetLocation();
     }
     private async void GeneralStart_Clicked(object sender, EventArgs e)
@@ -115,7 +96,7 @@ public partial class GeneralPage : ContentPage
                 {
                     g.location = g_location;
                     g.trip_start = DateTime.Now;
-                    await Navigation.PushAsync(new General(g));
+                    //await Navigation.PushAsync(new General(g));
                 }
                 else
                 {
@@ -158,7 +139,8 @@ public partial class GeneralPage : ContentPage
                 if (!CLLocationManager.LocationServicesEnabled)
                 {
                     //LocationLabel.Text = "Location Services ถูกปิด กรุณาเปิดใน Settings";
-                    return;
+                    locationService = new Platforms.iOS.LocationService(5);
+                    //return;
                 }
 #else
                 // สำหรับ Android และแพลตฟอร์มอื่นๆ อาจไม่สามารถตรวจสอบได้โดยตรง
@@ -189,14 +171,12 @@ public partial class GeneralPage : ContentPage
                 }
 #endif
 
-
-                cancellationTokenSource = new CancellationTokenSource();
-
 #if IOS
                 if (locationService == null)
                 {
                     // LocationLabel.Text = "LocationService ไม่ได้เริ่มต้น";
-                    return;
+                    locationService = new Platforms.iOS.LocationService(5);
+                    //return;
                 }
                 locationService.StartUpdatingLocation(async location =>
                 {
@@ -258,8 +238,8 @@ public partial class GeneralPage : ContentPage
 
             #region STOP
 #if IOS
-            locationService?.StopUpdatingLocation();
-            locationService = null;
+            //locationService?.StopUpdatingLocation();
+            //locationService = null;
             //#elif ANDROID
             //intent = new Intent(Platform.AppContext, typeof(TripExpenseNew.Platforms.Android.LocationService));
             //Platform.AppContext.StopService(intent);
