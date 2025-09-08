@@ -21,11 +21,15 @@ public partial class PublicCheckinCustomerPopup : Popup
 
     private void OnCloseButtonClicked(object sender, EventArgs e)
     {
+        CancelBtn.IsEnabled = false;
         Close(null);
+        CancelBtn.IsEnabled = true;
     }
     private void OnOKButtonClicked(object sender, EventArgs e)
     {
+        OKBtn.IsEnabled = false;
         string customer = Text_Customer.Text;
         Close(customer);
+        OKBtn.IsEnabled = true;
     }
 }

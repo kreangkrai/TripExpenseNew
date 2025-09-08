@@ -9,15 +9,13 @@
     <Border
         Padding="0"
         BackgroundColor="White"
-        WidthRequest="350"
-        VerticalOptions="Center"
         Stroke="Transparent"
-        StrokeShape="{RoundRectangle CornerRadius='20'}">
-            <VerticalStackLayout
-                Spacing="15"
-                Padding="20">
-                <!--  LABEL | START TRIP  -->
-                <Label
+        StrokeShape="{RoundRectangle CornerRadius='20'}"
+        VerticalOptions="Center"
+        WidthRequest="350">
+        <VerticalStackLayout Padding="20" Spacing="15">
+            <!--  LABEL | START TRIP  -->
+            <Label
                 CharacterSpacing="1"
                 FontAttributes="Bold"
                 FontFamily="Rajdhani-Bold"
@@ -27,24 +25,23 @@
                 TextColor="#1C4698"
                 VerticalOptions="Center" />
 
-                <!--  CUSTOMER/LOCATION  -->
-                <VerticalStackLayout
-                Spacing="5">
-                    <Label
+            <!--  CUSTOMER/LOCATION  -->
+            <VerticalStackLayout Spacing="5">
+                <Label
                     CharacterSpacing="1"
                     FontAttributes="None"
                     FontSize="20"
                     HorizontalOptions="Start"
                     Text="Stop Location:"
                     VerticalOptions="Center" />
-                    <!--  ENTRY | USERNAME  -->
-                    <Border
+                <!--  ENTRY | USERNAME  -->
+                <Border
                     Stroke="#C8C8C8"
                     StrokeShape="RoundRectangle 5"
                     StrokeThickness="2">
-                        <Entry
-                        Margin="1"
+                    <Entry
                         x:Name="Text_Location"
+                        Margin="1"
                         CharacterSpacing="1"
                         ClearButtonVisibility="WhileEditing"
                         FontSize="18"
@@ -52,58 +49,56 @@
                         Keyboard="Text"
                         Placeholder=" Ex. CTL-(HQ)"
                         Text="" />
-                    </Border>
-                </VerticalStackLayout>
-
-                <Grid
-                    ColumnDefinitions=".50*,.50*"
-                    ColumnSpacing="10">
-                    <!--  BUTTON | Cancel  -->
-                    <Button
-                x:Name="CancelBtn"
-                    Grid.Column="0"
-                Padding="10,15"
-                BackgroundColor="#EC221F"
-                CharacterSpacing="2"
-                Clicked="CancelBtn_Clicked"
-                CornerRadius="10"
-                FontAttributes="Bold"
-                FontSize="22"
-                HorizontalOptions="Fill"
-                Text="Cancel"
-                VerticalOptions="Center">
-                        <Button.Shadow>
-                            <Shadow
-                        Brush="Black"
-                        Opacity="0.2"
-                        Radius="15"
-                        Offset="0,4" />
-                        </Button.Shadow>
-                    </Button>
-
-                    <!--  BUTTON | OK  -->
-                    <Button
-                x:Name="OKBtn"
-                Grid.Column="1"
-                Padding="10,15"
-                BackgroundColor="#14AE5C"
-                CharacterSpacing="2"
-                Clicked="OKBtn_Clicked"
-                CornerRadius="10"
-                FontAttributes="Bold"
-                FontSize="22"
-                HorizontalOptions="Fill"
-                Text="OK"
-                VerticalOptions="Center">
-                        <Button.Shadow>
-                            <Shadow
-                        Brush="Black"
-                        Opacity="0.2"
-                        Radius="15"
-                        Offset="0,4" />
-                        </Button.Shadow>
-                    </Button>
-                </Grid>
+                </Border>
             </VerticalStackLayout>
+
+            <Grid ColumnDefinitions=".50*,.50*" ColumnSpacing="10">
+                <!--  BUTTON | Cancel  -->
+                <Button
+                    x:Name="CancelBtn"
+                    Grid.Column="0"
+                    Padding="10,15"
+                    BackgroundColor="#EC221F"
+                    CharacterSpacing="2"
+                    Clicked="CancelBtn_Clicked"
+                    CornerRadius="10"
+                    FontAttributes="Bold"
+                    FontSize="22"
+                    HorizontalOptions="Fill"
+                    Text="Cancel"
+                    VerticalOptions="Center">
+                    <Button.Shadow>
+                        <Shadow
+                            Brush="Black"
+                            Opacity="0.2"
+                            Radius="15"
+                            Offset="0,4" />
+                    </Button.Shadow>
+                </Button>
+
+                <!--  BUTTON | OK  -->
+                <Button
+                    x:Name="OKBtn"
+                    Grid.Column="1"
+                    Padding="10,15"
+                    BackgroundColor="#14AE5C"
+                    CharacterSpacing="2"
+                    Clicked="OKBtn_Clicked"
+                    CornerRadius="10"
+                    FontAttributes="Bold"
+                    FontSize="22"
+                    HorizontalOptions="Fill"
+                    Text="OK"
+                    VerticalOptions="Center">
+                    <Button.Shadow>
+                        <Shadow
+                            Brush="Black"
+                            Opacity="0.2"
+                            Radius="15"
+                            Offset="0,4" />
+                    </Button.Shadow>
+                </Button>
+            </Grid>
+        </VerticalStackLayout>
     </Border>
 </toolkit:Popup>

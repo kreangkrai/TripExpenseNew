@@ -10,9 +10,9 @@
         Margin="5"
         Padding="0"
         BackgroundColor="White"
-        WidthRequest="350"
         Stroke="Transparent"
-        StrokeShape="{RoundRectangle CornerRadius='20'}">
+        StrokeShape="{RoundRectangle CornerRadius='20'}"
+        WidthRequest="350">
         <Grid
             Padding="20,10"
             ColumnDefinitions=".50*,.50*"
@@ -67,9 +67,9 @@
                     StrokeShape="RoundRectangle 5"
                     StrokeThickness="2">
                     <Entry
+                        x:Name="Text_Location"
                         Margin="2"
                         CharacterSpacing="1"
-                        x:Name="Text_Location"
                         ClearButtonVisibility="WhileEditing"
                         FontSize="18"
                         Keyboard="Text"

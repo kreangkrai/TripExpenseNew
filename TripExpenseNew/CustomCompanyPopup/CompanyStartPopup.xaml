@@ -10,18 +10,18 @@
     <Border
         Padding="0"
         BackgroundColor="White"
-        WidthRequest="350"
         Stroke="Transparent"
-        StrokeShape="{RoundRectangle CornerRadius='20'}">
-            <Grid
+        StrokeShape="{RoundRectangle CornerRadius='20'}"
+        WidthRequest="350">
+        <Grid
             Padding="20,20"
             ColumnDefinitions=".50*,.50*"
             ColumnSpacing="10"
             RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto"
             RowSpacing="15">
 
-                <!--  LABEL | START TRIP  -->
-                <Label
+            <!--  LABEL | START TRIP  -->
+            <Label
                 Grid.Row="0"
                 Grid.ColumnSpan="2"
                 CharacterSpacing="1"
@@ -33,8 +33,8 @@
                 TextColor="#1C4698"
                 VerticalOptions="Center" />
 
-                <!--  Location Type  -->
-                <Grid
+            <!--  Location Type  -->
+            <Grid
                 Grid.Row="1"
                 Grid.ColumnSpan="2"
                 ColumnDefinitions=".50*,.50*"
@@ -43,186 +43,186 @@
                 RowSpacing="5"
                 VerticalOptions="Center">
 
-                    <!--  LABEL | Location Type:  -->
-                    <Label
-                    CharacterSpacing="1"
+                <!--  LABEL | Location Type:  -->
+                <Label
                     Grid.ColumnSpan="2"
+                    CharacterSpacing="1"
                     FontAttributes="None"
                     FontSize="20"
                     HorizontalOptions="Start"
                     Text="Location Type:"
                     VerticalOptions="Center" />
 
-                    <!--  BUTTON | CUSTOMER  -->
-                    <Button
+                <!--  BUTTON | CUSTOMER  -->
+                <Button
                     x:Name="CustomerBtn"
-                    Clicked="CustomerBtn_Clicked"
                     Grid.Row="1"
                     Padding="10,15"
                     BackgroundColor="#BEBEBE"
                     CharacterSpacing="2"
+                    Clicked="CustomerBtn_Clicked"
                     CornerRadius="10"
                     FontAttributes="Bold"
                     FontSize="18"
                     HorizontalOptions="Fill"
                     Text="Customer"
                     VerticalOptions="Center">
-                        <Button.Shadow>
-                            <Shadow
+                    <Button.Shadow>
+                        <Shadow
                             Brush="Black"
                             Opacity="0.2"
                             Radius="15"
                             Offset="0,4" />
-                        </Button.Shadow>
-                    </Button>
+                    </Button.Shadow>
+                </Button>
 
-                    <!--  BUTTON | OTHER  -->
-                    <Button
+                <!--  BUTTON | OTHER  -->
+                <Button
                     x:Name="OtherBtn"
-                    Clicked="OtherBtn_Clicked"
                     Grid.Row="1"
                     Grid.Column="1"
                     Padding="10,15"
                     BackgroundColor="#BEBEBE"
                     CharacterSpacing="2"
+                    Clicked="OtherBtn_Clicked"
                     CornerRadius="10"
                     FontAttributes="Bold"
                     FontSize="18"
                     HorizontalOptions="Fill"
                     Text="Other"
                     VerticalOptions="Center">
-                        <Button.Shadow>
-                            <Shadow
+                    <Button.Shadow>
+                        <Shadow
                             Brush="Black"
                             Opacity="0.2"
                             Radius="15"
                             Offset="0,4" />
-                        </Button.Shadow>
-                    </Button>
-                </Grid>
+                    </Button.Shadow>
+                </Button>
+            </Grid>
 
-                <!--  CAR  -->
-                <VerticalStackLayout
-                    Grid.Row="2"
-                    Grid.ColumnSpan="2"
-                    Spacing="5">
-                    <!--  LABEL | CAR:  -->
-                    <Label
+            <!--  CAR  -->
+            <VerticalStackLayout
+                Grid.Row="2"
+                Grid.ColumnSpan="2"
+                Spacing="5">
+                <!--  LABEL | CAR:  -->
+                <Label
+                    CharacterSpacing="1"
+                    FontAttributes="None"
+                    FontSize="20"
+                    HorizontalOptions="Start"
+                    Text="Car:"
+                    VerticalOptions="Center" />
+                <!--  ENTRY | CAR  -->
+                <Border
+                    Stroke="#C8C8C8"
+                    StrokeShape="RoundRectangle 5"
+                    StrokeThickness="2">
+                    <Entry
+                        x:Name="Text_Car"
+                        Margin="2"
                         CharacterSpacing="1"
-                        FontAttributes="None"
-                        FontSize="20"
-                        HorizontalOptions="Start"
-                        Text="Car:"
-                        VerticalOptions="Center" />
-                                        <!--  ENTRY | CAR  -->
-                        <Border
-                        Stroke="#C8C8C8"
-                        StrokeShape="RoundRectangle 5"
-                        StrokeThickness="2">
-                                            <Entry
-                            Margin="2"
-                            x:Name="Text_Car"
-                            CharacterSpacing="1"
-                            ClearButtonVisibility="WhileEditing"
-                            FontSize="18"
-                            Keyboard="Text"
-                            Placeholder=""
-                            Text="" 
-                            IsEnabled="False"/>
-                    </Border>
-                </VerticalStackLayout>
-                <!--  CUSTOMER/LOCATION  -->
-                <VerticalStackLayout
+                        ClearButtonVisibility="WhileEditing"
+                        FontSize="18"
+                        IsEnabled="False"
+                        Keyboard="Text"
+                        Placeholder=""
+                        Text="" />
+                </Border>
+            </VerticalStackLayout>
+            <!--  CUSTOMER/LOCATION  -->
+            <VerticalStackLayout
                 Grid.Row="3"
                 Grid.ColumnSpan="2"
                 Spacing="5">
-                    <!--  LABEL | Customer/Location:  -->
-                    <Label
+                <!--  LABEL | Customer/Location:  -->
+                <Label
                     CharacterSpacing="1"
                     FontAttributes="None"
                     FontSize="20"
                     HorizontalOptions="Start"
                     Text="Start Location:"
                     VerticalOptions="Center" />
-                    <!--  ENTRY | USERNAME  -->
-                    <Border
+                <!--  ENTRY | USERNAME  -->
+                <Border
                     Stroke="#C8C8C8"
                     StrokeShape="RoundRectangle 5"
                     StrokeThickness="2">
-                        <Entry
-                        Margin="2"
+                    <Entry
                         x:Name="Text_Location"
+                        Margin="2"
                         CharacterSpacing="1"
                         ClearButtonVisibility="WhileEditing"
                         FontSize="18"
                         Keyboard="Text"
                         Placeholder=" Ex. CTL-(HQ)"
                         Text="" />
-                    </Border>
-                </VerticalStackLayout>
+                </Border>
+            </VerticalStackLayout>
 
-                <!--  Job  (Can Search own job)  -->
-                <VerticalStackLayout
+            <!--  Job  (Can Search own job)  -->
+            <VerticalStackLayout
                 Grid.Row="4"
                 Grid.ColumnSpan="2"
                 Spacing="5">
-                    <!--  LABEL | Job  -->
-                    <Label
-                    CharacterSpacing="1"                    
+                <!--  LABEL | Job  -->
+                <Label
+                    CharacterSpacing="1"
                     FontAttributes="None"
                     FontSize="20"
                     HorizontalOptions="Start"
                     Text="Job:"
                     VerticalOptions="Center" />
-                    <!--  ENTRY | USERNAME  -->
-                    <Border
+                <!--  ENTRY | USERNAME  -->
+                <Border
                     Stroke="#C8C8C8"
                     StrokeShape="RoundRectangle 5"
                     StrokeThickness="2">
-                        <Entry
+                    <Entry
+                        x:Name="Text_Job"
                         Margin="2"
                         CharacterSpacing="1"
-                        x:Name="Text_Job"
                         ClearButtonVisibility="WhileEditing"
                         FontSize="18"
                         Keyboard="Text"
                         Placeholder=" Ex. J99-0000"
                         Text="{Binding Text}" />
-                    </Border>
-                </VerticalStackLayout>
+                </Border>
+            </VerticalStackLayout>
 
-                <!--  Mileage  -->
-                <VerticalStackLayout
+            <!--  Mileage  -->
+            <VerticalStackLayout
                 Grid.Row="5"
                 Grid.ColumnSpan="2"
                 Spacing="5">
-                    <!--  LABEL | Job  -->
-                    <Label
+                <!--  LABEL | Job  -->
+                <Label
                     CharacterSpacing="1"
                     FontAttributes="None"
                     FontSize="20"
                     HorizontalOptions="Start"
                     Text="Mileage Start:"
                     VerticalOptions="Center" />
-                    <!--  ENTRY | USERNAME  -->
-                    <Border
+                <!--  ENTRY | USERNAME  -->
+                <Border
                     Stroke="#C8C8C8"
                     StrokeShape="RoundRectangle 5"
                     StrokeThickness="2">
-                        <Entry
+                    <Entry
+                        x:Name="Text_Mileage"
                         Margin="2"
                         CharacterSpacing="1"
-                        x:Name="Text_Mileage"
                         ClearButtonVisibility="WhileEditing"
                         FontSize="18"
                         Keyboard="Numeric"
                         Placeholder=" Ex. 123456"
                         Text="0" />
-                    </Border>
-                </VerticalStackLayout>
+                </Border>
+            </VerticalStackLayout>
 
-                <!--  BUTTON | Cancel  -->
-                <Button
+            <!--  BUTTON | Cancel  -->
+            <Button
                 x:Name="CancelBtn"
                 Grid.Row="6"
                 Padding="10,15"
@@ -235,17 +235,17 @@
                 HorizontalOptions="Fill"
                 Text="Cancel"
                 VerticalOptions="Center">
-                    <Button.Shadow>
-                        <Shadow
+                <Button.Shadow>
+                    <Shadow
                         Brush="Black"
                         Opacity="0.2"
                         Radius="15"
                         Offset="0,4" />
-                    </Button.Shadow>
-                </Button>
+                </Button.Shadow>
+            </Button>
 
-                <!--  BUTTON | OK  -->
-                <Button
+            <!--  BUTTON | OK  -->
+            <Button
                 x:Name="OKBtn"
                 Grid.Row="6"
                 Grid.Column="1"
@@ -259,15 +259,15 @@
                 HorizontalOptions="Fill"
                 Text="OK"
                 VerticalOptions="Center">
-                    <Button.Shadow>
-                        <Shadow
+                <Button.Shadow>
+                    <Shadow
                         Brush="Black"
                         Opacity="0.2"
                         Radius="15"
                         Offset="0,4" />
-                    </Button.Shadow>
-                </Button>
-            </Grid>
+                </Button.Shadow>
+            </Button>
+        </Grid>
     </Border>
 
 </toolkit:Popup>

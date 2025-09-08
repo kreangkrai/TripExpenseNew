@@ -8,71 +8,71 @@
     shell:Shell.NavBarIsVisible="False">
     <ScrollView>
         <Grid
-        Padding="5,5"
-        ColumnDefinitions=".10*,.80*,.10*"
-        RowDefinitions="*,50,50,60,60,Auto"
-        RowSpacing="20"
-        VerticalOptions="Center">
+            Padding="5,5"
+            ColumnDefinitions=".10*,.80*,.10*"
+            RowDefinitions="*,50,50,60,60,Auto"
+            RowSpacing="20"
+            VerticalOptions="Center">
 
             <!--  IMAGE | LOGO TRIP EXPENSE  -->
             <Image
-            Grid.Row="0"
-            Grid.Column="1"            
-            Aspect="AspectFit"
-            HeightRequest="250"
-            VerticalOptions="Center"
-            HorizontalOptions="Center"
-            Source="logo_tripexpense.png" />
+                Grid.Row="0"
+                Grid.Column="1"
+                Aspect="AspectFit"
+                HeightRequest="250"
+                HorizontalOptions="Center"
+                Source="logo_tripexpense.png"
+                VerticalOptions="Center" />
 
             <!--  ENTRY | USERNAME  -->
             <Border
-            Grid.Row="1"
-            Grid.Column="1"
-            Stroke="#778899"
-            StrokeShape="RoundRectangle 5"
-            StrokeThickness="2">
+                Grid.Row="1"
+                Grid.Column="1"
+                Stroke="#778899"
+                StrokeShape="RoundRectangle 5"
+                StrokeThickness="2">
                 <Entry
                     x:Name="txt_name"
-                ClearButtonVisibility="WhileEditing"
-                FontSize="18"
-                Keyboard="Text"
-                Placeholder="Username"
-                Text="{Binding Text}" />
+                    ClearButtonVisibility="WhileEditing"
+                    FontSize="18"
+                    Keyboard="Text"
+                    Placeholder="Username"
+                    Text="{Binding Text}" />
             </Border>
 
             <!--  ENTRY | PASSWORD  -->
             <Border
-            Grid.Row="2"
-            Grid.Column="1"
-            Stroke="#778899"
-            StrokeShape="RoundRectangle 5"
-            StrokeThickness="2">
+                Grid.Row="2"
+                Grid.Column="1"
+                Stroke="#778899"
+                StrokeShape="RoundRectangle 5"
+                StrokeThickness="2">
                 <Entry
                     x:Name="txt_password"
-                FontSize="18"
-                IsPassword="true"
-                Keyboard="Text"
-                MaxLength="20"
-                Placeholder="Password"
-                Text="{Binding Text}" />
+                    FontSize="18"
+                    IsPassword="true"
+                    Keyboard="Text"
+                    MaxLength="20"
+                    Placeholder="Password"
+                    Text="{Binding Text}" />
             </Border>
 
             <!--  BUTTON | LOG IN  -->
             <Button
-            x:Name="LogInBtn"
-            Grid.Row="3"
-            Grid.Column="1"
-            Padding="10,5"
-            BackgroundColor="#14AE5C"
-            CharacterSpacing="03"
-            Clicked="LogInBtn_Clicked"
-            CornerRadius="30"
-            FontAttributes="Bold"
-            FontSize="Large"
-            HeightRequest="60"
-            HorizontalOptions="Fill"
-            Text="LOG IN"
-            VerticalOptions="Center" />
+                x:Name="LogInBtn"
+                Grid.Row="3"
+                Grid.Column="1"
+                Padding="10,5"
+                BackgroundColor="#14AE5C"
+                CharacterSpacing="03"
+                Clicked="LogInBtn_Clicked"
+                CornerRadius="30"
+                FontAttributes="Bold"
+                FontSize="Large"
+                HeightRequest="60"
+                HorizontalOptions="Fill"
+                Text="LOG IN"
+                VerticalOptions="Center" />
             <Button
                 x:Name="ServerBtn"
                 Grid.Row="4"
@@ -91,60 +91,60 @@
 
             <!--  Bottom Sheet  -->
             <ContentView
-            x:Name="BottomSheet"
-            Grid.Row="5"
-            Grid.RowSpan="3"
-            Grid.ColumnSpan="3"
-            Padding="10"
-            BackgroundColor="White"
-            IsVisible="False"
-            TranslationY="0">
+                x:Name="BottomSheet"
+                Grid.Row="5"
+                Grid.RowSpan="3"
+                Grid.ColumnSpan="3"
+                Padding="10"
+                BackgroundColor="White"
+                IsVisible="False"
+                TranslationY="0">
                 <ContentView.GestureRecognizers>
                     <PanGestureRecognizer PanUpdated="OnPanUpdated" />
                 </ContentView.GestureRecognizers>
                 <VerticalStackLayout Spacing="15">
                     <BoxView
-                    Margin="0,1"
-                    HeightRequest="4"
-                    HorizontalOptions="Center"
-                    WidthRequest="70"
-                    CornerRadius="0"
-                    Color="Gray" />
+                        Margin="0,1"
+                        CornerRadius="0"
+                        HeightRequest="4"
+                        HorizontalOptions="Center"
+                        WidthRequest="70"
+                        Color="Gray" />
                     <Label
-                    CharacterSpacing="1"
-                    FontFamily="Rajdhani-Bold.ttf"
-                    FontSize="28"
-                    Text="SERVER NAME"
-                    FontAttributes="Bold"
-                    TextColor="#1C4698" />
-       
+                        CharacterSpacing="1"
+                        FontAttributes="Bold"
+                        FontFamily="Rajdhani-Bold.ttf"
+                        FontSize="28"
+                        Text="SERVER NAME"
+                        TextColor="#1C4698" />
+
                     <Border
-                    Stroke="#778899"
-                    StrokeShape="RoundRectangle 5"
-                    StrokeThickness="2">
+                        Stroke="#778899"
+                        StrokeShape="RoundRectangle 5"
+                        StrokeThickness="2">
                         <Entry
-                        x:Name="txt_server"
-                        FontSize="18"
-                        IsPassword="false"
-                        Keyboard="Text"
-                        MaxLength="100"
-                        Text="{Binding Text}" />
+                            x:Name="txt_server"
+                            FontSize="18"
+                            IsPassword="false"
+                            Keyboard="Text"
+                            MaxLength="100"
+                            Text="{Binding Text}" />
                     </Border>
 
                     <!--  BUTTON | Connect  -->
                     <Button
-                    x:Name="ConnectBtn"
-                    Clicked="ConnectBtn_Clicked"
-                    Padding="10,5"
-                    BackgroundColor="#14AE5C"
-                    CharacterSpacing="03"
-                    CornerRadius="25"
-                    FontAttributes="Bold"
-                    FontSize="Medium"
-                    HeightRequest="50"
-                    HorizontalOptions="Fill"
-                    Text="CONNECT"
-                    VerticalOptions="Center" />
+                        x:Name="ConnectBtn"
+                        Padding="10,5"
+                        BackgroundColor="#14AE5C"
+                        CharacterSpacing="03"
+                        Clicked="ConnectBtn_Clicked"
+                        CornerRadius="25"
+                        FontAttributes="Bold"
+                        FontSize="Medium"
+                        HeightRequest="50"
+                        HorizontalOptions="Fill"
+                        Text="CONNECT"
+                        VerticalOptions="Center" />
 
                 </VerticalStackLayout>
             </ContentView>

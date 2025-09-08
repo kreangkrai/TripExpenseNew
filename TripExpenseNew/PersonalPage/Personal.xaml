@@ -41,14 +41,14 @@
                 TextColor="#1C4698"
                 VerticalOptions="Center" />
 
-            <!--  INFO | 
-            
+            <!--
+                INFO |
             -->
             <Frame
                 Grid.Row="3"
                 Grid.Column="0"
-                Padding="5,5"
                 Grid.ColumnSpan="2"
+                Padding="5,5"
                 BorderColor="#BCBCBC"
                 CornerRadius="20">
                 <Grid
@@ -68,9 +68,9 @@
 
                     <!--  LABEL | Time  -->
                     <Label
+                        x:Name="trip_duration"
                         Grid.Row="1"
                         Grid.ColumnSpan="3"
-                        x:Name="trip_duration"
                         CharacterSpacing="1"
                         FontFamily="Rajdhani-Bold"
                         FontSize="24"
@@ -82,7 +82,7 @@
                     <!--  LABEL | Duration  -->
                     <Label
                         Grid.Row="2"
-                        Grid.ColumnSpan="3"                        
+                        Grid.ColumnSpan="3"
                         CharacterSpacing="1"
                         FontFamily="Rajdhani-Medium"
                         FontSize="16"
@@ -119,9 +119,9 @@
 
                     <!--  LABEL | Time  -->
                     <Label
+                        x:Name="trip_distance"
                         Grid.Row="1"
                         Grid.ColumnSpan="3"
-                        x:Name="trip_distance"
                         CharacterSpacing="1"
                         FontFamily="Rajdhani-Bold"
                         FontSize="24"
@@ -147,9 +147,9 @@
 
             <!--  LABEL | Active Trip Detail:  -->
             <Label
+                x:Name="Text_Detail"
                 Grid.Row="4"
                 Grid.ColumnSpan="4"
-                x:Name="Text_Detail"
                 FontAttributes="Bold"
                 FontFamily="Rajdhani-Bold"
                 FontSize="24"
@@ -160,36 +160,72 @@
 
             <!--  Collection View | Active Trip Detail:  -->
             <Frame
-                Padding="5" Grid.Row="5"
+                Grid.Row="5"
                 Grid.ColumnSpan="4"
                 Margin="1"
-                BackgroundColor= "White"
-                CornerRadius="5"
+                Padding="5"
+                BackgroundColor="White"
                 BorderColor="DimGrey"
+                CornerRadius="5"
                 HasShadow="False">
                 <StackLayout>
                     <CollectionView x:Name="TripCollectionView" HeightRequest="200">
                         <CollectionView.ItemsLayout>
-                            <LinearItemsLayout Orientation="Vertical" ItemSpacing="3" />
+                            <LinearItemsLayout ItemSpacing="3" Orientation="Vertical" />
                         </CollectionView.ItemsLayout>
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
                                 <Frame
                                     Margin="1"
                                     Padding="5,1"
-                                    BackgroundColor= "{Binding FrameColor}"
-                                    CornerRadius="5"                          
+                                    BackgroundColor="{Binding FrameColor}"
+                                    CornerRadius="5"
                                     HasShadow="False">
-                                    <Grid RowDefinitions="Auto,Auto,Auto" Padding="1" RowSpacing="1">
+                                    <Grid
+                                        Padding="1"
+                                        RowDefinitions="Auto,Auto,Auto"
+                                        RowSpacing="1">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
-                                        <Label Grid.Row="0"  Grid.ColumnSpan="2" Text="{Binding TextStatus}" VerticalOptions="Center" FontSize="20" FontFamily="Rajdhani-Bold"/>
-                                        <Image Grid.Row="1"  Grid.Column="0" Source="{Binding IconLocationSource}" WidthRequest="16" HeightRequest="16" Margin="10,0" />
-                                        <Label Grid.Row="1"  Grid.Column="1" Padding="1" Text="{Binding TextLocation}" VerticalOptions="Center"  FontSize="16" FontFamily="Rajdhani-Medium"/>
-                                        <Image Grid.Row="2"  Grid.Column="0" Source="{Binding IconDateSource}" WidthRequest="16" HeightRequest="16" Margin="10,0" />
-                                        <Label Grid.Row="2"  Grid.Column="1" Padding="1" Text="{Binding TextDate}" VerticalOptions="Center" FontSize="16" FontFamily="Rajdhani-Medium" />
+                                        <Label
+                                            Grid.Row="0"
+                                            Grid.ColumnSpan="2"
+                                            FontFamily="Rajdhani-Bold"
+                                            FontSize="20"
+                                            Text="{Binding TextStatus}"
+                                            VerticalOptions="Center" />
+                                        <Image
+                                            Grid.Row="1"
+                                            Grid.Column="0"
+                                            Margin="10,0"
+                                            HeightRequest="16"
+                                            Source="{Binding IconLocationSource}"
+                                            WidthRequest="16" />
+                                        <Label
+                                            Grid.Row="1"
+                                            Grid.Column="1"
+                                            Padding="1"
+                                            FontFamily="Rajdhani-Medium"
+                                            FontSize="16"
+                                            Text="{Binding TextLocation}"
+                                            VerticalOptions="Center" />
+                                        <Image
+                                            Grid.Row="2"
+                                            Grid.Column="0"
+                                            Margin="10,0"
+                                            HeightRequest="16"
+                                            Source="{Binding IconDateSource}"
+                                            WidthRequest="16" />
+                                        <Label
+                                            Grid.Row="2"
+                                            Grid.Column="1"
+                                            Padding="1"
+                                            FontFamily="Rajdhani-Medium"
+                                            FontSize="16"
+                                            Text="{Binding TextDate}"
+                                            VerticalOptions="Center" />
                                     </Grid>
                                 </Frame>
                             </DataTemplate>
@@ -200,12 +236,12 @@
             <!--  BUTTON | Check In  -->
             <Button
                 x:Name="CheckInBtn"
-                Clicked="CheckInBtn_Clicked"
                 Grid.Row="6"
                 Grid.ColumnSpan="4"
                 Padding="10,5"
                 BackgroundColor="#297CC0"
                 CharacterSpacing="1"
+                Clicked="CheckInBtn_Clicked"
                 ContentLayout="Right,10"
                 CornerRadius="20"
                 FontAttributes="Bold"
@@ -218,9 +254,9 @@
 
             <!--  LABEL | Active Trip Detail:  -->
             <Label
+                x:Name="Current_Passenger"
                 Grid.Row="7"
                 Grid.ColumnSpan="4"
-                x:Name="Current_Passenger"
                 FontAttributes="Bold"
                 FontFamily="Rajdhani-Bold"
                 FontSize="24"
@@ -231,37 +267,72 @@
 
             <!--  CollectionView | Current Passenger:  -->
             <Frame
-                Padding="5" Grid.Row="8"
                 x:Name="frame_passenger"
-                IsVisible="False"
+                Grid.Row="8"
                 Grid.ColumnSpan="4"
                 Margin="1"
-                BackgroundColor= "White"
-                CornerRadius="5"
+                Padding="5"
+                BackgroundColor="White"
                 BorderColor="DimGrey"
-                HasShadow="False">
+                CornerRadius="5"
+                HasShadow="False"
+                IsVisible="False">
                 <StackLayout Padding="10">
                     <CollectionView x:Name="PassengerCollectionView" HeightRequest="150">
                         <CollectionView.ItemsLayout>
-                            <LinearItemsLayout Orientation="Vertical" ItemSpacing="2" />
+                            <LinearItemsLayout ItemSpacing="2" Orientation="Vertical" />
                         </CollectionView.ItemsLayout>
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
                                 <Frame
-                    Margin="5"
-                    Padding="5,1,5,2"
-                    CornerRadius="8"
-                    HasShadow="False">
-                                    <Grid RowDefinitions="Auto,Auto" Padding="1" RowSpacing="3">
+                                    Margin="5"
+                                    Padding="5,1,5,2"
+                                    CornerRadius="8"
+                                    HasShadow="False">
+                                    <Grid
+                                        Padding="1"
+                                        RowDefinitions="Auto,Auto"
+                                        RowSpacing="3">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="100" />
                                         </Grid.ColumnDefinitions>
-                                        <Label Grid.Row="0" Grid.ColumnSpan="3" Text="{Binding TextPassenger}" VerticalOptions="Center" FontSize="20" FontFamily="Rajdhani-Bold"/>
-                                        <Image Grid.Row="1" Grid.Column="0" Source="{Binding IconDatePassengerSource}" WidthRequest="16" HeightRequest="16" Margin="1,0" />
-                                        <Label Grid.Row="1" Grid.Column="1" Padding="3" Text="{Binding TextDatePassenger}" VerticalOptions="Center" FontSize="16" FontFamily="Rajdhani-Medium"/>
-                                        <Button Grid.Row="1" Grid.Column="2" Text="Drop Off" CornerRadius="15"  HeightRequest="50" Clicked="OnDropOffPassengerItemClicked"  BackgroundColor="#FF474C" TextColor="White" CommandParameter="{Binding .}" Margin="1" FontSize="14" FontAttributes="Bold"/>
+                                        <Label
+                                            Grid.Row="0"
+                                            Grid.ColumnSpan="3"
+                                            FontFamily="Rajdhani-Bold"
+                                            FontSize="20"
+                                            Text="{Binding TextPassenger}"
+                                            VerticalOptions="Center" />
+                                        <Image
+                                            Grid.Row="1"
+                                            Grid.Column="0"
+                                            Margin="1,0"
+                                            HeightRequest="16"
+                                            Source="{Binding IconDatePassengerSource}"
+                                            WidthRequest="16" />
+                                        <Label
+                                            Grid.Row="1"
+                                            Grid.Column="1"
+                                            Padding="3"
+                                            FontFamily="Rajdhani-Medium"
+                                            FontSize="16"
+                                            Text="{Binding TextDatePassenger}"
+                                            VerticalOptions="Center" />
+                                        <Button
+                                            Grid.Row="1"
+                                            Grid.Column="2"
+                                            Margin="1"
+                                            BackgroundColor="#FF474C"
+                                            Clicked="OnDropOffPassengerItemClicked"
+                                            CommandParameter="{Binding .}"
+                                            CornerRadius="15"
+                                            FontAttributes="Bold"
+                                            FontSize="14"
+                                            HeightRequest="50"
+                                            Text="Drop Off"
+                                            TextColor="White" />
                                     </Grid>
                                 </Frame>
                             </DataTemplate>
@@ -272,12 +343,12 @@
             <!--  BUTTON | Add Passenger  -->
             <Button
                 x:Name="AddPassengerBtn"
-                Clicked="AddPassengerBtn_Clicked"
                 Grid.Row="9"
                 Grid.ColumnSpan="4"
                 Padding="10,5"
                 BackgroundColor="#14AE5C"
                 CharacterSpacing="1"
+                Clicked="AddPassengerBtn_Clicked"
                 ContentLayout="Right,10"
                 CornerRadius="20"
                 FontAttributes="Bold"
@@ -294,9 +365,9 @@
                 Grid.Row="10"
                 Grid.ColumnSpan="4"
                 Padding="10,5"
-                Clicked="StopTripBtn_Clicked"
                 BackgroundColor="#EC221F"
                 CharacterSpacing="1"
+                Clicked="StopTripBtn_Clicked"
                 ContentLayout="Right,10"
                 CornerRadius="20"
                 FontAttributes="Bold"

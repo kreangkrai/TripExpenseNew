@@ -269,19 +269,18 @@ public partial class PassengerCompanyStopPage : ContentPage
     private void CustomerBtn_Clicked(object sender, EventArgs e)
     {
         IsCustomer = true;
-
         CustomerBtn.BackgroundColor = Color.FromArgb("#297CC0");
         OtherBtn.BackgroundColor = Colors.LightGrey;
     }
 
     private async void ConfirmBtn_Clicked(object sender, EventArgs e)
     {
+        ConfirmBtn.IsEnabled = false;
         if (Text_Location.Text.Trim() != "")
         {
             bool internet = await Internet.CheckServerConnection("/api/CurrentTime/get");
             if (internet)
             {
-
                 var popup = new ProgressPopup();
                 this.ShowPopup(popup);
 
@@ -354,10 +353,12 @@ public partial class PassengerCompanyStopPage : ContentPage
                 await DisplayAlert("", "กรุณาใส่ข้อมูล", "ตกลง");
             });
         }
+        ConfirmBtn.IsEnabled = true;
     }
 
     private async void CancelBtn_Clicked(object sender, EventArgs e)
     {
+        CancelBtn.IsEnabled = false;
 #if IOS
         locationService?.StopUpdatingLocation();
         locationService = null;
@@ -367,6 +368,7 @@ public partial class PassengerCompanyStopPage : ContentPage
 #endif
 
         await Shell.Current.GoToAsync("Home_Page");
+        CancelBtn.IsEnabled = true;
     }
 
     private void timePicker_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)

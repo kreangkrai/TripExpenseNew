@@ -58,6 +58,8 @@ public partial class PassengerCompanyHistoryPopup : Popup
 
     private void CloseBtn_Clicked(object sender, EventArgs e)
     {
+        CloseBtn.IsEnabled = false;
         Close(null);
+        CloseBtn.IsEnabled = true;
     }
 }

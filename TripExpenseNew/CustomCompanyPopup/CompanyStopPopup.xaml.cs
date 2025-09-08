@@ -37,11 +37,14 @@ public partial class CompanyStopPopup : Popup
     }
     private void CancelBtn_Clicked(object sender, EventArgs e)
     {
+        CancelBtn.IsEnabled = false;
         Close(null);
+        CancelBtn.IsEnabled = true;
     }
 
     private void OKBtn_Clicked(object sender, EventArgs e)
     {
+        OKBtn.IsEnabled = false;
         CompanyPopupStopModel company = new CompanyPopupStopModel()
         {
             IsCustomer = Iscustomer,
@@ -50,12 +53,12 @@ public partial class CompanyStopPopup : Popup
             car_id = car
         };
         Close(company);
+        OKBtn.IsEnabled = true;
     }
 
     private void CustomerBtn_Clicked(object sender, EventArgs e)
     {
         Iscustomer = true;
-
         CustomerBtn.BackgroundColor = Color.FromArgb("#297CC0");
         OtherBtn.BackgroundColor = Colors.Grey;
     }

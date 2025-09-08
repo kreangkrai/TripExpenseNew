@@ -10,7 +10,7 @@
         Padding="0"
         BackgroundColor="White"
         Stroke="Transparent"
-        StrokeShape="{RoundRectangle CornerRadius='20'}"   
+        StrokeShape="{RoundRectangle CornerRadius='20'}"
         WidthRequest="350">
         <Grid
             Padding="20,20"
@@ -20,20 +20,20 @@
 
             <!--  LABEL | TRIP NAME  -->
             <Label
+                x:Name="Text_Trip"
                 Grid.Row="0"
                 Grid.Column="0"
                 Grid.ColumnSpan="4"
-                x:Name="Text_Trip"
                 CharacterSpacing="1"
                 FontAttributes="Bold"
                 FontFamily="Rajdhani-Bold"
                 FontSize="28"
                 HorizontalOptions="Center"
+                HorizontalTextAlignment="Center"
                 Text=""
                 TextColor="#1C4698"
-                HorizontalTextAlignment="Center"
-                VerticalTextAlignment="Center"
-                VerticalOptions="Center" />
+                VerticalOptions="Center"
+                VerticalTextAlignment="Center" />
 
             <!--  LABEL | Job:  -->
             <Label
@@ -47,10 +47,10 @@
                 VerticalOptions="Start" />
             <!--  LABEL | Job  -->
             <Label
+                x:Name="Text_Job"
                 Grid.Row="1"
                 Grid.Column="1"
                 Grid.ColumnSpan="3"
-                x:Name="Text_Job"
                 CharacterSpacing="0"
                 FontFamily="Rajdhani-Medium"
                 FontSize="22"
@@ -70,10 +70,10 @@
                 VerticalOptions="Start" />
             <!--  LABEL | Date  -->
             <Label
+                x:Name="Text_Date"
                 Grid.Row="2"
                 Grid.Column="1"
                 Grid.ColumnSpan="3"
-                x:Name="Text_Date"
                 CharacterSpacing="0"
                 FontFamily="Rajdhani-Medium"
                 FontSize="22"
@@ -91,12 +91,12 @@
                 HorizontalOptions="Start"
                 Text="Car:"
                 VerticalOptions="Start" />
-                        <!--  LABEL | Mode  -->
-                        <Label
+            <!--  LABEL | Mode  -->
+            <Label
+                x:Name="Text_Car"
                 Grid.Row="3"
                 Grid.Column="1"
                 Grid.ColumnSpan="3"
-                x:Name="Text_Car"
                 CharacterSpacing="0"
                 FontFamily="Rajdhani-Medium"
                 FontSize="22"
@@ -115,10 +115,10 @@
                 VerticalOptions="Start" />
             <!--  LABEL | Mode  -->
             <Label
+                x:Name="Text_Driver"
                 Grid.Row="4"
                 Grid.Column="1"
                 Grid.ColumnSpan="3"
-                x:Name="Text_Driver"
                 CharacterSpacing="0"
                 FontFamily="Rajdhani-Medium"
                 FontSize="22"
@@ -138,10 +138,10 @@
                 VerticalOptions="Start" />
             <!--  LABEL | Mode  -->
             <Label
+                x:Name="Text_Mode"
                 Grid.Row="5"
                 Grid.Column="1"
                 Grid.ColumnSpan="3"
-                x:Name="Text_Mode"
                 CharacterSpacing="0"
                 FontFamily="Rajdhani-Medium"
                 FontSize="22"
@@ -244,9 +244,9 @@
                 x:Name="CloseBtn"
                 Grid.Row="8"
                 Grid.ColumnSpan="4"
-                Clicked="CloseBtn_Clicked"
                 BackgroundColor="#EC221F"
                 CharacterSpacing="2"
+                Clicked="CloseBtn_Clicked"
                 CornerRadius="10"
                 FontAttributes="Bold"
                 FontSize="22"

@@ -8,18 +8,21 @@
     shell:Shell.NavBarIsVisible="False">
     <ScrollView>
         <Grid
-            Padding="20,3"
+            Padding="10,3"
             ColumnDefinitions=".30*,.40*,.30*"
             RowDefinitions="Auto,Auto,Auto,Auto,Auto,*"
             RowSpacing="10">
-          
+
             <!--  LABEL | NAME & SURNAME  -->
-            <ContentView Grid.Row="0" Grid.ColumnSpan="2" Padding="5">
-                <StackLayout>
+            <ContentView
+                Grid.Row="0"
+                Grid.ColumnSpan="2"
+                Padding="5">
+                <VerticalStackLayout>
                     <!--  LABEL | NAME  -->
                     <Label
-                        CharacterSpacing="1"
                         x:Name="lbl_name"
+                        CharacterSpacing="1"
                         FontFamily="Rajdhani-Bold"
                         FontSize="45"
                         HorizontalOptions="Start"
@@ -27,37 +30,39 @@
                         TextColor="#000000" />
                     <!--  LABEL | SURNAME  -->
                     <Label
-                        CharacterSpacing="1"
                         x:Name="lbl_lastname"
+                        CharacterSpacing="1"
                         FontFamily="Rajdhani-Bold"
-                        FontSize="34"
+                        FontSize="30"
                         HorizontalOptions="Start"
                         Text=""
                         TextColor="#000000" />
-                </StackLayout>
+                </VerticalStackLayout>
             </ContentView>
 
-            <ContentView Grid.Row="0" Grid.Column="2" Padding="5" >
-                <!--  BUTTON | Check In  -->
+            <ContentView
+                Grid.Row="0"
+                Grid.Column="2"
+                Padding="5">
+                <!--  BUTTON | Log out  -->
                 <Button
-                    x:Name="CheckInBtn"
-                    Clicked="ImageButton_Clicked"
                     Padding="15"
                     BackgroundColor="Transparent"
-                    TextColor="Black"
+                    Clicked="ImageButton_Clicked"
                     FontAttributes="Bold"
                     FontSize="22"
                     HeightRequest="60"
                     HorizontalOptions="End"
-                    VerticalOptions="Start"
                     ImageSource="turn_off.png"
-                    Text="" />
+                    Text=""
+                    TextColor="Black"
+                    VerticalOptions="Start" />
             </ContentView>
             <!--  LABEL | STATUS  -->
             <Label
                 Grid.Row="1"
-                CharacterSpacing="1"
                 Padding="5"
+                CharacterSpacing="1"
                 FontFamily="Rajdhani-Bold"
                 FontSize="24"
                 HorizontalOptions="Start"
@@ -65,33 +70,33 @@
                 TextColor="#000000"
                 VerticalOptions="Center" />
 
-            <!--   STATUS (Active, Inactive, In Progress)  -->
-               <Label
+            <!--  STATUS (Active, Inactive, In Progress)  -->
+            <Label
+                x:Name="Text_Active"
                 Grid.Row="1"
                 Grid.Column="1"
-                    CharacterSpacing="1"
-                    FontAttributes="Bold"
-                    x:Name="Text_Active"
-                        FontFamily="Rajdhani-Bold"
-                    FontSize="28"
-                    HorizontalOptions="Start"
-                    Text=""
-                    TextColor="#14AE5C"
-                    VerticalOptions="Center" />
-           
+                CharacterSpacing="1"
+                FontAttributes="Bold"
+                FontFamily="Rajdhani-Bold"
+                FontSize="28"
+                HorizontalOptions="Start"
+                Text=""
+                TextColor="#14AE5C"
+                VerticalOptions="Center" />
+
             <ContentView Grid.Row="3" Grid.ColumnSpan="3">
                 <StackLayout Spacing="15">
                     <!--  IMAGE | CAR  -->
                     <Image
+                        x:Name="img_status"
                         Aspect="AspectFit"
                         HeightRequest="60"
-                        x:Name="img_status"
                         VerticalOptions="End" />
 
                     <!--  LABEL | Ready to start a trip?  -->
                     <Label
-                        CharacterSpacing="1"
                         x:Name="Text_Status"
+                        CharacterSpacing="1"
                         FontFamily="Rajdhani-SemiBold"
                         FontSize="Large"
                         HorizontalOptions="Center"
@@ -107,9 +112,9 @@
                         BackgroundColor="#297CC0"
                         CharacterSpacing="3"
                         Clicked="OnGoToModePageClicked"
-                        FontFamily="Rajdhani-SemiBold"
                         CornerRadius="30"
                         FontAttributes="Bold"
+                        FontFamily="Rajdhani-SemiBold"
                         FontSize="32"
                         HeightRequest="60"
                         HorizontalOptions="Fill"
@@ -120,7 +125,10 @@
             </ContentView>
 
             <!--  INFO | LAST TRIP DETAIL  -->
-            <ContentView Grid.Row="4" Grid.ColumnSpan="3" Padding="5">
+            <ContentView
+                Grid.Row="4"
+                Grid.ColumnSpan="3"
+                Padding="5">
                 <Grid
                     Padding="5,10"
                     ColumnDefinitions=".20*,.80*"
@@ -158,9 +166,9 @@
                         VerticalOptions="Center" />
                     <!--  LABEL | CTL-(HQ) to Customer  -->
                     <Label
+                        x:Name="txt_last_location"
                         Grid.Row="2"
                         Grid.Column="1"
-                        x:Name="txt_last_location"
                         CharacterSpacing="1"
                         FontFamily="Rajdhani-SemiBold"
                         FontSize="22"
@@ -178,9 +186,9 @@
                         VerticalOptions="Center" />
                     <!--  LABEL | Date 21/07/25  -->
                     <Label
+                        x:Name="txt_last_date"
                         Grid.Row="3"
                         Grid.Column="1"
-                        x:Name="txt_last_date"
                         CharacterSpacing="1"
                         FontFamily="Rajdhani-SemiBold"
                         FontSize="22"
@@ -198,9 +206,9 @@
                         VerticalOptions="Center" />
                     <!--  LABEL | Distance 540.8 km  -->
                     <Label
+                        x:Name="txt_last_distance"
                         Grid.Row="4"
                         Grid.Column="1"
-                        x:Name="txt_last_distance"
                         CharacterSpacing="1"
                         FontFamily="Rajdhani-SemiBold"
                         FontSize="22"
@@ -218,9 +226,9 @@
                         VerticalOptions="Center" />
                     <!--  LABEL | 3 Passengers  -->
                     <Label
+                        x:Name="txt_last_mileage"
                         Grid.Row="5"
                         Grid.Column="1"
-                        x:Name="txt_last_mileage"
                         CharacterSpacing="1"
                         FontFamily="Rajdhani-SemiBold"
                         FontSize="22"
@@ -231,29 +239,27 @@
             </ContentView>
 
 
-            <ContentView 
-                Grid.Row="5"
-                Grid.ColumnSpan="3">
+            <ContentView Grid.Row="5" Grid.ColumnSpan="3">
                 <!--  BUTTON | Trip History  -->
                 <Button
-                x:Name="HistoryBtn"            
-                Clicked="HistoryBtn_Clicked"
-                BackgroundColor="#E8E8E8"
-                FontFamily="Rajdhani-SemiBold"
-                BorderColor="#A3A2A2"               
-                BorderWidth="0"
-                CharacterSpacing="3"
-                CornerRadius="30"
-                FontAttributes="Bold"
-                FontSize="24"
-                HeightRequest="60"
-                HorizontalOptions="Fill"
-                Text="TRIP HISTORY"
-                TextColor="Black"
-                VerticalOptions="Center"               
-                WidthRequest="300" />
+                    x:Name="HistoryBtn"
+                    BackgroundColor="#E8E8E8"
+                    BorderColor="#A3A2A2"
+                    BorderWidth="0"
+                    CharacterSpacing="3"
+                    Clicked="HistoryBtn_Clicked"
+                    CornerRadius="30"
+                    FontAttributes="Bold"
+                    FontFamily="Rajdhani-SemiBold"
+                    FontSize="24"
+                    HeightRequest="60"
+                    HorizontalOptions="Fill"
+                    Text="TRIP HISTORY"
+                    TextColor="Black"
+                    VerticalOptions="Center"
+                    WidthRequest="300" />
             </ContentView>
-            <!-- 3C9BCB-->
+            <!--  3C9BCB  -->
         </Grid>
     </ScrollView>
 </ContentPage>

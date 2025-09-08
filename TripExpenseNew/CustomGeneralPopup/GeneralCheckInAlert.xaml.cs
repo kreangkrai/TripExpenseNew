@@ -28,6 +28,8 @@ public partial class GeneralCheckInAlert : Popup
 
     private void Location_Clicked(object sender, EventArgs e)
     {
+        Location.IsEnabled = false;
         Close("Location");
+        Location.IsEnabled = true;
     }
 }

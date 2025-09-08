@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="TripExpenseNew.HistoryPage"
-             xmlns:shell="http://schemas.microsoft.com/dotnet/2021/maui"
-             Title="HistoryPage"
-             shell:Shell.NavBarIsVisible="False">
-        <Grid
-            Padding="10,10"
-            ColumnDefinitions="*"
-            ColumnSpacing="5"
-            RowDefinitions="Auto,*,Auto"
-            RowSpacing="10">
-            <!--  LABEL | ACTIVE TRIP  -->
-            <Label
-                Grid.Row="0"
-                Grid.Column="0"
-                CharacterSpacing="1"
-                FontAttributes="Bold"
-                FontFamily="Rajdhani-Bold"
-                FontSize="32"
-                HorizontalOptions="Center"
-                Text="TRIP HISTORY"
-                TextColor="#1C4698"
-                VerticalOptions="Center" />
-            <Frame
-                        Padding="10" 
-                        Grid.Row="1"
-                        Grid.Column="0"
-                        Margin="1"
-                        BackgroundColor= "White"
-                        CornerRadius="5"
-                        BorderColor="DimGrey"
-                        HasShadow="False">
+<ContentPage
+    x:Class="TripExpenseNew.HistoryPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:shell="http://schemas.microsoft.com/dotnet/2021/maui"
+    Title="HistoryPage"
+    shell:Shell.NavBarIsVisible="False">
+    <Grid
+        Padding="10,10"
+        ColumnDefinitions="*"
+        ColumnSpacing="5"
+        RowDefinitions="Auto,*,Auto"
+        RowSpacing="10">
+        <!--  LABEL | ACTIVE TRIP  -->
+        <Label
+            Grid.Row="0"
+            Grid.Column="0"
+            CharacterSpacing="1"
+            FontAttributes="Bold"
+            FontFamily="Rajdhani-Bold"
+            FontSize="32"
+            HorizontalOptions="Center"
+            Text="TRIP HISTORY"
+            TextColor="#1C4698"
+            VerticalOptions="Center" />
+        <Frame
+            Grid.Row="1"
+            Grid.Column="0"
+            Margin="1"
+            Padding="10"
+            BackgroundColor="White"
+            BorderColor="DimGrey"
+            CornerRadius="5"
+            HasShadow="False">
             <ScrollView>
-            <StackLayout>
-                    <CollectionView x:Name="HistoryTripCollectionView" 
-                                    SelectionMode="Single">
+                <StackLayout>
+                    <CollectionView x:Name="HistoryTripCollectionView" SelectionMode="Single">
                         <CollectionView.ItemsLayout>
-                            <LinearItemsLayout Orientation="Vertical" ItemSpacing="5" />
+                            <LinearItemsLayout ItemSpacing="5" Orientation="Vertical" />
                         </CollectionView.ItemsLayout>
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
@@ -45,23 +45,71 @@
                                     Margin="1"
                                     Padding="5,1"
                                     BackgroundColor="White"
-                                    CornerRadius="5"                          
+                                    CornerRadius="5"
                                     HasShadow="False">
                                     <Frame.GestureRecognizers>
-                                        <TapGestureRecognizer Tapped="OnItemTapped" />
+                                        <TapGestureRecognizer x:Name="TapRecognizer" Tapped="OnItemTapped" />
                                     </Frame.GestureRecognizers>
-                                    <Grid RowDefinitions="Auto,Auto,Auto,Auto" Padding="1" RowSpacing="1">
+                                    <Grid
+                                        Padding="1"
+                                        RowDefinitions="Auto,Auto,Auto,Auto"
+                                        RowSpacing="1">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="50" />
                                             <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
-                                        <Label Grid.Row="0"  Grid.ColumnSpan="2" Text="{Binding TextTrip}" VerticalOptions="Center" FontSize="20" FontFamily="Rajdhani-Bold"/>
-                                        <Image Grid.Row="1"  Grid.Column="0" Source="{Binding IconLocationSource}" WidthRequest="16" HeightRequest="16" Margin="10,0" />
-                                        <Label Grid.Row="1"  Grid.Column="1" Padding="1" Text="{Binding TextLocation}" VerticalOptions="Center"  FontSize="16" FontFamily="Rajdhani-Medium"/>
-                                        <Image Grid.Row="2"  Grid.Column="0" Source="{Binding IconMileageSource}" WidthRequest="16" HeightRequest="16" Margin="10,0" />
-                                        <Label Grid.Row="2"  Grid.Column="1" Padding="1" Text="{Binding TextMileage}" VerticalOptions="Center" FontSize="16" FontFamily="Rajdhani-Medium" />
-                                        <Image Grid.Row="3"  Grid.Column="0" Source="{Binding IconDistanceSource}" WidthRequest="16" HeightRequest="16" Margin="10,0" />
-                                        <Label Grid.Row="3"  Grid.Column="1" Padding="1" Text="{Binding TextDistance}" VerticalOptions="Center" FontSize="16" FontFamily="Rajdhani-Medium" />
+                                        <Label
+                                            Grid.Row="0"
+                                            Grid.ColumnSpan="2"
+                                            FontFamily="Rajdhani-Bold"
+                                            FontSize="20"
+                                            Text="{Binding TextTrip}"
+                                            VerticalOptions="Center" />
+                                        <Image
+                                            Grid.Row="1"
+                                            Grid.Column="0"
+                                            Margin="10,0"
+                                            HeightRequest="16"
+                                            Source="{Binding IconLocationSource}"
+                                            WidthRequest="16" />
+                                        <Label
+                                            Grid.Row="1"
+                                            Grid.Column="1"
+                                            Padding="1"
+                                            FontFamily="Rajdhani-Medium"
+                                            FontSize="16"
+                                            Text="{Binding TextLocation}"
+                                            VerticalOptions="Center" />
+                                        <Image
+                                            Grid.Row="2"
+                                            Grid.Column="0"
+                                            Margin="10,0"
+                                            HeightRequest="16"
+                                            Source="{Binding IconMileageSource}"
+                                            WidthRequest="16" />
+                                        <Label
+                                            Grid.Row="2"
+                                            Grid.Column="1"
+                                            Padding="1"
+                                            FontFamily="Rajdhani-Medium"
+                                            FontSize="16"
+                                            Text="{Binding TextMileage}"
+                                            VerticalOptions="Center" />
+                                        <Image
+                                            Grid.Row="3"
+                                            Grid.Column="0"
+                                            Margin="10,0"
+                                            HeightRequest="16"
+                                            Source="{Binding IconDistanceSource}"
+                                            WidthRequest="16" />
+                                        <Label
+                                            Grid.Row="3"
+                                            Grid.Column="1"
+                                            Padding="1"
+                                            FontFamily="Rajdhani-Medium"
+                                            FontSize="16"
+                                            Text="{Binding TextDistance}"
+                                            VerticalOptions="Center" />
                                     </Grid>
                                 </Frame>
                             </DataTemplate>
@@ -70,23 +118,23 @@
                 </StackLayout>
             </ScrollView>
         </Frame>
-            <Button
-                x:Name="CancelBtn"
-                Clicked="CancelBtn_Clicked"
-                Grid.Row="2"
-                Grid.Column="0"
-                Padding="10,5"
-                BackgroundColor="#00B0B0"
-                TextColor="White"
-                CharacterSpacing="3"
-                ContentLayout="Left,5"
-                CornerRadius="10"
-                FontAttributes="Bold"
-                FontSize="22"
-                HeightRequest="50"
-                HorizontalOptions="Fill"
-                ImageSource="arrow_left.png"
-                Text="BACK"
-                VerticalOptions="Center" />
-        </Grid>
+        <Button
+            x:Name="CancelBtn"
+            Grid.Row="2"
+            Grid.Column="0"
+            Padding="10,5"
+            BackgroundColor="#00B0B0"
+            CharacterSpacing="3"
+            Clicked="CancelBtn_Clicked"
+            ContentLayout="Left,5"
+            CornerRadius="10"
+            FontAttributes="Bold"
+            FontSize="22"
+            HeightRequest="50"
+            HorizontalOptions="Fill"
+            ImageSource="arrow_left.png"
+            Text="BACK"
+            TextColor="White"
+            VerticalOptions="Center" />
+    </Grid>
 </ContentPage>

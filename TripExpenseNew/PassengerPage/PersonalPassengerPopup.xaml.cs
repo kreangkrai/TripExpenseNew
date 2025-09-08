@@ -36,12 +36,16 @@ public partial class PersonalPassengerPopup : Popup
     }
     private void CancelBtn_Clicked(object sender, EventArgs e)
     {
+        CancelBtn.IsEnabled = false;
         Close(null);
+        CancelBtn.IsEnabled = true;
     }
 
     private void AddBtn_Clicked(object sender, EventArgs e)
     {
+        AddBtn.IsEnabled = false;
         Close(_emp);
+        AddBtn.IsEnabled = true;
     }
 
     private void OnCollectionViewSelectionChanged(object sender, SelectionChangedEventArgs e)

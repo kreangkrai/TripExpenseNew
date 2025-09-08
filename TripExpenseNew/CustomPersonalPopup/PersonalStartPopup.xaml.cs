@@ -36,11 +36,14 @@ public partial class PersonalStartPopup : Popup
 
     private void CancelBtn_Clicked(object sender, EventArgs e)
     {
+        CancelBtn.IsEnabled = false;
         Close(null);
+        CancelBtn.IsEnabled = true;
     }
 
     private void OKBtn_Clicked(object sender, EventArgs e)
     {
+        OKBtn.IsEnabled = false;
         PersonalPopupStartModel personal = new PersonalPopupStartModel()
         {
             IsCustomer = Iscustomer,
@@ -49,6 +52,7 @@ public partial class PersonalStartPopup : Popup
             mileage = Text_Mileage.Text != null ? Convert.ToInt32(Text_Mileage.Text) : 0
         };
         Close(personal);
+        OKBtn.IsEnabled = true;
     }
 
     private void CustomerBtn_Clicked(object sender, EventArgs e)

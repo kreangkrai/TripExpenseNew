@@ -225,6 +225,7 @@ public partial class Home_Page : ContentPage
     }
     private async void OnGoToModePageClicked(object sender, EventArgs e)
     {
+        AddTripBtn.IsEnabled = false;
         if (trips.Count == 0)
         {
             await Navigation.PushAsync(new ModePage());
@@ -319,6 +320,7 @@ public partial class Home_Page : ContentPage
                 await Navigation.PushAsync(new ModePage());
             }
         }
+        AddTripBtn.IsEnabled = true;
     }
     private async void AddTripBtn_Clicked(object sender, EventArgs e)
     {
@@ -336,9 +338,11 @@ public partial class Home_Page : ContentPage
 
     private async void HistoryBtn_Clicked(object sender, EventArgs e)
     {
+        HistoryBtn.IsEnabled = false;
         List<LastTripViewModel> lastTrips = await LastTrip.GetByEmp(emp_id.emp_id);
         lastTrips = lastTrips.Where(w=>w.trip_start.Date >= DateTime.Now.AddDays(-60)).ToList();
         lastTrips = lastTrips.OrderByDescending(o=>o.trip_start).ToList();
         await Navigation.PushAsync(new HistoryPage(lastTrips));
+        HistoryBtn.IsEnabled = true;
     }
 }

@@ -34,17 +34,21 @@ public partial class PublicStopPopup : Popup
     }
     private void CancelBtn_Clicked(object sender, EventArgs e)
     {
+        CancelBtn.IsEnabled = false;
         Close(null);
+        CancelBtn.IsEnabled = true;
     }
 
     private void OKBtn_Clicked(object sender, EventArgs e)
     {
+        OKBtn.IsEnabled = false;
         PublicPopupStopModel p = new PublicPopupStopModel()
         {
             IsCustomer = Iscustomer,
             location = Text_Location.Text,
         };
         Close(p);
+        OKBtn.IsEnabled = true;
     }
 
     private void CustomerBtn_Clicked(object sender, EventArgs e)

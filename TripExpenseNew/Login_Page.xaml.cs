@@ -202,6 +202,7 @@ public partial class Login_Page : ContentPage
     }
     private async void LogInBtn_Clicked(object sender, EventArgs e)
     {
+        LogInBtn.IsEnabled = false;
         if (txt_name.Text.Trim().Length > 0 && txt_password.Text.Trim().Length > 0)
         {
             var popup = new ProgressPopup();
@@ -256,5 +257,6 @@ public partial class Login_Page : ContentPage
                 await DisplayAlert("", "กรุณากรอกให้ครบ", "OK");
             });
         }
+        LogInBtn.IsEnabled = true;
     }
 }

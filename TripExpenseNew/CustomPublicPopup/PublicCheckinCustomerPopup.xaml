@@ -67,9 +67,9 @@
                     StrokeShape="RoundRectangle 5"
                     StrokeThickness="2">
                     <Entry
+                        x:Name="Text_Customer"
                         Margin="2"
                         CharacterSpacing="1"
-                        x:Name="Text_Customer"
                         ClearButtonVisibility="WhileEditing"
                         FontSize="18"
                         Keyboard="Text"

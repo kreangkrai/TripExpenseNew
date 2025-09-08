@@ -34,18 +34,18 @@
             <!--  ENTRY | Trip Name  -->
             <Border
                 BackgroundColor="#E7E7E7"
+                HeightRequest="50"
                 Stroke="#C8C8C8"
                 StrokeShape="RoundRectangle 5"
-                HeightRequest="50"
                 StrokeThickness="2">
                 <Label
                     x:Name="Text_TripName"
                     Margin="2"
                     Padding="4"
                     CharacterSpacing="1"
-                    VerticalOptions="Center"
                     FontSize="18"
-                    Text="{Binding Text}" />
+                    Text="{Binding Text}"
+                    VerticalOptions="Center" />
             </Border>
         </VerticalStackLayout>
 
@@ -53,27 +53,27 @@
         <VerticalStackLayout Spacing="5">
             <!--  LABEL | Driver:  -->
             <Label
-        CharacterSpacing="1"
-        FontAttributes="Bold"
-        FontSize="20"
-        HorizontalOptions="Start"
-        Text="Driver:"
-        VerticalOptions="Center" />
+                CharacterSpacing="1"
+                FontAttributes="Bold"
+                FontSize="20"
+                HorizontalOptions="Start"
+                Text="Driver:"
+                VerticalOptions="Center" />
             <!--  ENTRY | Trip Name  -->
             <Border
-            BackgroundColor="#E7E7E7"
-            Stroke="#C8C8C8"
-            StrokeShape="RoundRectangle 5"
-            HeightRequest="50"
-            StrokeThickness="2">
-            <Label
-            x:Name="Text_Driver"
-            Margin="2"
-            Padding="4"
-            CharacterSpacing="1"
-            VerticalOptions="Center"
-            FontSize="18"
-            Text="{Binding Text}" />
+                BackgroundColor="#E7E7E7"
+                HeightRequest="50"
+                Stroke="#C8C8C8"
+                StrokeShape="RoundRectangle 5"
+                StrokeThickness="2">
+                <Label
+                    x:Name="Text_Driver"
+                    Margin="2"
+                    Padding="4"
+                    CharacterSpacing="1"
+                    FontSize="18"
+                    Text="{Binding Text}"
+                    VerticalOptions="Center" />
             </Border>
         </VerticalStackLayout>
 
@@ -98,9 +98,9 @@
                 x:Name="CustomerBtn"
                 Grid.Row="3"
                 Padding="10,15"
-                Clicked="CustomerBtn_Clicked"
                 BackgroundColor="#BEBEBE"
                 CharacterSpacing="2"
+                Clicked="CustomerBtn_Clicked"
                 CornerRadius="10"
                 FontAttributes="Bold"
                 FontSize="22"
@@ -122,9 +122,9 @@
                 Grid.Row="3"
                 Grid.Column="1"
                 Padding="10,15"
-                Clicked="OtherBtn_Clicked"
                 BackgroundColor="#BEBEBE"
                 CharacterSpacing="2"
+                Clicked="OtherBtn_Clicked"
                 CornerRadius="10"
                 FontAttributes="Bold"
                 FontSize="22"
@@ -162,13 +162,13 @@
                     CharacterSpacing="1"
                     ClearButtonVisibility="WhileEditing"
                     FontSize="18"
-                    Keyboard="Text"
                     HeightRequest="50"
+                    Keyboard="Text"
                     Placeholder=" Ex. CTL-(HQ)"
                     Text="" />
             </Border>
         </VerticalStackLayout>
-        
+
         <!--  Stop Time  -->
         <Grid ColumnDefinitions=".50*,.50*" ColumnSpacing="10">
             <!--  LABEL | Stop Time:  -->
@@ -188,14 +188,13 @@
                 StrokeThickness="2" />
             <TimePicker
                 x:Name="timePicker"
-                PropertyChanged="timePicker_PropertyChanged"
                 Grid.Column="1"
                 CharacterSpacing="5"
                 FontSize="20"
                 Format="HH:mm"
-             
                 HeightRequest="50"
                 HorizontalOptions="Center"
+                PropertyChanged="timePicker_PropertyChanged"
                 TextColor="#297CC0" />
             <Label Text="{Binding SelectedTime, StringFormat='Selected Time: {0:HH:mm}'}" />
         </Grid>
@@ -203,19 +202,20 @@
         <!--  BUTTON  -->
         <VerticalStackLayout
             Grid.Row="6"
-            Grid.ColumnSpan="2" Padding="0,20"
+            Grid.ColumnSpan="2"
+            Padding="0,20"
             Spacing="15">
             <!--  BUTTON | Confirm  -->
             <Button
                 x:Name="ConfirmBtn"
                 Padding="10,15"
-                Clicked="ConfirmBtn_Clicked"
                 BackgroundColor="#14AE5C"
                 CharacterSpacing="2"
+                Clicked="ConfirmBtn_Clicked"
                 CornerRadius="30"
-                HeightRequest="60"
                 FontAttributes="Bold"
                 FontSize="22"
+                HeightRequest="60"
                 HorizontalOptions="Fill"
                 Text="Confirm"
                 VerticalOptions="Center">

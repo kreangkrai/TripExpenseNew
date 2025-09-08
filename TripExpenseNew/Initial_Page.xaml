@@ -7,7 +7,11 @@
     Title="Initial_Page"
     shell:Shell.NavBarIsVisible="False">
 
-    <StackLayout Padding="60,120" Spacing="20" VerticalOptions="Center" HorizontalOptions="Center">
+    <StackLayout
+        Padding="60,120"
+        HorizontalOptions="Center"
+        Spacing="20"
+        VerticalOptions="Center">
         <Image
             Aspect="AspectFit"
             HeightRequest="280"
@@ -29,13 +33,13 @@
 
         <Button
             x:Name="GeneralBtn"
-            Clicked="GeneralBtn_Clicked"
             BackgroundColor="LightGrey"
             CharacterSpacing="03"
+            Clicked="GeneralBtn_Clicked"
             CornerRadius="50"
+            HeightRequest="100"
             Text="GENERAL"
             VerticalOptions="End"
-            HeightRequest="100"
             WidthRequest="300" />
     </StackLayout>
 

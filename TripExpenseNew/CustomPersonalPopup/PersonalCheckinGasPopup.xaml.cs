@@ -10,10 +10,13 @@ public partial class PersonalCheckinGasPopup : Popup
 	}
     private void OnCloseButtonClicked(object sender, EventArgs e)
     {
+        CancelBtn.IsEnabled = false;
         Close(null);
+        CancelBtn.IsEnabled = false;
     }
     private void OnOkButtonClicked(object sender, EventArgs e)
     {
+        OKBtn.IsEnabled = false;
         string customer = Text_Gas.Text;
         double cash = Text_Cash.Text == "" ? 0 : Convert.ToDouble(Text_Cash.Text);
         if (customer.Trim() != "" && Text_Gas.Text != null)
@@ -25,5 +28,6 @@ public partial class PersonalCheckinGasPopup : Popup
         {
             Close(null);
         }       
+        OKBtn.IsEnabled = true;
     }
 }

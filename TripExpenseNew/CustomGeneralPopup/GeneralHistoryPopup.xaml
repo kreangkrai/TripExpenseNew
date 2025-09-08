@@ -20,19 +20,19 @@
 
             <!--  LABEL | TRIP NAME  -->
             <Label
+                x:Name="Text_Trip"
                 Grid.Row="0"
                 Grid.ColumnSpan="2"
-                x:Name="Text_Trip"
                 CharacterSpacing="1"
                 FontAttributes="Bold"
                 FontFamily="Rajdhani-Bold"
                 FontSize="28"
                 HorizontalOptions="Center"
+                HorizontalTextAlignment="Center"
                 Text="Summary"
                 TextColor="#1C4698"
-                HorizontalTextAlignment="Center"
-                VerticalTextAlignment="Center"
-                VerticalOptions="Center" />
+                VerticalOptions="Center"
+                VerticalTextAlignment="Center" />
 
             <!--  LABEL | Date:  -->
             <Label
@@ -46,10 +46,10 @@
                 VerticalOptions="Start" />
             <!--  LABEL | Date  -->
             <Label
+                x:Name="Text_Date"
                 Grid.Row="1"
                 Grid.Column="1"
                 Grid.ColumnSpan="3"
-                x:Name="Text_Date"
                 CharacterSpacing="0"
                 FontFamily="Rajdhani-Medium"
                 FontSize="22"
@@ -69,10 +69,10 @@
                 VerticalOptions="Start" />
             <!--  LABEL | Mode  -->
             <Label
+                x:Name="Text_Mode"
                 Grid.Row="2"
                 Grid.Column="1"
                 Grid.ColumnSpan="3"
-                x:Name="Text_Mode"
                 CharacterSpacing="0"
                 FontFamily="Rajdhani-Medium"
                 FontSize="22"
@@ -92,9 +92,9 @@
                 VerticalOptions="Start" />
             <!--  LABEL | Distance  -->
             <Label
+                x:Name="Text_Distance"
                 Grid.Row="3"
                 Grid.Column="1"
-                x:Name="Text_Distance"
                 CharacterSpacing="0"
                 FontFamily="Rajdhani-Medium"
                 FontSize="22"
@@ -107,9 +107,9 @@
                 x:Name="CloseBtn"
                 Grid.Row="4"
                 Grid.ColumnSpan="4"
-                Clicked="CloseBtn_Clicked"
                 BackgroundColor="#EC221F"
                 CharacterSpacing="2"
+                Clicked="CloseBtn_Clicked"
                 CornerRadius="10"
                 FontAttributes="Bold"
                 FontSize="22"

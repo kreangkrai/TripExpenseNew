@@ -20,12 +20,16 @@ public partial class PublicCheckinOtherPopup : Popup
 
     private void OnCloseButtonClicked(object sender, EventArgs e)
     {
+        CancelBtn.IsEnabled = false;
         Close(null);
+        CancelBtn.IsEnabled = true;
     }
 
     private void OnOkButtonClicked(object sender, EventArgs e)
     {
+        OKBtn.IsEnabled = false;
         string location = Text_Other.Text;
         Close(location);
+        OKBtn.IsEnabled = true;
     }
 }

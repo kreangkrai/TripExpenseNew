@@ -149,7 +149,9 @@ public partial class CompanyPage : ContentPage
     }
     private async void CompanyCancel_Clicked(object sender, EventArgs e)
     {
+        CompanyCancel.IsEnabled = false;
         await Shell.Current.GoToAsync("Home_Page");
+        CompanyCancel.IsEnabled = true;
     }
 
     private async Task GetLocation()
@@ -266,6 +268,7 @@ public partial class CompanyPage : ContentPage
     }
     private async void ScanQR_Clicked(object sender, EventArgs e)
     {
+        ScanQR.IsEnabled = false;
         var result = await this.ShowPopupAsync(new ScanQRPopup());
 
         if (result != null)
@@ -318,10 +321,12 @@ public partial class CompanyPage : ContentPage
                 await DisplayAlert("", "Invalid QR Code", "ตกลง");
             });
         }
+        ScanQR.IsEnabled = true;
     }
 
     private async void Btn_Start_Clicked(object sender, EventArgs e)
     {
+        Btn_Start.IsEnabled = false;
         bool internet = await Internet.CheckServerConnection("/api/CurrentTime/get");
         if (internet)
         {
@@ -370,5 +375,6 @@ public partial class CompanyPage : ContentPage
                 await DisplayAlert("", "Cann't connect to server", "OK");
             });
         }
+        Btn_Start.IsEnabled = true;
     }
 }

@@ -1,4 +1,5 @@
 using CommunityToolkit.Maui.Views;
+using SixLabors.ImageSharp.ColorSpaces;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using TripExpenseNew.Models;
@@ -61,6 +62,8 @@ public partial class CompanyHistoryPopup : Popup
 
     private void CloseBtn_Clicked(object sender, System.EventArgs e)
     {
+        CloseBtn.IsEnabled = false;
         Close(null);
+        CloseBtn.IsEnabled = true;
     }
 }

@@ -58,6 +58,8 @@ public partial class PublicHistoryPopup : Popup
 
     private void CloseBtn_Clicked(object sender, System.EventArgs e)
     {
+        CloseBtn.IsEnabled = false;
         Close(null);
+        CloseBtn.IsEnabled = true;
     }
 }

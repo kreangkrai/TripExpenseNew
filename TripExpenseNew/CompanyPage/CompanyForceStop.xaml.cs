@@ -238,7 +238,6 @@ public partial class CompanyForceStop : ContentPage
                     OtherBtn.BackgroundColor = Color.FromArgb("#297CC0");
                 }
 
-
                 Console.WriteLine($"ALL ==> Lat: {location.Latitude}, Lon: {location.Longitude}");
             }
             else
@@ -272,13 +271,13 @@ public partial class CompanyForceStop : ContentPage
     private void CustomerBtn_Clicked(object sender, EventArgs e)
     {
         IsCustomer = true;
-
         CustomerBtn.BackgroundColor = Color.FromArgb("#297CC0");
         OtherBtn.BackgroundColor = Colors.Grey;
     }
 
     private async void ConfirmBtn_Clicked(object sender, EventArgs e)
     {
+        ConfirmBtn.IsEnabled = false;
         if (Text_Location.Text.Trim() != "" && Text_MileageStop.Text.Trim() != "")
         {
             bool internet = await Internet.CheckServerConnection("/api/CurrentTime/get");
@@ -486,10 +485,12 @@ public partial class CompanyForceStop : ContentPage
                 await DisplayAlert("", "กรุณาใส่ข้อมูล", "OK");
             });
         }
+        ConfirmBtn.IsEnabled = true;
     }
 
     private async void CancelBtn_Clicked(object sender, EventArgs e)
     {
+        CancelBtn.IsEnabled = false;
 #if IOS
         locationService?.StopUpdatingLocation();
         locationService = null;
@@ -499,6 +500,7 @@ public partial class CompanyForceStop : ContentPage
 #endif
 
         await Shell.Current.GoToAsync("Home_Page");
+        CancelBtn.IsEnabled = true;
     }
 
     private void timePicker_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)

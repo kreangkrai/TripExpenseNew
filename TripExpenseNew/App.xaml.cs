@@ -8,6 +8,9 @@ namespace TripExpenseNew
         public App()
         {
             InitializeComponent();
+            // UserAppTheme = AppTheme.Unspecified;  // ตามระบบ (Light หรือ Dark)
+            UserAppTheme = AppTheme.Light;  // บังคับ Light Mode
+                                                  // หรือ UserAppTheme = AppTheme.Dark;   // บังคับ Dark Mode
             MainPage = new AppShell();
             //MainPage = mainPage;
         }

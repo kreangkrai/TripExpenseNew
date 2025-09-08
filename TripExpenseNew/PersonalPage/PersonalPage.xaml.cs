@@ -139,6 +139,7 @@ public partial class PersonalPage : ContentPage
     }
     private async void PersonalStart_Clicked(object sender, EventArgs e)
     {
+        PersonalStart.IsEnabled = false;
         bool internet = await Internet.CheckServerConnection("/api/CurrentTime/get");
         if (internet)
         {
@@ -173,10 +174,12 @@ public partial class PersonalPage : ContentPage
                 await DisplayAlert("", "Cann't connect to server", "OK");
             });
         }
+        PersonalStart.IsEnabled = true;
     }
 
     private async void PersonalCancel_Clicked(object sender, EventArgs e)
     {
+        PersonalCancel.IsEnabled = false;
 #if IOS
         locationService?.StopUpdatingLocation();
 #elif ANDROID
@@ -185,6 +188,7 @@ public partial class PersonalPage : ContentPage
 #endif
 
         await Shell.Current.GoToAsync("Home_Page");
+        PersonalCancel.IsEnabled = true;
     }
 
     private async Task GetLocation()

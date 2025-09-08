@@ -202,6 +202,7 @@ public partial class PublicPage : ContentPage
 
     private async void PublicStart_Clicked(object sender, EventArgs e)
     {
+        PublicStart.IsEnabled = false;
         bool internet = await Internet.CheckServerConnection("/api/CurrentTime/get");
         if (internet)
         {
@@ -233,6 +234,7 @@ public partial class PublicPage : ContentPage
                 await DisplayAlert("", "Cann't connect to server", "OK");
             });
         }
+        PublicStart.IsEnabled = true;
     }
 
     private async Task GetLocation()
@@ -305,6 +307,7 @@ public partial class PublicPage : ContentPage
 
     private async void PublicCancel_Clicked(object sender, EventArgs e)
     {
+        PublicCancel.IsEnabled = false;
 #if IOS
         locationService?.StopUpdatingLocation();
 #elif ANDROID
@@ -313,5 +316,6 @@ public partial class PublicPage : ContentPage
 #endif
 
         await Shell.Current.GoToAsync("Home_Page");
+        PublicCancel.IsEnabled = true;
     }
 }

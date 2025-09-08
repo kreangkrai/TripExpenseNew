@@ -10,10 +10,13 @@ public partial class CompanyCheckinGasCashPopup : Popup
     }
     private void OnCloseButtonClicked(object sender, EventArgs e)
     {
+        CancelBtn.IsEnabled = false;
         Close(null);
+        CancelBtn.IsEnabled = true;
     }
     private void OnOkButtonClicked(object sender, EventArgs e)
     {
+        OKBtn.IsEnabled = false;
         string customer = Text_Gas.Text;
         double cash = Text_Cash.Text == "" ? 0 : Convert.ToDouble(Text_Cash.Text);
         int mileage = Text_Mileage.Text == "" ? 0 : Convert.ToInt32(Text_Mileage.Text);
@@ -26,5 +29,6 @@ public partial class CompanyCheckinGasCashPopup : Popup
         {
             Close(null);
         }
+        OKBtn.IsEnabled = true;
     }
 }

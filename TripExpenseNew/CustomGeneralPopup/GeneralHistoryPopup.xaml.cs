@@ -18,7 +18,6 @@ public partial class GeneralHistoryPopup : Popup
     protected override void OnParentChanged()
     {
         base.OnParentChanged();
-        Text_Trip.Text = data.trip;
         Text_Date.Text = data.date;
         Text_Distance.Text = $"{data.distance.ToString("#0.#")} km.";
         Text_Mode.Text = "GENERAL";
@@ -26,6 +25,8 @@ public partial class GeneralHistoryPopup : Popup
 
     private void CloseBtn_Clicked(object sender, System.EventArgs e)
     {
+        CloseBtn.IsEnabled = false;
         Close(null);
+        CloseBtn.IsEnabled = true;
     }
 }

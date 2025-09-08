@@ -58,11 +58,14 @@ public partial class ScanQRPopup : Popup
 
     private void Confirm_Clicked(object sender, EventArgs e)
     {
+        Confirm.IsEnabled = false;
         Close(Confirm.Text);
+        Confirm.IsEnabled = true;
     }
 
     private async void ReadQRBtn_Clicked(object sender, EventArgs e)
     {
+        ReadQRBtn.IsEnabled = false;
         try
         {
 
@@ -173,10 +176,13 @@ public partial class ScanQRPopup : Popup
         {
             Close(null);
         }
+        ReadQRBtn.IsEnabled = true;
     }
 
     private void Cancel_Clicked(object sender, EventArgs e)
     {
+        Cancel.IsEnabled = false;
         Close(null);
+        Cancel.IsEnabled = true;
     }
 }

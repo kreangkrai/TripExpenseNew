@@ -58,7 +58,9 @@ public partial class HistoryPage : ContentPage
 
     private async void CancelBtn_Clicked(object sender, EventArgs e)
     {
+        CancelBtn.IsEnabled = false;
         await Shell.Current.GoToAsync("Home_Page");
+        CancelBtn.IsEnabled = true;
     }
 
     private async void OnItemTapped(object sender, EventArgs e)

@@ -35,11 +35,14 @@ public partial class PublicStartPopup : Popup
 
     private void CancelBtn_Clicked(object sender, EventArgs e)
     {
+        CancelBtn.IsEnabled = false;
         Close(null);
+        CancelBtn.IsEnabled = true;
     }
 
     private void OKBtn_Clicked(object sender, EventArgs e)
     {
+        OKBtn.IsEnabled = false;
         PublicPopupStartModel p = new PublicPopupStartModel()
         {
             IsCustomer = Iscustomer,
@@ -47,6 +50,7 @@ public partial class PublicStartPopup : Popup
             location_name = Text_Location.Text,
         };
         Close(p);
+        OKBtn.IsEnabled = true;
     }
 
     private void CustomerBtn_Clicked(object sender, EventArgs e)

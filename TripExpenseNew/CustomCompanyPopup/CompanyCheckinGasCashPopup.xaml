@@ -9,10 +9,10 @@
     <Border
         Margin="5"
         Padding="0,5"
-        WidthRequest="350"
         BackgroundColor="White"
         Stroke="Transparent"
-        StrokeShape="{RoundRectangle CornerRadius='20'}">
+        StrokeShape="{RoundRectangle CornerRadius='20'}"
+        WidthRequest="350">
         <Grid
             Padding="20,10"
             ColumnDefinitions=".50*,.50*"
@@ -67,9 +67,9 @@
                     StrokeShape="RoundRectangle 5"
                     StrokeThickness="2">
                     <Entry
+                        x:Name="Text_Gas"
                         Margin="2"
                         CharacterSpacing="1"
-                        x:Name="Text_Gas"
                         ClearButtonVisibility="WhileEditing"
                         FontSize="18"
                         Keyboard="Text"
@@ -78,34 +78,34 @@
                 </Border>
             </VerticalStackLayout>
             <VerticalStackLayout
-            Grid.Row="2"
-            Grid.ColumnSpan="2"
-            Spacing="5">
+                Grid.Row="2"
+                Grid.ColumnSpan="2"
+                Spacing="5">
                 <!--  LABEL | Mileage  -->
                 <Label
-                CharacterSpacing="1"
-                FontAttributes="None"
-                FontSize="20"
-                HorizontalOptions="Start"
-                Text="Mileage:"
-                VerticalOptions="Center" />
-                <!--  ENTRY | USERNAME  -->
-                 <Border
-                Stroke="#C8C8C8"
-                StrokeShape="RoundRectangle 5"
-                StrokeThickness="2">
-                            <Entry
-                    Margin="2"
                     CharacterSpacing="1"
-                    x:Name="Text_Mileage"
-                    ClearButtonVisibility="WhileEditing"
-                    FontSize="18"
-                    Keyboard="Numeric"
-                    Placeholder=" Ex. 123456"
-                    Text="0" />
+                    FontAttributes="None"
+                    FontSize="20"
+                    HorizontalOptions="Start"
+                    Text="Mileage:"
+                    VerticalOptions="Center" />
+                <!--  ENTRY | USERNAME  -->
+                <Border
+                    Stroke="#C8C8C8"
+                    StrokeShape="RoundRectangle 5"
+                    StrokeThickness="2">
+                    <Entry
+                        x:Name="Text_Mileage"
+                        Margin="2"
+                        CharacterSpacing="1"
+                        ClearButtonVisibility="WhileEditing"
+                        FontSize="18"
+                        Keyboard="Numeric"
+                        Placeholder=" Ex. 123456"
+                        Text="0" />
                 </Border>
             </VerticalStackLayout>
-            
+
             <!--  Amount to Pay  -->
             <VerticalStackLayout
                 Grid.Row="3"
@@ -113,7 +113,7 @@
                 Spacing="5">
                 <!--  LABEL | Amount to Pay  -->
                 <Label
-                    CharacterSpacing="1"                  
+                    CharacterSpacing="1"
                     FontAttributes="None"
                     FontSize="20"
                     HorizontalOptions="Start"
@@ -125,8 +125,8 @@
                     StrokeShape="RoundRectangle 5"
                     StrokeThickness="2">
                     <Entry
-                        Margin="2"
                         x:Name="Text_Cash"
+                        Margin="2"
                         CharacterSpacing="1"
                         ClearButtonVisibility="WhileEditing"
                         FontSize="18"

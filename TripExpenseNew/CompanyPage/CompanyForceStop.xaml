@@ -34,9 +34,9 @@
             <!--  ENTRY | Trip Name  -->
             <Border
                 BackgroundColor="#E7E7E7"
+                HeightRequest="50"
                 Stroke="#C8C8C8"
                 StrokeShape="RoundRectangle 5"
-                HeightRequest="50"
                 StrokeThickness="2">
                 <Label
                     x:Name="Text_TripName"
@@ -70,9 +70,9 @@
                 x:Name="CustomerBtn"
                 Grid.Row="1"
                 Padding="10,15"
-                Clicked="CustomerBtn_Clicked"
                 BackgroundColor="#BEBEBE"
                 CharacterSpacing="2"
+                Clicked="CustomerBtn_Clicked"
                 CornerRadius="10"
                 FontAttributes="Bold"
                 FontSize="22"
@@ -94,9 +94,9 @@
                 Grid.Row="1"
                 Grid.Column="1"
                 Padding="10,15"
-                Clicked="OtherBtn_Clicked"
                 BackgroundColor="#BEBEBE"
                 CharacterSpacing="2"
+                Clicked="OtherBtn_Clicked"
                 CornerRadius="10"
                 FontAttributes="Bold"
                 FontSize="22"
@@ -134,40 +134,40 @@
                     CharacterSpacing="1"
                     ClearButtonVisibility="WhileEditing"
                     FontSize="18"
-                    Keyboard="Text"
                     HeightRequest="50"
+                    Keyboard="Text"
                     Placeholder=" Ex. CTL-(HQ)"
                     Text="" />
             </Border>
         </VerticalStackLayout>
         <!--  STOP LOCATION  -->
         <VerticalStackLayout Spacing="5">
-                      
-            
+
+
             <!--  LABEL | Car:  -->
             <Label
-        CharacterSpacing="1"
-        FontAttributes="Bold"
-        FontSize="20"
-        HorizontalOptions="Start"
-        Text="Car:"
-        VerticalOptions="Center" />
+                CharacterSpacing="1"
+                FontAttributes="Bold"
+                FontSize="20"
+                HorizontalOptions="Start"
+                Text="Car:"
+                VerticalOptions="Center" />
             <!--  ENTRY | Stop Location:  -->
             <Border
-        Stroke="#C8C8C8"
-        StrokeShape="RoundRectangle 5"
-        StrokeThickness="2">
+                Stroke="#C8C8C8"
+                StrokeShape="RoundRectangle 5"
+                StrokeThickness="2">
                 <Entry
-            x:Name="Text_Car"
-            Margin="2"
-            CharacterSpacing="1"
-            ClearButtonVisibility="WhileEditing"
-            FontSize="18"
-            Keyboard="Text"
-            HeightRequest="50"
-            Placeholder=""
+                    x:Name="Text_Car"
+                    Margin="2"
+                    CharacterSpacing="1"
+                    ClearButtonVisibility="WhileEditing"
+                    FontSize="18"
+                    HeightRequest="50"
                     IsEnabled="False"
-            Text="" />
+                    Keyboard="Text"
+                    Placeholder=""
+                    Text="" />
             </Border>
         </VerticalStackLayout>
         <!--  Mileage Start  -->
@@ -183,19 +183,19 @@
                 VerticalOptions="Center" />
             <!--  ENTRY | Mileage Start  -->
             <Border
-                    Grid.Column="1"
-                    Stroke="#C8C8C8"
-                    StrokeShape="RoundRectangle 5"
-                    StrokeThickness="2">
+                Grid.Column="1"
+                Stroke="#C8C8C8"
+                StrokeShape="RoundRectangle 5"
+                StrokeThickness="2">
                 <Entry
                     x:Name="Text_MileageStart"
                     Margin="2"
                     CharacterSpacing="1"
                     ClearButtonVisibility="WhileEditing"
                     FontSize="18"
-                    Keyboard="Numeric"
-                    IsEnabled="False"
                     HeightRequest="50"
+                    IsEnabled="False"
+                    Keyboard="Numeric"
                     Text="" />
             </Border>
         </Grid>
@@ -221,9 +221,9 @@
                     x:Name="Text_MileageStop"
                     Margin="2"
                     CharacterSpacing="1"
-                    HeightRequest="50"
                     ClearButtonVisibility="WhileEditing"
                     FontSize="18"
+                    HeightRequest="50"
                     HorizontalOptions="Center"
                     HorizontalTextAlignment="Center"
                     Keyboard="Numeric"
@@ -257,8 +257,8 @@
                 Format="HH:mm"
                 HeightRequest="50"
                 HorizontalOptions="Center"
-                TextColor="#297CC0"
-                PropertyChanged="timePicker_PropertyChanged"/>
+                PropertyChanged="timePicker_PropertyChanged"
+                TextColor="#297CC0" />
             <Label Text="{Binding SelectedTime, StringFormat='Selected Time: {0:HH:mm}'}" />
         </Grid>
 
@@ -271,13 +271,13 @@
             <Button
                 x:Name="ConfirmBtn"
                 Padding="10,15"
-                Clicked="ConfirmBtn_Clicked"
                 BackgroundColor="#14AE5C"
                 CharacterSpacing="2"
+                Clicked="ConfirmBtn_Clicked"
                 CornerRadius="30"
-                HeightRequest="60"
                 FontAttributes="Bold"
                 FontSize="22"
+                HeightRequest="60"
                 HorizontalOptions="Fill"
                 Text="Confirm"
                 VerticalOptions="Center">

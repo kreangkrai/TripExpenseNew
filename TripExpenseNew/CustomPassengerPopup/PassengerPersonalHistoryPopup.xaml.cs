@@ -57,6 +57,8 @@ public partial class PassengerPersonalHistoryPopup : Popup
 
     private void CloseBtn_Clicked(object sender, EventArgs e)
     {
+        CloseBtn.IsEnabled = false;
         Close(null);
+        CloseBtn.IsEnabled = true;
     }
 }

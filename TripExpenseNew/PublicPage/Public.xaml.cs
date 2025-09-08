@@ -677,6 +677,7 @@ namespace TripExpenseNew.PublicPage
         }
         private async void StopTripBtn_Clicked(object sender, EventArgs e)
         {
+            StopTripBtn.IsEnabled = false;
             try
             {
                 bool internet = await Internet.CheckServerConnection("/api/CurrentTime/get");
@@ -871,10 +872,12 @@ namespace TripExpenseNew.PublicPage
             {
                 Console.WriteLine($"StopTripBtn_Clicked Error: {ex}");
             }
+            StopTripBtn.IsEnabled = true;
         }
 
         private async void CheckInBtn_Clicked(object sender, EventArgs e)
         {
+            CheckInBtn.IsEnabled = false;
             try
             {
                 var popup = new PublicCheckInAlert { Title = "CHECK IN", Message = "Please Select type of check in?" };
@@ -1099,6 +1102,7 @@ namespace TripExpenseNew.PublicPage
                     await DisplayAlert("", ex.Message, "OK");
                 });
             }
+            CheckInBtn.IsEnabled = true;
         }
     }
 }

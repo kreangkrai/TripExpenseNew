@@ -9,18 +9,18 @@
     <Border
         Padding="0"
         BackgroundColor="White"
-        WidthRequest="350"
         Stroke="Transparent"
-        StrokeShape="{RoundRectangle CornerRadius='20'}">
-            <Grid
+        StrokeShape="{RoundRectangle CornerRadius='20'}"
+        WidthRequest="350">
+        <Grid
             Padding="20,20"
             ColumnDefinitions=".50*,.50*"
             ColumnSpacing="10"
             RowDefinitions="Auto,Auto,Auto,Auto"
             RowSpacing="15">
 
-                <!--  LABEL | START TRIP  -->
-                <Label
+            <!--  LABEL | START TRIP  -->
+            <Label
                 Grid.Row="0"
                 Grid.ColumnSpan="2"
                 CharacterSpacing="1"
@@ -32,8 +32,8 @@
                 TextColor="#1C4698"
                 VerticalOptions="Center" />
 
-                <!--  Location Type  -->
-                <Grid
+            <!--  Location Type  -->
+            <Grid
                 Grid.Row="1"
                 Grid.ColumnSpan="2"
                 ColumnDefinitions=".50*,.50*"
@@ -42,86 +42,86 @@
                 RowSpacing="5"
                 VerticalOptions="Center">
 
-                    <!--  LABEL | Location Type:  -->
-                    <Label
-                    CharacterSpacing="1"
+                <!--  LABEL | Location Type:  -->
+                <Label
                     Grid.Row="0"
                     Grid.ColumnSpan="2"
+                    CharacterSpacing="1"
                     FontAttributes="None"
                     FontSize="20"
                     HorizontalOptions="Start"
                     Text="Location Type:"
                     VerticalOptions="Center" />
 
-                    <!--  BUTTON | CUSTOMER  -->
-                    <Button
+                <!--  BUTTON | CUSTOMER  -->
+                <Button
                     x:Name="CustomerBtn"
-                    Clicked="CustomerBtn_Clicked"
                     Grid.Row="1"
                     Padding="10,15"
                     BackgroundColor="#BEBEBE"
                     CharacterSpacing="2"
+                    Clicked="CustomerBtn_Clicked"
                     CornerRadius="10"
                     FontAttributes="Bold"
                     FontSize="22"
                     HorizontalOptions="Fill"
                     Text="Customer"
                     VerticalOptions="Center">
-                        <Button.Shadow>
-                            <Shadow
+                    <Button.Shadow>
+                        <Shadow
                             Brush="Black"
                             Opacity="0.2"
                             Radius="15"
                             Offset="0,4" />
-                        </Button.Shadow>
-                    </Button>
+                    </Button.Shadow>
+                </Button>
 
-                    <!--  BUTTON | OTHER  -->
-                    <Button
+                <!--  BUTTON | OTHER  -->
+                <Button
                     x:Name="OtherBtn"
-                    Clicked="OtherBtn_Clicked"
                     Grid.Row="1"
                     Grid.Column="1"
                     Padding="10,15"
                     BackgroundColor="#BEBEBE"
                     CharacterSpacing="2"
+                    Clicked="OtherBtn_Clicked"
                     CornerRadius="10"
                     FontAttributes="Bold"
                     FontSize="22"
                     HorizontalOptions="Fill"
                     Text="Other"
                     VerticalOptions="Center">
-                        <Button.Shadow>
-                            <Shadow
+                    <Button.Shadow>
+                        <Shadow
                             Brush="Black"
                             Opacity="0.2"
                             Radius="15"
                             Offset="0,4" />
-                        </Button.Shadow>
-                    </Button>
-                </Grid>
+                    </Button.Shadow>
+                </Button>
+            </Grid>
 
-                <!--  CUSTOMER/LOCATION  -->
-                <VerticalStackLayout
+            <!--  CUSTOMER/LOCATION  -->
+            <VerticalStackLayout
                 Grid.Row="2"
                 Grid.ColumnSpan="2"
                 Spacing="5">
 
-                    <Label
+                <Label
                     CharacterSpacing="1"
                     FontAttributes="None"
                     FontSize="20"
                     HorizontalOptions="Start"
                     Text="Stop Location:"
                     VerticalOptions="Center" />
-                    <!--  ENTRY | USERNAME  -->
-                    <Border
+                <!--  ENTRY | USERNAME  -->
+                <Border
                     Stroke="#C8C8C8"
                     StrokeShape="RoundRectangle 5"
                     StrokeThickness="2">
-                        <Entry
-                        Margin="1"
+                    <Entry
                         x:Name="Text_Location"
+                        Margin="1"
                         CharacterSpacing="1"
                         ClearButtonVisibility="WhileEditing"
                         FontSize="18"
@@ -129,11 +129,11 @@
                         Keyboard="Text"
                         Placeholder=" Ex. CTL-(HQ)"
                         Text="" />
-                    </Border>
-                </VerticalStackLayout>
+                </Border>
+            </VerticalStackLayout>
 
-                <!--  BUTTON | Cancel  -->
-                <Button
+            <!--  BUTTON | Cancel  -->
+            <Button
                 x:Name="CancelBtn"
                 Grid.Row="3"
                 Padding="10,15"
@@ -146,17 +146,17 @@
                 HorizontalOptions="Fill"
                 Text="Cancel"
                 VerticalOptions="Center">
-                    <Button.Shadow>
-                        <Shadow
+                <Button.Shadow>
+                    <Shadow
                         Brush="Black"
                         Opacity="0.2"
                         Radius="15"
                         Offset="0,4" />
-                    </Button.Shadow>
-                </Button>
+                </Button.Shadow>
+            </Button>
 
-                <!--  BUTTON | OK  -->
-                <Button
+            <!--  BUTTON | OK  -->
+            <Button
                 x:Name="OKBtn"
                 Grid.Row="3"
                 Grid.Column="1"
@@ -170,14 +170,14 @@
                 HorizontalOptions="Fill"
                 Text="OK"
                 VerticalOptions="Center">
-                    <Button.Shadow>
-                        <Shadow
+                <Button.Shadow>
+                    <Shadow
                         Brush="Black"
                         Opacity="0.2"
                         Radius="15"
                         Offset="0,4" />
-                    </Button.Shadow>
-                </Button>
-            </Grid>
+                </Button.Shadow>
+            </Button>
+        </Grid>
     </Border>
 </toolkit:Popup>

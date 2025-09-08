@@ -1,46 +1,58 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-               xmlns:toolkit="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
-               x:Class="TripExpenseNew.CustomGeneralPopup.GeneralCheckInAlert"
-               x:Name="this"
-               Color="Transparent">
-    <Frame BackgroundColor="White"
-           CornerRadius="10"
-           Padding="10"
-           VerticalOptions="Center"
-           WidthRequest="350"
-           HorizontalOptions="Center"
-           HasShadow="False">
+<toolkit:Popup
+    x:Class="TripExpenseNew.CustomGeneralPopup.GeneralCheckInAlert"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:toolkit="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
+    x:Name="this"
+    Color="Transparent">
+    <Frame
+        Padding="10"
+        BackgroundColor="White"
+        CornerRadius="10"
+        HasShadow="False"
+        HorizontalOptions="Center"
+        VerticalOptions="Center"
+        WidthRequest="350">
         <VerticalStackLayout Spacing="5">
-            <Label Text="{Binding Title, Source={x:Reference this}}"
-                   FontSize="28"
-                   FontAttributes="Bold" FontFamily="Rajdhani-Bold"
-                   HorizontalOptions="Center" />
-            <Label Text="{Binding Message, Source={x:Reference this}}"
-                   FontSize="16"
-                   HorizontalOptions="Center" FontFamily="Rajdhani-Medium"
-                   LineBreakMode="WordWrap" />
-            <VerticalStackLayout  Spacing="10" VerticalOptions="Center" HorizontalOptions="Fill" Padding="5">
-                <Button Text="Location"
-                        x:Name="Location"
-                        FontSize="22"
-                        TextColor="White"
-                        CharacterSpacing="1"
-                        BackgroundColor="#297CC0"
-                        FontAttributes="Bold"
-                        FontFamily="Rajdhani-Bold"
-                        HeightRequest="60"
-                        ContentLayout="Right,5"
-                        ImageSource="industrial.png"
-                        MaximumHeightRequest="60"
-                        Clicked="Location_Clicked"  HorizontalOptions="Fill">
+            <Label
+                FontAttributes="Bold"
+                FontFamily="Rajdhani-Bold"
+                FontSize="28"
+                HorizontalOptions="Center"
+                Text="{Binding Title, Source={x:Reference this}}" />
+            <Label
+                FontFamily="Rajdhani-Medium"
+                FontSize="16"
+                HorizontalOptions="Center"
+                LineBreakMode="WordWrap"
+                Text="{Binding Message, Source={x:Reference this}}" />
+            <VerticalStackLayout
+                Padding="5"
+                HorizontalOptions="Fill"
+                Spacing="10"
+                VerticalOptions="Center">
+                <Button
+                    x:Name="Location"
+                    BackgroundColor="#297CC0"
+                    CharacterSpacing="1"
+                    Clicked="Location_Clicked"
+                    ContentLayout="Right,5"
+                    FontAttributes="Bold"
+                    FontFamily="Rajdhani-Bold"
+                    FontSize="22"
+                    HeightRequest="60"
+                    HorizontalOptions="Fill"
+                    ImageSource="industrial.png"
+                    MaximumHeightRequest="60"
+                    Text="Location"
+                    TextColor="White">
                     <Button.Shadow>
                         <Shadow
-                        Brush="Black"
-                        Opacity="0.2"
-                        Radius="5"
-                        Offset="0,2" />
+                            Brush="Black"
+                            Opacity="0.2"
+                            Radius="5"
+                            Offset="0,2" />
                     </Button.Shadow>
                 </Button>
             </VerticalStackLayout>

@@ -9,9 +9,9 @@
     <Border
         Padding="0"
         BackgroundColor="White"
-        WidthRequest="350"
         Stroke="Transparent"
-        StrokeShape="{RoundRectangle CornerRadius='20'}">
+        StrokeShape="{RoundRectangle CornerRadius='20'}"
+        WidthRequest="350">
         <Grid
             Padding="20,20"
             ColumnDefinitions=".50*,.50*"
@@ -44,9 +44,9 @@
 
                 <!--  LABEL | Location Type:  -->
                 <Label
-                    CharacterSpacing="1"
                     Grid.Row="0"
                     Grid.ColumnSpan="2"
+                    CharacterSpacing="1"
                     FontAttributes="None"
                     FontSize="20"
                     HorizontalOptions="Start"
@@ -56,11 +56,11 @@
                 <!--  BUTTON | CUSTOMER  -->
                 <Button
                     x:Name="CustomerBtn"
-                    Clicked="CustomerBtn_Clicked"
                     Grid.Row="1"
                     Padding="10,15"
                     BackgroundColor="#BEBEBE"
                     CharacterSpacing="2"
+                    Clicked="CustomerBtn_Clicked"
                     CornerRadius="10"
                     FontAttributes="Bold"
                     FontSize="22"
@@ -79,12 +79,12 @@
                 <!--  BUTTON | OTHER  -->
                 <Button
                     x:Name="OtherBtn"
-                    Clicked="OtherBtn_Clicked"
                     Grid.Row="1"
                     Grid.Column="1"
                     Padding="10,15"
                     BackgroundColor="#BEBEBE"
                     CharacterSpacing="2"
+                    Clicked="OtherBtn_Clicked"
                     CornerRadius="10"
                     FontAttributes="Bold"
                     FontSize="22"
@@ -120,8 +120,8 @@
                     StrokeShape="RoundRectangle 5"
                     StrokeThickness="2">
                     <Entry
-                        Margin="1"
                         x:Name="Text_Location"
+                        Margin="1"
                         CharacterSpacing="1"
                         ClearButtonVisibility="WhileEditing"
                         FontSize="18"
@@ -134,29 +134,29 @@
 
             <!--  LABEL | CAR:  -->
             <Label
-                    x:Name="Text_Car"
+                x:Name="Text_Car"
                 Grid.Row="3"
                 Grid.ColumnSpan="2"
-                    CharacterSpacing="1"
-                    TextColor="#297CC0"
-                    FontAttributes="None"
-                    FontSize="20"
-                    HorizontalOptions="Start"
-                    Text="Car:"
-                    VerticalOptions="Center" />
+                CharacterSpacing="1"
+                FontAttributes="None"
+                FontSize="20"
+                HorizontalOptions="Start"
+                Text="Car:"
+                TextColor="#297CC0"
+                VerticalOptions="Center" />
 
             <!--  LABEL | Customer/Location:  -->
             <Label
-                    CharacterSpacing="1"
-                    x:Name="Text_mileage"
-                    Grid.Row="4"
-                    Grid.ColumnSpan="2"
-                    FontAttributes="None"
-                    FontSize="20"
-                    HorizontalOptions="Start"
-                    TextColor="#297CC0"
-                    Text="Mileage Start:"
-                    VerticalOptions="Center" />
+                x:Name="Text_mileage"
+                Grid.Row="4"
+                Grid.ColumnSpan="2"
+                CharacterSpacing="1"
+                FontAttributes="None"
+                FontSize="20"
+                HorizontalOptions="Start"
+                Text="Mileage Start:"
+                TextColor="#297CC0"
+                VerticalOptions="Center" />
 
             <!--  Mileage  -->
             <VerticalStackLayout
@@ -177,13 +177,13 @@
                     StrokeShape="RoundRectangle 5"
                     StrokeThickness="2">
                     <Entry
+                        x:Name="Text_Mileage"
                         Margin="1"
                         CharacterSpacing="1"
-                        x:Name="Text_Mileage"
                         ClearButtonVisibility="WhileEditing"
                         FontSize="18"
-                        Keyboard="Numeric"
                         HeightRequest="40"
+                        Keyboard="Numeric"
                         Placeholder=" Ex. 123456"
                         Text="{Binding Text}" />
                 </Border>
@@ -196,7 +196,7 @@
                 Padding="10,15"
                 BackgroundColor="#EC221F"
                 CharacterSpacing="2"
-                            Clicked="CancelBtn_Clicked"
+                Clicked="CancelBtn_Clicked"
                 CornerRadius="10"
                 FontAttributes="Bold"
                 FontSize="22"

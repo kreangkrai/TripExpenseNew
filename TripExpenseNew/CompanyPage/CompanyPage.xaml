@@ -14,7 +14,7 @@
         RowDefinitions="Auto,Auto,Auto,Auto,Auto"
         RowSpacing="25"
         VerticalOptions="Center">
-      
+
         <!--  IMAGE | pickupcar.gif  -->
         <Image
             Grid.Row="0"
@@ -36,31 +36,31 @@
             VerticalOptions="Center" />
 
         <Button
+            x:Name="ScanQR"
             Grid.Row="2"
             Padding="10,5"
-            x:Name="ScanQR"
-            Clicked="ScanQR_Clicked"
             BackgroundColor="#297CC0"
             CharacterSpacing="3"
+            Clicked="ScanQR_Clicked"
+            ContentLayout="Right,10"
             CornerRadius="20"
             FontAttributes="Bold"
             FontSize="24"
             HeightRequest="80"
             HorizontalOptions="Center"
+            ImageSource="scan.png"
             IsEnabled="False"
             Text="SCAN QR"
             TextColor="White"
-            ImageSource="scan.png"
-            ContentLayout="Right,10"
             VerticalOptions="Center"
             WidthRequest="300" />
         <Button
+            x:Name="Btn_Start"
             Grid.Row="3"
             Padding="10,5"
-            x:Name="Btn_Start"
-            Clicked="Btn_Start_Clicked"
             BackgroundColor="#297CC0"
             CharacterSpacing="3"
+            Clicked="Btn_Start_Clicked"
             CornerRadius="20"
             FontAttributes="Bold"
             FontSize="24"
