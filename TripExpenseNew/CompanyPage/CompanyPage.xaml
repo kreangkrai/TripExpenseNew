@@ -66,7 +66,7 @@
             FontSize="24"
             HeightRequest="80"
             HorizontalOptions="Center"
-            IsEnabled="True"
+            IsEnabled="False"
             Text="Processing.."
             TextColor="White"
             VerticalOptions="Center"
