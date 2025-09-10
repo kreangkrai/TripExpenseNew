@@ -32,7 +32,6 @@ public partial class PublicPage : ContentPage
     private ILogin Login;
     private IMileage Mileage;
     private IInternet Internet;
-    private CancellationTokenSource cancellationTokenSource;
     private bool isTracking = true;
     Tuple<string, bool> loc = new Tuple<string, bool>("", false);
     Location g_location = null;
@@ -278,9 +277,6 @@ public partial class PublicPage : ContentPage
                         }
                     }
 #endif
-
-
-                cancellationTokenSource = new CancellationTokenSource();
 
 #if IOS
                     if (locationService == null)

@@ -36,7 +36,6 @@ public partial class CompanyPage : ContentPage
     private ILastTrip LastTrip;
     private IMileage Mileage;
     private IBorrower Borrower;
-    private CancellationTokenSource cancellationTokenSource;
     private bool isTracking = true;
     Tuple<string, bool> loc = new Tuple<string, bool>("", false);
     Location g_location = null;
@@ -197,8 +196,6 @@ public partial class CompanyPage : ContentPage
 #endif
 
 
-                cancellationTokenSource = new CancellationTokenSource();
-
 #if IOS
                 if (locationService == null)
                 {
@@ -248,7 +245,7 @@ public partial class CompanyPage : ContentPage
                 loc = findLocation.FindLocation(GetLocationCTL, GetLocationOthers, GetLocationCustomers, location);
 
                 g_location = location;
-                Console.WriteLine($"ALL ==> Lat: {location.Latitude}, Lon: {location.Longitude}");
+                //Console.WriteLine($"ALL ==> Lat: {location.Latitude}, Lon: {location.Longitude}");
             }
 
             #region STOP

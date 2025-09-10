@@ -100,7 +100,7 @@ namespace TripExpenseNew.Platforms.Android
                 {
                     try
                     {
-                        var request = new GeolocationRequest(GeolocationAccuracy.High, TimeSpan.FromSeconds(10));
+                        var request = new GeolocationRequest(GeolocationAccuracy.Best, TimeSpan.FromSeconds(10));
                         var location = await Geolocation.Default.GetLocationAsync(request, cancellationToken);
                         if (location != null)
                         {

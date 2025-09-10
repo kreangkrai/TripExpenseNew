@@ -31,7 +31,6 @@ public partial class PersonalPage : ContentPage
     private ILogin Login;
     private IMileage Mileage;
     private IInternet Internet;
-    private CancellationTokenSource cancellationTokenSource;
     private bool isTracking = true;
     Tuple<string, bool> loc = new Tuple<string, bool> ("",false);
     Location g_location = null;
@@ -231,10 +230,7 @@ public partial class PersonalPage : ContentPage
                             return;
                         }
                     }
-#endif
-
-                
-                cancellationTokenSource = new CancellationTokenSource();
+#endif                             
 
 #if IOS
                     if (locationService == null)
@@ -280,12 +276,11 @@ public partial class PersonalPage : ContentPage
                     }
                 });
 
-
                 FindLocationService findLocation = new FindLocationService();
                 loc = findLocation.FindLocation(GetLocationCTL, GetLocationOthers, GetLocationCustomers, location);
 
                 g_location = location;
-                Console.WriteLine($"ALL ==> Lat: {location.Latitude}, Lon: {location.Longitude}");
+                //Console.WriteLine($"ALL ==> Lat: {location.Latitude}, Lon: {location.Longitude}");
             }
             else
             {
