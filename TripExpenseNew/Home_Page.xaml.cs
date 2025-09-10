@@ -332,7 +332,12 @@ public partial class Home_Page : ContentPage
         bool result = await DisplayAlert("", "Do you want to Logout?", "Yes", "No");
         if (result)
         {
-            await Shell.Current.GoToAsync("Login_Page");
+
+#if ANDROID
+             Application.Current.Quit();
+#elif IOS
+            UIKit.UIApplication.SharedApplication.PerformSelector(new ObjCRuntime.Selector("terminateWithSuccess"), null, 0);
+#endif
         }
     }
 
