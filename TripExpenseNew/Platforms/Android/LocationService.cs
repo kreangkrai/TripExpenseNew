@@ -59,7 +59,7 @@ namespace TripExpenseNew.Platforms.Android
 
                 StartForeground(1000, notification);
 
-                int trackingInterval = intent.GetIntExtra("TrackingInterval", 5000); // ค่าเริ่มต้น 5 วินาที
+                int trackingInterval = intent.GetIntExtra("TrackingInterval", 3000); // ค่าเริ่มต้น 3 วินาที
                 //Console.WriteLine($"เริ่มติดตามตำแหน่งด้วยช่วงเวลา: {trackingInterval}ms");
                 Task.Run(() => StartTrackingAsync(cancellationTokenSource.Token, trackingInterval));
             }

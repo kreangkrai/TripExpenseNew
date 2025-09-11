@@ -267,7 +267,7 @@ namespace TripExpenseNew.PersonalPage
                 if (previousLocation != null)
                 {
                     double dist = CalculateDistance(previousLocation, location);
-                    double displacement = CalculateDistanceInactive(10.0, interval);
+                    double displacement = CalculateDistanceInactive(5.0, interval);
                     if (dist >= displacement)
                     {
                         totalDistance += CalculateDistance(previousLocation, location);
@@ -407,39 +407,6 @@ namespace TripExpenseNew.PersonalPage
                                 await LocationOther.Insert(locationOther);
                             }
                         }
-                        else
-                        {
-                            double dist = CalculateDistance(start.location, location);
-                            if (dist > 0.1)
-                            {
-                                if (start.IsCustomer)
-                                {
-                                    LocationCustomerModel locationCustomer = new LocationCustomerModel()
-                                    {
-                                        emp_id = emp_id,
-                                        latitude = location.Latitude,
-                                        longitude = location.Longitude,
-                                        location = start.location_name,
-                                        location_id = DateTime.Now.ToString("yyyyMMddHHmmssfff", cultureinfo),
-                                        zipcode = zipcode,
-                                    };
-                                    await LocationCustomer.Insert(locationCustomer);
-                                }
-                                else
-                                {
-                                    LocationOtherModel locationOther = new LocationOtherModel()
-                                    {
-                                        emp_id = emp_id,
-                                        latitude = location.Latitude,
-                                        longitude = location.Longitude,
-                                        location = start.location_name,
-                                        location_id = DateTime.Now.ToString("yyyyMMddHHmmssfff", cultureinfo),
-                                        zipcode = zipcode,
-                                    };
-                                    await LocationOther.Insert(locationOther);
-                                }
-                            }
-                        }
 
                         #endregion
 
@@ -503,7 +470,7 @@ namespace TripExpenseNew.PersonalPage
                         //INACTIVE
 
                         double dist = CalculateDistance(g_location, location);
-                        double displacement = CalculateDistanceInactive(10.0, interval);
+                        double displacement = CalculateDistanceInactive(5.0, interval);
                         if (dist < displacement)  // Check ditance beteween point to point less than displacement
                         {
                             int minute_inactive = (int)(DateTime.Now - lastInactive).TotalMinutes;
@@ -861,7 +828,7 @@ namespace TripExpenseNew.PersonalPage
                                                 emp_id = emp_id,
                                                 latitude = g_location.Latitude,
                                                 longitude = g_location.Longitude,
-                                                location = start.location_name,
+                                                location = personal.location,
                                                 location_id = DateTime.Now.ToString("yyyyMMddHHmmssfff", cultureinfo),
                                                 zipcode = zipcode,
                                             };
@@ -874,13 +841,14 @@ namespace TripExpenseNew.PersonalPage
                                                 emp_id = emp_id,
                                                 latitude = g_location.Latitude,
                                                 longitude = g_location.Longitude,
-                                                location = start.location_name,
+                                                location = personal.location,
                                                 location_id = DateTime.Now.ToString("yyyyMMddHHmmssfff", cultureinfo),
                                                 zipcode = zipcode,
                                             };
                                             await LocationOther.Insert(locationOther);
                                         }
                                     }
+
                                     #endregion
 
                                     #region GET PASSENGER
