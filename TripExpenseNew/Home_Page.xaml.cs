@@ -19,18 +19,21 @@ using TripExpenseNew.ViewModels;
 
 public partial class Home_Page : ContentPage
 {
+    string version = "1.0.0";
+    private IVersion Version;
     private ILastTrip LastTrip;
     private ILogin Login;
     private IEmployee Employee;
     CultureInfo cultureinfo = new CultureInfo("en-us");
     LoginModel emp_id = new LoginModel();
     List<LastTripViewModel> trips = new List<LastTripViewModel>();
-    public Home_Page(ILastTrip _LastTrip, ILogin _Login, IEmployee _Employee)
+    public Home_Page(ILastTrip _LastTrip, ILogin _Login, IEmployee _Employee, IVersion _Version)
     {
         InitializeComponent();
         LastTrip = _LastTrip;
         Login = _Login;
         Employee = _Employee;
+        Version = _Version;
     }
 
     protected override async void OnAppearing()
@@ -38,68 +41,109 @@ public partial class Home_Page : ContentPage
         base.OnAppearing();
         try
         {
-            List<EmployeeModel> employees = await Employee.GetEmployees();
-            emp_id = await Login.GetLogin(1);
-            trips = await GetLastTrip();
-            trips = trips.OrderByDescending(o => o.date).ToList();
-
-            string name = employees.Where(w => w.emp_id == emp_id.emp_id).FirstOrDefault().name;
-            lbl_name.Text = name.Split(' ')[0];
-            lbl_lastname.Text = name.Split(' ')[1];
-
-            if (trips.Count > 0)
+            VersionModel ver = await Version.GetVersion();
+            if (ver.version != version && ver.version != "")
+            { // Link Update
+#if IOS
+                await Application.Current.MainPage.DisplayAlert("", $"Please Update iOS New Version {ver.version}", "OK");
+                //await Launcher.OpenAsync(new Uri(url));
+#elif ANDROID
+            await Application.Current.MainPage.DisplayAlert("", $"Please Update Android New Version {ver.version}", "OK");
+            //await Launcher.OpenAsync(new Uri(url))
+#endif
+                await Shell.Current.GoToAsync("Login_Page");
+            }
+            else
             {
-                if (trips[0].status == true) // In Use Trip
+
+
+                List<EmployeeModel> employees = await Employee.GetEmployees();
+                emp_id = await Login.GetLogin(1);
+                trips = await GetLastTrip();
+                trips = trips.OrderByDescending(o => o.date).ToList();
+
+                string name = employees.Where(w => w.emp_id == emp_id.emp_id).FirstOrDefault().name;
+                lbl_name.Text = name.Split(' ')[0];
+                lbl_lastname.Text = name.Split(' ')[1];
+
+                if (trips.Count > 0)
                 {
-                    if (trips[0].trip_start.Date == DateTime.Now.Date)
+                    if (trips[0].status == true) // In Use Trip
                     {
-                        if (trips[0].mode.Contains("PASSENGER PERSONAL"))
+                        if (trips[0].trip_start.Date == DateTime.Now.Date)
                         {
-                            MainThread.BeginInvokeOnMainThread(() =>
+                            if (trips[0].mode.Contains("PASSENGER PERSONAL"))
                             {
-                                if (BindingContext is ButtonTrip viewModel)
+                                MainThread.BeginInvokeOnMainThread(() =>
                                 {
-                                    viewModel.ButtonTripText = "DROP OFF";
-                                    AddTripBtn.BackgroundColor = Color.FromArgb("#FF474C");
-                                    Text_Active.TextColor = Color.FromArgb("#FF474C");
-                                    Text_Status.Text = $"You are a passenger of \n{trips[0].driver_name} \n Do you want to drop off now?";
-                                    Text_Active.Text = "IN USE";
-                                    img_status.Source = "passenger.png";
-                                }
-                                else
-                                {
-                                    AddTripBtn.Text = "DROP OFF";
-                                    AddTripBtn.BackgroundColor = Color.FromArgb("#FF474C");
-                                    Text_Active.TextColor = Color.FromArgb("#FF474C");
-                                    Text_Status.Text = $"You are a passenger of \n{trips[0].driver_name} \n Do you want to drop off now?";
-                                    Text_Active.Text = "IN USE";
-                                    img_status.Source = "passenger.png";
-                                }
-                            });
-                        }
-                        else if (trips[0].mode.Contains("PASSENGER COMPANY"))
-                        {
-                            MainThread.BeginInvokeOnMainThread(() =>
+                                    if (BindingContext is ButtonTrip viewModel)
+                                    {
+                                        viewModel.ButtonTripText = "DROP OFF";
+                                        AddTripBtn.BackgroundColor = Color.FromArgb("#FF474C");
+                                        Text_Active.TextColor = Color.FromArgb("#FF474C");
+                                        Text_Status.Text = $"You are a passenger of \n{trips[0].driver_name} \n Do you want to drop off now?";
+                                        Text_Active.Text = "IN USE";
+                                        img_status.Source = "passenger.png";
+                                    }
+                                    else
+                                    {
+                                        AddTripBtn.Text = "DROP OFF";
+                                        AddTripBtn.BackgroundColor = Color.FromArgb("#FF474C");
+                                        Text_Active.TextColor = Color.FromArgb("#FF474C");
+                                        Text_Status.Text = $"You are a passenger of \n{trips[0].driver_name} \n Do you want to drop off now?";
+                                        Text_Active.Text = "IN USE";
+                                        img_status.Source = "passenger.png";
+                                    }
+                                });
+                            }
+                            else if (trips[0].mode.Contains("PASSENGER COMPANY"))
                             {
-                                if (BindingContext is ButtonTrip viewModel)
+                                MainThread.BeginInvokeOnMainThread(() =>
                                 {
-                                    viewModel.ButtonTripText = "DROP OFF";
-                                    AddTripBtn.BackgroundColor = Color.FromArgb("#FF474C");
-                                    Text_Active.TextColor = Color.FromArgb("#FF474C");
-                                    Text_Status.Text = $"You are a passenger of \n{trips[0].driver_name} \n Do you want to drop off now?";
-                                    Text_Active.Text = "IN USE";
-                                    img_status.Source = "passenger.png";
-                                }
-                                else
+                                    if (BindingContext is ButtonTrip viewModel)
+                                    {
+                                        viewModel.ButtonTripText = "DROP OFF";
+                                        AddTripBtn.BackgroundColor = Color.FromArgb("#FF474C");
+                                        Text_Active.TextColor = Color.FromArgb("#FF474C");
+                                        Text_Status.Text = $"You are a passenger of \n{trips[0].driver_name} \n Do you want to drop off now?";
+                                        Text_Active.Text = "IN USE";
+                                        img_status.Source = "passenger.png";
+                                    }
+                                    else
+                                    {
+                                        AddTripBtn.Text = "DROP OFF";
+                                        AddTripBtn.BackgroundColor = Color.FromArgb("#FF474C");
+                                        Text_Active.TextColor = Color.FromArgb("#FF474C");
+                                        Text_Status.Text = $"You are a passenger of \n{trips[0].driver_name} \n Do you want to drop off now?";
+                                        Text_Active.Text = "IN USE";
+                                        img_status.Source = "passenger.png";
+                                    }
+                                });
+                            }
+                            else
+                            {
+                                MainThread.BeginInvokeOnMainThread(() =>
                                 {
-                                    AddTripBtn.Text = "DROP OFF";
-                                    AddTripBtn.BackgroundColor = Color.FromArgb("#FF474C");
-                                    Text_Active.TextColor = Color.FromArgb("#FF474C");
-                                    Text_Status.Text = $"You are a passenger of \n{trips[0].driver_name} \n Do you want to drop off now?";
-                                    Text_Active.Text = "IN USE";
-                                    img_status.Source = "passenger.png";
-                                }
-                            });
+                                    if (BindingContext is ButtonTrip viewModel)
+                                    {
+                                        viewModel.ButtonTripText = "CONTINUE";
+                                        AddTripBtn.BackgroundColor = Colors.Orange;
+                                        Text_Active.TextColor = Colors.Orange;
+                                        Text_Status.Text = "Please press CONTINUE\nfor start trip";
+                                        Text_Active.Text = "IN USE";
+                                        img_status.Source = "driver.png";
+                                    }
+                                    else
+                                    {
+                                        AddTripBtn.Text = "CONTINUE";
+                                        AddTripBtn.BackgroundColor = Colors.Orange;
+                                        Text_Active.TextColor = Colors.Orange;
+                                        Text_Status.Text = "Please press CONTINUE\n for start trip";
+                                        Text_Active.Text = "IN USE";
+                                        img_status.Source = "driver.png";
+                                    }
+                                });
+                            }
                         }
                         else
                         {
@@ -107,55 +151,55 @@ public partial class Home_Page : ContentPage
                             {
                                 if (BindingContext is ButtonTrip viewModel)
                                 {
-                                    viewModel.ButtonTripText = "CONTINUE";
-                                    AddTripBtn.BackgroundColor = Colors.Orange;
-                                    Text_Active.TextColor = Colors.Orange;
-                                    Text_Status.Text = "Please press CONTINUE\nfor start trip";
+                                    viewModel.ButtonTripText = "STOP";
+                                    AddTripBtn.BackgroundColor = Color.FromArgb("#FF474C");
+                                    Text_Active.TextColor = Color.FromArgb("#FF474C");
+                                    Text_Status.Text = "Please press STOP\nfor stop trip";
                                     Text_Active.Text = "IN USE";
                                     img_status.Source = "driver.png";
                                 }
                                 else
                                 {
-                                    AddTripBtn.Text = "CONTINUE";
-                                    AddTripBtn.BackgroundColor = Colors.Orange;
-                                    Text_Active.TextColor = Colors.Orange;
-                                    Text_Status.Text = "Please press CONTINUE\n for start trip";
+                                    AddTripBtn.Text = "STOP";
+                                    AddTripBtn.BackgroundColor = Color.FromArgb("#FF474C");
+                                    Text_Active.TextColor = Color.FromArgb("#FF474C");
+                                    Text_Status.Text = "Please press STOP\nfor stop trip";
                                     Text_Active.Text = "IN USE";
                                     img_status.Source = "driver.png";
                                 }
                             });
                         }
+                        txt_last_mileage.Text = trips[0].mileage_start.ToString();
                     }
                     else
                     {
+                        txt_last_mileage.Text = trips[0].mileage_stop.ToString();
+
                         MainThread.BeginInvokeOnMainThread(() =>
                         {
                             if (BindingContext is ButtonTrip viewModel)
                             {
-                                viewModel.ButtonTripText = "STOP";
-                                AddTripBtn.BackgroundColor = Color.FromArgb("#FF474C");
-                                Text_Active.TextColor = Color.FromArgb("#FF474C");
-                                Text_Status.Text = "Please press STOP\nfor stop trip";
-                                Text_Active.Text = "IN USE";
-                                img_status.Source = "driver.png";
+                                viewModel.ButtonTripText = "ADD TRIP";
+                                AddTripBtn.BackgroundColor = Color.FromArgb("#297CC0");
+                                img_status.Source = "car.png";
+                                Text_Active.Text = "IDLE";
                             }
                             else
                             {
-                                AddTripBtn.Text = "STOP";
-                                AddTripBtn.BackgroundColor = Color.FromArgb("#FF474C");
-                                Text_Active.TextColor = Color.FromArgb("#FF474C");
-                                Text_Status.Text = "Please press STOP\nfor stop trip";
-                                Text_Active.Text = "IN USE";
-                                img_status.Source = "driver.png";
+                                AddTripBtn.Text = "ADD TRIP";
+                                AddTripBtn.BackgroundColor = Color.FromArgb("#297CC0");
+                                img_status.Source = "car.png";
+                                Text_Active.Text = "IDLE";
                             }
                         });
                     }
-                    txt_last_mileage.Text = trips[0].mileage_start.ToString();
+
+                    txt_last_location.Text = trips[0].location;
+                    txt_last_date.Text = trips[0].date.ToString("dd/MM/yyyy HH:mm:ss", cultureinfo);
+                    txt_last_distance.Text = trips[0].distance.ToString("#.#") + " km";
                 }
                 else
                 {
-                    txt_last_mileage.Text = trips[0].mileage_stop.ToString();
-
                     MainThread.BeginInvokeOnMainThread(() =>
                     {
                         if (BindingContext is ButtonTrip viewModel)
@@ -174,30 +218,6 @@ public partial class Home_Page : ContentPage
                         }
                     });
                 }
-
-                txt_last_location.Text = trips[0].location;
-                txt_last_date.Text = trips[0].date.ToString("dd/MM/yyyy HH:mm:ss", cultureinfo);
-                txt_last_distance.Text = trips[0].distance.ToString("#.#") + " km";              
-            }
-            else
-            {
-                MainThread.BeginInvokeOnMainThread(() =>
-                {
-                    if (BindingContext is ButtonTrip viewModel)
-                    {
-                        viewModel.ButtonTripText = "ADD TRIP";
-                        AddTripBtn.BackgroundColor = Color.FromArgb("#297CC0");
-                        img_status.Source = "car.png";
-                        Text_Active.Text = "IDLE";
-                    }
-                    else
-                    {
-                        AddTripBtn.Text = "ADD TRIP";
-                        AddTripBtn.BackgroundColor = Color.FromArgb("#297CC0");
-                        img_status.Source = "car.png";
-                        Text_Active.Text = "IDLE";
-                    }
-                });
             }
         }
         catch (Exception ex)

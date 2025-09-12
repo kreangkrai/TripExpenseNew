@@ -1,12 +1,17 @@
+using System;
+using TripExpenseNew.Interface;
+using TripExpenseNew.Models;
+
 namespace TripExpenseNew;
 
 public partial class Initial_Page : ContentPage
 {
+   
 	public Initial_Page()
 	{
         InitializeComponent();
-
     }
+
     private async void OnGoToLoginPageClicked(object sender, EventArgs e)
     {
         EnterpriseBtn.IsEnabled = false;

@@ -138,13 +138,14 @@ public partial class Login_Page : ContentPage
 
     private async void ConnectBtn_Clicked(object sender, EventArgs e)
     {
+        var popup = new ProgressPopup();
+        this.ShowPopup(popup);
         bool internet = await CheckServerConnection($"{txt_server.Text}/api/CurrentTime/get");
         if (internet)
         {
             if (txt_server.Text.Trim() != "")
             {
-                var popup = new ProgressPopup();
-                this.ShowPopup(popup);
+                
                 int message = await Server.Save(new ServerModel()
                 {
                     Id = 1,
@@ -161,8 +162,7 @@ public partial class Login_Page : ContentPage
                     LogInBtn.IsEnabled = true;
                     AnimateBottomSheet(_sheetHeight); // เลื่อนลงไปล่างสุด
                     _isOpen = false;
-                }
-                await popup.CloseAsync();
+                }               
             }
             else
             {
@@ -170,7 +170,7 @@ public partial class Login_Page : ContentPage
                 {
                     await DisplayAlert("", "กรุณาใส่ url server", "ตกลง");
                 });
-            }
+            }           
         }
         else
         {
@@ -179,6 +179,7 @@ public partial class Login_Page : ContentPage
                 await DisplayAlert("", "Cann't connect to server", "OK");
             });
         }
+        await popup.CloseAsync();
     }
 
     public async Task<bool> CheckServerConnection(string serverUrl)
