@@ -244,7 +244,7 @@ public partial class PersonalPage : ContentPage
                     });
 #elif ANDROID
                 intent = new Intent(Platform.AppContext, typeof(TripExpenseNew.Platforms.Android.LocationService));
-                intent.PutExtra("TrackingInterval", 5000);
+                intent.PutExtra("TrackingInterval", 2000);
                 Platform.AppContext.StartForegroundService(intent);
 #endif
             }

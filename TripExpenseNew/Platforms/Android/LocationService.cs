@@ -10,6 +10,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using TripExpenseNew.Models;
 using AndroidX.Core.Content;
 using Android;
+using Android.Locations;
 
 namespace TripExpenseNew.Platforms.Android
 {
@@ -59,7 +60,7 @@ namespace TripExpenseNew.Platforms.Android
 
                 StartForeground(1000, notification);
 
-                int trackingInterval = intent.GetIntExtra("TrackingInterval", 3000); // ค่าเริ่มต้น 3 วินาที
+                int trackingInterval = intent.GetIntExtra("TrackingInterval", 1000); // ค่าเริ่มต้น 1 วินาที
                 //Console.WriteLine($"เริ่มติดตามตำแหน่งด้วยช่วงเวลา: {trackingInterval}ms");
                 Task.Run(() => StartTrackingAsync(cancellationTokenSource.Token, trackingInterval));
             }
@@ -82,8 +83,6 @@ namespace TripExpenseNew.Platforms.Android
                     cancellationTokenSource.Cancel();
                     cancellationTokenSource.Dispose();
                     cancellationTokenSource = null;
-                    //DateTime n = DateTime.Now;
-                    //Console.WriteLine($"CancellationTokenSource ถูกยกเลิกและกำจัดแล้ว {n}");
                 }
             }
             catch (Exception ex)
@@ -96,29 +95,29 @@ namespace TripExpenseNew.Platforms.Android
         {
             try
             {
+                var locationManager = (LocationManager)GetSystemService(LocationService);
+                if (!locationManager.IsProviderEnabled(LocationManager.GpsProvider))
+                {
+                    Console.WriteLine("GPS is disabled, please enable it");
+                }
+
                 while (!cancellationToken.IsCancellationRequested)
                 {
-                    try
-                    {
-                        var request = new GeolocationRequest(GeolocationAccuracy.Best, TimeSpan.FromSeconds(10));
-                        var location = await Geolocation.Default.GetLocationAsync(request, cancellationToken);
-                        if (location != null)
+                    var loopStart = DateTime.Now;
+                    var request = new GeolocationRequest(GeolocationAccuracy.Best, TimeSpan.FromSeconds(5));
+                    var location = await Geolocation.Default.GetLocationAsync(request, cancellationToken);
+                    
+                    if (location != null && location.Accuracy <= 8)
+                    {                        
+                        MainThread.BeginInvokeOnMainThread(() =>
                         {
-                            MainThread.BeginInvokeOnMainThread(() =>
-                            {
-                                WeakReferenceMessenger.Default.Send(new LocationData { Location = location });
-                            });
-                        }
-                        else
-                        {
-                            Console.WriteLine("Location is null");
-                        }
+                            WeakReferenceMessenger.Default.Send(new LocationData { Location = location });
+                        });
                     }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Inner loop error: {ex.GetType().Name} - {ex.Message}");
-                    }
-                    await Task.Delay(trackingInterval, cancellationToken);
+
+                    var elapsed = (DateTime.Now - loopStart).TotalMilliseconds;
+                    var delay = Math.Max(0, trackingInterval - (int)elapsed);
+                    await Task.Delay(delay, cancellationToken);
                 }
             }
             catch (TaskCanceledException ex)
