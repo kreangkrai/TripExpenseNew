@@ -52,6 +52,8 @@ namespace TripExpenseNew
             builder.Services.AddTransient<IVersion, VersionService>();
             builder.Services.AddTransient<ICurrentTime, CurrentTimeService>();
             builder.Services.AddTransient<IInternet, InternetService>();
+            builder.Services.AddTransient<IAndroid, AndroidService>();
+            builder.Services.AddTransient<IKalman, KalmanService>();
 
             builder.Services.AddTransient<Personal>();
             builder.Services.AddTransient<PersonalPage.PersonalPage>();

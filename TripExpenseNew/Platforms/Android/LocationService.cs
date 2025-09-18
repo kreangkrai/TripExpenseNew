@@ -11,6 +11,7 @@ using TripExpenseNew.Models;
 using AndroidX.Core.Content;
 using Android;
 using Android.Locations;
+using Microsoft.Maui.Controls.PlatformConfiguration;
 
 namespace TripExpenseNew.Platforms.Android
 {
@@ -60,9 +61,23 @@ namespace TripExpenseNew.Platforms.Android
 
                 StartForeground(1000, notification);
 
+                
                 int trackingInterval = intent.GetIntExtra("TrackingInterval", 1000); // ค่าเริ่มต้น 1 วินาที
+                string geolocation_accuracy = intent.GetStringExtra("GeolocationAccuracy");
+                int timeout = intent.GetIntExtra("AccuracyMeter",5);
+                int accuracy_meter = intent.GetIntExtra("AccuracyCourse",10);
+                int accuracy_course = intent.GetIntExtra("Timeout",90);
+
+                AndroidParameterModel android = new AndroidParameterModel()
+                {
+                    geolocation_accuracy = geolocation_accuracy,
+                    timeout = timeout,
+                    accuracy_meter = accuracy_meter,
+                    accuracy_course = accuracy_course
+
+                };
                 //Console.WriteLine($"เริ่มติดตามตำแหน่งด้วยช่วงเวลา: {trackingInterval}ms");
-                Task.Run(() => StartTrackingAsync(cancellationTokenSource.Token, trackingInterval));
+                Task.Run(() => StartTrackingAsync(cancellationTokenSource.Token, trackingInterval, android));
             }
             catch (Exception ex)
             {
@@ -91,7 +106,7 @@ namespace TripExpenseNew.Platforms.Android
             }
             
         }
-        private async Task StartTrackingAsync(CancellationToken cancellationToken,int trackingInterval)
+        private async Task StartTrackingAsync(CancellationToken cancellationToken,int trackingInterval , AndroidParameterModel android)
         {
             try
             {
@@ -104,10 +119,28 @@ namespace TripExpenseNew.Platforms.Android
                 while (!cancellationToken.IsCancellationRequested)
                 {
                     var loopStart = DateTime.Now;
-                    var request = new GeolocationRequest(GeolocationAccuracy.Best, TimeSpan.FromSeconds(5));
+                    GeolocationAccuracy geo = GeolocationAccuracy.Medium;
+                    if (android.geolocation_accuracy == "MEDIUM")
+                    {
+                        geo = GeolocationAccuracy.Medium;
+                    }
+                    else if (android.geolocation_accuracy == "HIGH")
+                    {
+                        geo = GeolocationAccuracy.High;
+                    }
+                    else if (android.geolocation_accuracy == "BEST")
+                    {
+                        geo = GeolocationAccuracy.Best;
+                    }
+                    else
+                    {
+                        geo = GeolocationAccuracy.Medium;
+                    }
+
+                    var request = new GeolocationRequest(geo, TimeSpan.FromSeconds(android.timeout));
                     var location = await Geolocation.Default.GetLocationAsync(request, cancellationToken);
                     
-                    if (location != null && location.Accuracy <= 8)
+                    if (location != null && location.Accuracy <= android.accuracy_meter)
                     {                        
                         MainThread.BeginInvokeOnMainThread(() =>
                         {
