@@ -53,8 +53,6 @@ namespace TripExpenseNew.PersonalPage
         private ILocationOther LocationOther;
         private IMileage Mileage;
         private IInternet Internet;
-        private IAndroid Android;
-        private IKalman Kalman;
         private Location previousLocation = null;
         private Location g_location = null;
         private Location last_location_for_passenger = null;
@@ -79,8 +77,6 @@ namespace TripExpenseNew.PersonalPage
         List<LocationCustomerModel> GetLocationCustomers = new List<LocationCustomerModel>();
         List<LocationOtherModel> GetLocationOthers = new List<LocationOtherModel>();
         List<LocationOtherModel> GetLocationCTL = new List<LocationOtherModel>();
-        AndroidParameterModel android = new AndroidParameterModel();
-        KalmanParameterModel kalman = new KalmanParameterModel();
 #if IOS
         private Platforms.iOS.LocationService locationService;
 #elif ANDROID
@@ -107,8 +103,6 @@ namespace TripExpenseNew.PersonalPage
             trip_start = start.trip_start;
             g_location = start.location;
             mileage_start = start.mileage;
-            Android = new AndroidService();
-            Kalman = new KalmanService();
 
             WeakReferenceMessenger.Default.Register<LocationData>(this, async (send, data) =>
             {
@@ -123,8 +117,6 @@ namespace TripExpenseNew.PersonalPage
             interval = tracking.time_interval;
             tracking_db = tracking.time_tracking;
             start_tracking = DateTime.Now;
-            android = await Android.GetParameter();
-            kalman = await Kalman.GetParameter();
             OnStartTracking();
         }
         async Task RequestNotificationPermission()
@@ -229,10 +221,6 @@ namespace TripExpenseNew.PersonalPage
         // ตรวจสอบสถานะ service และเริ่มใหม่
         intent = new Intent(Platform.AppContext, typeof(TripExpenseNew.Platforms.Android.LocationService));
         intent.PutExtra("TrackingInterval", interval * 1000);
-        intent.PutExtra("GeolocationAccuracy", android.geolocation_accuracy);
-        intent.PutExtra("AccuracyMeter", android.accuracy_meter);
-        intent.PutExtra("AccuracyCourse", android.accuracy_course);
-        intent.PutExtra("Timeout", android.timeout);
         Platform.AppContext.StartForegroundService(intent);
 
 #endif
@@ -278,33 +266,8 @@ namespace TripExpenseNew.PersonalPage
                 int velocity_min = tracking.velocity_min;
                 if (previousLocation != null)
                 {
-                    double accuracy_prev = previousLocation.Accuracy != null ? previousLocation.Accuracy.Value : 0.5;
-                    double accuracy_curr = location.Accuracy != null ? location.Accuracy.Value : 0.5;
-                    var data = new (double lat, double lon, double acc)[]
-                    {
-                    (previousLocation.Latitude, previousLocation.Longitude, accuracy_prev),
-                    (location.Latitude, location.Longitude, accuracy_curr)
-                    };
-
-                    double latRef = data[0].lat;
-                    double lonRef = data[0].lon;
-
-                    var kf = new KalmanFilter(dt: 1.0, processNoise: kalman.process_noise, measurementNoise: kalman.measurement_noise);
-
-                    foreach (var (lat, lon, acc) in data)
-                    {
-                        var (x, y) = CoordinateConverter.LatLonToXY(lat, lon, latRef, lonRef);
-                        var z = DenseVector.OfArray(new[] { x, y });
-
-                        kf.Predict();
-                        kf.Update(z, acc);
-
-                        var state = kf.GetState();
-
-                        var (filteredLat, filteredLon) = CoordinateConverter.XYToLatLon(state[0], state[1], latRef, lonRef);
-                        location.Latitude = filteredLat; 
-                        location.Longitude = filteredLon;                
-                    }
+                    CalculateKalman kf = new CalculateKalman(location, previousLocation);
+                    location = kf.Calculate();
                 }
 
                 if (previousLocation != null)

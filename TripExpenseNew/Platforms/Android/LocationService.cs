@@ -63,17 +63,17 @@ namespace TripExpenseNew.Platforms.Android
 
                 
                 int trackingInterval = intent.GetIntExtra("TrackingInterval", 1000); // ค่าเริ่มต้น 1 วินาที
-                string geolocation_accuracy = intent.GetStringExtra("GeolocationAccuracy");
-                int timeout = intent.GetIntExtra("AccuracyMeter",5);
-                int accuracy_meter = intent.GetIntExtra("AccuracyCourse",10);
-                int accuracy_course = intent.GetIntExtra("Timeout",90);
+                //string geolocation_accuracy = intent.GetStringExtra("GeolocationAccuracy");
+                //int timeout = intent.GetIntExtra("AccuracyMeter",5);
+                //int accuracy_meter = intent.GetIntExtra("AccuracyCourse",10);
+                //int accuracy_course = intent.GetIntExtra("Timeout",90);
 
                 AndroidParameterModel android = new AndroidParameterModel()
                 {
-                    geolocation_accuracy = geolocation_accuracy,
-                    timeout = timeout,
-                    accuracy_meter = accuracy_meter,
-                    accuracy_course = accuracy_course
+                    geolocation_accuracy = "HIGH",
+                    timeout = 5,
+                    accuracy_meter = 10,
+                    accuracy_course = 90
 
                 };
                 //Console.WriteLine($"เริ่มติดตามตำแหน่งด้วยช่วงเวลา: {trackingInterval}ms");
@@ -139,8 +139,9 @@ namespace TripExpenseNew.Platforms.Android
 
                     var request = new GeolocationRequest(geo, TimeSpan.FromSeconds(android.timeout));
                     var location = await Geolocation.Default.GetLocationAsync(request, cancellationToken);
-                    
-                    if (location != null && location.Accuracy <= android.accuracy_meter)
+
+                    double accuracy = location.Accuracy.Value;
+                    if (location != null && accuracy <= android.accuracy_meter)
                     {                        
                         MainThread.BeginInvokeOnMainThread(() =>
                         {

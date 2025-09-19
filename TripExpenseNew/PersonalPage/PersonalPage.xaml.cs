@@ -31,20 +31,18 @@ public partial class PersonalPage : ContentPage
     private ILogin Login;
     private IMileage Mileage;
     private IInternet Internet;
-    private IAndroid Android;
     private bool isTracking = true;
     Tuple<string, bool> loc = new Tuple<string, bool> ("",false);
     Location g_location = null;
     List<LocationCustomerModel> GetLocationCustomers = new List<LocationCustomerModel>();
     List<LocationOtherModel> GetLocationOthers = new List<LocationOtherModel>();
     List<LocationOtherModel> GetLocationCTL = new List<LocationOtherModel>();
-    AndroidParameterModel android = new AndroidParameterModel();
 #if IOS
         private Platforms.iOS.LocationService locationService;
 #elif ANDROID
         private Intent intent = new Intent();
 #endif
-    public PersonalPage(ILocationCustomer _LocationCustomer, ILogin _Login, ILocationOther _LocationOther, IMileage _Mileage, IInternet _Internet, IAndroid _Android)
+    public PersonalPage(ILocationCustomer _LocationCustomer, ILogin _Login, ILocationOther _LocationOther, IMileage _Mileage, IInternet _Internet)
 	{
 		InitializeComponent();
         Login = _Login;
@@ -52,7 +50,6 @@ public partial class PersonalPage : ContentPage
         LocationOther = _LocationOther;
         Mileage = _Mileage;
         Internet = _Internet;
-        Android = _Android;
         WeakReferenceMessenger.Default.Register<LocationData>(this, (send, data) =>
         {
             if (send != null)
@@ -124,7 +121,6 @@ public partial class PersonalPage : ContentPage
         LoginModel login = await Login.GetLogin(1);
         GetLocationCustomers = await LocationCustomer.GetByEmp(login.emp_id);
         GetLocationOthers = await LocationOther.GetByEmp(login.emp_id);
-        android = await Android.GetParameter();
 #if IOS
             try
             {
@@ -248,10 +244,6 @@ public partial class PersonalPage : ContentPage
 #elif ANDROID
                 intent = new Intent(Platform.AppContext, typeof(TripExpenseNew.Platforms.Android.LocationService));
                 intent.PutExtra("TrackingInterval", 2000);
-                intent.PutExtra("GeolocationAccuracy", android.geolocation_accuracy);
-                intent.PutExtra("AccuracyMeter", android.accuracy_meter);
-                intent.PutExtra("AccuracyCourse", android.accuracy_course);
-                intent.PutExtra("Timeout", android.timeout);
                 Platform.AppContext.StartForegroundService(intent);
 #endif
             }

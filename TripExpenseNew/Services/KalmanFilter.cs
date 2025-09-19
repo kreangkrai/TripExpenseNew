@@ -91,4 +91,73 @@ namespace TripExpenseNew.Services
             return (lat, lon);
         }
     }
+
+    public class CalculateKalman
+    {
+        private Location curr_location;
+        private Location prev_location;
+
+        public CalculateKalman(Location _curr_location, Location _prev_location)
+        {
+            curr_location = _curr_location;
+            prev_location = _prev_location;
+        }
+        public Location Calculate()
+        {
+            double first_speed = curr_location.Speed.HasValue ? curr_location.Speed.Value * 3.6 : 0;
+            double accuracy_prev = prev_location.Accuracy != null ? prev_location.Accuracy.Value : 0.5;
+            double accuracy_curr = curr_location.Accuracy != null ? curr_location.Accuracy.Value : 0.5;
+            double dt = 1.0;
+            double processNoise = 0.01;
+            double measurementNoise = accuracy_curr * accuracy_curr;
+
+            if (first_speed <= 10.0)
+            {
+                dt = 1.0;
+                processNoise = 0.005;
+            }
+            else if (first_speed > 10.0 && first_speed <= 60.0)
+            {
+                dt = 1.0;
+                processNoise = 0.03;
+            }
+            else if (first_speed > 60.0 && first_speed <= 120.0)
+            {
+                dt = 1.0;
+                processNoise = 0.07;
+            }
+            else if (first_speed > 120.0)
+            {
+                dt = 1.0;
+                processNoise = 0.1;
+            }
+
+            var data = new (double lat, double lon, double acc)[]
+                {
+                    (prev_location.Latitude, prev_location.Longitude, accuracy_prev),
+                    (curr_location.Latitude, curr_location.Longitude, accuracy_curr)
+                };
+
+            double latRef = data[0].lat;
+            double lonRef = data[0].lon;
+
+            var kf = new KalmanFilter(dt: dt, processNoise: processNoise, measurementNoise: measurementNoise);
+
+            foreach (var (lat, lon, acc) in data)
+            {
+                var (x, y) = CoordinateConverter.LatLonToXY(lat, lon, latRef, lonRef);
+                var z = DenseVector.OfArray(new[] { x, y });
+
+                kf.Predict();
+                kf.Update(z, acc);
+
+                var state = kf.GetState();
+
+                var (filteredLat, filteredLon) = CoordinateConverter.XYToLatLon(state[0], state[1], latRef, lonRef);
+                curr_location.Latitude = filteredLat;
+                curr_location.Longitude = filteredLon;
+            }
+            return curr_location;
+        }
+    }
 }
