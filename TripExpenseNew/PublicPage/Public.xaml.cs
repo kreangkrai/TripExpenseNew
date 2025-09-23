@@ -20,7 +20,6 @@ using TripExpenseNew.CustomPopup;
 using System.Globalization;
 using TripExpenseNew.CustomPersonalPopup;
 using TripExpenseNew.CustomPublicPopup;
-using MathNet.Numerics.LinearAlgebra.Double;
 
 #if IOS
 using UserNotifications;
@@ -256,15 +255,17 @@ namespace TripExpenseNew.PublicPage
             try
             {
                 int velocity_min = tracking.velocity_min;
+                double speed = 0;
                 if (previousLocation != null)
                 {
-                    CalculateKalman kf = new CalculateKalman(location, previousLocation);
-                    location = kf.Calculate();
-                }
+                    DateTimeOffset start = previousLocation.Timestamp;
+                    DateTimeOffset end = location.Timestamp;
+                    double duration = (end - start).TotalSeconds;
 
-                if (previousLocation != null)
-                {
                     double dist = CalculateDistance(previousLocation, location);
+
+                    speed = ((dist * 1000) / duration) * 3.6;
+
                     double displacement = CalculateDistanceInactive(velocity_min, interval);
                     if (dist >= displacement)
                     {
@@ -274,7 +275,7 @@ namespace TripExpenseNew.PublicPage
 
                 previousLocation = location;
 
-                double speed = location.Speed.HasValue ? location.Speed.Value * 3.6 : 0;
+                //double speed = location.Speed.HasValue ? location.Speed.Value * 3.6 : 0;
 
                 if (!isStart)
                 {
@@ -289,6 +290,7 @@ namespace TripExpenseNew.PublicPage
                             job_id = start.job_id,
                             latitude = location.Latitude,
                             longitude = location.Longitude,
+                            accuracy = location.Accuracy.HasValue ? location.Accuracy.Value : 10.0,
                             location = start.location_name,
                             zipcode = zipcode,
                             location_mode = start.IsCustomer ? "CUSTOMER" : "OTHER",
@@ -310,6 +312,7 @@ namespace TripExpenseNew.PublicPage
                             job_id = start.job_id,
                             latitude = location.Latitude,
                             longitude = location.Longitude,
+                            accuracy = location.Accuracy.HasValue ? location.Accuracy.Value : 10.0,
                             location = start.location_name,
                             zipcode = zipcode,
                             location_mode = start.IsCustomer ? "CUSTOMER" : "OTHER",
@@ -333,6 +336,7 @@ namespace TripExpenseNew.PublicPage
                             location = data_public.location,
                             latitude = data_public.latitude,
                             longitude = data_public.longitude,
+                            accuracy = data_public.accuracy,
                             mileage_start = 0,
                             mileage_stop = 0,
                             mode = "PUBLIC",
@@ -450,6 +454,7 @@ namespace TripExpenseNew.PublicPage
                                         distance = totalDistance,
                                         latitude = location.Latitude,
                                         longitude = location.Longitude,
+                                        accuracy = location.Accuracy.HasValue ? location.Accuracy.Value : 10.0,
                                         location = "",
                                         zipcode = "",
                                         location_mode = "",
@@ -471,6 +476,7 @@ namespace TripExpenseNew.PublicPage
                                         location = p.location,
                                         latitude = p.latitude,
                                         longitude = p.longitude,
+                                        accuracy = p.accuracy,
                                         mileage_start = 0,
                                         mileage_stop = 0,
                                         mode = "PUBLIC",
@@ -510,6 +516,7 @@ namespace TripExpenseNew.PublicPage
                                 distance = totalDistance,
                                 latitude = location.Latitude,
                                 longitude = location.Longitude,
+                                accuracy = location.Accuracy.HasValue ? location.Accuracy.Value : 10.0,
                                 location = "",
                                 zipcode = "",
                                 location_mode = "",
@@ -536,6 +543,7 @@ namespace TripExpenseNew.PublicPage
                                     latitude = s.latitude,
                                     longitude = s.longitude,
                                     location = s.location,
+                                    accuracy = s.accuracy,
                                     zipcode = s.zipcode,
                                     location_mode = s.location_mode,
                                     speed = s.speed,
@@ -561,6 +569,7 @@ namespace TripExpenseNew.PublicPage
                                     location = _public.location,
                                     latitude = _public.latitude,
                                     longitude = _public.longitude,
+                                    accuracy = _public.accuracy,
                                     mileage_start = 0,
                                     mileage_stop = 0,
                                     mode = "PUBLIC",
@@ -709,6 +718,7 @@ namespace TripExpenseNew.PublicPage
                                     date = s.date,
                                     latitude = s.latitude,
                                     longitude = s.longitude,
+                                    accuracy = s.accuracy,
                                     location = _public.location,
                                     zipcode = s.zipcode,
                                     location_mode = _public.IsCustomer ? "CUSTOMER" : "OTHER",
@@ -731,6 +741,7 @@ namespace TripExpenseNew.PublicPage
                                         distance = totalDistance,
                                         latitude = g_location.Latitude,
                                         longitude = g_location.Longitude,
+                                        accuracy = g_location.Accuracy.HasValue ? g_location.Accuracy.Value : 10.0,
                                         location = _public.location,
                                         zipcode = zipcode,
                                         location_mode = _public.IsCustomer ? "CUSTOMER" : "OTHER",
@@ -754,6 +765,7 @@ namespace TripExpenseNew.PublicPage
                                             location = data_public.location,
                                             latitude = data_public.latitude,
                                             longitude = data_public.longitude,
+                                            accuracy = data_public.accuracy,
                                             mileage_start = 0,
                                             mileage_stop = 0,
                                             mode = "PUBLIC",
@@ -975,6 +987,7 @@ namespace TripExpenseNew.PublicPage
                                 distance = totalDistance,
                                 latitude = g_location.Latitude,
                                 longitude = g_location.Longitude,
+                                accuracy = g_location.Accuracy.HasValue ? g_location.Accuracy.Value : 10.0,
                                 location = chkinlocation,
                                 zipcode = zipcode,
                                 location_mode = location_mode,
@@ -1011,6 +1024,7 @@ namespace TripExpenseNew.PublicPage
                                     location = data_public.location,
                                     latitude = data_public.latitude,
                                     longitude = data_public.longitude,
+                                    accuracy = data_public.accuracy,
                                     mileage_start = 0,
                                     mileage_stop = 0,
                                     mode = "PUBLIC",

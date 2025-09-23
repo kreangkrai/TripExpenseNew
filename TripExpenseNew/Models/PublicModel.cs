@@ -12,6 +12,7 @@
         public double distance { get; set; }
         public double speed { get; set; }
         public double longitude { get; set; }
+        public double accuracy { get; set; }
         public string location_mode { get; set; }
         public string location { get; set; }
         public string zipcode { get; set; }

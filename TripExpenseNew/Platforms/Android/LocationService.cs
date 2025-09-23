@@ -12,6 +12,8 @@ using AndroidX.Core.Content;
 using Android;
 using Android.Locations;
 using Microsoft.Maui.Controls.PlatformConfiguration;
+using Location = Microsoft.Maui.Devices.Sensors.Location;
+using TripExpenseNew.Services;
 
 namespace TripExpenseNew.Platforms.Android
 {
@@ -22,6 +24,7 @@ namespace TripExpenseNew.Platforms.Android
 
         public override IBinder OnBind(Intent intent) => null;
 
+        Location prevLocation = null;
         public override StartCommandResult OnStartCommand(Intent intent, StartCommandFlags flags, int startId)
         {
             try
@@ -72,7 +75,7 @@ namespace TripExpenseNew.Platforms.Android
                 {
                     geolocation_accuracy = "HIGH",
                     timeout = 5,
-                    accuracy_meter = 10,
+                    accuracy_meter = 30,
                     accuracy_course = 90
 
                 };
@@ -139,19 +142,48 @@ namespace TripExpenseNew.Platforms.Android
 
                     var request = new GeolocationRequest(geo, TimeSpan.FromSeconds(android.timeout));
                     var location = await Geolocation.Default.GetLocationAsync(request, cancellationToken);
-
-                    double accuracy = location.Accuracy.Value;
-                    if (location != null && accuracy <= android.accuracy_meter)
-                    {                        
-                        MainThread.BeginInvokeOnMainThread(() =>
+                    
+                    if (location != null)
+                    {
+                        if (prevLocation != null)
                         {
-                            WeakReferenceMessenger.Default.Send(new LocationData { Location = location });
-                        });
+                            double accuracy = location.Accuracy.HasValue ? location.Accuracy.Value : 10.0;
+                            if (accuracy <= 5)
+                            {
+                                MainThread.BeginInvokeOnMainThread(() =>
+                                {
+                                    WeakReferenceMessenger.Default.Send(new LocationData { Location = location });
+                                });
+
+                                prevLocation = location;
+                            }
+                            else if (accuracy > 5 && accuracy <= android.accuracy_meter)
+                            {
+                                var calculator = new CalculateKalman(location, prevLocation);
+                                var filteredLocation = calculator.Calculate();
+
+                                MainThread.BeginInvokeOnMainThread(() =>
+                                {
+                                    WeakReferenceMessenger.Default.Send(new LocationData { Location = filteredLocation });
+                                });
+
+                                prevLocation = filteredLocation;
+                            }
+                        }
+                        else
+                        {
+                            MainThread.BeginInvokeOnMainThread(() =>
+                            {
+                                WeakReferenceMessenger.Default.Send(new LocationData { Location = location });
+                            });
+
+                            prevLocation = location;
+                        }
                     }
 
                     var elapsed = (DateTime.Now - loopStart).TotalMilliseconds;
                     var delay = Math.Max(0, trackingInterval - (int)elapsed);
-                    await Task.Delay(delay, cancellationToken);
+                    await Task.Delay(delay, cancellationToken);                  
                 }
             }
             catch (TaskCanceledException ex)

@@ -19,7 +19,6 @@ using TripExpenseNew.PassengerPage;
 using TripExpenseNew.CustomPopup;
 using System.Globalization;
 using TripExpenseNew.CustomPersonalPopup;
-using MathNet.Numerics.LinearAlgebra.Double;
 
 #if IOS
 using UserNotifications;
@@ -264,25 +263,27 @@ namespace TripExpenseNew.PersonalPage
             try
             {
                 int velocity_min = tracking.velocity_min;
+                double speed = 0;
                 if (previousLocation != null)
                 {
-                    CalculateKalman kf = new CalculateKalman(location, previousLocation);
-                    location = kf.Calculate();
-                }
+                    DateTimeOffset start = previousLocation.Timestamp;
+                    DateTimeOffset end = location.Timestamp;
+                    double duration = (end - start).TotalSeconds;
 
-                if (previousLocation != null)
-                {
                     double dist = CalculateDistance(previousLocation, location);
-                    
+
+                    speed = ((dist * 1000) / duration) * 3.6;
+
                     double displacement = CalculateDistanceInactive(velocity_min, interval);
                     if (dist >= displacement)
                     {
                         totalDistance += CalculateDistance(previousLocation, location);
                     }
                 }
+             
                 previousLocation = location;
 
-                double speed = location.Speed.HasValue ? location.Speed.Value * 3.6 : 0;
+                //double speed = location.Speed.HasValue ? location.Speed.Value * 3.6 : 0;
 
                 if (!isStart)
                 {
@@ -299,6 +300,7 @@ namespace TripExpenseNew.PersonalPage
                             distance = totalDistance,
                             latitude = location.Latitude,
                             longitude = location.Longitude,
+                            accuracy = location.Accuracy.HasValue ? location.Accuracy.Value : 10.0,
                             location = start.location_name,
                             zipcode = zipcode,
                             location_mode = start.IsCustomer ? "CUSTOMER" : "OTHER",
@@ -346,6 +348,7 @@ namespace TripExpenseNew.PersonalPage
                             distance = totalDistance,
                             latitude = location.Latitude,
                             longitude = location.Longitude,
+                            accuracy = location.Accuracy.HasValue ? location.Accuracy.Value : 10.0,
                             location = start.location_name,
                             zipcode = zipcode,
                             location_mode = start.IsCustomer ? "CUSTOMER" : "OTHER",
@@ -493,6 +496,7 @@ namespace TripExpenseNew.PersonalPage
                                         distance = totalDistance,
                                         latitude = location.Latitude,
                                         longitude = location.Longitude,
+                                        accuracy = location.Accuracy.HasValue ? location.Accuracy.Value : 10.0,
                                         location = "",
                                         zipcode = "",
                                         location_mode = "",
@@ -516,6 +520,7 @@ namespace TripExpenseNew.PersonalPage
                                         location = personal.location,
                                         latitude = personal.latitude,
                                         longitude = personal.longitude,
+                                        accuracy = personal.accuracy,
                                         mileage_start = mileage_start,
                                         mileage_stop = 0,
                                         mode = "PERSONAL",
@@ -555,6 +560,7 @@ namespace TripExpenseNew.PersonalPage
                                 distance = totalDistance,
                                 latitude = location.Latitude,
                                 longitude = location.Longitude,
+                                accuracy = location.Accuracy.HasValue ? location.Accuracy.Value : 10.0,
                                 location = "",
                                 zipcode = "",
                                 location_mode = "",
@@ -582,6 +588,7 @@ namespace TripExpenseNew.PersonalPage
                                     date = s.date,
                                     latitude = s.latitude,
                                     longitude = s.longitude,
+                                    accuracy = s.accuracy,
                                     location = s.location,
                                     zipcode = s.zipcode,
                                     location_mode = s.location_mode,
@@ -610,6 +617,7 @@ namespace TripExpenseNew.PersonalPage
                                     location = personal.location,
                                     latitude = personal.latitude,
                                     longitude = personal.longitude,
+                                    accuracy = personal.accuracy,
                                     mileage_start = mileage_start,
                                     mileage_stop = 0,
                                     mode = "PERSONAL",
@@ -760,6 +768,7 @@ namespace TripExpenseNew.PersonalPage
                                         date = s.date,
                                         latitude = s.latitude,
                                         longitude = s.longitude,
+                                        accuracy = s.accuracy,
                                         location = personal.location,
                                         zipcode = s.zipcode,
                                         location_mode = personal.IsCustomer ? "CUSTOMER" : "OTHER",
@@ -784,6 +793,7 @@ namespace TripExpenseNew.PersonalPage
                                             distance = totalDistance,
                                             latitude = g_location.Latitude,
                                             longitude = g_location.Longitude,
+                                            accuracy = g_location.Accuracy.HasValue ? g_location.Accuracy.Value : 10.0,
                                             location = personal.location,
                                             zipcode = zipcode,
                                             location_mode = personal.IsCustomer ? "CUSTOMER" : "OTHER",
@@ -809,6 +819,7 @@ namespace TripExpenseNew.PersonalPage
                                                 location = data_personal.location,
                                                 latitude = data_personal.latitude,
                                                 longitude = data_personal.longitude,
+                                                accuracy = data_personal.accuracy,
                                                 mileage_start = mileage_start,
                                                 mileage_stop = data_personal.mileage,
                                                 mode = "PERSONAL",
@@ -879,6 +890,7 @@ namespace TripExpenseNew.PersonalPage
                                                 job_id = data_personal.job_id,
                                                 latitude = data_personal.latitude,
                                                 longitude = data_personal.longitude,
+                                                accuracy = data_personal.accuracy,
                                                 location = data_personal.location,
                                                 location_mode = data_personal.location_mode,
                                                 passenger = emps[i],
@@ -899,6 +911,7 @@ namespace TripExpenseNew.PersonalPage
                                                 location = data_personal.location,
                                                 latitude = data_personal.latitude,
                                                 longitude = data_personal.longitude,
+                                                accuracy = data_personal.accuracy,
                                                 mileage_start = 0,
                                                 mileage_stop = 0,
                                                 mode = "PASSENGER PERSONAL",
@@ -1132,6 +1145,7 @@ namespace TripExpenseNew.PersonalPage
                                 distance = totalDistance,
                                 latitude = g_location.Latitude,
                                 longitude = g_location.Longitude,
+                                accuracy = g_location.Accuracy.HasValue ? g_location.Accuracy.Value : 10.0,
                                 location = chkinlocation,
                                 zipcode = zipcode,
                                 location_mode = location_mode,
@@ -1171,6 +1185,7 @@ namespace TripExpenseNew.PersonalPage
                                     location = data_personal.location,
                                     latitude = data_personal.latitude,
                                     longitude = data_personal.longitude,
+                                    accuracy = data_personal.accuracy,
                                     mileage_start = mileage_start,
                                     mileage_stop = 0,
                                     mode = "PERSONAL",
@@ -1206,6 +1221,7 @@ namespace TripExpenseNew.PersonalPage
                                         job_id = data_personal.job_id,
                                         latitude = data_personal.latitude,
                                         longitude = data_personal.longitude,
+                                        accuracy = data_personal.accuracy,
                                         location = data_personal.location,
                                         location_mode = data_personal.location_mode,
                                         passenger = emps[i],
@@ -1228,6 +1244,7 @@ namespace TripExpenseNew.PersonalPage
                                             location = data_personal.location,
                                             latitude = data_personal.latitude,
                                             longitude = data_personal.longitude,
+                                            accuracy = data_personal.accuracy,
                                             mileage_start = 0,
                                             mileage_stop = 0,
                                             mode = "PASSENGER PERSONAL",
@@ -1336,6 +1353,7 @@ namespace TripExpenseNew.PersonalPage
                                     job_id = data_personal.job_id,
                                     latitude = data_personal.latitude,
                                     longitude = data_personal.longitude,
+                                    accuracy = data_personal.accuracy,
                                     location = data_personal.location,
                                     location_mode = data_personal.location_mode,
                                     passenger = emp.emp_id,
@@ -1357,6 +1375,7 @@ namespace TripExpenseNew.PersonalPage
                                     location = data_personal.location,
                                     latitude = data_personal.latitude,
                                     longitude = data_personal.longitude,
+                                    accuracy=data_personal.accuracy,
                                     mileage_start = 0,
                                     mileage_stop = 0,
                                     mode = "PASSENGER PERSONAL",
@@ -1448,6 +1467,7 @@ namespace TripExpenseNew.PersonalPage
                                         job_id = data_personal.job_id,
                                         latitude = data_personal.latitude,
                                         longitude = data_personal.longitude,
+                                        accuracy = data_personal.accuracy,
                                         location = data_personal.location,
                                         location_mode = data_personal.location_mode,
                                         passenger = emp.emp_id,
@@ -1470,6 +1490,7 @@ namespace TripExpenseNew.PersonalPage
                                             location = passengerPersonal.location,
                                             latitude = passengerPersonal.latitude,
                                             longitude = passengerPersonal.longitude,
+                                            accuracy=passengerPersonal.accuracy,
                                             mileage_start = 0,
                                             mileage_stop = 0,
                                             mode = "PASSENGER PERSONAL",
