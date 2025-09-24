@@ -439,7 +439,7 @@ namespace TripExpenseNew.PublicPage
 
                         double dist = CalculateDistance(g_location, location);
                         double displacement = CalculateDistanceInactive(velocity_min, interval);
-                        if (dist < displacement)  // Check ditance beteween point to point less than displacement
+                        if (dist <= displacement)  // Check ditance beteween point to point less than displacement
                         {
                             int minute_inactive = (int)(DateTime.Now - lastInactive).TotalMinutes;
                             if (minute_inactive >= 15)  // Inactive Each 15 Minute

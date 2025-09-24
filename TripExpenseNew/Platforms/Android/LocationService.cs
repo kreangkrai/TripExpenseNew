@@ -14,6 +14,8 @@ using Android.Locations;
 using Microsoft.Maui.Controls.PlatformConfiguration;
 using Location = Microsoft.Maui.Devices.Sensors.Location;
 using TripExpenseNew.Services;
+using Android.Gms.Location;
+using LocationRequest = Android.Gms.Location.LocationRequest;
 
 namespace TripExpenseNew.Platforms.Android
 {
@@ -65,7 +67,7 @@ namespace TripExpenseNew.Platforms.Android
                 StartForeground(1000, notification);
 
                 
-                int trackingInterval = intent.GetIntExtra("TrackingInterval", 1000); // ค่าเริ่มต้น 1 วินาที
+                int trackingInterval = intent.GetIntExtra("TrackingInterval", 2000); // ค่าเริ่มต้น 1 วินาที
                 //string geolocation_accuracy = intent.GetStringExtra("GeolocationAccuracy");
                 //int timeout = intent.GetIntExtra("AccuracyMeter",5);
                 //int accuracy_meter = intent.GetIntExtra("AccuracyCourse",10);
@@ -73,9 +75,9 @@ namespace TripExpenseNew.Platforms.Android
 
                 AndroidParameterModel android = new AndroidParameterModel()
                 {
-                    geolocation_accuracy = "HIGH",
-                    timeout = 5,
-                    accuracy_meter = 30,
+                    geolocation_accuracy = "BEST",
+                    timeout = 10,
+                    accuracy_meter = 50,
                     accuracy_course = 90
 
                 };
@@ -109,91 +111,206 @@ namespace TripExpenseNew.Platforms.Android
             }
             
         }
-        private async Task StartTrackingAsync(CancellationToken cancellationToken,int trackingInterval , AndroidParameterModel android)
+
+        [Obsolete]
+        private async Task StartTrackingAsync(CancellationToken cancellationToken, int trackingInterval, AndroidParameterModel android)
         {
             try
             {
+                var fusedLocationClient = LocationServices.GetFusedLocationProviderClient(this);
                 var locationManager = (LocationManager)GetSystemService(LocationService);
                 if (!locationManager.IsProviderEnabled(LocationManager.GpsProvider))
                 {
                     Console.WriteLine("GPS is disabled, please enable it");
+                    return;
                 }
 
-                while (!cancellationToken.IsCancellationRequested)
-                {
-                    var loopStart = DateTime.Now;
-                    GeolocationAccuracy geo = GeolocationAccuracy.Medium;
-                    if (android.geolocation_accuracy == "MEDIUM")
-                    {
-                        geo = GeolocationAccuracy.Medium;
-                    }
-                    else if (android.geolocation_accuracy == "HIGH")
-                    {
-                        geo = GeolocationAccuracy.High;
-                    }
-                    else if (android.geolocation_accuracy == "BEST")
-                    {
-                        geo = GeolocationAccuracy.Best;
-                    }
-                    else
-                    {
-                        geo = GeolocationAccuracy.Medium;
-                    }
 
-                    var request = new GeolocationRequest(geo, TimeSpan.FromSeconds(android.timeout));
-                    var location = await Geolocation.Default.GetLocationAsync(request, cancellationToken);
-                    
-                    if (location != null)
+                var locationRequest = LocationRequest.Create()
+                    .SetPriority(android.geolocation_accuracy == "BEST" ? Priority.PriorityHighAccuracy : Priority.PriorityBalancedPowerAccuracy)
+                    .SetInterval(trackingInterval)
+                    .SetWaitForAccurateLocation(true)
+                    .SetFastestInterval(trackingInterval / 2);
+
+                var locationCallback = new MyLocationCallback(result =>
+                {
+                    if (result.Locations != null && result.Locations.Count > 0)
                     {
+                        var androidLocation = result.Locations[0];
+                        var mauiLocation = new Location(androidLocation.Latitude, androidLocation.Longitude)
+                        {
+                            Accuracy = androidLocation.HasAccuracy ? androidLocation.Accuracy : 10.0,
+                            Speed = androidLocation.HasSpeed ? androidLocation.Speed : null,
+                            Timestamp = DateTimeOffset.FromUnixTimeMilliseconds(androidLocation.Time)
+                        };
+
                         if (prevLocation != null)
                         {
-                            double accuracy = location.Accuracy.HasValue ? location.Accuracy.Value : 10.0;
-                            if (accuracy <= 5)
+                            if (prevLocation.Timestamp.ToString("yyyy-MM-dd HH:mm:ss") != mauiLocation.Timestamp.ToString("yyyy-MM-dd HH:mm:ss"))
                             {
                                 MainThread.BeginInvokeOnMainThread(() =>
                                 {
-                                    WeakReferenceMessenger.Default.Send(new LocationData { Location = location });
+                                    WeakReferenceMessenger.Default.Send(new LocationData { Location = mauiLocation });
                                 });
-
-                                prevLocation = location;
-                            }
-                            else if (accuracy > 5 && accuracy <= android.accuracy_meter)
-                            {
-                                var calculator = new CalculateKalman(location, prevLocation);
-                                var filteredLocation = calculator.Calculate();
-
-                                MainThread.BeginInvokeOnMainThread(() =>
-                                {
-                                    WeakReferenceMessenger.Default.Send(new LocationData { Location = filteredLocation });
-                                });
-
-                                prevLocation = filteredLocation;
                             }
                         }
                         else
                         {
                             MainThread.BeginInvokeOnMainThread(() =>
                             {
-                                WeakReferenceMessenger.Default.Send(new LocationData { Location = location });
+                                WeakReferenceMessenger.Default.Send(new LocationData { Location = mauiLocation });
                             });
-
-                            prevLocation = location;
                         }
+
+                        prevLocation = mauiLocation;
+
+                        //if (prevLocation != null)
+                        //{
+                        //    double accuracy = mauiLocation.Accuracy.HasValue ? mauiLocation.Accuracy.Value : 10.0;
+                        //    if (accuracy <= 5)
+                        //    {
+                        //        MainThread.BeginInvokeOnMainThread(() =>
+                        //        {
+                        //            WeakReferenceMessenger.Default.Send(new LocationData { Location = mauiLocation });
+                        //        });
+                        //        prevLocation = mauiLocation;
+                        //    }
+
+                        //    else if (accuracy > 5 && accuracy <= android.accuracy_meter)
+                        //    {
+                        //        var calculator = new CalculateKalman(mauiLocation, prevLocation);
+                        //        var filteredLocation = calculator.Calculate();
+
+                        //        if (filteredLocation.Accuracy.Value < mauiLocation.Accuracy.Value)
+                        //        {
+                        //            MainThread.BeginInvokeOnMainThread(() =>
+                        //            {
+                        //                WeakReferenceMessenger.Default.Send(new LocationData { Location = filteredLocation });
+                        //            });
+
+                        //            prevLocation = filteredLocation;
+                        //        }
+                        //        else
+                        //        {
+                        //            MainThread.BeginInvokeOnMainThread(() =>
+                        //            {
+                        //                WeakReferenceMessenger.Default.Send(new LocationData { Location = mauiLocation });
+                        //            });
+                        //            prevLocation = mauiLocation;
+
+                        //        }
+                        //    }
+                        //}
+                        //else
+                        //{
+                        //    MainThread.BeginInvokeOnMainThread(() =>
+                        //    {
+                        //        WeakReferenceMessenger.Default.Send(new LocationData { Location = mauiLocation });
+                        //    });
+                        //    prevLocation = mauiLocation;
+                        //}
                     }
 
-                    var elapsed = (DateTime.Now - loopStart).TotalMilliseconds;
-                    var delay = Math.Max(0, trackingInterval - (int)elapsed);
-                    await Task.Delay(delay, cancellationToken);                  
-                }
+                });
+
+                await fusedLocationClient.RequestLocationUpdatesAsync(locationRequest, locationCallback, Looper.MainLooper);
+                await Task.Delay(Timeout.Infinite, cancellationToken);
+                await fusedLocationClient.RemoveLocationUpdatesAsync(locationCallback);
             }
-            catch (TaskCanceledException ex)
+            catch (TaskCanceledException)
             {
-                Console.WriteLine($"Location tracking cancelled: {ex.Message}");
+                Console.WriteLine("Location tracking cancelled");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Unexpected error in StartTrackingAsync: {ex.GetType().Name} - {ex.Message}");
+                Console.WriteLine($"Error in StartTrackingAsync: {ex.Message}");
             }
         }
+        //private async Task StartTrackingAsyncOLD(CancellationToken cancellationToken,int trackingInterval , AndroidParameterModel android)
+        //{
+        //    try
+        //    {
+        //        var locationManager = (LocationManager)GetSystemService(LocationService);
+        //        if (!locationManager.IsProviderEnabled(LocationManager.GpsProvider))
+        //        {
+        //            Console.WriteLine("GPS is disabled, please enable it");
+        //        }
+
+        //        while (!cancellationToken.IsCancellationRequested)
+        //        {
+        //            var loopStart = DateTime.Now;
+        //            GeolocationAccuracy geo = GeolocationAccuracy.Medium;
+        //            if (android.geolocation_accuracy == "MEDIUM")
+        //            {
+        //                geo = GeolocationAccuracy.Medium;
+        //            }
+        //            else if (android.geolocation_accuracy == "HIGH")
+        //            {
+        //                geo = GeolocationAccuracy.High;
+        //            }
+        //            else if (android.geolocation_accuracy == "BEST")
+        //            {
+        //                geo = GeolocationAccuracy.Best;
+        //            }
+        //            else
+        //            {
+        //                geo = GeolocationAccuracy.Medium;
+        //            }
+
+        //            var request = new GeolocationRequest(geo, TimeSpan.FromSeconds(android.timeout));
+        //            var location = await Geolocation.Default.GetLocationAsync(request, cancellationToken);
+
+        //            if (location != null)
+        //            {
+        //                if (prevLocation != null)
+        //                {
+        //                    double accuracy = location.Accuracy.HasValue ? location.Accuracy.Value : 10.0;
+        //                    if (accuracy <= 5)
+        //                    {
+        //                        MainThread.BeginInvokeOnMainThread(() =>
+        //                        {
+        //                            WeakReferenceMessenger.Default.Send(new LocationData { Location = location });
+        //                        });
+
+        //                        prevLocation = location;
+        //                    }
+        //                    else if (accuracy > 5 && accuracy <= android.accuracy_meter)
+        //                    {
+        //                        var calculator = new CalculateKalman(location, prevLocation);
+        //                        var filteredLocation = calculator.Calculate();
+
+        //                        MainThread.BeginInvokeOnMainThread(() =>
+        //                        {
+        //                            WeakReferenceMessenger.Default.Send(new LocationData { Location = filteredLocation });
+        //                        });
+
+        //                        prevLocation = filteredLocation;
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    MainThread.BeginInvokeOnMainThread(() =>
+        //                    {
+        //                        WeakReferenceMessenger.Default.Send(new LocationData { Location = location });
+        //                    });
+
+        //                    prevLocation = location;
+        //                }
+        //            }
+
+        //            var elapsed = (DateTime.Now - loopStart).TotalMilliseconds;
+        //            var delay = Math.Max(0, trackingInterval - (int)elapsed);
+        //            await Task.Delay(delay, cancellationToken);                  
+        //        }
+        //    }
+        //    catch (TaskCanceledException ex)
+        //    {
+        //        Console.WriteLine($"Location tracking cancelled: {ex.Message}");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine($"Unexpected error in StartTrackingAsync: {ex.GetType().Name} - {ex.Message}");
+        //    }
+        //}
     }
 }
