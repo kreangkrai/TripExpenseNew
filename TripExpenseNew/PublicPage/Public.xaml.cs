@@ -275,360 +275,361 @@ namespace TripExpenseNew.PublicPage
 
                 previousLocation = location;
 
-                //double speed = location.Speed.HasValue ? location.Speed.Value * 3.6 : 0;
-
-                if (!isStart)
+                if (speed < 200.0)
                 {
-                    var placemarks = await Geocoding.Default.GetPlacemarksAsync(location.Latitude, location.Longitude);
-                    var zipcode = placemarks?.FirstOrDefault()?.PostalCode ?? "N/A";
 
-                    if (start.IsContinue)
+                    if (!isStart)
                     {
-                        data_public = new PublicModel()
+                        var placemarks = await Geocoding.Default.GetPlacemarksAsync(location.Latitude, location.Longitude);
+                        var zipcode = placemarks?.FirstOrDefault()?.PostalCode ?? "N/A";
+
+                        if (start.IsContinue)
                         {
-                            date = DateTime.Now,
-                            job_id = start.job_id,
-                            latitude = location.Latitude,
-                            longitude = location.Longitude,
-                            accuracy = location.Accuracy.HasValue ? location.Accuracy.Value : 10.0,
-                            location = start.location_name,
-                            zipcode = zipcode,
-                            location_mode = start.IsCustomer ? "CUSTOMER" : "OTHER",
-                            trip = start.trip,
-                            status = "CONTINUE",
-                            passenger = emp_id
-
-                        };
-
-                        isStart = true;
-                        string message = await _Public.Insert(data_public);
-                    }
-                    else
-                    {
-                        data_public = new PublicModel()
-                        {
-                            passenger = emp_id,
-                            date = DateTime.Now,
-                            job_id = start.job_id,
-                            latitude = location.Latitude,
-                            longitude = location.Longitude,
-                            accuracy = location.Accuracy.HasValue ? location.Accuracy.Value : 10.0,
-                            location = start.location_name,
-                            zipcode = zipcode,
-                            location_mode = start.IsCustomer ? "CUSTOMER" : "OTHER",
-                            trip = trip_start.ToString("yyyyMMddHHmmss", cultureinfo),
-                            status = "START"
-                        };
-
-                        isStart = true;
-                        string message = await _Public.Insert(data_public);
-
-                        // Insert Last Trip to Server DB
-                        LastTripModel lastTrip = new LastTripModel()
-                        {
-                            driver = "",
-                            speed = 0,
-                            job_id = data_public.job_id,
-                            emp_id = data_public.passenger,
-                            trip_start = trip_start,
-                            date = DateTime.Now,
-                            distance = 0,
-                            location = data_public.location,
-                            latitude = data_public.latitude,
-                            longitude = data_public.longitude,
-                            accuracy = data_public.accuracy,
-                            mileage_start = 0,
-                            mileage_stop = 0,
-                            mode = "PUBLIC",
-                            status = true,
-                            trip = data_public.trip,
-                            car_id = "",
-                            borrower_id = ""
-                        };
-
-                        message = await LastTrip.Insert(lastTrip);
-
-                        #region Add Location
-                        if (start.location_name != "" && start.location_name != "CTL(HQ)" && start.location_name != "CTL(KBO)" && start.location_name != "CTL(RBO)")
-                        {
-                            if (start.IsCustomer)
+                            data_public = new PublicModel()
                             {
-                                LocationCustomerModel locationCustomer = new LocationCustomerModel()
-                                {
-                                    emp_id = emp_id,
-                                    latitude = location.Latitude,
-                                    longitude = location.Longitude,
-                                    location = start.location_name,
-                                    location_id = DateTime.Now.ToString("yyyyMMddHHmmssfff", cultureinfo),
-                                    zipcode = zipcode,
-                                };
-                                await LocationCustomer.Insert(locationCustomer);
-                            }
-                            else
-                            {
-                                LocationOtherModel locationOther = new LocationOtherModel()
-                                {
-                                    emp_id = emp_id,
-                                    latitude = location.Latitude,
-                                    longitude = location.Longitude,
-                                    location = start.location_name,
-                                    location_id = DateTime.Now.ToString("yyyyMMddHHmmssfff", cultureinfo),
-                                    zipcode = zipcode,
-                                };
+                                date = DateTime.Now,
+                                job_id = start.job_id,
+                                latitude = location.Latitude,
+                                longitude = location.Longitude,
+                                accuracy = location.Accuracy.HasValue ? location.Accuracy.Value : 10.0,
+                                location = start.location_name,
+                                zipcode = zipcode,
+                                location_mode = start.IsCustomer ? "CUSTOMER" : "OTHER",
+                                trip = start.trip,
+                                status = "CONTINUE",
+                                passenger = emp_id
 
-                                await LocationOther.Insert(locationOther);
-                            }
-                        }
-                        
-                        #endregion
-                    }
+                            };
 
-
-                    // Insert Active Public to Local DB
-                    ActivePublicModel active_public = new ActivePublicModel()
-                    {
-                        passenger = data_public.passenger,
-                        location = data_public.location,
-                        status = data_public.status,
-                        trip = data_public.trip,
-                        date = DateTime.Now
-                    };
-
-                    int act = await ActivePublic.Insert(active_public);
-
-                    #region Show Active Public
-                    tripItems = new ObservableCollection<TripItems>();
-                    List<ActivePublicModel> act_publics = await ActivePublic.GetByTrip(data_public.trip);
-                    foreach (var ap in act_publics)
-                    {
-                        Color color = new Color();
-                        if (ap.status == "START")
-                        {
-                            color = Color.FromRgb(255, 255, 255);
+                            isStart = true;
+                            string message = await _Public.Insert(data_public);
                         }
                         else
                         {
-                            color = Color.FromRgb(255, 255, 255);
-                        }
-                        TripItems trip_item = new TripItems()
-                        {
-                            FrameColor = color,
-                            TextStatus = ap.status,
-                            IconLocationSource = "route.png",
-                            TextLocation = $"Location: {ap.location}",
-                            IconDateSource = "clock.png",
-                            TextDate = $"Date: {ap.date.ToString("dd/MM/yyyy HH:mm:ss", cultureinfo)}"
-                        };
-
-                        tripItems.Add(trip_item);
-                    }
-
-                    TripCollectionView.ItemsSource = tripItems;
-
-                    #endregion
-
-                    Text_Detail.Text = $"Active Trip Detail : ({tripItems.Count})";
-                    //Console.WriteLine($"ALL ==> Lat: {location.Latitude}, Lon: {location.Longitude}, Speed: {speed}, Distance: {totalDistance}, Zipcode: {zipcode}");                   
-                }
-                else
-                {
-
-                    if (!isWaitStop)
-                    {
-                        //INACTIVE
-
-                        double dist = CalculateDistance(g_location, location);
-                        double displacement = CalculateDistanceInactive(velocity_min, interval);
-                        if (dist <= displacement)  // Check ditance beteween point to point less than displacement
-                        {
-                            int minute_inactive = (int)(DateTime.Now - lastInactive).TotalMinutes;
-                            if (minute_inactive >= 15)  // Inactive Each 15 Minute
-                            {
-                                if (!isInactive)
-                                {
-                                    PublicModel p = new PublicModel()
-                                    {
-                                        passenger = emp_id,
-                                        date = DateTime.Now,
-                                        job_id = start.job_id,
-                                        distance = totalDistance,
-                                        latitude = location.Latitude,
-                                        longitude = location.Longitude,
-                                        accuracy = location.Accuracy.HasValue ? location.Accuracy.Value : 10.0,
-                                        location = "",
-                                        zipcode = "",
-                                        location_mode = "",
-                                        speed = speed,
-                                        trip = trip_start.ToString("yyyyMMddHHmmss", cultureinfo),
-                                        status = "INACTIVE"
-                                    };
-                                    string message = await _Public.Insert(p);
-
-                                    LastTripModel lastTrip = new LastTripModel()
-                                    {
-                                        driver = "",
-                                        speed = p.speed,
-                                        job_id = p.job_id,
-                                        emp_id = p.passenger,
-                                        trip_start = trip_start,
-                                        date = DateTime.Now,
-                                        distance = p.distance,
-                                        location = p.location,
-                                        latitude = p.latitude,
-                                        longitude = p.longitude,
-                                        accuracy = p.accuracy,
-                                        mileage_start = 0,
-                                        mileage_stop = 0,
-                                        mode = "PUBLIC",
-                                        status = true,
-                                        trip = p.trip,
-                                        car_id = "",
-                                        borrower_id = ""
-
-                                    };
-
-                                    string l = await LastTrip.UpdateByTrip(lastTrip);
-
-                                    ActivePublicModel active_public = new ActivePublicModel()
-                                    {
-                                        passenger = p.passenger,
-                                        distance = totalDistance,
-                                        location = p.location,
-                                        status = p.status,
-                                        trip = p.trip,
-                                        date = DateTime.Now
-                                    };
-
-                                    int act = await ActivePublic.Insert(active_public);
-
-                                    isInactive = true;
-                                }
-                            }
-                        }
-
-                        else
-                        {
-                            PublicDBModel db_public = new PublicDBModel()
+                            data_public = new PublicModel()
                             {
                                 passenger = emp_id,
                                 date = DateTime.Now,
                                 job_id = start.job_id,
-                                distance = totalDistance,
                                 latitude = location.Latitude,
                                 longitude = location.Longitude,
                                 accuracy = location.Accuracy.HasValue ? location.Accuracy.Value : 10.0,
-                                location = "",
-                                zipcode = "",
-                                location_mode = "",
-                                speed = speed,
+                                location = start.location_name,
+                                zipcode = zipcode,
+                                location_mode = start.IsCustomer ? "CUSTOMER" : "OTHER",
                                 trip = trip_start.ToString("yyyyMMddHHmmss", cultureinfo),
-                                status = "NA"
+                                status = "START"
                             };
 
-                            int message = await DB_Public.Insert(db_public);
+                            isStart = true;
+                            string message = await _Public.Insert(data_public);
 
-                            int diff = (int)(DateTime.Now - start_tracking).TotalSeconds;
-
-                            if (diff >= tracking_db)
+                            // Insert Last Trip to Server DB
+                            LastTripModel lastTrip = new LastTripModel()
                             {
-                                List<PublicDBModel> db_publics = new List<PublicDBModel>();
-                                db_publics = await DB_Public.GetByTrip(trip_start.ToString("yyyyMMddHHmmss", cultureinfo));
+                                driver = "",
+                                speed = 0,
+                                job_id = data_public.job_id,
+                                emp_id = data_public.passenger,
+                                trip_start = trip_start,
+                                date = DateTime.Now,
+                                distance = 0,
+                                location = data_public.location,
+                                latitude = data_public.latitude,
+                                longitude = data_public.longitude,
+                                accuracy = data_public.accuracy,
+                                mileage_start = 0,
+                                mileage_stop = 0,
+                                mode = "PUBLIC",
+                                status = true,
+                                trip = data_public.trip,
+                                car_id = "",
+                                borrower_id = ""
+                            };
 
-                                List<PublicModel> publics = new List<PublicModel>();
-                                publics = db_publics.Select(s => new PublicModel()
+                            message = await LastTrip.Insert(lastTrip);
+
+                            #region Add Location
+                            if (start.location_name != "" && start.location_name != "CTL(HQ)" && start.location_name != "CTL(KBO)" && start.location_name != "CTL(RBO)")
+                            {
+                                if (start.IsCustomer)
                                 {
-                                    job_id = s.job_id,
-                                    distance = s.distance,
-                                    date = s.date,
-                                    latitude = s.latitude,
-                                    longitude = s.longitude,
-                                    location = s.location,
-                                    accuracy = s.accuracy,
-                                    zipcode = s.zipcode,
-                                    location_mode = s.location_mode,
-                                    speed = s.speed,
-                                    trip = trip_start.ToString("yyyyMMddHHmmss", cultureinfo),
-                                    status = s.status,
-                                    passenger = s.passenger
-                                }).ToList();
-                                string m = await _Public.Inserts(publics);
-
-                                await DB_Public.Delete(trip_start.ToString("yyyyMMddHHmmss", cultureinfo));
-
-                                PublicModel _public = publics.FirstOrDefault();
-
-                                LastTripModel lastTrip = new LastTripModel()
+                                    LocationCustomerModel locationCustomer = new LocationCustomerModel()
+                                    {
+                                        emp_id = emp_id,
+                                        latitude = location.Latitude,
+                                        longitude = location.Longitude,
+                                        location = start.location_name,
+                                        location_id = DateTime.Now.ToString("yyyyMMddHHmmssfff", cultureinfo),
+                                        zipcode = zipcode,
+                                    };
+                                    await LocationCustomer.Insert(locationCustomer);
+                                }
+                                else
                                 {
-                                    driver = "",
-                                    speed = _public.speed,
-                                    job_id = _public.job_id,
-                                    emp_id = _public.passenger,
-                                    trip_start = trip_start,
-                                    date = DateTime.Now,
-                                    distance = _public.distance,
-                                    location = _public.location,
-                                    latitude = _public.latitude,
-                                    longitude = _public.longitude,
-                                    accuracy = _public.accuracy,
-                                    mileage_start = 0,
-                                    mileage_stop = 0,
-                                    mode = "PUBLIC",
-                                    status = true,
-                                    trip = _public.trip,
-                                    car_id = "",
-                                    borrower_id = ""
-                                };
-
-                                string l = await LastTrip.UpdateByTrip(lastTrip);
-
-                                #region Show Active Public
-                                tripItems = new ObservableCollection<TripItems>();
-                                List<ActivePublicModel> act_publics = await ActivePublic.GetByTrip(_public.trip);
-                                foreach (var ap in act_publics)
-                                {
-                                    Color color = new Color();
-                                    if (ap.status == "START")
+                                    LocationOtherModel locationOther = new LocationOtherModel()
                                     {
-                                        color = Color.FromRgb(255, 255, 255);
-                                    }
-                                    else
-                                    {
-                                        color = Color.FromRgb(255, 255, 255);
-                                    }
-                                    TripItems trip_item = new TripItems()
-                                    {
-                                        FrameColor = color,
-                                        TextStatus = ap.status,
-                                        IconLocationSource = "route.png",
-                                        TextLocation = $"Location: {ap.location}",
-                                        IconDateSource = "clock.png",
-                                        TextDate = $"Date: {ap.date.ToString("dd/MM/yyyy HH:mm:ss", cultureinfo)}"
+                                        emp_id = emp_id,
+                                        latitude = location.Latitude,
+                                        longitude = location.Longitude,
+                                        location = start.location_name,
+                                        location_id = DateTime.Now.ToString("yyyyMMddHHmmssfff", cultureinfo),
+                                        zipcode = zipcode,
                                     };
 
-                                    tripItems.Add(trip_item);
+                                    await LocationOther.Insert(locationOther);
                                 }
-
-                                TripCollectionView.ItemsSource = tripItems;
-
-                                #endregion
-                                //Console.WriteLine($"ALL ==> {m} Lat: {location.Latitude}, Lon: {location.Longitude}, Speed: {speed}, Distance: {totalDistance}");
-                                start_tracking = DateTime.Now;
                             }
 
-                            lastInactive = DateTime.Now;
-                            isInactive = false;
+                            #endregion
+                        }
+
+
+                        // Insert Active Public to Local DB
+                        ActivePublicModel active_public = new ActivePublicModel()
+                        {
+                            passenger = data_public.passenger,
+                            location = data_public.location,
+                            status = data_public.status,
+                            trip = data_public.trip,
+                            date = DateTime.Now
+                        };
+
+                        int act = await ActivePublic.Insert(active_public);
+
+                        #region Show Active Public
+                        tripItems = new ObservableCollection<TripItems>();
+                        List<ActivePublicModel> act_publics = await ActivePublic.GetByTrip(data_public.trip);
+                        foreach (var ap in act_publics)
+                        {
+                            Color color = new Color();
+                            if (ap.status == "START")
+                            {
+                                color = Color.FromRgb(255, 255, 255);
+                            }
+                            else
+                            {
+                                color = Color.FromRgb(255, 255, 255);
+                            }
+                            TripItems trip_item = new TripItems()
+                            {
+                                FrameColor = color,
+                                TextStatus = ap.status,
+                                IconLocationSource = "route.png",
+                                TextLocation = $"Location: {ap.location}",
+                                IconDateSource = "clock.png",
+                                TextDate = $"Date: {ap.date.ToString("dd/MM/yyyy HH:mm:ss", cultureinfo)}"
+                            };
+
+                            tripItems.Add(trip_item);
+                        }
+
+                        TripCollectionView.ItemsSource = tripItems;
+
+                        #endregion
+
+                        Text_Detail.Text = $"Active Trip Detail : ({tripItems.Count})";
+                        //Console.WriteLine($"ALL ==> Lat: {location.Latitude}, Lon: {location.Longitude}, Speed: {speed}, Distance: {totalDistance}, Zipcode: {zipcode}");                   
+                    }
+                    else
+                    {
+
+                        if (!isWaitStop)
+                        {
+                            //INACTIVE
+
+                            double dist = CalculateDistance(g_location, location);
+                            double displacement = CalculateDistanceInactive(velocity_min, interval);
+                            if (dist <= displacement)  // Check ditance beteween point to point less than displacement
+                            {
+                                int minute_inactive = (int)(DateTime.Now - lastInactive).TotalMinutes;
+                                if (minute_inactive >= 15)  // Inactive Each 15 Minute
+                                {
+                                    if (!isInactive)
+                                    {
+                                        PublicModel p = new PublicModel()
+                                        {
+                                            passenger = emp_id,
+                                            date = DateTime.Now,
+                                            job_id = start.job_id,
+                                            distance = totalDistance,
+                                            latitude = location.Latitude,
+                                            longitude = location.Longitude,
+                                            accuracy = location.Accuracy.HasValue ? location.Accuracy.Value : 10.0,
+                                            location = "",
+                                            zipcode = "",
+                                            location_mode = "",
+                                            speed = speed,
+                                            trip = trip_start.ToString("yyyyMMddHHmmss", cultureinfo),
+                                            status = "INACTIVE"
+                                        };
+                                        string message = await _Public.Insert(p);
+
+                                        LastTripModel lastTrip = new LastTripModel()
+                                        {
+                                            driver = "",
+                                            speed = p.speed,
+                                            job_id = p.job_id,
+                                            emp_id = p.passenger,
+                                            trip_start = trip_start,
+                                            date = DateTime.Now,
+                                            distance = p.distance,
+                                            location = p.location,
+                                            latitude = p.latitude,
+                                            longitude = p.longitude,
+                                            accuracy = p.accuracy,
+                                            mileage_start = 0,
+                                            mileage_stop = 0,
+                                            mode = "PUBLIC",
+                                            status = true,
+                                            trip = p.trip,
+                                            car_id = "",
+                                            borrower_id = ""
+
+                                        };
+
+                                        string l = await LastTrip.UpdateByTrip(lastTrip);
+
+                                        ActivePublicModel active_public = new ActivePublicModel()
+                                        {
+                                            passenger = p.passenger,
+                                            distance = totalDistance,
+                                            location = p.location,
+                                            status = p.status,
+                                            trip = p.trip,
+                                            date = DateTime.Now
+                                        };
+
+                                        int act = await ActivePublic.Insert(active_public);
+
+                                        isInactive = true;
+                                    }
+                                }
+                            }
+
+                            else
+                            {
+                                PublicDBModel db_public = new PublicDBModel()
+                                {
+                                    passenger = emp_id,
+                                    date = DateTime.Now,
+                                    job_id = start.job_id,
+                                    distance = totalDistance,
+                                    latitude = location.Latitude,
+                                    longitude = location.Longitude,
+                                    accuracy = location.Accuracy.HasValue ? location.Accuracy.Value : 10.0,
+                                    location = "",
+                                    zipcode = "",
+                                    location_mode = "",
+                                    speed = speed,
+                                    trip = trip_start.ToString("yyyyMMddHHmmss", cultureinfo),
+                                    status = "NA"
+                                };
+
+                                int message = await DB_Public.Insert(db_public);
+
+                                int diff = (int)(DateTime.Now - start_tracking).TotalSeconds;
+
+                                if (diff >= tracking_db)
+                                {
+                                    List<PublicDBModel> db_publics = new List<PublicDBModel>();
+                                    db_publics = await DB_Public.GetByTrip(trip_start.ToString("yyyyMMddHHmmss", cultureinfo));
+
+                                    List<PublicModel> publics = new List<PublicModel>();
+                                    publics = db_publics.Select(s => new PublicModel()
+                                    {
+                                        job_id = s.job_id,
+                                        distance = s.distance,
+                                        date = s.date,
+                                        latitude = s.latitude,
+                                        longitude = s.longitude,
+                                        location = s.location,
+                                        accuracy = s.accuracy,
+                                        zipcode = s.zipcode,
+                                        location_mode = s.location_mode,
+                                        speed = s.speed,
+                                        trip = trip_start.ToString("yyyyMMddHHmmss", cultureinfo),
+                                        status = s.status,
+                                        passenger = s.passenger
+                                    }).ToList();
+                                    string m = await _Public.Inserts(publics);
+
+                                    await DB_Public.Delete(trip_start.ToString("yyyyMMddHHmmss", cultureinfo));
+
+                                    PublicModel _public = publics.FirstOrDefault();
+
+                                    LastTripModel lastTrip = new LastTripModel()
+                                    {
+                                        driver = "",
+                                        speed = _public.speed,
+                                        job_id = _public.job_id,
+                                        emp_id = _public.passenger,
+                                        trip_start = trip_start,
+                                        date = DateTime.Now,
+                                        distance = _public.distance,
+                                        location = _public.location,
+                                        latitude = _public.latitude,
+                                        longitude = _public.longitude,
+                                        accuracy = _public.accuracy,
+                                        mileage_start = 0,
+                                        mileage_stop = 0,
+                                        mode = "PUBLIC",
+                                        status = true,
+                                        trip = _public.trip,
+                                        car_id = "",
+                                        borrower_id = ""
+                                    };
+
+                                    string l = await LastTrip.UpdateByTrip(lastTrip);
+
+                                    #region Show Active Public
+                                    tripItems = new ObservableCollection<TripItems>();
+                                    List<ActivePublicModel> act_publics = await ActivePublic.GetByTrip(_public.trip);
+                                    foreach (var ap in act_publics)
+                                    {
+                                        Color color = new Color();
+                                        if (ap.status == "START")
+                                        {
+                                            color = Color.FromRgb(255, 255, 255);
+                                        }
+                                        else
+                                        {
+                                            color = Color.FromRgb(255, 255, 255);
+                                        }
+                                        TripItems trip_item = new TripItems()
+                                        {
+                                            FrameColor = color,
+                                            TextStatus = ap.status,
+                                            IconLocationSource = "route.png",
+                                            TextLocation = $"Location: {ap.location}",
+                                            IconDateSource = "clock.png",
+                                            TextDate = $"Date: {ap.date.ToString("dd/MM/yyyy HH:mm:ss", cultureinfo)}"
+                                        };
+
+                                        tripItems.Add(trip_item);
+                                    }
+
+                                    TripCollectionView.ItemsSource = tripItems;
+
+                                    #endregion
+                                    //Console.WriteLine($"ALL ==> {m} Lat: {location.Latitude}, Lon: {location.Longitude}, Speed: {speed}, Distance: {totalDistance}");
+                                    start_tracking = DateTime.Now;
+                                }
+
+                                lastInactive = DateTime.Now;
+                                isInactive = false;
+                            }
                         }
                     }
+
+                    await MainThread.InvokeOnMainThreadAsync(() =>
+                    {
+                        DateTime now = DateTime.Now;
+                        TimeSpan duration = now - trip_start;
+                        trip_distance.Text = totalDistance.ToString("#.#") + " km";
+                        trip_duration.Text = duration.ToString(@"hh\:mm");
+                    });
                 }
-
-                await MainThread.InvokeOnMainThreadAsync(() =>
-                {
-                    DateTime now = DateTime.Now;
-                    TimeSpan duration = now - trip_start;
-                    trip_distance.Text = totalDistance.ToString("#.#") + " km";
-                    trip_duration.Text = duration.ToString(@"hh\:mm");
-                });
-
                 g_location = location;
             }
             catch (Exception ex)

@@ -27,6 +27,8 @@ namespace TripExpenseNew.Platforms.Android
         public override IBinder OnBind(Intent intent) => null;
 
         Location prevLocation = null;
+
+        [Obsolete]
         public override StartCommandResult OnStartCommand(Intent intent, StartCommandFlags flags, int startId)
         {
             try
@@ -146,7 +148,7 @@ namespace TripExpenseNew.Platforms.Android
 
                         if (prevLocation != null)
                         {
-                            if (prevLocation.Timestamp.ToString("yyyy-MM-dd HH:mm:ss") != mauiLocation.Timestamp.ToString("yyyy-MM-dd HH:mm:ss"))
+                            if (prevLocation.Timestamp.ToString("yyyy-MM-dd HH:mm:ss.f") != mauiLocation.Timestamp.ToString("yyyy-MM-dd HH:mm:ss.f"))
                             {
                                 MainThread.BeginInvokeOnMainThread(() =>
                                 {
