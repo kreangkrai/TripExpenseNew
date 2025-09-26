@@ -23,8 +23,6 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>XSAppIconAssets</key>
-	<string>Assets.xcassets/appicon.appiconset</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.contrologic.tripexpensenew</string>
 	<key>CFBundleShortVersionString</key>
@@ -33,6 +31,7 @@
 	<array>
 		<string>remote-notification</string>
 		<string>location</string>
+		<string>fetch</string>
 	</array>
 	<key>NSUserNotificationUsageDescription</key>
 	<string>Allow this app to send you notifications</string>

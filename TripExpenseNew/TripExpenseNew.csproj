@@ -38,17 +38,18 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)'=='net8.0-ios'">
-	  <CodesignKey>iPhone Developer</CodesignKey>
-	  <CodesignProvision></CodesignProvision>
+	  <CodesignKey>Apple Development: Created via API (ZLTNNGF66L)</CodesignKey>
+	  <CodesignProvision>VS: com.contrologic.tripexpensenew Development</CodesignProvision>
 	  <ProvisioningType>manual</ProvisioningType>
 	</PropertyGroup>
 
 	<ItemGroup>
+
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" Color="#FFFFFF" />
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
 
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\logo_te.png" Color="#1C4698" BaseSize="300,300" />
+		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
 		
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
@@ -84,7 +85,10 @@
 		<PackageReference Include="ZXing.Net.Maui" Version="0.4.0" />
 		<PackageReference Include="ZXing.Net.Maui.Controls" Version="0.4.0" />
 	</ItemGroup>
-
+	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0-ios'">
+		<None Include="Platforms\iOS\Info.plist" />
+	</ItemGroup>
+	
 	<ItemGroup>
 	  <Folder Include="Views\" />
 	</ItemGroup>
