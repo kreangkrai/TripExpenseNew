@@ -16,6 +16,7 @@ using Location = Microsoft.Maui.Devices.Sensors.Location;
 using TripExpenseNew.Services;
 using Android.Gms.Location;
 using LocationRequest = Android.Gms.Location.LocationRequest;
+using Resource = Microsoft.Maui.Resource;
 
 namespace TripExpenseNew.Platforms.Android
 {
