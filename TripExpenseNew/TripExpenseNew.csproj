@@ -40,16 +40,21 @@
 	<PropertyGroup Condition="'$(TargetFramework)'=='net8.0-ios'">
 	  <CodesignKey>Apple Development: Created via API (ZLTNNGF66L)</CodesignKey>
 	  <CodesignProvision>VS: com.contrologic.tripexpensenew Development</CodesignProvision>
-	  <ProvisioningType>manual</ProvisioningType>
+	  <ProvisioningType>automatic</ProvisioningType>
 	</PropertyGroup>
 
 	<ItemGroup>
 
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#1C4698" />
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#1C4698">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</MauiIcon>
+		
 
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
+		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</MauiSplashScreen>
 		
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
@@ -63,18 +68,6 @@
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
 		
-	</ItemGroup>
-
-	<ItemGroup>
-	  <BundleResource Remove="Platforms\iOS\Resources\LaunchScreen.storyboard" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <MauiImage Remove="Resources\Images\splash.png" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Remove="Resources\AppIcon\appicon.svg" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -99,11 +92,6 @@
 		<None Include="Platforms\iOS\Info.plist" />
 	</ItemGroup>
 	
-	<ItemGroup>
-	  <Folder Include="Platforms\iOS\Resources\Assets.xcassets\" />
-	  <Folder Include="Views\" />
-	</ItemGroup>
-
 	<ItemGroup>
 	  <Compile Update="CustomPersonalPopup\PersonalStopPopup.xaml.cs">
 	    <DependentUpon>PersonalStopPopup.xaml</DependentUpon>
@@ -261,6 +249,15 @@
 	  <MauiXaml Update="PublicPage\PublicPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Resources\AppIcon\appiconfg.svg">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Resources\Splash\logo_te.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 </Project>

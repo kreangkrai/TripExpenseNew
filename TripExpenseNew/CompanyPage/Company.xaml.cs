@@ -23,6 +23,8 @@ using TripExpenseNew.CustomCompanyPopup;
 #if IOS
 using UserNotifications;
 using Microsoft.Maui.Maps;
+using MathNet.Numerics.LinearAlgebra.Factorization;
+
 
 
 #endif
@@ -268,17 +270,16 @@ namespace TripExpenseNew.CompanyPage
             {
                 int velocity_min = tracking.velocity_min;
                 double speed = 0;
+                DateTimeOffset start_location = previousLocation.Timestamp;
+                DateTimeOffset end_location = location.Timestamp;
+                double duration = (end_location - start_location).TotalSeconds;
                 if (previousLocation != null)
                 {
-                    DateTimeOffset start = previousLocation.Timestamp;
-                    DateTimeOffset end = location.Timestamp;
-                    double duration = (end - start).TotalSeconds;
-
                     double dist = CalculateDistance(previousLocation, location);
 
                     speed = ((dist * 1000) / duration) * 3.6;
 
-                    double displacement = CalculateDistanceInactive(velocity_min, interval);
+                    double displacement = CalculateDistanceInactive(velocity_min, duration);
                     if (dist >= displacement)
                     {
                         totalDistance += CalculateDistance(previousLocation, location);
@@ -491,7 +492,7 @@ namespace TripExpenseNew.CompanyPage
                             //INACTIVE
 
                             double dist = CalculateDistance(g_location, location);
-                            double displacement = CalculateDistanceInactive(velocity_min, interval);
+                            double displacement = CalculateDistanceInactive(velocity_min, duration);
                             if (dist <= displacement)  // Check ditance beteween point to point less than displacement
                             {
                                 int minute_inactive = (int)(DateTime.Now - lastInactive).TotalMinutes;
@@ -722,7 +723,7 @@ namespace TripExpenseNew.CompanyPage
             return R * c;
         }
 
-        private double CalculateDistanceInactive(double velocity, int duration)
+        private double CalculateDistanceInactive(double velocity, double duration)
         {
             return (velocity / 3.6 * duration) / 1000.0;
         }
