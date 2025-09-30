@@ -12,7 +12,7 @@
         BackgroundColor="White"
         Stroke="Transparent"
         StrokeShape="{RoundRectangle CornerRadius='20'}"
-        WidthRequest="350">
+        WidthRequest="320">
         <Grid
             Padding="20,10"
             ColumnDefinitions=".50*,.50*"
@@ -31,7 +31,7 @@
                     CharacterSpacing="1"
                     FontAttributes="Bold"
                     FontFamily="Rajdhani-Bold"
-                    FontSize="32"
+                    FontSize="30"
                     HorizontalOptions="Center"
                     Text="CHECK IN"
                     TextColor="#1C4698"
@@ -57,7 +57,7 @@
                 <Label
                     CharacterSpacing="1"
                     FontAttributes="None"
-                    FontSize="20"
+                    FontSize="18"
                     HorizontalOptions="Start"
                     Text="Location Name:"
                     VerticalOptions="Center" />
@@ -86,7 +86,7 @@
                 <Label
                     CharacterSpacing="1"
                     FontAttributes="None"
-                    FontSize="20"
+                    FontSize="18"
                     HorizontalOptions="Start"
                     Text="Mileage:"
                     VerticalOptions="Center" />
@@ -116,7 +116,7 @@
                 <Label
                     CharacterSpacing="1"
                     FontAttributes="None"
-                    FontSize="20"
+                    FontSize="18"
                     HorizontalOptions="Start"
                     Text="Amount to Pay:"
                     VerticalOptions="Center" />
@@ -147,7 +147,7 @@
                 Clicked="OnCloseButtonClicked"
                 CornerRadius="10"
                 FontAttributes="Bold"
-                FontSize="22"
+                FontSize="20"
                 HorizontalOptions="Fill"
                 Text="Cancel"
                 VerticalOptions="Center">
@@ -171,7 +171,7 @@
                 Clicked="OnOkButtonClicked"
                 CornerRadius="10"
                 FontAttributes="Bold"
-                FontSize="22"
+                FontSize="20"
                 HorizontalOptions="Fill"
                 Text="OK"
                 VerticalOptions="Center">
@@ -183,7 +183,6 @@
                         Offset="0,4" />
                 </Button.Shadow>
             </Button>
-
         </Grid>
     </Border>
 </toolkit:Popup>

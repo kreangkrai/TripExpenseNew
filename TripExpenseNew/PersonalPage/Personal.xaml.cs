@@ -264,13 +264,13 @@ namespace TripExpenseNew.PersonalPage
             {
                 int velocity_min = tracking.velocity_min;
                 double speed = 0;
-                DateTimeOffset start_location = previousLocation.Timestamp;
-                DateTimeOffset end_location = location.Timestamp;
-                double duration = (end_location - start_location).TotalSeconds;
+                double duration = 0;
                 if (previousLocation != null)
                 {                   
                     double dist = CalculateDistance(previousLocation, location);
-
+                    DateTimeOffset start_location = previousLocation.Timestamp;
+                    DateTimeOffset end_location = location.Timestamp;
+                    duration = (end_location - start_location).TotalSeconds;
                     speed = ((dist * 1000) / duration) * 3.6;
 
                     double displacement = CalculateDistanceInactive(velocity_min, duration);

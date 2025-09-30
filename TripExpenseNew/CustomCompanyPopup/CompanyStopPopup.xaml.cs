@@ -7,9 +7,22 @@ public partial class CompanyStopPopup : Popup
 {
     private bool Iscustomer = false;
     string car = "";
-    public CompanyStopPopup(string location, bool isCustomer, int mileage,string car_id)
+    string location = string.Empty;
+    bool isCustomer = false;
+    int mileage = 0;
+    string car_id = string.Empty;
+
+    public CompanyStopPopup(string _location, bool _isCustomer, int _mileage, string _car_id)
     {
         InitializeComponent();
+        location = _location;
+        mileage = _mileage;
+        car = _car_id;
+        isCustomer = _isCustomer;
+    }
+    protected override void OnParentChanged()
+    {
+        base.OnParentChanged();
         Text_Location.Text = location;
         if (location != "CTL(HQ)" && location != "CTL(KBO)" && location != "CTL(RBO)")
         {

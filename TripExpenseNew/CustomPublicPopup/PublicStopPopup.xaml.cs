@@ -1,4 +1,5 @@
 using CommunityToolkit.Maui.Views;
+using Microsoft.Maui.Devices.Sensors;
 using TripExpenseNew.Models;
 
 namespace TripExpenseNew.CustomPublicPopup;
@@ -6,10 +7,18 @@ namespace TripExpenseNew.CustomPublicPopup;
 public partial class PublicStopPopup : Popup
 {
     private bool Iscustomer = false;
-
-    public PublicStopPopup(string location, bool isCustomer)
+    string location = "";
+    bool isCustomer = false;
+    public PublicStopPopup(string _location, bool _isCustomer)
     {
         InitializeComponent();
+        location = _location;
+        isCustomer = _isCustomer;
+    }
+
+    protected override void OnParentChanged()
+    {
+        base.OnParentChanged();
         Text_Location.Text = location;
         if (location != "CTL(HQ)" && location != "CTL(KBO)" && location != "CTL(RBO)")
         {

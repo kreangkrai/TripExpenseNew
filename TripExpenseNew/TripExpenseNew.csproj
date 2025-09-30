@@ -46,15 +46,11 @@
 	<ItemGroup>
 
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#1C4698">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</MauiIcon>
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#1C4698" />
 		
 
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</MauiSplashScreen>
+		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#1C4698"  />
 		
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
@@ -250,14 +246,4 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
-
-	<ItemGroup>
-	  <None Update="Resources\AppIcon\appiconfg.svg">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Resources\Splash\logo_te.png">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
-	</ItemGroup>
-
 </Project>

@@ -11,16 +11,15 @@
         Padding="0,5"
         BackgroundColor="White"
         Stroke="Transparent"
-        StrokeShape="{RoundRectangle CornerRadius='20'}"
-        WidthRequest="350">
+        StrokeShape="{RoundRectangle CornerRadius='10'}"
+        WidthRequest="320">
         <Grid
-            Padding="20,10"
+            Padding="15,15"
             ColumnDefinitions=".50*,.50*"
             ColumnSpacing="10"
             RowDefinitions="Auto,Auto,Auto,Auto"
             RowSpacing="15"
-            VerticalOptions="Center"
-            WidthRequest="350">
+            VerticalOptions="Center">
 
             <!--  LABEL HEADER  -->
             <VerticalStackLayout
@@ -32,7 +31,7 @@
                     CharacterSpacing="1"
                     FontAttributes="Bold"
                     FontFamily="Rajdhani-Bold"
-                    FontSize="32"
+                    FontSize="28"
                     HorizontalOptions="Center"
                     Text="CHECK IN"
                     TextColor="#1C4698"
@@ -42,7 +41,7 @@
                     CharacterSpacing="1"
                     FontAttributes="Bold"
                     FontFamily="Rajdhani-Bold"
-                    FontSize="28"
+                    FontSize="26"
                     HorizontalOptions="Center"
                     Text="(Gas Station)"
                     TextColor="#297CC0"
@@ -58,7 +57,7 @@
                 <Label
                     CharacterSpacing="1"
                     FontAttributes="Bold"
-                    FontSize="20"
+                    FontSize="18"
                     HorizontalOptions="Start"
                     Text="Location Name:"
                     VerticalOptions="Center" />
@@ -72,7 +71,7 @@
                         Margin="2"
                         CharacterSpacing="1"
                         ClearButtonVisibility="WhileEditing"
-                        FontSize="18"
+                        FontSize="16"
                         Keyboard="Text"
                         Placeholder=" Ex. CTL-(HQ)"
                         Text="" />
@@ -88,7 +87,7 @@
                 <Label
                     CharacterSpacing="1"
                     FontAttributes="Bold"
-                    FontSize="20"
+                    FontSize="18"
                     HorizontalOptions="Start"
                     Text="Amount to Pay:"
                     VerticalOptions="Center" />
@@ -102,7 +101,7 @@
                         Margin="2"
                         CharacterSpacing="1"
                         ClearButtonVisibility="WhileEditing"
-                        FontSize="18"
+                        FontSize="16"
                         Keyboard="Numeric"
                         Placeholder=" Ex. 1000 ฿"
                         Text="0" />
@@ -113,13 +112,13 @@
             <Button
                 x:Name="CancelBtn"
                 Grid.Row="3"
-                Padding="10,15"
+                Padding="10,10"
                 BackgroundColor="#EC221F"
                 CharacterSpacing="2"
                 Clicked="OnCloseButtonClicked"
                 CornerRadius="10"
                 FontAttributes="Bold"
-                FontSize="22"
+                FontSize="18"
                 HorizontalOptions="Fill"
                 Text="Cancel"
                 VerticalOptions="Center">
@@ -137,13 +136,13 @@
                 x:Name="OKBtn"
                 Grid.Row="3"
                 Grid.Column="1"
-                Padding="10,15"
+                Padding="10,10"
                 BackgroundColor="#14AE5C"
                 CharacterSpacing="2"
                 Clicked="OnOkButtonClicked"
                 CornerRadius="10"
                 FontAttributes="Bold"
-                FontSize="22"
+                FontSize="18"
                 HorizontalOptions="Fill"
                 Text="OK"
                 VerticalOptions="Center">
@@ -155,7 +154,6 @@
                         Offset="0,4" />
                 </Button.Shadow>
             </Button>
-
         </Grid>
     </Border>
 </toolkit:Popup>

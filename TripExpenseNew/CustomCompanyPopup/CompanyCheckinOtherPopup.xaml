@@ -12,15 +12,14 @@
         BackgroundColor="White"
         Stroke="Transparent"
         StrokeShape="{RoundRectangle CornerRadius='20'}"
-        WidthRequest="350">
+        WidthRequest="320">
         <Grid
             Padding="20,10"
             ColumnDefinitions=".50*,.50*"
             ColumnSpacing="10"
             RowDefinitions="Auto,Auto,Auto"
             RowSpacing="15"
-            VerticalOptions="Center"
-            WidthRequest="350">
+            VerticalOptions="Center">
 
             <!--  LABEL HEADER  -->
             <VerticalStackLayout
@@ -32,7 +31,7 @@
                     CharacterSpacing="1"
                     FontAttributes="Bold"
                     FontFamily="Rajdhani-Bold"
-                    FontSize="32"
+                    FontSize="30"
                     HorizontalOptions="Center"
                     Text="CHECK IN"
                     TextColor="#1C4698"
@@ -42,7 +41,7 @@
                     CharacterSpacing="1"
                     FontAttributes="Bold"
                     FontFamily="Rajdhani-Bold"
-                    FontSize="28"
+                    FontSize="26"
                     HorizontalOptions="Center"
                     Text="(Other)"
                     TextColor="#297CC0"
@@ -58,7 +57,7 @@
                 <Label
                     CharacterSpacing="1"
                     FontAttributes="Bold"
-                    FontSize="20"
+                    FontSize="18"
                     HorizontalOptions="Start"
                     Text="Location Name:"
                     VerticalOptions="Center" />
@@ -89,7 +88,7 @@
                 Clicked="OnCloseButtonClicked"
                 CornerRadius="10"
                 FontAttributes="Bold"
-                FontSize="22"
+                FontSize="20"
                 HorizontalOptions="Fill"
                 Text="Cancel"
                 VerticalOptions="Center">
@@ -113,7 +112,7 @@
                 Clicked="OnOkButtonClicked"
                 CornerRadius="10"
                 FontAttributes="Bold"
-                FontSize="22"
+                FontSize="20"
                 HorizontalOptions="Fill"
                 Text="OK"
                 VerticalOptions="Center">

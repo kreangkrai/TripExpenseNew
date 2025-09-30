@@ -6,10 +6,21 @@ namespace TripExpenseNew.CustomPersonalPopup;
 public partial class PersonalStopPopup : Popup
 {
     private bool Iscustomer = false;
+    string location = string.Empty;
+    bool isCustomer = false;
+    int mileage = 0;
 
-    public PersonalStopPopup(string location,bool isCustomer,int mileage)
+    public PersonalStopPopup(string _location,bool _isCustomer,int _mileage)
 	{
 		InitializeComponent();
+        location = _location;
+        mileage = _mileage;
+        isCustomer = _isCustomer;
+    }
+
+    protected override void OnParentChanged()
+    {
+        base.OnParentChanged();
         Text_Location.Text = location;
         if (location != "CTL(HQ)" && location != "CTL(KBO)" && location != "CTL(RBO)")
         {

@@ -9,126 +9,135 @@
     xmlns:vm="clr-namespace:TripExpenseNew.ViewModels"
     Color="White">
 
-    <Grid
-        Padding="20,20"
-        ColumnDefinitions=".50*,.50*"
-        ColumnSpacing="10"
-        RowDefinitions="Auto,Auto,Auto"
-        RowSpacing="5">
-        <Label
-            Grid.Row="0"
-            Grid.ColumnSpan="2"
-            CharacterSpacing="1"
-            FontAttributes="Bold"
-            FontFamily="Rajdhani-Bold"
-            FontSize="32"
-            HorizontalOptions="Center"
-            Text="ADD PASSENGER"
-            TextColor="#1C4698"
-            VerticalOptions="Center" />
+    <Border
+        Padding="0,5"
+        BackgroundColor="White"
+        Stroke="Transparent"
+        StrokeShape="{RoundRectangle CornerRadius='10'}"
+        WidthRequest="320">
         <Grid
-            Grid.Row="1"
-            Grid.ColumnSpan="2"
-            Margin="1"
-            HeightRequest="200"
-            WidthRequest="300">
-            <!-- <ContentPage.BindingContext>
+            Padding="20,10"
+            ColumnDefinitions=".50*,.50*"
+            ColumnSpacing="10"
+            RowDefinitions="Auto,Auto,Auto"
+            RowSpacing="5">
+            <Label
+                Grid.Row="0"
+                Grid.ColumnSpan="2"
+                CharacterSpacing="1"
+                FontAttributes="Bold"
+                FontFamily="Rajdhani-Bold"
+                FontSize="32"
+                HorizontalOptions="Center"
+                Text="ADD PASSENGER"
+                TextColor="#1C4698"
+                VerticalOptions="Center" />
+            <Grid
+                Grid.Row="1"
+                Grid.ColumnSpan="2"
+                Margin="1"
+                WidthRequest="300">
+                <!-- <ContentPage.BindingContext>
                 <vm:EmployeeItems />
             </ContentPage.BindingContext>-->
 
-            <VerticalStackLayout Padding="2">
-                <!--  SearchBar สำหรับค้นหา  -->
-                <SearchBar
-                    BackgroundColor="White"
-                    FontSize="16"
-                    Placeholder="ค้นหารายชื่อ"
-                    Text="{Binding SearchText}" />
-                <!--  CollectionView สำหรับแสดงรายชื่อ  -->
-                <!--    -->
-                <CollectionView
-                    ItemsSource="{Binding FilteredEmployees}"
-                    SelectionChanged="OnCollectionViewSelectionChanged"
-                    SelectionMode="Single">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="local:EmployeeModel">
-                            <Grid Padding="5" RowSpacing="3">
-                                <Label
-                                    FontFamily="Rajdhani-Medium"
-                                    FontSize="18"
-                                    Text="{Binding name}" />
-                                <VisualStateManager.VisualStateGroups>
-                                    <VisualStateGroup x:Name="CommonStates">
-                                        <VisualState x:Name="Normal">
-                                            <VisualState.Setters>
-                                                <Setter Property="BackgroundColor" Value="Transparent" />
-                                            </VisualState.Setters>
-                                        </VisualState>
-                                        <VisualState x:Name="Selected">
-                                            <VisualState.Setters>
-                                                <Setter Property="BackgroundColor" Value="#D3D3D3" />
-                                                <!--  Highlight color  -->
-                                            </VisualState.Setters>
-                                        </VisualState>
-                                    </VisualStateGroup>
-                                </VisualStateManager.VisualStateGroups>
-                            </Grid>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-            </VerticalStackLayout>
+                <VerticalStackLayout Padding="2">
+                    <!--  SearchBar สำหรับค้นหา  -->
+                    <SearchBar
+                        BackgroundColor="White"
+                        FontSize="16"
+                        Placeholder="ค้นหารายชื่อ"
+                        Text="{Binding SearchText}" />
+                    <!--  CollectionView สำหรับแสดงรายชื่อ  -->
+                    <!--    -->
+                    <ScrollView>
+                        <StackLayout>
+                            <CollectionView
+                                HeightRequest="200"
+                                ItemsSource="{Binding FilteredEmployees}"
+                                SelectionChanged="OnCollectionViewSelectionChanged"
+                                SelectionMode="Single">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate x:DataType="local:EmployeeModel">
+                                        <Grid Padding="5" RowSpacing="3">
+                                            <Label
+                                                FontFamily="Rajdhani-Medium"
+                                                FontSize="18"
+                                                Text="{Binding name}" />
+                                            <VisualStateManager.VisualStateGroups>
+                                                <VisualStateGroup x:Name="CommonStates">
+                                                    <VisualState x:Name="Normal">
+                                                        <VisualState.Setters>
+                                                            <Setter Property="BackgroundColor" Value="Transparent" />
+                                                        </VisualState.Setters>
+                                                    </VisualState>
+                                                    <VisualState x:Name="Selected">
+                                                        <VisualState.Setters>
+                                                            <Setter Property="BackgroundColor" Value="#D3D3D3" />
+                                                            <!--  Highlight color  -->
+                                                        </VisualState.Setters>
+                                                    </VisualState>
+                                                </VisualStateGroup>
+                                            </VisualStateManager.VisualStateGroups>
+                                        </Grid>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </StackLayout>
+                    </ScrollView>
+                </VerticalStackLayout>
+            </Grid>
+
+
+            <!--  BUTTON | Cancel  -->
+            <Button
+                x:Name="CancelBtn"
+                Grid.Row="2"
+                Padding="10,15"
+                BackgroundColor="#EC221F"
+                CharacterSpacing="2"
+                Clicked="CancelBtn_Clicked"
+                CornerRadius="10"
+                FontAttributes="Bold"
+                FontSize="18"
+                HorizontalOptions="Fill"
+                Text="Cancel"
+                TextColor="White"
+                VerticalOptions="Center">
+                <Button.Shadow>
+                    <Shadow
+                        Brush="Black"
+                        Opacity="0.2"
+                        Radius="5"
+                        Offset="0,4" />
+                </Button.Shadow>
+            </Button>
+
+            <!--  BUTTON | Add  -->
+            <Button
+                x:Name="AddBtn"
+                Grid.Row="2"
+                Grid.Column="1"
+                Padding="10,15"
+                BackgroundColor="#14AE5C"
+                CharacterSpacing="2"
+                Clicked="AddBtn_Clicked"
+                CornerRadius="10"
+                FontAttributes="Bold"
+                FontSize="18"
+                HorizontalOptions="Fill"
+                IsEnabled="False"
+                Text="Add"
+                VerticalOptions="Center">
+                <Button.Shadow>
+                    <Shadow
+                        Brush="Black"
+                        Opacity="0.2"
+                        Radius="5"
+                        Offset="0,4" />
+                </Button.Shadow>
+            </Button>
         </Grid>
-
-
-        <!--  BUTTON | Cancel  -->
-        <Button
-            x:Name="CancelBtn"
-            Grid.Row="2"
-            Padding="10,15"
-            BackgroundColor="#EC221F"
-            CharacterSpacing="2"
-            Clicked="CancelBtn_Clicked"
-            CornerRadius="10"
-            FontAttributes="Bold"
-            FontSize="22"
-            HeightRequest="60"
-            HorizontalOptions="Fill"
-            Text="Cancel"
-            TextColor="White"
-            VerticalOptions="Center">
-            <Button.Shadow>
-                <Shadow
-                    Brush="Black"
-                    Opacity="0.2"
-                    Radius="5"
-                    Offset="0,4" />
-            </Button.Shadow>
-        </Button>
-
-        <!--  BUTTON | Add  -->
-        <Button
-            x:Name="AddBtn"
-            Grid.Row="2"
-            Grid.Column="1"
-            Padding="10,15"
-            BackgroundColor="#14AE5C"
-            CharacterSpacing="2"
-            Clicked="AddBtn_Clicked"
-            CornerRadius="10"
-            FontAttributes="Bold"
-            FontSize="22"
-            HeightRequest="60"
-            HorizontalOptions="Fill"
-            IsEnabled="False"
-            Text="Add"
-            VerticalOptions="Center">
-            <Button.Shadow>
-                <Shadow
-                    Brush="Black"
-                    Opacity="0.2"
-                    Radius="5"
-                    Offset="0,4" />
-            </Button.Shadow>
-        </Button>
-    </Grid>
+    </Border>
 </toolkit:Popup>
 

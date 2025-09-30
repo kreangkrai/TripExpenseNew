@@ -6,66 +6,202 @@
     xmlns:shell="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     Color="Transparent">
-    <Border
-        Padding="0"
-        BackgroundColor="White"
-        Stroke="Transparent"
-        StrokeShape="{RoundRectangle CornerRadius='20'}"
-        WidthRequest="350">
-        <Grid
-            Padding="20,20"
-            ColumnDefinitions=".50*,.50*"
-            ColumnSpacing="10"
-            RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto"
-            RowSpacing="15">
-
-            <!--  LABEL | START TRIP  -->
-            <Label
-                Grid.Row="0"
-                Grid.ColumnSpan="2"
-                CharacterSpacing="1"
-                FontAttributes="Bold"
-                FontFamily="Rajdhani-Bold"
-                FontSize="32"
-                HorizontalOptions="Center"
-                Text="STOP TRIP"
-                TextColor="#1C4698"
-                VerticalOptions="Center" />
-
-            <!--  Location Type  -->
+    <ScrollView>
+        <Border
+            Padding="0"
+            BackgroundColor="White"
+            Stroke="Transparent"
+            StrokeShape="{RoundRectangle CornerRadius='10'}"
+            WidthRequest="320">
             <Grid
-                Grid.Row="1"
-                Grid.ColumnSpan="2"
+                Padding="20,20"
                 ColumnDefinitions=".50*,.50*"
                 ColumnSpacing="10"
-                RowDefinitions="Auto,Auto"
-                RowSpacing="5"
-                VerticalOptions="Center">
+                RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+                RowSpacing="10">
 
-                <!--  LABEL | Location Type:  -->
+                <!--  LABEL | START TRIP  -->
                 <Label
                     Grid.Row="0"
+                    Grid.ColumnSpan="2"
+                    CharacterSpacing="1"
+                    FontAttributes="Bold"
+                    FontFamily="Rajdhani-Bold"
+                    FontSize="28"
+                    HorizontalOptions="Center"
+                    Text="STOP TRIP"
+                    TextColor="#1C4698"
+                    VerticalOptions="Center" />
+
+                <!--  Location Type  -->
+                <Grid
+                    Grid.Row="1"
+                    Grid.ColumnSpan="2"
+                    ColumnDefinitions=".50*,.50*"
+                    ColumnSpacing="10"
+                    RowDefinitions="Auto,Auto"
+                    RowSpacing="5"
+                    VerticalOptions="Center">
+
+                    <!--  LABEL | Location Type:  -->
+                    <Label
+                        Grid.Row="0"
+                        Grid.ColumnSpan="2"
+                        CharacterSpacing="1"
+                        FontAttributes="None"
+                        FontSize="18"
+                        HorizontalOptions="Start"
+                        Text="Location Type:"
+                        VerticalOptions="Center" />
+
+                    <!--  BUTTON | CUSTOMER  -->
+                    <Button
+                        x:Name="CustomerBtn"
+                        Grid.Row="1"
+                        Padding="10,10"
+                        BackgroundColor="#BEBEBE"
+                        CharacterSpacing="2"
+                        Clicked="CustomerBtn_Clicked"
+                        CornerRadius="10"
+                        FontAttributes="Bold"
+                        FontSize="16"
+                        HorizontalOptions="Fill"
+                        Text="Customer"
+                        VerticalOptions="Center">
+                        <Button.Shadow>
+                            <Shadow
+                                Brush="Black"
+                                Opacity="0.2"
+                                Radius="15"
+                                Offset="0,4" />
+                        </Button.Shadow>
+                    </Button>
+
+                    <!--  BUTTON | OTHER  -->
+                    <Button
+                        x:Name="OtherBtn"
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Padding="10,10"
+                        BackgroundColor="#BEBEBE"
+                        CharacterSpacing="2"
+                        Clicked="OtherBtn_Clicked"
+                        CornerRadius="10"
+                        FontAttributes="Bold"
+                        FontSize="16"
+                        HorizontalOptions="Fill"
+                        Text="Other"
+                        VerticalOptions="Center">
+                        <Button.Shadow>
+                            <Shadow
+                                Brush="Black"
+                                Opacity="0.2"
+                                Radius="15"
+                                Offset="0,4" />
+                        </Button.Shadow>
+                    </Button>
+                </Grid>
+
+                <!--  CUSTOMER/LOCATION  -->
+                <VerticalStackLayout
+                    Grid.Row="2"
+                    Grid.ColumnSpan="2"
+                    Spacing="5">
+
+                    <Label
+                        CharacterSpacing="1"
+                        FontAttributes="None"
+                        FontSize="18"
+                        HorizontalOptions="Start"
+                        Text="Stop Location:"
+                        VerticalOptions="Center" />
+                    <!--  ENTRY | USERNAME  -->
+                    <Border
+                        Stroke="#C8C8C8"
+                        StrokeShape="RoundRectangle 5"
+                        StrokeThickness="2">
+                        <Entry
+                            x:Name="Text_Location"
+                            Margin="1"
+                            CharacterSpacing="1"
+                            ClearButtonVisibility="WhileEditing"
+                            FontSize="18"
+                            HeightRequest="40"
+                            Keyboard="Text"
+                            Placeholder=" Ex. CTL-(HQ)"
+                            Text="{Binding Text}" />
+                    </Border>
+                </VerticalStackLayout>
+
+                <!--  LABEL | CAR:  -->
+                <Label
+                    x:Name="Text_Car"
+                    Grid.Row="3"
+                    Grid.ColumnSpan="2"
+                    CharacterSpacing="1"
+                    FontAttributes="None"
+                    FontSize="18"
+                    HorizontalOptions="Start"
+                    Text="Car:"
+                    TextColor="#297CC0"
+                    VerticalOptions="Center" />
+
+                <!--  LABEL | Customer/Location:  -->
+                <Label
+                    x:Name="Text_mileage"
+                    Grid.Row="4"
                     Grid.ColumnSpan="2"
                     CharacterSpacing="1"
                     FontAttributes="None"
                     FontSize="20"
                     HorizontalOptions="Start"
-                    Text="Location Type:"
+                    Text="Mileage Start:"
+                    TextColor="#297CC0"
                     VerticalOptions="Center" />
 
-                <!--  BUTTON | CUSTOMER  -->
+                <!--  Mileage  -->
+                <VerticalStackLayout
+                    Grid.Row="5"
+                    Grid.ColumnSpan="2"
+                    Spacing="5">
+                    <!--  LABEL | Job  -->
+                    <Label
+                        CharacterSpacing="1"
+                        FontAttributes="None"
+                        FontSize="18"
+                        HorizontalOptions="Start"
+                        Text="Mileage Stop:"
+                        VerticalOptions="Center" />
+                    <!--  ENTRY | Mileage Stop  -->
+                    <Border
+                        Stroke="#C8C8C8"
+                        StrokeShape="RoundRectangle 5"
+                        StrokeThickness="2">
+                        <Entry
+                            x:Name="Text_Mileage"
+                            Margin="1"
+                            CharacterSpacing="1"
+                            ClearButtonVisibility="WhileEditing"
+                            FontSize="16"
+                            Keyboard="Numeric"
+                            Placeholder=" Ex. 123456"
+                            Text="{Binding Text}" />
+                    </Border>
+                </VerticalStackLayout>
+
+                <!--  BUTTON | Cancel  -->
                 <Button
-                    x:Name="CustomerBtn"
-                    Grid.Row="1"
-                    Padding="10,15"
-                    BackgroundColor="#BEBEBE"
+                    x:Name="CancelBtn"
+                    Grid.Row="6"
+                    Padding="10,10"
+                    BackgroundColor="#EC221F"
                     CharacterSpacing="2"
-                    Clicked="CustomerBtn_Clicked"
+                    Clicked="CancelBtn_Clicked"
                     CornerRadius="10"
                     FontAttributes="Bold"
-                    FontSize="22"
+                    FontSize="18"
                     HorizontalOptions="Fill"
-                    Text="Customer"
+                    Text="Cancel"
                     VerticalOptions="Center">
                     <Button.Shadow>
                         <Shadow
@@ -76,20 +212,20 @@
                     </Button.Shadow>
                 </Button>
 
-                <!--  BUTTON | OTHER  -->
+                <!--  BUTTON | OK  -->
                 <Button
-                    x:Name="OtherBtn"
-                    Grid.Row="1"
+                    x:Name="OKBtn"
+                    Grid.Row="6"
                     Grid.Column="1"
-                    Padding="10,15"
-                    BackgroundColor="#BEBEBE"
+                    Padding="10,10"
+                    BackgroundColor="#14AE5C"
                     CharacterSpacing="2"
-                    Clicked="OtherBtn_Clicked"
+                    Clicked="OKBtn_Clicked"
                     CornerRadius="10"
                     FontAttributes="Bold"
-                    FontSize="22"
+                    FontSize="18"
                     HorizontalOptions="Fill"
-                    Text="Other"
+                    Text="OK"
                     VerticalOptions="Center">
                     <Button.Shadow>
                         <Shadow
@@ -100,141 +236,6 @@
                     </Button.Shadow>
                 </Button>
             </Grid>
-
-            <!--  CUSTOMER/LOCATION  -->
-            <VerticalStackLayout
-                Grid.Row="2"
-                Grid.ColumnSpan="2"
-                Spacing="5">
-
-                <Label
-                    CharacterSpacing="1"
-                    FontAttributes="None"
-                    FontSize="20"
-                    HorizontalOptions="Start"
-                    Text="Stop Location:"
-                    VerticalOptions="Center" />
-                <!--  ENTRY | USERNAME  -->
-                <Border
-                    Stroke="#C8C8C8"
-                    StrokeShape="RoundRectangle 5"
-                    StrokeThickness="2">
-                    <Entry
-                        x:Name="Text_Location"
-                        Margin="1"
-                        CharacterSpacing="1"
-                        ClearButtonVisibility="WhileEditing"
-                        FontSize="18"
-                        HeightRequest="40"
-                        Keyboard="Text"
-                        Placeholder=" Ex. CTL-(HQ)"
-                        Text="{Binding Text}" />
-                </Border>
-            </VerticalStackLayout>
-
-            <!--  LABEL | CAR:  -->
-            <Label
-                x:Name="Text_Car"
-                Grid.Row="3"
-                Grid.ColumnSpan="2"
-                CharacterSpacing="1"
-                FontAttributes="None"
-                FontSize="20"
-                HorizontalOptions="Start"
-                Text="Car:"
-                TextColor="#297CC0"
-                VerticalOptions="Center" />
-
-            <!--  LABEL | Customer/Location:  -->
-            <Label
-                x:Name="Text_mileage"
-                Grid.Row="4"
-                Grid.ColumnSpan="2"
-                CharacterSpacing="1"
-                FontAttributes="None"
-                FontSize="20"
-                HorizontalOptions="Start"
-                Text="Mileage Start:"
-                TextColor="#297CC0"
-                VerticalOptions="Center" />
-
-            <!--  Mileage  -->
-            <VerticalStackLayout
-                Grid.Row="5"
-                Grid.ColumnSpan="2"
-                Spacing="5">
-                <!--  LABEL | Job  -->
-                <Label
-                    CharacterSpacing="1"
-                    FontAttributes="None"
-                    FontSize="20"
-                    HorizontalOptions="Start"
-                    Text="Mileage Stop:"
-                    VerticalOptions="Center" />
-                <!--  ENTRY | Mileage Stop  -->
-                <Border
-                    Stroke="#C8C8C8"
-                    StrokeShape="RoundRectangle 5"
-                    StrokeThickness="2">
-                    <Entry
-                        x:Name="Text_Mileage"
-                        Margin="1"
-                        CharacterSpacing="1"
-                        ClearButtonVisibility="WhileEditing"
-                        FontSize="18"
-                        HeightRequest="40"
-                        Keyboard="Numeric"
-                        Placeholder=" Ex. 123456"
-                        Text="{Binding Text}" />
-                </Border>
-            </VerticalStackLayout>
-
-            <!--  BUTTON | Cancel  -->
-            <Button
-                x:Name="CancelBtn"
-                Grid.Row="6"
-                Padding="10,15"
-                BackgroundColor="#EC221F"
-                CharacterSpacing="2"
-                Clicked="CancelBtn_Clicked"
-                CornerRadius="10"
-                FontAttributes="Bold"
-                FontSize="22"
-                HorizontalOptions="Fill"
-                Text="Cancel"
-                VerticalOptions="Center">
-                <Button.Shadow>
-                    <Shadow
-                        Brush="Black"
-                        Opacity="0.2"
-                        Radius="15"
-                        Offset="0,4" />
-                </Button.Shadow>
-            </Button>
-
-            <!--  BUTTON | OK  -->
-            <Button
-                x:Name="OKBtn"
-                Grid.Row="6"
-                Grid.Column="1"
-                Padding="10,15"
-                BackgroundColor="#14AE5C"
-                CharacterSpacing="2"
-                Clicked="OKBtn_Clicked"
-                CornerRadius="10"
-                FontAttributes="Bold"
-                FontSize="22"
-                HorizontalOptions="Fill"
-                Text="OK"
-                VerticalOptions="Center">
-                <Button.Shadow>
-                    <Shadow
-                        Brush="Black"
-                        Opacity="0.2"
-                        Radius="15"
-                        Offset="0,4" />
-                </Button.Shadow>
-            </Button>
-        </Grid>
-    </Border>
+        </Border>
+    </ScrollView>
 </toolkit:Popup>

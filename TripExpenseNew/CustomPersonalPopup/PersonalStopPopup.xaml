@@ -5,20 +5,20 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:shell="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    Size="320,415"
     Color="Transparent">
     <ScrollView>
         <Border
             Padding="0,5"
             BackgroundColor="White"
             Stroke="Transparent"
-            StrokeShape="{RoundRectangle CornerRadius='20'}"
-            WidthRequest="350">
+            StrokeShape="{RoundRectangle CornerRadius='10'}">
             <Grid
-                Padding="20,20"
+                Padding="20,10"
                 ColumnDefinitions=".50*,.50*"
                 ColumnSpacing="10"
                 RowDefinitions="Auto,Auto,Auto,Auto,Auto"
-                RowSpacing="15">
+                RowSpacing="10">
 
                 <!--  LABEL | START TRIP  -->
                 <Label
@@ -27,7 +27,7 @@
                     CharacterSpacing="1"
                     FontAttributes="Bold"
                     FontFamily="Rajdhani-Bold"
-                    FontSize="32"
+                    FontSize="28"
                     HorizontalOptions="Center"
                     Text="STOP TRIP"
                     TextColor="#1C4698"
@@ -49,7 +49,7 @@
                         Grid.ColumnSpan="2"
                         CharacterSpacing="1"
                         FontAttributes="None"
-                        FontSize="20"
+                        FontSize="18"
                         HorizontalOptions="Start"
                         Text="Location Type:"
                         VerticalOptions="Center" />
@@ -58,13 +58,13 @@
                     <Button
                         x:Name="CustomerBtn"
                         Grid.Row="1"
-                        Padding="10,15"
+                        Padding="10,10"
                         BackgroundColor="#BEBEBE"
                         CharacterSpacing="2"
                         Clicked="CustomerBtn_Clicked"
                         CornerRadius="10"
                         FontAttributes="Bold"
-                        FontSize="22"
+                        FontSize="16"
                         HorizontalOptions="Fill"
                         Text="Customer"
                         VerticalOptions="Center">
@@ -82,13 +82,13 @@
                         x:Name="OtherBtn"
                         Grid.Row="1"
                         Grid.Column="1"
-                        Padding="10,15"
+                        Padding="10,10"
                         BackgroundColor="#BEBEBE"
                         CharacterSpacing="2"
                         Clicked="OtherBtn_Clicked"
                         CornerRadius="10"
                         FontAttributes="Bold"
-                        FontSize="22"
+                        FontSize="16"
                         HorizontalOptions="Fill"
                         Text="Other"
                         VerticalOptions="Center">
@@ -111,7 +111,7 @@
                     <Label
                         CharacterSpacing="1"
                         FontAttributes="None"
-                        FontSize="20"
+                        FontSize="18"
                         HorizontalOptions="Start"
                         Text="Stop Location:"
                         VerticalOptions="Center" />
@@ -125,7 +125,7 @@
                             Margin="1"
                             CharacterSpacing="1"
                             ClearButtonVisibility="WhileEditing"
-                            FontSize="18"
+                            FontSize="16"
                             HeightRequest="40"
                             Keyboard="Text"
                             Placeholder=" Ex. CTL-(HQ)"
@@ -145,7 +145,7 @@
                         Grid.ColumnSpan="2"
                         CharacterSpacing="1"
                         FontAttributes="None"
-                        FontSize="20"
+                        FontSize="18"
                         HorizontalOptions="Start"
                         Text="Mileage Start:"
                         TextColor="#297CC0"
@@ -154,7 +154,7 @@
                     <Label
                         CharacterSpacing="1"
                         FontAttributes="None"
-                        FontSize="20"
+                        FontSize="18"
                         HorizontalOptions="Start"
                         Text="Mileage Stop:"
                         VerticalOptions="Center" />
@@ -168,7 +168,7 @@
                             Margin="1"
                             CharacterSpacing="1"
                             ClearButtonVisibility="WhileEditing"
-                            FontSize="18"
+                            FontSize="16"
                             HeightRequest="40"
                             Keyboard="Numeric"
                             Placeholder=" Ex. 123456"
@@ -180,13 +180,13 @@
                 <Button
                     x:Name="CancelBtn"
                     Grid.Row="4"
-                    Padding="10,15"
+                    Padding="10,10"
                     BackgroundColor="#EC221F"
                     CharacterSpacing="2"
                     Clicked="CancelBtn_Clicked"
                     CornerRadius="10"
                     FontAttributes="Bold"
-                    FontSize="22"
+                    FontSize="18"
                     HorizontalOptions="Fill"
                     Text="Cancel"
                     VerticalOptions="Center">
@@ -204,13 +204,13 @@
                     x:Name="OKBtn"
                     Grid.Row="4"
                     Grid.Column="1"
-                    Padding="10,15"
+                    Padding="10,10"
                     BackgroundColor="#14AE5C"
                     CharacterSpacing="2"
                     Clicked="OKBtn_Clicked"
                     CornerRadius="10"
                     FontAttributes="Bold"
-                    FontSize="22"
+                    FontSize="18"
                     HorizontalOptions="Fill"
                     Text="OK"
                     VerticalOptions="Center">
