@@ -14,7 +14,6 @@ namespace TripExpenseNew
             Routing.RegisterRoute("PersonalPage", typeof(PersonalPage.PersonalPage));
             Routing.RegisterRoute("PersonalForceStop", typeof(PersonalPage.PersonalForceStop));
             Routing.RegisterRoute("CompanyPage", typeof(CompanyPage.CompanyPage));
-            Routing.RegisterRoute("CompanyQR", typeof(CompanyPage.CompanyQR));
             Routing.RegisterRoute("PublicPage", typeof(PublicPage.PublicPage));
             Routing.RegisterRoute("GeneralPage", typeof(GeneralPage.GeneralPage));
             Routing.RegisterRoute("General", typeof(GeneralPage.General));

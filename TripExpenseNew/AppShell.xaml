@@ -48,11 +48,6 @@
         Route="CompanyPage" />
 
     <ShellContent
-        Title="CompanyQR"
-        ContentTemplate="{DataTemplate pages_company:CompanyQR}"
-        Route="CompanyQR" />
-
-    <ShellContent
         Title="PublicPage"
         ContentTemplate="{DataTemplate pages_public:PublicPage}"
         Route="PublicPage" />
