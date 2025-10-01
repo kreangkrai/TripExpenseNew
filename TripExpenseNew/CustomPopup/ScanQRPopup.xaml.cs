@@ -13,8 +13,6 @@ namespace TripExpenseNew.CustomPopup;
 
 public partial class ScanQRPopup : Popup
 {
-    public delegate void QRScannedEventHandler(string qrValue);
-    public event QRScannedEventHandler OnQRScanned;
     public ScanQRPopup()
 	{
 		InitializeComponent();
@@ -34,43 +32,19 @@ public partial class ScanQRPopup : Popup
     }
     private void OnBarcodesDetected(object sender, BarcodeDetectionEventArgs e)
     {
-        if (e.Results.Any())
+        MainThread.BeginInvokeOnMainThread(() =>
         {
-            var qrValue = e.Results.First().Value;
-            MainThread.BeginInvokeOnMainThread(() =>
-            {              
-                Confirm.IsEnabled = true;
-                Confirm.TextColor = Colors.White;
-                Confirm.BackgroundColor = Microsoft.Maui.Graphics.Color.FromArgb("#297CC0");
-                Confirm.Text = qrValue;               
-                OnQRScanned?.Invoke(qrValue);
-            });
-        }
-
-        //MainThread.BeginInvokeOnMainThread(() =>
-        //{
-        //    foreach (var barcode in e.Results)
-        //    {
-        //        MainThread.BeginInvokeOnMainThread(() =>
-        //        {
-        //            if (BindingContext is ButtonScanQRResult viewModel)
-        //            {                      
-        //                Confirm.TextColor = Colors.White;
-        //                Confirm.BackgroundColor = Microsoft.Maui.Graphics.Color.FromArgb("#297CC0");
-        //                Confirm.IsEnabled = true;
-        //                viewModel.ButtonScanQRResultText = barcode.Value;
-        //            }
-        //            else
-        //            {
-        //                Confirm.IsEnabled = true;
-        //                Confirm.TextColor = Colors.White;
-        //                Confirm.BackgroundColor = Microsoft.Maui.Graphics.Color.FromArgb("#297CC0");                       
-        //                Confirm.Text = barcode.Value;
-        //            }
-        //        });
-                
-        //    }
-        //});
+            foreach (var barcode in e.Results)
+            {
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    Confirm.IsEnabled = true;
+                    Confirm.TextColor = Colors.White;
+                    Confirm.BackgroundColor = Microsoft.Maui.Graphics.Color.FromArgb("#297CC0");
+                    Confirm.Text = barcode.Value;
+                });
+            }
+        });
     }
 
     private void Confirm_Clicked(object sender, EventArgs e)
