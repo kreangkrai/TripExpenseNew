@@ -7,11 +7,14 @@ using TripExpenseNew.ViewModels;
 using ZXing;
 using ZXing.Net.Maui;
 using ZXing.Net.Maui.Controls;
+using ZXing.QrCode.Internal;
 using Image = SixLabors.ImageSharp.Image;
 namespace TripExpenseNew.CustomPopup;
 
 public partial class ScanQRPopup : Popup
 {
+    public delegate void QRScannedEventHandler(string qrValue);
+    public event QRScannedEventHandler OnQRScanned;
     public ScanQRPopup()
 	{
 		InitializeComponent();
@@ -32,30 +35,40 @@ public partial class ScanQRPopup : Popup
     }
     private void OnBarcodesDetected(object sender, BarcodeDetectionEventArgs e)
     {
-        MainThread.BeginInvokeOnMainThread(() =>
+        if (e.Results.Any())
         {
-            foreach (var barcode in e.Results)
-            {
-                MainThread.BeginInvokeOnMainThread(() =>
-                {
-                    if (BindingContext is ButtonScanQRResult viewModel)
-                    {                      
-                        Confirm.TextColor = Colors.White;
-                        Confirm.BackgroundColor = Microsoft.Maui.Graphics.Color.FromArgb("#297CC0");
-                        Confirm.IsEnabled = true;
-                        viewModel.ButtonScanQRResultText = barcode.Value;
-                    }
-                    else
-                    {
-                        Confirm.IsEnabled = true;
-                        Confirm.TextColor = Colors.White;
-                        Confirm.BackgroundColor = Microsoft.Maui.Graphics.Color.FromArgb("#297CC0");                       
-                        Confirm.Text = barcode.Value;
-                    }
-                });
+            var qrValue = e.Results.First().Value;
+            Confirm.IsEnabled = true;
+            Confirm.TextColor = Colors.White;
+            Confirm.BackgroundColor = Microsoft.Maui.Graphics.Color.FromArgb("#297CC0");
+            Confirm.Text = qrValue;
+            OnQRScanned?.Invoke(qrValue);  
+        }
+
+        //MainThread.BeginInvokeOnMainThread(() =>
+        //{
+        //    foreach (var barcode in e.Results)
+        //    {
+        //        MainThread.BeginInvokeOnMainThread(() =>
+        //        {
+        //            if (BindingContext is ButtonScanQRResult viewModel)
+        //            {                      
+        //                Confirm.TextColor = Colors.White;
+        //                Confirm.BackgroundColor = Microsoft.Maui.Graphics.Color.FromArgb("#297CC0");
+        //                Confirm.IsEnabled = true;
+        //                viewModel.ButtonScanQRResultText = barcode.Value;
+        //            }
+        //            else
+        //            {
+        //                Confirm.IsEnabled = true;
+        //                Confirm.TextColor = Colors.White;
+        //                Confirm.BackgroundColor = Microsoft.Maui.Graphics.Color.FromArgb("#297CC0");                       
+        //                Confirm.Text = barcode.Value;
+        //            }
+        //        });
                 
-            }
-        });
+        //    }
+        //});
     }
 
     private void Confirm_Clicked(object sender, EventArgs e)

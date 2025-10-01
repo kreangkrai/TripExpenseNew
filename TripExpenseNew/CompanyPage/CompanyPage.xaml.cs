@@ -266,36 +266,26 @@ public partial class CompanyPage : ContentPage
     private async void ScanQR_Clicked(object sender, EventArgs e)
     {
         ScanQR.IsEnabled = false;
-        var result = await this.ShowPopupAsync(new ScanQRPopup());
+        var popup = new ScanQRPopup();
 
-        if (result != null)
+        popup.OnQRScanned += async (qrValue) =>
         {
-            car_id = result.ToString();
-            //car_id.Replace("#", "%23")
+            car_id = qrValue;
             CarModel car = await Car.GetByCar(car_id);
             if (car.car_id != null)
             {
-                List<LastTripViewModel> trips = await LastTrip.GetByCar(car_id);                
+                List<LastTripViewModel> trips = await LastTrip.GetByCar(car_id);
                 LastTripViewModel trip = trips.Where(w => w.status == true).LastOrDefault();
                 if (trip == null)
                 {
                     MainThread.BeginInvokeOnMainThread(() =>
                     {
-                        if (BindingContext is ButtonCompanyStart viewModel)
-                        {                          
-                            Btn_Start.IsEnabled = true;
-                            Btn_Start.TextColor = Colors.White;
-                            Btn_Start.BackgroundColor = Color.FromArgb("#297CC0");
-                            viewModel.ButtonCompanyStartText = "START";
-                        }
-                        else
-                        {
-                            Btn_Start.IsEnabled = true;
-                            Btn_Start.TextColor = Colors.White;
-                            Btn_Start.BackgroundColor = Color.FromArgb("#297CC0");
-                            Btn_Start.Text = "START";
-                        }
-                    });                   
+                        Btn_Start.IsEnabled = true;
+                        Btn_Start.TextColor = Colors.White;
+                        Btn_Start.BackgroundColor = Color.FromArgb("#297CC0");
+                        Btn_Start.Text = "START";
+
+                    });
                 }
                 else
                 {
@@ -316,14 +306,64 @@ public partial class CompanyPage : ContentPage
                     await DisplayAlert("", "Car not found!", "OK");
                 });
             }
-        }
-        else
-        {
-            MainThread.BeginInvokeOnMainThread(async () =>
-            {
-                await DisplayAlert("", "Invalid QR Code", "ตกลง");
-            });
-        }
+        };
+        await this.ShowPopupAsync(popup);
+
+        //if (result != null)
+        //{
+        //    car_id = result.ToString();
+        //    CarModel car = await Car.GetByCar(car_id);
+        //    if (car.car_id != null)
+        //    {
+        //        List<LastTripViewModel> trips = await LastTrip.GetByCar(car_id);                
+        //        LastTripViewModel trip = trips.Where(w => w.status == true).LastOrDefault();
+        //        if (trip == null)
+        //        {
+        //            MainThread.BeginInvokeOnMainThread(() =>
+        //            {
+        //                if (BindingContext is ButtonCompanyStart viewModel)
+        //                {                          
+        //                    Btn_Start.IsEnabled = true;
+        //                    Btn_Start.TextColor = Colors.White;
+        //                    Btn_Start.BackgroundColor = Color.FromArgb("#297CC0");
+        //                    viewModel.ButtonCompanyStartText = "START";
+        //                }
+        //                else
+        //                {
+        //                    Btn_Start.IsEnabled = true;
+        //                    Btn_Start.TextColor = Colors.White;
+        //                    Btn_Start.BackgroundColor = Color.FromArgb("#297CC0");
+        //                    Btn_Start.Text = "START";
+        //                }
+        //            });                   
+        //        }
+        //        else
+        //        {
+        //            Btn_Start.IsEnabled = false;
+        //            Btn_Start.TextColor = Colors.White;
+        //            Btn_Start.BackgroundColor = Colors.Grey;
+        //            Btn_Start.Text = "Processing..";
+        //            MainThread.BeginInvokeOnMainThread(async () =>
+        //            {
+        //                await DisplayAlert("COMPANY CAR", $"This car {trip.license_plate} using by\n {trip.driver_name}", "OK");
+        //            });
+        //        }
+        //    }
+        //    else
+        //    {
+        //        MainThread.BeginInvokeOnMainThread(async () =>
+        //        {
+        //            await DisplayAlert("", "Car not found!", "OK");
+        //        });
+        //    }
+        //}
+        //else
+        //{
+        //    MainThread.BeginInvokeOnMainThread(async () =>
+        //    {
+        //        await DisplayAlert("", "Invalid QR Code", "ตกลง");
+        //    });
+        //}
         ScanQR.IsEnabled = true;
     }
 
