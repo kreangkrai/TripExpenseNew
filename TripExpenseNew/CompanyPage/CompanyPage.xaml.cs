@@ -267,47 +267,49 @@ public partial class CompanyPage : ContentPage
     {
         ScanQR.IsEnabled = false;
         var scanqr = new ScanQRPopup();
-
-        scanqr.OnQRScanned += async (qrValue) =>
+        if (scanqr != null)
         {
-            car_id = qrValue;
-            CarModel car = await Car.GetByCar(car_id);
-            if (car.car_id != null)
+            scanqr.OnQRScanned += async (qrValue) =>
             {
-                List<LastTripViewModel> trips = await LastTrip.GetByCar(car_id);
-                LastTripViewModel trip = trips.Where(w => w.status == true).LastOrDefault();
-                if (trip == null)
+                car_id = qrValue;
+                CarModel car = await Car.GetByCar(car_id);
+                if (car.car_id != null)
                 {
-                    MainThread.BeginInvokeOnMainThread(() =>
+                    List<LastTripViewModel> trips = await LastTrip.GetByCar(car_id);
+                    LastTripViewModel trip = trips.Where(w => w.status == true).LastOrDefault();
+                    if (trip == null)
                     {
-                        Btn_Start.IsEnabled = true;
-                        Btn_Start.TextColor = Colors.White;
-                        Btn_Start.BackgroundColor = Color.FromArgb("#297CC0");
-                        Btn_Start.Text = qrValue;
-                        VisualStateManager.GoToState(Btn_Start, qrValue);
+                        MainThread.BeginInvokeOnMainThread(() =>
+                        {
+                            Btn_Start.IsEnabled = true;
+                            Btn_Start.TextColor = Colors.White;
+                            Btn_Start.BackgroundColor = Color.FromArgb("#297CC0");
+                            Btn_Start.Text = qrValue;
+                            VisualStateManager.GoToState(Btn_Start, qrValue);
 
-                    });
+                        });
+                    }
+                    else
+                    {
+                        Btn_Start.IsEnabled = false;
+                        Btn_Start.TextColor = Colors.White;
+                        Btn_Start.BackgroundColor = Colors.Grey;
+                        Btn_Start.Text = "Processing..";
+                        MainThread.BeginInvokeOnMainThread(async () =>
+                        {
+                            await DisplayAlert("COMPANY CAR", $"This car {trip.license_plate} using by\n {trip.driver_name}", "OK");
+                        });
+                    }
                 }
                 else
                 {
-                    Btn_Start.IsEnabled = false;
-                    Btn_Start.TextColor = Colors.White;
-                    Btn_Start.BackgroundColor = Colors.Grey;
-                    Btn_Start.Text = "Processing..";
                     MainThread.BeginInvokeOnMainThread(async () =>
                     {
-                        await DisplayAlert("COMPANY CAR", $"This car {trip.license_plate} using by\n {trip.driver_name}", "OK");
+                        await DisplayAlert("", "Car not found!", "OK");
                     });
                 }
-            }
-            else
-            {
-                MainThread.BeginInvokeOnMainThread(async () =>
-                {
-                    await DisplayAlert("", "Car not found!", "OK");
-                });
-            }
-        };
+            };
+        }
         await this.ShowPopupAsync(scanqr);
 
         //if (result != null)
