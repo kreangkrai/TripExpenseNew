@@ -4,10 +4,10 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:pages="clr-namespace:TripExpenseNew"
-    xmlns:pages_personal="clr-namespace:TripExpenseNew.PersonalPage"
     xmlns:pages_company="clr-namespace:TripExpenseNew.CompanyPage"
-    xmlns:pages_public="clr-namespace:TripExpenseNew.PublicPage"
     xmlns:pages_general="clr-namespace:TripExpenseNew.GeneralPage"
+    xmlns:pages_personal="clr-namespace:TripExpenseNew.PersonalPage"
+    xmlns:pages_public="clr-namespace:TripExpenseNew.PublicPage"
     Title="TripExpenseNew"
     Shell.FlyoutBehavior="Disabled">
 
@@ -36,30 +36,35 @@
         Title="Home"
         ContentTemplate="{DataTemplate pages:Home_Page}"
         Route="Home_Page" />
-    
-    <ShellContent
-    Title="PersonalForceStop"
-    ContentTemplate="{DataTemplate pages_personal:PersonalForceStop}"
-    Route="PersonalForceStop" />
 
     <ShellContent
-    Title="CompanyPage"
-    ContentTemplate="{DataTemplate pages_company:CompanyPage}"
-    Route="CompanyPage" />
+        Title="PersonalForceStop"
+        ContentTemplate="{DataTemplate pages_personal:PersonalForceStop}"
+        Route="PersonalForceStop" />
 
     <ShellContent
-     Title="PublicPage"
-     ContentTemplate="{DataTemplate pages_public:PublicPage}"
-     Route="PublicPage" />
+        Title="CompanyPage"
+        ContentTemplate="{DataTemplate pages_company:CompanyPage}"
+        Route="CompanyPage" />
 
     <ShellContent
-  Title="GeneralPage"
-  ContentTemplate="{DataTemplate pages_general:GeneralPage}"
-  Route="GeneralPage" />
+        Title="CompanyQR"
+        ContentTemplate="{DataTemplate pages_company:CompanyQR}"
+        Route="CompanyQR" />
 
     <ShellContent
-Title="General"
-ContentTemplate="{DataTemplate pages_general:General}"
-Route="General" />
+        Title="PublicPage"
+        ContentTemplate="{DataTemplate pages_public:PublicPage}"
+        Route="PublicPage" />
+
+    <ShellContent
+        Title="GeneralPage"
+        ContentTemplate="{DataTemplate pages_general:GeneralPage}"
+        Route="GeneralPage" />
+
+    <ShellContent
+        Title="General"
+        ContentTemplate="{DataTemplate pages_general:General}"
+        Route="General" />
 
 </Shell>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="TripExpenseNew.CompanyPage.CompanyQR"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:shell="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:zxing="clr-namespace:ZXing.Net.Maui.Controls;assembly=ZXing.Net.MAUI.Controls"
+    Title="CompanyQR"
+    shell:Shell.NavBarIsVisible="False">
+    <Grid
+        Padding="0,20"
+        BackgroundColor="Transparent"
+        ColumnDefinitions="*"
+        RowDefinitions="Auto,Auto,Auto"
+        RowSpacing="5"
+        VerticalOptions="End">
+
+        <zxing:CameraBarcodeReaderView
+            x:Name="cameraBarcodeReaderView"
+            Grid.Row="0"
+            Grid.Column="0"
+            BarcodesDetected="OnBarcodesDetected"
+            CameraLocation="Rear"
+            HeightRequest="480"
+            HorizontalOptions="Fill"
+            IsDetecting="True"
+            IsEnabled="True"
+            VerticalOptions="Fill" />
+
+        <Button
+            x:Name="ReadQRBtn"
+            Grid.Row="0"
+            Margin="-5,-10"
+            Padding="15"
+            BackgroundColor="Transparent"
+            Clicked="ReadQRBtn_Clicked"
+            FontAttributes="Bold"
+            FontSize="22"
+            HeightRequest="70"
+            HorizontalOptions="End"
+            ImageSource="browse_image.png"
+            TextColor="Black"
+            VerticalOptions="End"
+            WidthRequest="70" />
+
+        <Button
+            x:Name="Confirm"
+            Grid.Row="1"
+            Margin="0,30"
+            Padding="1,10"
+            BackgroundColor="Grey"
+            CharacterSpacing="3"
+            Clicked="Confirm_Clicked"
+            CornerRadius="10"
+            FontAttributes="Bold"
+            FontSize="28"
+            HeightRequest="80"
+            HorizontalOptions="Center"
+            IsEnabled="False"
+            Text="Scanning..."
+            TextColor="White"
+            VerticalOptions="Center"
+            WidthRequest="300">
+            <Button.Shadow>
+                <Shadow
+                    Brush="Black"
+                    Opacity="0.2"
+                    Radius="15"
+                    Offset="0,4" />
+            </Button.Shadow>
+        </Button>
+
+        <Button
+            x:Name="Cancel"
+            Grid.Row="2"
+            Padding="1,5"
+            BackgroundColor="Red"
+            CharacterSpacing="3"
+            Clicked="Cancel_Clicked"
+            CornerRadius="10"
+            FontAttributes="Bold"
+            FontSize="28"
+            HeightRequest="80"
+            HorizontalOptions="Center"
+            IsEnabled="True"
+            Text="CANCEL"
+            TextColor="White"
+            VerticalOptions="Center"
+            WidthRequest="300">
+            <Button.Shadow>
+                <Shadow
+                    Brush="Black"
+                    Opacity="0.2"
+                    Radius="15"
+                    Offset="0,4" />
+            </Button.Shadow>
+        </Button>
+    </Grid>
+</ContentPage>

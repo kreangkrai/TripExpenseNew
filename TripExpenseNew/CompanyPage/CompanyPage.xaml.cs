@@ -266,9 +266,9 @@ public partial class CompanyPage : ContentPage
     private async void ScanQR_Clicked(object sender, EventArgs e)
     {
         ScanQR.IsEnabled = false;
-        var popup = new ScanQRPopup();
+        var scanqr = new CompanyQR();
 
-        popup.OnQRScanned += async (qrValue) =>
+        scanqr.OnQRCodeScanned += async (qrValue) =>
         {
             car_id = qrValue;
             CarModel car = await Car.GetByCar(car_id);
@@ -307,7 +307,7 @@ public partial class CompanyPage : ContentPage
                 });
             }
         };
-        await this.ShowPopupAsync(popup);
+        await Navigation.PushAsync(scanqr);
 
         //if (result != null)
         //{
