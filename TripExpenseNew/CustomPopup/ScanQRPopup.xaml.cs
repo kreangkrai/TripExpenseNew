@@ -31,18 +31,20 @@ public partial class ScanQRPopup : Popup
             Multiple = true,
             TryHarder = true
         };
-        //cameraBarcodeReaderView.Focus(new Microsoft.Maui.Graphics.Point (200,200));
     }
     private void OnBarcodesDetected(object sender, BarcodeDetectionEventArgs e)
     {
         if (e.Results.Any())
         {
             var qrValue = e.Results.First().Value;
-            Confirm.IsEnabled = true;
-            Confirm.TextColor = Colors.White;
-            Confirm.BackgroundColor = Microsoft.Maui.Graphics.Color.FromArgb("#297CC0");
-            Confirm.Text = qrValue;
-            OnQRScanned?.Invoke(qrValue);  
+            MainThread.BeginInvokeOnMainThread(() =>
+            {              
+                Confirm.IsEnabled = true;
+                Confirm.TextColor = Colors.White;
+                Confirm.BackgroundColor = Microsoft.Maui.Graphics.Color.FromArgb("#297CC0");
+                Confirm.Text = qrValue;
+                OnQRScanned?.Invoke(qrValue);
+            });
         }
 
         //MainThread.BeginInvokeOnMainThread(() =>

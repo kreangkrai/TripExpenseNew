@@ -283,7 +283,7 @@ public partial class CompanyPage : ContentPage
                         Btn_Start.IsEnabled = true;
                         Btn_Start.TextColor = Colors.White;
                         Btn_Start.BackgroundColor = Color.FromArgb("#297CC0");
-                        Btn_Start.Text = "START";
+                        Btn_Start.Text = qrValue;
 
                     });
                 }
