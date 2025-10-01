@@ -285,8 +285,6 @@ public partial class CompanyPage : ContentPage
                             Btn_Start.TextColor = Colors.White;
                             Btn_Start.BackgroundColor = Color.FromArgb("#297CC0");
                             Btn_Start.Text = qrValue;
-                            VisualStateManager.GoToState(Btn_Start, qrValue);
-
                         });
                     }
                     else

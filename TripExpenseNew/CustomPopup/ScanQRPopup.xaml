@@ -60,7 +60,7 @@
             HeightRequest="80"
             HorizontalOptions="Center"
             IsEnabled="False"
-            Text="Scanning..."
+            Text=""
             TextColor="White"
             VerticalOptions="Center"
             WidthRequest="300">

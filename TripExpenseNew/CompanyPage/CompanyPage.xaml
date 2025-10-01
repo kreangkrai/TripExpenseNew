@@ -67,22 +67,10 @@
             HeightRequest="80"
             HorizontalOptions="Center"
             IsEnabled="False"
-            Text="Processing.."
+            Text=""
             TextColor="White"
             VerticalOptions="Center"
-            WidthRequest="300">
-            <VisualStateManager.VisualStateGroups>
-                <VisualStateGroup x:Name="CommonStates">
-                    <VisualState x:Name="Normal" />
-                    <VisualState x:Name="Scanned">
-                        <VisualState.Setters>
-                            <Setter Property="BackgroundColor" Value="Green" />
-                            <Setter Property="TextColor" Value="White" />
-                        </VisualState.Setters>
-                    </VisualState>
-                </VisualStateGroup>
-            </VisualStateManager.VisualStateGroups>
-        </Button>
+            WidthRequest="300" />
 
         <Button
             x:Name="CompanyCancel"
