@@ -42,8 +42,9 @@ public partial class ScanQRPopup : Popup
                 Confirm.IsEnabled = true;
                 Confirm.TextColor = Colors.White;
                 Confirm.BackgroundColor = Microsoft.Maui.Graphics.Color.FromArgb("#297CC0");
-                Confirm.Text = qrValue;
+                Confirm.Text = qrValue;               
                 OnQRScanned?.Invoke(qrValue);
+                Close(qrValue);
             });
         }
 

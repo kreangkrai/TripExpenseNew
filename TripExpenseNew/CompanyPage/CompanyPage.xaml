@@ -70,7 +70,19 @@
             Text="Processing.."
             TextColor="White"
             VerticalOptions="Center"
-            WidthRequest="300" />
+            WidthRequest="300">
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Scanned">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="Green" />
+                            <Setter Property="TextColor" Value="White" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+        </Button>
 
         <Button
             x:Name="CompanyCancel"

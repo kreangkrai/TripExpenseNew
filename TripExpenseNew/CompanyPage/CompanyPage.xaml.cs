@@ -266,9 +266,9 @@ public partial class CompanyPage : ContentPage
     private async void ScanQR_Clicked(object sender, EventArgs e)
     {
         ScanQR.IsEnabled = false;
-        var scanqr = new CompanyQR();
+        var scanqr = new ScanQRPopup();
 
-        scanqr.OnQRCodeScanned += async (qrValue) =>
+        scanqr.OnQRScanned += async (qrValue) =>
         {
             car_id = qrValue;
             CarModel car = await Car.GetByCar(car_id);
@@ -284,6 +284,7 @@ public partial class CompanyPage : ContentPage
                         Btn_Start.TextColor = Colors.White;
                         Btn_Start.BackgroundColor = Color.FromArgb("#297CC0");
                         Btn_Start.Text = qrValue;
+                        VisualStateManager.GoToState(Btn_Start, qrValue);
 
                     });
                 }
@@ -307,7 +308,7 @@ public partial class CompanyPage : ContentPage
                 });
             }
         };
-        await Navigation.PushAsync(scanqr);
+        await this.ShowPopupAsync(scanqr);
 
         //if (result != null)
         //{
