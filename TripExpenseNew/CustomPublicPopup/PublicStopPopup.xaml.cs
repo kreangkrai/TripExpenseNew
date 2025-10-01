@@ -7,7 +7,7 @@ namespace TripExpenseNew.CustomPublicPopup;
 public partial class PublicStopPopup : Popup
 {
     private bool Iscustomer = false;
-    string location = "";
+    string location = string.Empty;
     bool isCustomer = false;
     public PublicStopPopup(string _location, bool _isCustomer)
     {

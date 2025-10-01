@@ -39,16 +39,18 @@ public partial class ScanQRPopup : Popup
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
                     if (BindingContext is ButtonScanQRResult viewModel)
-                    {
-                        viewModel.ButtonScanQRResultText = barcode.Value;
+                    {                      
+                        Confirm.TextColor = Colors.White;
                         Confirm.BackgroundColor = Microsoft.Maui.Graphics.Color.FromArgb("#297CC0");
                         Confirm.IsEnabled = true;
+                        viewModel.ButtonScanQRResultText = barcode.Value;
                     }
                     else
                     {
-                        Confirm.Text = barcode.Value;
-                        Confirm.BackgroundColor = Microsoft.Maui.Graphics.Color.FromArgb("#297CC0");
                         Confirm.IsEnabled = true;
+                        Confirm.TextColor = Colors.White;
+                        Confirm.BackgroundColor = Microsoft.Maui.Graphics.Color.FromArgb("#297CC0");                       
+                        Confirm.Text = barcode.Value;
                     }
                 });
                 

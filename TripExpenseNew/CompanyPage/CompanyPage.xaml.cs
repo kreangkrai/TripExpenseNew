@@ -282,13 +282,17 @@ public partial class CompanyPage : ContentPage
                     MainThread.BeginInvokeOnMainThread(() =>
                     {
                         if (BindingContext is ButtonCompanyStart viewModel)
-                        {
-                            viewModel.ButtonCompanyStartText = "START";
+                        {                          
                             Btn_Start.IsEnabled = true;
+                            Btn_Start.TextColor = Colors.White;
+                            Btn_Start.BackgroundColor = Color.FromArgb("#297CC0");
+                            viewModel.ButtonCompanyStartText = "START";
                         }
                         else
                         {
                             Btn_Start.IsEnabled = true;
+                            Btn_Start.TextColor = Colors.White;
+                            Btn_Start.BackgroundColor = Color.FromArgb("#297CC0");
                             Btn_Start.Text = "START";
                         }
                     });                   
@@ -296,6 +300,8 @@ public partial class CompanyPage : ContentPage
                 else
                 {
                     Btn_Start.IsEnabled = false;
+                    Btn_Start.TextColor = Colors.White;
+                    Btn_Start.BackgroundColor = Colors.Grey;
                     Btn_Start.Text = "Processing..";
                     MainThread.BeginInvokeOnMainThread(async () =>
                     {

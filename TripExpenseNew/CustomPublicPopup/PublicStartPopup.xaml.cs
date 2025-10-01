@@ -6,9 +6,25 @@ namespace TripExpenseNew.CustomPublicPopup;
 public partial class PublicStartPopup : Popup
 {
     bool Iscustomer = false;
-    public PublicStartPopup(string location, bool iscustomer)
+    string location = string.Empty;
+    bool iscustomer = false;
+    public PublicStartPopup(string _location, bool _iscustomer)
     {
         InitializeComponent();
+        location = _location;
+        iscustomer = _iscustomer;
+    }
+
+    private void CancelBtn_Clicked(object sender, EventArgs e)
+    {
+        CancelBtn.IsEnabled = false;
+        Close(null);
+        CancelBtn.IsEnabled = true;
+    }
+
+    protected override void OnParentChanged()
+    {
+        base.OnParentChanged();
         Text_Location.Text = location;
 
         if (location != "CTL(HQ)" && location != "CTL(KBO)" && location != "CTL(RBO)")
@@ -32,14 +48,6 @@ public partial class PublicStartPopup : Popup
             OtherBtn.BackgroundColor = Color.FromArgb("#297CC0");
         }
     }
-
-    private void CancelBtn_Clicked(object sender, EventArgs e)
-    {
-        CancelBtn.IsEnabled = false;
-        Close(null);
-        CancelBtn.IsEnabled = true;
-    }
-
     private void OKBtn_Clicked(object sender, EventArgs e)
     {
         OKBtn.IsEnabled = false;
