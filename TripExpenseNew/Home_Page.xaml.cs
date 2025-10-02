@@ -365,8 +365,7 @@ public partial class Home_Page : ContentPage
     {
         HistoryBtn.IsEnabled = false;
         List<LastTripViewModel> lastTrips = await LastTrip.GetByEmp(emp_id.emp_id);
-        lastTrips = lastTrips.Where(w=>w.trip_start.Date >= DateTime.Now.AddDays(-60)).ToList();
-        lastTrips = lastTrips.OrderByDescending(o=>o.trip_start).ToList();
+        lastTrips = lastTrips.Where(w=>w.trip_start.Date >= DateTime.Now.AddDays(-60)).OrderByDescending(o=>o.trip_start).ToList();
         await Navigation.PushAsync(new HistoryPage(lastTrips));
         HistoryBtn.IsEnabled = true;
     }
