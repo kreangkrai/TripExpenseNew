@@ -87,6 +87,8 @@ public partial class PersonalForceStop : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
+        DateTime date = new DateTime(trip.trip_start.Year, trip.trip_start.Month, trip.trip_start.Day);
+        datePicker.Date = date;
         var status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
         if (status != PermissionStatus.Granted)
         {
@@ -289,7 +291,7 @@ public partial class PersonalForceStop : ContentPage
                     var popup = new ProgressPopup();
                     this.ShowPopup(popup);
 
-                    DateTime date = new DateTime(trip.trip_start.Year, trip.trip_start.Month, trip.trip_start.Day, time_select.Time.Hours, time_select.Time.Minutes, time_select.Time.Seconds);
+                    DateTime date = new DateTime(datePicker.Date.Year, datePicker.Date.Month, datePicker.Date.Day, time_select.Time.Hours, time_select.Time.Minutes, time_select.Time.Seconds);
 
                     double speed = g_location?.Speed.HasValue ?? false ? g_location.Speed.Value * 3.6 : 0;
                     var placemarks = await Geocoding.Default.GetPlacemarksAsync(g_location.Latitude, g_location.Longitude);
@@ -335,7 +337,7 @@ public partial class PersonalForceStop : ContentPage
                             latitude = data_personal.latitude,
                             longitude = data_personal.longitude,
                             accuracy = data_personal.accuracy,
-                            mileage_start = data_personal.mileage,
+                            mileage_start = mileage_start,
                             mileage_stop = mileage_stop,
                             mode = "PERSONAL",
                             status = false,

@@ -233,6 +233,35 @@
                 </Border>
             </Grid>
 
+            <!--  Stop Date  -->
+            <Grid ColumnDefinitions=".50*,.50*" ColumnSpacing="10">
+                <!--  LABEL | Stop Date:  -->
+                <Label
+                    CharacterSpacing="1"
+                    FontAttributes="Bold"
+                    FontSize="20"
+                    HorizontalOptions="Start"
+                    Text="Stop Date:"
+                    VerticalOptions="Center" />
+
+                <!--  ENTRY | Stop Date  -->
+                <Border
+                    Grid.Column="1"
+                    Stroke="#C8C8C8"
+                    StrokeShape="RoundRectangle 5"
+                    StrokeThickness="2" />
+                <DatePicker
+                    x:Name="datePicker"
+                    Grid.Column="1"
+                    CharacterSpacing="5"
+                    FontSize="18"
+                    Format="dd/MM/yyyy"
+                    HeightRequest="50"
+                    HorizontalOptions="Center"
+                    TextColor="#297CC0" />
+                <Label Text="{Binding SelectedDate, StringFormat='Selected Date: {dd/MM/yyyy}'}" />
+            </Grid>
+
             <!--  Stop Time  -->
             <Grid ColumnDefinitions=".50*,.50*" ColumnSpacing="10">
                 <!--  LABEL | Stop Time:  -->
