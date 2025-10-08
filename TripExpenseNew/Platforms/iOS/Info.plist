@@ -35,8 +35,6 @@
 		<string>location</string>
 		<string>fetch</string>
 	</array>
-	<key>NSUserNotificationUsageDescription</key>
-	<string>Allow this app to send you notifications</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>แอปนี้ต้องการใช้ตำแหน่งของคุณเพื่อติดตามการเดินทางในโหมด Background</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>

@@ -366,7 +366,7 @@ public partial class CompanyPage : ContentPage
             {
                 MainThread.BeginInvokeOnMainThread(async () =>
                 {
-                    await DisplayAlert("", "ไม่มีข้อมูลการยืมรถ", "OK");
+                    await DisplayAlert("", "ไม่มีข้อมูลการยืมรถ กรุณาติดต่อแอดมิน", "OK");
                 });
             }
         }
