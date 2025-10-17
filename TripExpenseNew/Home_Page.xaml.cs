@@ -63,8 +63,17 @@ public partial class Home_Page : ContentPage
                 trips = trips.OrderByDescending(o => o.date).ToList();
 
                 string name = employees.Where(w => w.emp_id == emp_id.emp_id).FirstOrDefault().name;
-                lbl_name.Text = name.Split(' ')[0];
-                lbl_lastname.Text = name.Split(' ')[1];
+                int count = name.Count(a=> a == ' ');
+                if (count > 0)
+                {
+                    lbl_name.Text = name.Split(' ')[0];
+                    lbl_lastname.Text = name.Split(' ')[1];
+                }
+                else
+                {
+                    lbl_name.Text = name;
+                    lbl_lastname.Text = "";
+                }
 
                 if (trips.Count > 0)
                 {
