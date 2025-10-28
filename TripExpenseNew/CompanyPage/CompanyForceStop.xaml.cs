@@ -10,7 +10,7 @@ using TripExpenseNew.DBService;
 using TripExpenseNew.CustomPopup;
 using CommunityToolkit.Maui.Views;
 using System.Globalization;
-
+using CommunityToolkit.Maui.Extensions;
 #if IOS
 using CoreLocation;
 using UserNotifications;

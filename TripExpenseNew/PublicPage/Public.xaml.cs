@@ -20,7 +20,7 @@ using TripExpenseNew.CustomPopup;
 using System.Globalization;
 using TripExpenseNew.CustomPersonalPopup;
 using TripExpenseNew.CustomPublicPopup;
-
+using CommunityToolkit.Maui.Extensions;
 #if IOS
 using UserNotifications;
 using Microsoft.Maui.Maps;

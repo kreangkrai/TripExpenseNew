@@ -1,5 +1,4 @@
 using CommunityToolkit.Maui.Views;
-
 namespace TripExpenseNew.CustomCompanyPopup;
 
 public partial class CompanyCheckInAlert : Popup

@@ -9,6 +9,7 @@ using TripExpenseNew.Services;
 using TripExpenseNew.CustomPopup;
 using TripExpenseNew.ViewModels;
 using TripExpenseNew.CustomPersonalPopup;
+using CommunityToolkit.Maui.Extensions;
 
 #if IOS
 using UserNotifications;

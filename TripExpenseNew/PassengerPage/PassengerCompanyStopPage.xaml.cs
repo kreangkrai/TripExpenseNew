@@ -8,7 +8,7 @@ using TripExpenseNew.Services;
 using TripExpenseNew.DBService;
 using TripExpenseNew.CustomPopup;
 using CommunityToolkit.Maui.Views;
-
+using CommunityToolkit.Maui.Extensions;
 
 #if IOS
 using CoreLocation;

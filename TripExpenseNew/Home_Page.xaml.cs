@@ -36,6 +36,7 @@ public partial class Home_Page : ContentPage
         Version = _Version;
     }
 
+    [Obsolete]
     protected override async void OnAppearing()
     {
         base.OnAppearing();

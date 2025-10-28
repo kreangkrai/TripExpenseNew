@@ -11,7 +11,7 @@ using TripExpenseNew.DBModels;
 using TripExpenseNew.ViewModels;
 using TripExpenseNew.CustomCompanyPopup;
 using Microsoft.Maui.Controls.PlatformConfiguration;
-
+using CommunityToolkit.Maui.Extensions;
 #if IOS
 using UserNotifications;
 

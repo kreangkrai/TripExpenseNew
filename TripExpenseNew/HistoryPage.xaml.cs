@@ -11,6 +11,7 @@ using TripExpenseNew.Interface;
 using TripExpenseNew.Models;
 using TripExpenseNew.Services;
 using TripExpenseNew.ViewModels;
+using CommunityToolkit.Maui.Extensions;
 namespace TripExpenseNew;
 
 public partial class HistoryPage : ContentPage
