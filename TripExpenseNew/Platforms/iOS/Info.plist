@@ -28,7 +28,7 @@
 	<key>CFBundleIdentifier</key>
 	<string>com.contrologic.tripexpensenew</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>1.0.1</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>
@@ -42,11 +42,9 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>แอปนี้ต้องการใช้ตำแหน่งของคุณเพื่อแสดงข้อมูลการเดินทาง</string>
 	<key>NSCameraUsageDescription</key>
-	<string>แอปนี้ต้องการเข้าถึงกล้องเพื่อสแกน QR Code</string>
-	<key>MinimumOSVersion</key>
-	<string>11.0</string>
-	<key>NSCameraUsageDescription</key>
 	<string>Allow the app to use camera for scan QR Code</string>
+	<key>MinimumOSVersion</key>
+	<string>14.0</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>แอปนี้ต้องการเข้าถึง Photos เพื่อเลือกภาพ QR Code</string>
 	<key>NSAppTransportSecurity</key>
@@ -56,5 +54,7 @@
 	</dict>
 	<key>CFBundleDisplayName</key>
 	<string>TripExpense</string>
+	<key>CFBundleVersion</key>
+	<string>2</string>
 </dict>
 </plist>

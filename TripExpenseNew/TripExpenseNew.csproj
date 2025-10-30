@@ -27,7 +27,7 @@
 		<ApplicationId>com.companyname.tripexpensenew</ApplicationId>
 
 		<!-- Versions -->
-		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+		<ApplicationDisplayVersion>1.0.1</ApplicationDisplayVersion>
 		<ApplicationVersion>1</ApplicationVersion>
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.0</SupportedOSPlatformVersion>
@@ -55,6 +55,12 @@
 		<AndroidSigningKeyAlias>te_ctl</AndroidSigningKeyAlias>
 		<AndroidSigningKeyPass>P@ssw0rd</AndroidSigningKeyPass>
 		<AndroidPackageFormat>aab</AndroidPackageFormat>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)'=='net9.0-ios'">
+	  <ProvisioningType>automatic</ProvisioningType>
+	  <CodesignKey>Apple Development: Created via API (ZLTNNGF66L)</CodesignKey>
+	  <CodesignProvision>VS: com.contrologic.tripexpensenew Development</CodesignProvision>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -95,8 +101,8 @@
 		<PackageReference Include="Plugin.LocalNotification" Version="10.1.8" />
 		<PackageReference Include="SixLabors.ImageSharp" Version="3.1.11" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
-		<PackageReference Include="ZXing.Net.Maui" Version="0.4.0" />
-		<PackageReference Include="ZXing.Net.Maui.Controls" Version="0.4.0" />
+		<PackageReference Include="ZXing.Net.Maui" Version="0.6.0" />
+		<PackageReference Include="ZXing.Net.Maui.Controls" Version="0.6.0" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0-ios'">
 		<None Include="Platforms\iOS\Info.plist" />
