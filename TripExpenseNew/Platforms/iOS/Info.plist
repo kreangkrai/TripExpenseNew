@@ -31,22 +31,20 @@
 	<string>1.0.1</string>
 	<key>UIBackgroundModes</key>
 	<array>
-		<string>remote-notification</string>
 		<string>location</string>
-		<string>fetch</string>
 	</array>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>แอปนี้ต้องการใช้ตำแหน่งของคุณเพื่อติดตามการเดินทางในโหมด Background</string>
+	<string>This app requires alway access to your location  to track your journey even in background mode</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>แอปนี้ต้องการใช้ตำแหน่งของคุณเพื่อติดตามการเดินทางในโหมด Background</string>
+	<string>This app requires access to your location to track your journey even in background mode</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>แอปนี้ต้องการใช้ตำแหน่งของคุณเพื่อแสดงข้อมูลการเดินทาง</string>
+	<string>This app requires access to your location to display travel information</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Allow the app to use camera for scan QR Code</string>
+	<string>This app requires access to the camera to scan QR codes.</string>
 	<key>MinimumOSVersion</key>
 	<string>14.0</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>แอปนี้ต้องการเข้าถึง Photos เพื่อเลือกภาพ QR Code</string>
+	<string>This app requires access to Photos to select a QR code image.</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
@@ -55,6 +53,6 @@
 	<key>CFBundleDisplayName</key>
 	<string>TripExpense</string>
 	<key>CFBundleVersion</key>
-	<string>2</string>
+	<string>3</string>
 </dict>
 </plist>

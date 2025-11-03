@@ -45,7 +45,8 @@
 	  <AndroidSigningStorePass>P@ssw0rd</AndroidSigningStorePass>
 	  <AndroidSigningKeyAlias>te_ctl</AndroidSigningKeyAlias>
 	  <AndroidSigningKeyPass>P@ssw0rd</AndroidSigningKeyPass>
-		<AndroidPackageFormat>aab</AndroidPackageFormat>
+		<AndroidPackageFormat>apk</AndroidPackageFormat>
+		<EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-android35.0|AnyCPU'">
@@ -54,7 +55,7 @@
 		<AndroidSigningStorePass>P@ssw0rd</AndroidSigningStorePass>
 		<AndroidSigningKeyAlias>te_ctl</AndroidSigningKeyAlias>
 		<AndroidSigningKeyPass>P@ssw0rd</AndroidSigningKeyPass>
-		<AndroidPackageFormat>aab</AndroidPackageFormat>
+		<AndroidPackageFormat>apk</AndroidPackageFormat>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)'=='net9.0-ios'">
