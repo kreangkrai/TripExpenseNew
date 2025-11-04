@@ -37,6 +37,7 @@ public partial class HistoryPage : ContentPage
 
     protected override void OnAppearing()
     {
+       
         base.OnAppearing();
 
         for (int i = 0; i < lastTrips.Count; i++)
@@ -54,7 +55,7 @@ public partial class HistoryPage : ContentPage
             tripItems.Add(item);
         }
         
-        HistoryTripCollectionView.ItemsSource = tripItems;
+        HistoryTripCollectionView.ItemsSource = tripItems;       
     }
 
     private async void CancelBtn_Clicked(object sender, EventArgs e)

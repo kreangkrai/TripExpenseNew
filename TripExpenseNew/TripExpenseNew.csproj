@@ -47,6 +47,10 @@
 	  <AndroidSigningKeyPass>P@ssw0rd</AndroidSigningKeyPass>
 		<AndroidPackageFormat>apk</AndroidPackageFormat>
 		<EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
+		<AndroidUseAapt2>True</AndroidUseAapt2>
+		<AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
+		<DebugSymbols>False</DebugSymbols>
+		<EnableLLVM>False</EnableLLVM>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-android35.0|AnyCPU'">
@@ -56,6 +60,10 @@
 		<AndroidSigningKeyAlias>te_ctl</AndroidSigningKeyAlias>
 		<AndroidSigningKeyPass>P@ssw0rd</AndroidSigningKeyPass>
 		<AndroidPackageFormat>apk</AndroidPackageFormat>
+		<AndroidUseAapt2>True</AndroidUseAapt2>
+		<AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
+		<DebugSymbols>True</DebugSymbols>
+		<EnableLLVM>False</EnableLLVM>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)'=='net9.0-ios'">

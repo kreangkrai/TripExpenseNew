@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Threading.Tasks;
 using TripExpenseNew.CompanyPage;
+using TripExpenseNew.CustomPopup;
 using TripExpenseNew.DBInterface;
 using TripExpenseNew.DBModels;
 using TripExpenseNew.Interface;
@@ -19,7 +20,7 @@ using TripExpenseNew.ViewModels;
 
 public partial class Home_Page : ContentPage
 {
-    string version = "1.0.0";
+    string version = "1.0.1";
     private IVersion Version;
     private ILastTrip LastTrip;
     private ILogin Login;
@@ -47,10 +48,10 @@ public partial class Home_Page : ContentPage
             { // Link Update
 #if IOS
                 await Application.Current.MainPage.DisplayAlert("", $"Please Update iOS New Version {ver.version}", "OK");
-                //await Launcher.OpenAsync(new Uri(url));
+                await Launcher.OpenAsync(new Uri("https://apps.apple.com/us/app/trip-expense-new/id6752587745"));
 #elif ANDROID
             await Application.Current.MainPage.DisplayAlert("", $"Please Update Android New Version {ver.version}", "OK");
-            //await Launcher.OpenAsync(new Uri(url))
+            await Launcher.OpenAsync(new Uri("https://play.google.com/store/apps/details?id=com.contrologic.tripexpensenew"));
 #endif
                 await Shell.Current.GoToAsync("Login_Page");
             }
@@ -373,10 +374,13 @@ public partial class Home_Page : ContentPage
 
     private async void HistoryBtn_Clicked(object sender, EventArgs e)
     {
+        var popup = new ProgressPopup();
+        this.ShowPopup(popup);
         HistoryBtn.IsEnabled = false;
         List<LastTripViewModel> lastTrips = await LastTrip.GetByEmp(emp_id.emp_id);
-        lastTrips = lastTrips.Where(w=>w.trip_start.Date >= DateTime.Now.AddDays(-60)).OrderByDescending(o=>o.trip_start).ToList();
+        lastTrips = lastTrips.Where(w=>w.trip_start.Date >= DateTime.Now.AddDays(-30)).OrderByDescending(o=>o.trip_start).ToList();
         await Navigation.PushAsync(new HistoryPage(lastTrips));
         HistoryBtn.IsEnabled = true;
+        await popup.CloseAsync();
     }
 }

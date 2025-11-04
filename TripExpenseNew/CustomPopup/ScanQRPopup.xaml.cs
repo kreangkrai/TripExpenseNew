@@ -9,6 +9,7 @@ using ZXing.Net.Maui;
 using ZXing.Net.Maui.Controls;
 using ZXing.QrCode.Internal;
 using Image = SixLabors.ImageSharp.Image;
+using CommunityToolkit.Maui.Media;
 namespace TripExpenseNew.CustomPopup;
 
 public partial class ScanQRPopup : Popup
@@ -59,67 +60,65 @@ public partial class ScanQRPopup : Popup
         ReadQRBtn.IsEnabled = false;
         try
         {
-
 #if IOS
-
+            // iOS ยังใช้ Permissions.Photos
             var status = await Permissions.CheckStatusAsync<Permissions.Photos>();
             if (status != PermissionStatus.Granted)
             {
                 status = await Permissions.RequestAsync<Permissions.Photos>();
                 if (status != PermissionStatus.Granted)
-                {                   
-                    return;
-                }
-            }
-#elif ANDROID
-        var status = await Permissions.CheckStatusAsync<Permissions.StorageRead>();
-            if (status != PermissionStatus.Granted)
-            {
-                status = await Permissions.RequestAsync<Permissions.StorageRead>();
-                if (status != PermissionStatus.Granted)
-                {                   
+                {
+                    ReadQRBtn.IsEnabled = true;
                     return;
                 }
             }
 #endif
-            var fileResult = await FilePicker.PickAsync(new PickOptions
+
+            // ใช้ MediaPicker (รองรับ Android Photo Picker โดยอัตโนมัติใน MAUI 8+)
+            var pickResult = await MediaPicker.PickPhotoAsync(new MediaPickerOptions
             {
-                PickerTitle = "Please Select QR Code",
-                FileTypes = FilePickerFileType.Images
+                Title = "Please Select QR Code"
             });
 
-            if (fileResult == null)
+            if (pickResult == null)
+            {
+                Close(null);
+                ReadQRBtn.IsEnabled = true;
                 return;
-           
-            // แสดงภาพที่เลือก
-            //SelectedImage.Source = ImageSource.FromFile(fileResult.FullPath);
+            }
 
-            // อ่านไฟล์ภาพเป็น Stream
-            using var stream = await fileResult.OpenReadAsync();
+            // เปิด stream จากไฟล์ที่เลือก
+            using var stream = await pickResult.OpenReadAsync();
             using var memoryStream = new MemoryStream();
             await stream.CopyToAsync(memoryStream);
             memoryStream.Position = 0;
 
-            // ตรวจสอบว่า stream มีข้อมูล
             if (memoryStream.Length == 0)
-            {                
+            {
+                Close(null);
+                ReadQRBtn.IsEnabled = true;
                 return;
             }
 
             // โหลดภาพด้วย ImageSharp
             using var image = Image.Load<Rgba32>(memoryStream);
 
-            // ตรวจสอบขนาดภาพ
             if (image.Width == 0 || image.Height == 0)
             {
+                Close(null);
+                ReadQRBtn.IsEnabled = true;
                 return;
             }
 
-            // ปรับขนาดภาพ (ถ้าจำเป็น)
-            using var resizedImage = image.Clone(); // สร้างสำเนาก่อน
-            resizedImage.Mutate(ctx => ctx.Resize(1000, 1000));
+            // ปรับขนาดภาพ
+            using var resizedImage = image.Clone();
+            resizedImage.Mutate(ctx => ctx.Resize(new ResizeOptions
+            {
+                Size = new SixLabors.ImageSharp.Size(1000, 1000),
+                Mode = SixLabors.ImageSharp.Processing.ResizeMode.Max
+            }));
 
-            // แปลงภาพเป็น array ของ RGB bytes (ไม่รวม Alpha)
+            // แปลงเป็น RGB bytes
             var rgbBytes = new byte[resizedImage.Width * resizedImage.Height * 3];
             int index = 0;
             resizedImage.ProcessPixelRows(accessor =>
@@ -129,45 +128,36 @@ public partial class ScanQRPopup : Popup
                     var row = accessor.GetRowSpan(y);
                     for (int x = 0; x < accessor.Width; x++)
                     {
-                        rgbBytes[index++] = row[x].R; // Red
-                        rgbBytes[index++] = row[x].G; // Green
-                        rgbBytes[index++] = row[x].B; // Blue
+                        rgbBytes[index++] = row[x].R;
+                        rgbBytes[index++] = row[x].G;
+                        rgbBytes[index++] = row[x].B;
                     }
                 }
             });
 
-            // สร้าง LuminanceSource
+            // อ่าน QR Code
             var luminanceSource = new RGBLuminanceSource(rgbBytes, resizedImage.Width, resizedImage.Height);
-
-            // ใช้ BarcodeReaderGeneric เพื่ออ่านบาร์โค้ด
             var reader = new BarcodeReaderGeneric
             {
                 Options = new ZXing.Common.DecodingOptions
                 {
-                    PossibleFormats = new[] { ZXing.BarcodeFormat.All_1D, ZXing.BarcodeFormat.QR_CODE }, // รองรับทุกประเภท
-                    //AutoRotate = true,
+                    PossibleFormats = new[] { ZXing.BarcodeFormat.QR_CODE },
                     TryHarder = true
                 }
             };
 
-            // อ่านบาร์โค้ดจากภาพ
             var result = reader.Decode(luminanceSource);
 
-            // แสดงผลลัพธ์
-            if (result != null)
-            {
-                Close(result.Text);
-            }
-            else
-            {
-                Close(null);
-            }
+            Close(result?.Text);
         }
         catch
         {
             Close(null);
         }
-        ReadQRBtn.IsEnabled = true;
+        finally
+        {
+            ReadQRBtn.IsEnabled = true;
+        }
     }
 
     private void Cancel_Clicked(object sender, EventArgs e)
