@@ -1,92 +1,116 @@
 ﻿namespace TripExpenseNew;
+
 using CommunityToolkit.Maui.Views;
 using Microsoft.Maui.Controls;
-using Microsoft.Maui.Primitives;
 using Plugin.LocalNotification;
-using System;
 using System.Net.Http;
-using TripExpenseNew.CustomPopup;
 using TripExpenseNew.DBInterface;
 using TripExpenseNew.DBModels;
 using TripExpenseNew.DBService;
 using TripExpenseNew.Interface;
 using TripExpenseNew.Models;
 using TripExpenseNew.Services;
-using CommunityToolkit.Maui.Extensions;
+
 public partial class Login_Page : ContentPage
 {
-    private IAuthen Authen;
-    private ILogin Login;
-    private IServer Server;
-    private IEmployee Employee;
-    private IInternet Internet;
+    private readonly IAuthen Authen;
+    private readonly ILogin Login;
+    private readonly IServer Server;
+    private readonly IEmployee Employee;
+    private readonly IInternet Internet;
+
     private bool _isOpen = false;
     private double _startY;
-    private double _sheetHeight;
+    private double _sheetHeight = 600;
 
-    public Login_Page(IAuthen _Authen,ILogin _Login, IServer _Server, IEmployee _Employee,IInternet _Internet)
-	{
+    // แชร์ HttpClient (ปลอดภัย + ไม่ค้าง)
+    private static readonly HttpClient _httpClient = CreateHttpClient();
+
+    public Login_Page(IAuthen _Authen, ILogin _Login, IServer _Server, IEmployee _Employee, IInternet _Internet)
+    {
         InitializeComponent();
         Authen = _Authen;
         Login = _Login;
         Server = _Server;
         Employee = _Employee;
         Internet = _Internet;
-        ServerModel servers = Server.Get(1).Result;
-        if (servers == null)
+
+        _ = LoadInitialDataAsync();
+    }
+
+    private static HttpClient CreateHttpClient()
+    {
+        var handler = new HttpClientHandler();
+
+#if DEBUG
+        handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true;
+#endif
+
+        return new HttpClient(handler)
         {
-            LogInBtn.IsEnabled = false;
-        }
-        else
+            Timeout = TimeSpan.FromSeconds(30)
+        };
+    }
+
+    private async Task LoadInitialDataAsync()
+    {
+        try
         {
-            LoginModel login = Login.GetLogin(1).Result;
+            var servers = await Server.Get(1);
+            if (servers == null)
+            {
+                LogInBtn.IsEnabled = false;
+                return;
+            }
+
+            var login = await Login.GetLogin(1);
             if (login != null)
             {
                 txt_name.Text = login.name;
                 txt_password.Text = login.password;
                 txt_server.Text = servers.server;
             }
+
+            LogInBtn.IsEnabled = true;
         }
-            _sheetHeight = BottomSheet.HeightRequest > 0 ? BottomSheet.HeightRequest : 300; // ใช้ HeightRequest หรือตั้งค่าเริ่มต้น
+        catch (Exception ex)
+        {
+            await MainThread.InvokeOnMainThreadAsync(async () =>
+            {
+                await DisplayAlert("ข้อผิดพลาด", $"โหลดข้อมูลล้มเหลว: {ex.Message}", "OK");
+            });
+        }
     }
 
     protected override async void OnAppearing()
     {
         base.OnAppearing();
+        await RequestPermissionsAsync();
+    }
 
+    private async Task RequestPermissionsAsync()
+    {
+        // Location
         var status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
         if (status != PermissionStatus.Granted)
-        {
-            status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
-            if (status != PermissionStatus.Granted)
-            {
-                return;
-            }
-        }
+            await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
 
         status = await Permissions.CheckStatusAsync<Permissions.LocationAlways>();
         if (status != PermissionStatus.Granted)
-        {
-            status = await Permissions.RequestAsync<Permissions.LocationAlways>();
-            if (status != PermissionStatus.Granted)
-            {
-                return;
-            }
-        }
+            await Permissions.RequestAsync<Permissions.LocationAlways>();
 
+        // Notification
         if (!await LocalNotificationCenter.Current.AreNotificationsEnabled())
-        {
             await LocalNotificationCenter.Current.RequestNotificationPermission();
-        }
     }
-    private void OnTapOpenBottomSheet(object sender, EventArgs e)
+
+    // --- Bottom Sheet ---
+    private void ServerBtn_Clicked(object sender, EventArgs e) => ToggleBottomSheet();
+    private void ToggleBottomSheet()
     {
-        if (!_isOpen)
-        {
-            _isOpen = true;
-            BottomSheet.IsVisible = true;
-            AnimateBottomSheet(0); // เลื่อนขึ้นมา
-        }
+        _isOpen = !_isOpen;
+        BottomSheet.IsVisible = true;
+        AnimateBottomSheet(_isOpen ? 0 : _sheetHeight);
     }
 
     private void OnPanUpdated(object sender, PanUpdatedEventArgs e)
@@ -97,18 +121,15 @@ public partial class Login_Page : ContentPage
                 _startY = BottomSheet.TranslationY;
                 break;
             case GestureStatus.Running:
-                double newY = Math.Max(_startY + e.TotalY, 0); // จำกัดไม่ให้เลื่อนเกินขอบบน
-                newY = Math.Min(newY, _sheetHeight); // จำกัดไม่ให้เลื่อนเกินล่าง
+                double newY = Math.Clamp(_startY + e.TotalY, 0, _sheetHeight);
                 BottomSheet.TranslationY = newY;
                 break;
             case GestureStatus.Completed:
                 if (BottomSheet.TranslationY <= _sheetHeight / 2)
-                {
-                    AnimateBottomSheet(0); // เปิดถ้าเลื่อนไม่เกินครึ่ง
-                }
+                    AnimateBottomSheet(0);
                 else
                 {
-                    AnimateBottomSheet(_sheetHeight); // ปิดถ้าเลื่อนเกินครึ่ง
+                    AnimateBottomSheet(_sheetHeight);
                     _isOpen = false;
                 }
                 break;
@@ -117,147 +138,117 @@ public partial class Login_Page : ContentPage
 
     private void AnimateBottomSheet(double targetY)
     {
-        uint duration = 250; // ระยะเวลาแอนิเมชัน (ms)
+        uint duration = 300;
         BottomSheet.TranslateTo(0, targetY, duration, Easing.CubicOut);
     }
 
-    private void ServerBtn_Clicked(object sender, EventArgs e)
-    {
-        if (!_isOpen)
-        {
-            _isOpen = true;
-            BottomSheet.IsVisible = true;
-            AnimateBottomSheet(0); // เลื่อนขึ้นมา
-        }
-        else
-        {
-            AnimateBottomSheet(_sheetHeight); // เลื่อนลงไปล่างสุด
-            _isOpen = false;
-        }
-    }
-
+    // --- เชื่อมต่อ Server ---
     private async void ConnectBtn_Clicked(object sender, EventArgs e)
     {
-        var popup = new ProgressPopup();
-        this.ShowPopup(popup);
-        bool internet = await CheckServerConnection($"{txt_server.Text}/api/CurrentTime/get");
-        if (internet)
+        if (string.IsNullOrWhiteSpace(txt_server.Text))
         {
-            if (txt_server.Text.Trim() != "")
-            {
-                
-                int message = await Server.Save(new ServerModel()
-                {
-                    Id = 1,
-                    server = txt_server.Text.Trim()
-                });
+            await DisplayAlert("", "Please insert URL", "OK");
+            return;
+        }
 
-                Server = new ServerService();
-                Authen = new AuthenService();
-                Employee = new EmployeeService();
+        ShowLoading(true);
 
-                ServerModel servers = Server.Get(1).Result;
-                if (servers != null)
-                {
-                    LogInBtn.IsEnabled = true;
-                    AnimateBottomSheet(_sheetHeight); // เลื่อนลงไปล่างสุด
-                    _isOpen = false;
-                }               
-            }
-            else
-            {
-                MainThread.BeginInvokeOnMainThread(async () =>
-                {
-                    await DisplayAlert("", "กรุณาใส่ url server", "ตกลง");
-                });
-            }           
+        string url = $"{txt_server.Text.TrimEnd('/')}/api/CurrentTime/get";
+        bool isConnected = await CheckServerConnectionAsync(url);
+
+        if (isConnected)
+        {
+            await Server.Save(new ServerModel { Id = 1, server = txt_server.Text.Trim() });
+            LogInBtn.IsEnabled = true;
+            ToggleBottomSheet();
+            await DisplayAlert("", "Connect Success!", "OK");
         }
         else
         {
-            MainThread.BeginInvokeOnMainThread(async () =>
-            {
-                await DisplayAlert("", "Cann't connect to server", "OK");
-            });
+            await DisplayAlert("", "Cannot Connect to Server", "OK");
         }
-        await popup.CloseAsync();
+
+        ShowLoading(false);
     }
 
-    public async Task<bool> CheckServerConnection(string serverUrl)
+    private async Task<bool> CheckServerConnectionAsync(string url)
     {
         try
         {
-            var handler = new HttpClientHandler
-            {
-                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
-            };
-            var client = new HttpClient(handler);
-                         
-            var response = await client.GetAsync(serverUrl);
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(20));
+            var response = await _httpClient.GetAsync(url, cts.Token);
             return response.IsSuccessStatusCode;
         }
-        catch(Exception ex)
+        catch (OperationCanceledException)
         {
-            Console.WriteLine(ex.Message);
+            return false;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[CheckServer] {ex.Message}");
             return false;
         }
     }
+
+    // --- Login ---
     private async void LogInBtn_Clicked(object sender, EventArgs e)
     {
-        LogInBtn.IsEnabled = false;
-        if (txt_name.Text.Trim().Length > 0 && txt_password.Text.Trim().Length > 0)
+        if (string.IsNullOrWhiteSpace(txt_name.Text) || string.IsNullOrWhiteSpace(txt_password.Text))
         {
-            var popup = new ProgressPopup();
-            this.ShowPopup(popup);
-            try
-            {                
-                AuthenModel authen = await Authen.ActiveDirectoryAuthenticate(txt_name.Text, txt_password.Text);
-                if (authen.authen == true)
+            await DisplayAlert("", "Please Input User and Password", "OK");
+            return;
+        }
+
+        LogInBtn.IsEnabled = false;
+        ShowLoading(true);
+
+        try
+        {
+            var authen = await Authen.ActiveDirectoryAuthenticate(txt_name.Text.Trim(), txt_password.Text.Trim());
+
+            if (authen?.authen == true)
+            {
+                var employees = await Employee.GetEmployees();
+                var emp = employees.FirstOrDefault(x =>
+                    x.name.Equals(authen.user, StringComparison.OrdinalIgnoreCase));
+
+                if (emp != null)
                 {
-                    List<EmployeeModel> employees = await Employee.GetEmployees();
-                    if (employees.Any(a => a.name == authen.user))
+                    var login = new LoginModel
                     {
-                        LoginModel login = new LoginModel()
-                        {
-                            Id = 1,
-                            name = txt_name.Text.Trim(),
-                            password = txt_password.Text.Trim(),
-                            emp_id = employees.Where(w => w.name.ToLower() == authen.user.ToLower()).Select(s => s.emp_id).FirstOrDefault()
-                        };
-                        await Login.Save(login);
-                        await Shell.Current.GoToAsync("Home_Page");
-                    }
-                    else
-                    {
-                        MainThread.BeginInvokeOnMainThread(async () =>
-                        {
-                            await DisplayAlert("", "Not Authorized", "OK");
-                        });
-                    }
+                        Id = 1,
+                        name = txt_name.Text.Trim(),
+                        password = txt_password.Text.Trim(),
+                        emp_id = emp.emp_id
+                    };
+
+                    await Login.Save(login);
+                    await Shell.Current.GoToAsync("Home_Page");
                 }
                 else
                 {
-                    MainThread.BeginInvokeOnMainThread(async () =>
-                    {
-                        await DisplayAlert("", "Name or Password is incorrect ", "OK");
-                    });
+                    await DisplayAlert("", "ไม่มีสิทธิ์เข้าใช้งาน", "ตกลง");
                 }
             }
-            catch (Exception ex) 
+            else
             {
-                MainThread.BeginInvokeOnMainThread(async () =>
-                {
-                    await DisplayAlert("", ex.Message, "OK");
-                });
+                await DisplayAlert("", "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง", "ตกลง");
             }
-            await popup.CloseAsync();
         }
-        else
+        catch (Exception ex)
         {
-            MainThread.BeginInvokeOnMainThread(async () =>
-            {
-                await DisplayAlert("", "กรุณากรอกให้ครบ", "OK");
-            });
+            await DisplayAlert("", $"เกิดข้อผิดพลาด: {ex.Message}", "ตกลง");
         }
-        LogInBtn.IsEnabled = true;
+        finally
+        {
+            ShowLoading(false);
+            LogInBtn.IsEnabled = true;
+        }
+    }
+
+    // --- ฟังก์ชันช่วย ---
+    private void ShowLoading(bool show)
+    {
+        LoadingOverlay.IsVisible = show;
     }
 }

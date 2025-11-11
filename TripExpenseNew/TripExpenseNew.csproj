@@ -38,7 +38,10 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 	</PropertyGroup>
 
-
+	<PropertyGroup Condition="'$(TargetFramework)'=='net9.0-ios'">
+		<SkipStaticLibraryValidation>true</SkipStaticLibraryValidation>
+	</PropertyGroup>
+	
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-android35.0|AnyCPU'">
 	  <AndroidKeyStore>True</AndroidKeyStore>
 		<AndroidSigningKeyStore>D:\keystore\te_release_key.keystore</AndroidSigningKeyStore>
@@ -67,9 +70,9 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)'=='net9.0-ios'">
-	  <ProvisioningType>manual</ProvisioningType>
-	  <CodesignKey>iPhone Distribution: CONTROLOGIC COMPANY LIMITED (3TLTUL4RC6)</CodesignKey>
-	  <CodesignProvision></CodesignProvision>
+	  <ProvisioningType>automatic</ProvisioningType>
+	  <CodesignKey>Apple Development: Created via API (ZLTNNGF66L)</CodesignKey>
+	  <CodesignProvision>VS: com.contrologic.tripexpensenew Development</CodesignProvision>
 	</PropertyGroup>
 
 	<ItemGroup>
