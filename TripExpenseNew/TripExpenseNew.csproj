@@ -70,9 +70,9 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)'=='net9.0-ios'">
-	  <ProvisioningType>automatic</ProvisioningType>
-	  <CodesignKey>Apple Development: Created via API (ZLTNNGF66L)</CodesignKey>
-	  <CodesignProvision>VS: com.contrologic.tripexpensenew Development</CodesignProvision>
+	  <ProvisioningType>manual</ProvisioningType>
+	  <CodesignKey>iPhone Distribution: CONTROLOGIC COMPANY LIMITED (3TLTUL4RC6)</CodesignKey>
+	  <CodesignProvision>tripexpensenew</CodesignProvision>
 	</PropertyGroup>
 
 	<ItemGroup>
