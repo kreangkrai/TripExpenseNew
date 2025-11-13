@@ -320,7 +320,7 @@ public partial class CompanyPage : ContentPage
         {
             MainThread.BeginInvokeOnMainThread(async () =>
             {
-                await DisplayAlert("", "Invalid QR Code", "ตกลง");
+                await DisplayAlert("", "Invalid QR Code", "OK");
             });
         }
         ScanQR.IsEnabled = true;
@@ -357,7 +357,7 @@ public partial class CompanyPage : ContentPage
                     {
                         MainThread.BeginInvokeOnMainThread(async () =>
                         {
-                            await DisplayAlert("", "กรุณาใส่ข้อมูล", "OK");
+                            await DisplayAlert("", "Please input current location or location mileage", "OK");
                         });
                     }
                 }
@@ -366,7 +366,7 @@ public partial class CompanyPage : ContentPage
             {
                 MainThread.BeginInvokeOnMainThread(async () =>
                 {
-                    await DisplayAlert("", "ไม่มีข้อมูลการยืมรถ กรุณาติดต่อแอดมิน", "OK");
+                    await DisplayAlert("", "There is no car borrow information. Please contact the admin.", "OK");
                 });
             }
         }

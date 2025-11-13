@@ -986,7 +986,7 @@ namespace TripExpenseNew.CompanyPage
                                 {
                                     MainThread.BeginInvokeOnMainThread(async () =>
                                     {
-                                        await DisplayAlert("", "กรุณาใส่ข้อมูลไมล์ให้ถูกต้อง", "ตกลง");
+                                        await DisplayAlert("", "Please input mileage start", "OK");
                                     });
                                 }
                             }
@@ -994,7 +994,7 @@ namespace TripExpenseNew.CompanyPage
                             {
                                 MainThread.BeginInvokeOnMainThread(async () =>
                                 {
-                                    await DisplayAlert("", "กรุณาใส่ข้อมูล", "ตกลง");
+                                    await DisplayAlert("", "Please input current location or location mileage", "OK");
                                 });
                             }
                         }
@@ -1164,7 +1164,7 @@ namespace TripExpenseNew.CompanyPage
                             {
                                 MainThread.BeginInvokeOnMainThread(async () =>
                                 {
-                                    await DisplayAlert("", "กรุณากรอกข้อมูล", "OK");
+                                    await DisplayAlert("", "Please input gas data", "OK");
                                 });
                             }
                             location_mode = "GAS";
@@ -1193,7 +1193,7 @@ namespace TripExpenseNew.CompanyPage
                             {
                                 MainThread.BeginInvokeOnMainThread(async () =>
                                 {
-                                    await DisplayAlert("", "กรุณากรอกข้อมูล", "OK");
+                                    await DisplayAlert("", "Please input gas data", "OK");
                                 });
                             }
                             location_mode = "GAS";

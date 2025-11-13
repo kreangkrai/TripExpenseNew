@@ -161,7 +161,7 @@ public partial class PersonalPage : ContentPage
                 {
                     MainThread.BeginInvokeOnMainThread(async () =>
                     {
-                        await DisplayAlert("", "กรุณาใส่ข้อมูล", "ตกลง");
+                        await DisplayAlert("", "Please input current location or location mileage", "OK");
                     });
                 }
             }

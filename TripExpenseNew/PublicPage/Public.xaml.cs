@@ -835,7 +835,7 @@ namespace TripExpenseNew.PublicPage
                             {
                                 MainThread.BeginInvokeOnMainThread(async () =>
                                 {
-                                    await DisplayAlert("", "กรุณาใส่ข้อมูล", "ตกลง");
+                                    await DisplayAlert("", "Please input current location", "OK");
                                 });
                             }
                         }

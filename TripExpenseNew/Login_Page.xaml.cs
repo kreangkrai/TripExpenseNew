@@ -77,7 +77,7 @@ public partial class Login_Page : ContentPage
         {
             await MainThread.InvokeOnMainThreadAsync(async () =>
             {
-                await DisplayAlert("ข้อผิดพลาด", $"โหลดข้อมูลล้มเหลว: {ex.Message}", "OK");
+                await DisplayAlert("Error", $"Error: {ex.Message}", "OK");
             });
         }
     }
@@ -227,17 +227,17 @@ public partial class Login_Page : ContentPage
                 }
                 else
                 {
-                    await DisplayAlert("", "ไม่มีสิทธิ์เข้าใช้งาน", "ตกลง");
+                    await DisplayAlert("", "Not Authorized", "OK");
                 }
             }
             else
             {
-                await DisplayAlert("", "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง", "ตกลง");
+                await DisplayAlert("", "user or password incorrect", "OK");
             }
         }
         catch (Exception ex)
         {
-            await DisplayAlert("", $"เกิดข้อผิดพลาด: {ex.Message}", "ตกลง");
+            await DisplayAlert("", $"Error: {ex.Message}", "OK");
         }
         finally
         {

@@ -351,7 +351,7 @@ public partial class PassengerPersonalStopPage : ContentPage
         {
             MainThread.BeginInvokeOnMainThread(async () =>
             {
-                await DisplayAlert("", "กรุณาใส่ข้อมูล", "ตกลง");
+                await DisplayAlert("", "Please input current location", "OK");
             });
         }
         ConfirmBtn.IsEnabled = true;
@@ -390,7 +390,7 @@ public partial class PassengerPersonalStopPage : ContentPage
                 {
                     MainThread.BeginInvokeOnMainThread(async () =>
                     {
-                        await DisplayAlert("", "เวลาไม่ถูกต้อง", "ตกลง");
+                        await DisplayAlert("", "Current time incorrect", "OK");
                     });
                 }
             }

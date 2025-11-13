@@ -471,7 +471,7 @@ public partial class CompanyForceStop : ContentPage
                 {
                     MainThread.BeginInvokeOnMainThread(async () =>
                     {
-                        await DisplayAlert("", "กรุณาใส่ข้อมูลให้ถูกต้อง", "OK");
+                        await DisplayAlert("", "Please input current mileage", "OK");
                     });
                 }
             }
@@ -488,7 +488,7 @@ public partial class CompanyForceStop : ContentPage
         {
             MainThread.BeginInvokeOnMainThread(async () =>
             {
-                await DisplayAlert("", "กรุณาใส่ข้อมูล", "OK");
+                await DisplayAlert("", "Please input current location or location mileage", "OK");
             });
         }
         ConfirmBtn.IsEnabled = true;

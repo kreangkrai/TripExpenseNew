@@ -468,7 +468,7 @@ public partial class PersonalForceStop : ContentPage
                 {
                     MainThread.BeginInvokeOnMainThread(async () =>
                     {
-                        await DisplayAlert("", "กรุณาใส่ข้อมูลให้ถูกต้อง", "ตกลง");
+                        await DisplayAlert("", "Please input current mileage stop", "OK");
                     });
                 }
             }
@@ -485,7 +485,7 @@ public partial class PersonalForceStop : ContentPage
         {
             MainThread.BeginInvokeOnMainThread(async () =>
             {
-                await DisplayAlert("", "กรุณาใส่ข้อมูล", "ตกลง");
+                await DisplayAlert("", "Please input current location or location mileage", "OK");
             });
         }
         ConfirmBtn.IsEnabled = true;
@@ -526,7 +526,7 @@ public partial class PersonalForceStop : ContentPage
                 {
                     MainThread.BeginInvokeOnMainThread(async () =>
                     {
-                        await DisplayAlert("", "เวลาไม่ถูกต้อง", "ตกลง");
+                        await DisplayAlert("", "Current time incorrect", "OK");
                     });
                 }
             }
