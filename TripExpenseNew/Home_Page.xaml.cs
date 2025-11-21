@@ -25,16 +25,18 @@ public partial class Home_Page : ContentPage
     private ILastTrip LastTrip;
     private ILogin Login;
     private IEmployee Employee;
+    private IPrivacy Privacy;
     CultureInfo cultureinfo = new CultureInfo("en-us");
     LoginModel emp_id = new LoginModel();
     List<LastTripViewModel> trips = new List<LastTripViewModel>();
-    public Home_Page(ILastTrip _LastTrip, ILogin _Login, IEmployee _Employee, IVersion _Version)
+    public Home_Page(ILastTrip _LastTrip, ILogin _Login, IEmployee _Employee, IVersion _Version, IPrivacy _Privacy)
     {
         InitializeComponent();
         LastTrip = _LastTrip;
         Login = _Login;
         Employee = _Employee;
         Version = _Version;
+        Privacy = _Privacy;
     }
 
     [Obsolete]
@@ -57,7 +59,24 @@ public partial class Home_Page : ContentPage
             }
             else
             {
+                //Check Privacy
 
+                PrivacyModel privacy = await Privacy.GetPrivacy(0);
+                if (privacy != null)
+                {
+                    if (privacy.accept == 1)
+                    {
+                        AddTripBtn.IsEnabled = true;
+                    }
+                    else
+                    {
+                        AddTripBtn.IsEnabled = false;
+                    }
+                }
+                else
+                {
+                    AddTripBtn.IsEnabled = false;
+                }
 
                 List<EmployeeModel> employees = await Employee.GetEmployees();
                 emp_id = await Login.GetLogin(1);

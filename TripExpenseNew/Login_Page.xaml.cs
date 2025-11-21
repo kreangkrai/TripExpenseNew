@@ -4,6 +4,7 @@ using CommunityToolkit.Maui.Views;
 using Microsoft.Maui.Controls;
 using Plugin.LocalNotification;
 using System.Net.Http;
+using TripExpenseNew.CustomPopup;
 using TripExpenseNew.DBInterface;
 using TripExpenseNew.DBModels;
 using TripExpenseNew.DBService;
@@ -13,20 +14,20 @@ using TripExpenseNew.Services;
 
 public partial class Login_Page : ContentPage
 {
-    private readonly IAuthen Authen;
+    private IAuthen Authen;
     private readonly ILogin Login;
     private readonly IServer Server;
     private readonly IEmployee Employee;
     private readonly IInternet Internet;
-
+    private IPrivacy Privacy;
     private bool _isOpen = false;
     private double _startY;
     private double _sheetHeight = 600;
 
-    // แชร์ HttpClient (ปลอดภัย + ไม่ค้าง)
     private static readonly HttpClient _httpClient = CreateHttpClient();
+    PrivacyModel privacy = new PrivacyModel();
 
-    public Login_Page(IAuthen _Authen, ILogin _Login, IServer _Server, IEmployee _Employee, IInternet _Internet)
+    public Login_Page(IAuthen _Authen, ILogin _Login, IServer _Server, IEmployee _Employee, IInternet _Internet, IPrivacy _Privacy)
     {
         InitializeComponent();
         Authen = _Authen;
@@ -34,8 +35,10 @@ public partial class Login_Page : ContentPage
         Server = _Server;
         Employee = _Employee;
         Internet = _Internet;
+        Privacy = _Privacy;
 
         _ = LoadInitialDataAsync();
+
     }
 
     private static HttpClient CreateHttpClient()
@@ -85,6 +88,19 @@ public partial class Login_Page : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
+        privacy = await Privacy.GetPrivacy(1);
+        if (privacy != null)
+        {
+            if (privacy.accept != 1)
+            {
+                var result = await this.ShowPopupAsync(new PrivacyPolicyPopup());
+            }
+        }
+        else
+        {
+            var result = await this.ShowPopupAsync(new PrivacyPolicyPopup());
+        }
+
         await RequestPermissionsAsync();
     }
 
@@ -246,6 +262,7 @@ public partial class Login_Page : ContentPage
         }
     }
 
+ 
     // --- ฟังก์ชันช่วย ---
     private void ShowLoading(bool show)
     {

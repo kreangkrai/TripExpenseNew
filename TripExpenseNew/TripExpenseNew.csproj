@@ -48,11 +48,11 @@
 	  <AndroidSigningStorePass>P@ssw0rd</AndroidSigningStorePass>
 	  <AndroidSigningKeyAlias>te_ctl</AndroidSigningKeyAlias>
 	  <AndroidSigningKeyPass>P@ssw0rd</AndroidSigningKeyPass>
-		<AndroidPackageFormat>apk</AndroidPackageFormat>
+		<AndroidPackageFormat>aab</AndroidPackageFormat>
 		<EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
 		<AndroidUseAapt2>True</AndroidUseAapt2>
 		<AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
-		<DebugSymbols>False</DebugSymbols>
+		<DebugSymbols>True</DebugSymbols>
 		<EnableLLVM>False</EnableLLVM>
 	</PropertyGroup>
 
@@ -62,7 +62,7 @@
 		<AndroidSigningStorePass>P@ssw0rd</AndroidSigningStorePass>
 		<AndroidSigningKeyAlias>te_ctl</AndroidSigningKeyAlias>
 		<AndroidSigningKeyPass>P@ssw0rd</AndroidSigningKeyPass>
-		<AndroidPackageFormat>apk</AndroidPackageFormat>
+		<AndroidPackageFormat>aab</AndroidPackageFormat>
 		<AndroidUseAapt2>True</AndroidUseAapt2>
 		<AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
 		<DebugSymbols>True</DebugSymbols>
@@ -203,6 +203,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="CustomPersonalPopup\PersonalStopPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="CustomPopup\PrivacyPolicyPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="CustomPopup\ProgressPopup.xaml">
