@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TripExpenseNew.DBModels;
+using TripExpenseNew.Models;
 
-namespace TripExpenseNew.DBInterface
+namespace TripExpenseNew.Interface
 {
     public interface IPrivacy
     {
-        Task<int> Save(PrivacyModel privacy);
-        Task<PrivacyModel> GetPrivacy(int id);
+        Task<List<PrivacyModel>> GetPrivacies();
+        Task<string> Insert(PrivacyModel model);
+
     }
 }

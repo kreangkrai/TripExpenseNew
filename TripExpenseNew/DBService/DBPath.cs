@@ -10,7 +10,7 @@ namespace TripExpenseNew.DBService
     {
         public static string GetDatabasePath()
         {
-            string dbName = "tripexpensv4.db3";
+            string dbName = "tripexpensv3.db3";
             string dbPath;
 
             if (DeviceInfo.Platform == DevicePlatform.Android)

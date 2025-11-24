@@ -52,7 +52,7 @@
 		<EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
 		<AndroidUseAapt2>True</AndroidUseAapt2>
 		<AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
-		<DebugSymbols>True</DebugSymbols>
+		<DebugSymbols>False</DebugSymbols>
 		<EnableLLVM>False</EnableLLVM>
 	</PropertyGroup>
 

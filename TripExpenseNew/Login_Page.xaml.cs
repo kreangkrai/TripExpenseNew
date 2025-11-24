@@ -17,26 +17,21 @@ public partial class Login_Page : ContentPage
     private IAuthen Authen;
     private readonly ILogin Login;
     private readonly IServer Server;
-    private readonly IEmployee Employee;
-    private readonly IInternet Internet;
+    private IEmployee Employee;
+    private IInternet Internet;
     private IPrivacy Privacy;
     private bool _isOpen = false;
     private double _startY;
     private double _sheetHeight = 600;
 
     private static readonly HttpClient _httpClient = CreateHttpClient();
-    PrivacyModel privacy = new PrivacyModel();
-
-    public Login_Page(IAuthen _Authen, ILogin _Login, IServer _Server, IEmployee _Employee, IInternet _Internet, IPrivacy _Privacy)
+    List<PrivacyModel> privacies = new List<PrivacyModel>();
+    public Login_Page(ILogin _Login, IServer _Server)
     {
         InitializeComponent();
-        Authen = _Authen;
         Login = _Login;
         Server = _Server;
-        Employee = _Employee;
-        Internet = _Internet;
-        Privacy = _Privacy;
-
+       
         _ = LoadInitialDataAsync();
 
     }
@@ -65,8 +60,15 @@ public partial class Login_Page : ContentPage
                 LogInBtn.IsEnabled = false;
                 return;
             }
+            else
+            {
+                Employee = new EmployeeService();
+                Privacy = new PrivacyService();
+                Authen = new AuthenService();
+                Internet = new InternetService();
+            }
 
-            var login = await Login.GetLogin(1);
+                var login = await Login.GetLogin(1);
             if (login != null)
             {
                 txt_name.Text = login.name;
@@ -88,19 +90,7 @@ public partial class Login_Page : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        privacy = await Privacy.GetPrivacy(1);
-        if (privacy != null)
-        {
-            if (privacy.accept != 1)
-            {
-                var result = await this.ShowPopupAsync(new PrivacyPolicyPopup());
-            }
-        }
-        else
-        {
-            var result = await this.ShowPopupAsync(new PrivacyPolicyPopup());
-        }
-
+           
         await RequestPermissionsAsync();
     }
 
@@ -177,6 +167,7 @@ public partial class Login_Page : ContentPage
             await Server.Save(new ServerModel { Id = 1, server = txt_server.Text.Trim() });
             LogInBtn.IsEnabled = true;
             ToggleBottomSheet();
+
             await DisplayAlert("", "Connect Success!", "OK");
         }
         else
@@ -215,6 +206,11 @@ public partial class Login_Page : ContentPage
             return;
         }
 
+        Employee = new EmployeeService();
+        Privacy = new PrivacyService();
+        Authen = new AuthenService();
+        Internet = new InternetService();
+
         LogInBtn.IsEnabled = false;
         ShowLoading(true);
 
@@ -239,6 +235,23 @@ public partial class Login_Page : ContentPage
                     };
 
                     await Login.Save(login);
+                   
+
+                    // Check Privacy
+                    privacies = await Privacy.GetPrivacies();
+                    if (privacies.Count > 0)
+                    {
+                        PrivacyModel privacy = privacies.Where(w=>w.emp_id == emp.emp_id).FirstOrDefault();
+                        if (privacy == null)
+                        {
+                            var result = await this.ShowPopupAsync(new PrivacyPolicyPopup(emp.emp_id,emp.name));
+                        }
+                    }
+                    else
+                    {
+                        var result = await this.ShowPopupAsync(new PrivacyPolicyPopup(emp.emp_id, emp.name));
+                    }
+
                     await Shell.Current.GoToAsync("Home_Page");
                 }
                 else

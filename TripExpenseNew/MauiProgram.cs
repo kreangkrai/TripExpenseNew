@@ -54,7 +54,7 @@ namespace TripExpenseNew
             builder.Services.AddTransient<IInternet, InternetService>();
             builder.Services.AddTransient<IAndroid, AndroidService>();
             builder.Services.AddTransient<IKalman, KalmanService>();
-            
+            builder.Services.AddTransient<IPrivacy, PrivacyService>();
 
             builder.Services.AddTransient<Personal>();
             builder.Services.AddTransient<PersonalPage.PersonalPage>();
@@ -76,8 +76,7 @@ namespace TripExpenseNew
             builder.Services.AddSingleton<DBInterface.ICompany,DBService.CompanyService>();
             builder.Services.AddSingleton<DBInterface.IMileage, DBService.MileageService>();
             builder.Services.AddSingleton<DBInterface.IPublic, DBService.PublicService>();
-            builder.Services.AddTransient<DBInterface.IPrivacy, DBService.PrivacyService>();
-
+            
             return builder.Build();
         }
     }

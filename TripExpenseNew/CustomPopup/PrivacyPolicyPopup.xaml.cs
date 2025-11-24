@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Maui.Views;
-using TripExpenseNew.DBInterface;
-using TripExpenseNew.DBService;
+using TripExpenseNew.Interface;
+using TripExpenseNew.Models;
+using TripExpenseNew.Services;
 
 namespace TripExpenseNew.CustomPopup;
 
@@ -8,10 +9,14 @@ public partial class PrivacyPolicyPopup : Popup
 {
     private IPrivacy Privacy;
     private readonly TaskCompletionSource<bool> _tcs = new();
-    public PrivacyPolicyPopup()
+    string emp_d = string.Empty;
+    string name = string.Empty;
+    public PrivacyPolicyPopup(string _emp_id,string _name)
 	{  
 		InitializeComponent();
         Privacy = new PrivacyService();
+        emp_d = _emp_id;
+        name = _name;
         AcceptCheckBox.CheckedChanged += AcceptCheckBox_CheckedChanged;
     }
 
@@ -41,9 +46,12 @@ public partial class PrivacyPolicyPopup : Popup
     {
         AcceptBtn.IsEnabled = false;
 
-        int result = await Privacy.Save(new DBModels.PrivacyModel()
+        string result = await Privacy.Insert(new PrivacyModel()
         {
-            accept = 1,
+            emp_id = emp_d,
+            name = name,
+            date = DateTime.Now,
+
         });
 
         Close(result);

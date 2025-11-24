@@ -58,26 +58,7 @@ public partial class Home_Page : ContentPage
                 await Shell.Current.GoToAsync("Login_Page");
             }
             else
-            {
-                //Check Privacy
-
-                PrivacyModel privacy = await Privacy.GetPrivacy(0);
-                if (privacy != null)
-                {
-                    if (privacy.accept == 1)
-                    {
-                        AddTripBtn.IsEnabled = true;
-                    }
-                    else
-                    {
-                        AddTripBtn.IsEnabled = false;
-                    }
-                }
-                else
-                {
-                    AddTripBtn.IsEnabled = false;
-                }
-
+            {              
                 List<EmployeeModel> employees = await Employee.GetEmployees();
                 emp_id = await Login.GetLogin(1);
                 trips = await GetLastTrip();
@@ -94,6 +75,19 @@ public partial class Home_Page : ContentPage
                 {
                     lbl_name.Text = name;
                     lbl_lastname.Text = "";
+                }
+
+                //Check Privacy
+
+                List<PrivacyModel> privacies = await Privacy.GetPrivacies();
+                PrivacyModel privacy = privacies.Where(w=>w.emp_id == emp_id.emp_id).FirstOrDefault();
+                if (privacy != null)
+                {
+                    AddTripBtn.IsEnabled = true;
+                }
+                else
+                {
+                    AddTripBtn.IsEnabled = false;
                 }
 
                 if (trips.Count > 0)
