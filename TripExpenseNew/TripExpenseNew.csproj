@@ -205,6 +205,9 @@
 	  <MauiXaml Update="CustomPersonalPopup\PersonalStopPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="CustomPopup\PolicyPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="CustomPopup\PrivacyPolicyPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

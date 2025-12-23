@@ -9,6 +9,8 @@ using TripExpenseNew.DBService;
 using TripExpenseNew.CustomPopup;
 using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Maui.Extensions;
+using Plugin.LocalNotification;
+
 
 #if IOS
 using CoreLocation;
@@ -90,22 +92,32 @@ public partial class PassengerPersonalStopPage : ContentPage
         var status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
         if (status != PermissionStatus.Granted)
         {
-            status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
-            if (status != PermissionStatus.Granted)
+            var result = await this.ShowPopupAsync(new PolicyPopup());
+            if (result != null)
             {
-                return;
+                await RequestPermissionsAsync();
             }
         }
 
-        status = await Permissions.CheckStatusAsync<Permissions.LocationAlways>();
-        if (status != PermissionStatus.Granted)
-        {
-            status = await Permissions.RequestAsync<Permissions.LocationAlways>();
-            if (status != PermissionStatus.Granted)
-            {
-                return;
-            }
-        }
+        //var status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
+        //if (status != PermissionStatus.Granted)
+        //{
+        //    status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+        //    if (status != PermissionStatus.Granted)
+        //    {
+        //        return;
+        //    }
+        //}
+
+        //status = await Permissions.CheckStatusAsync<Permissions.LocationAlways>();
+        //if (status != PermissionStatus.Granted)
+        //{
+        //    status = await Permissions.RequestAsync<Permissions.LocationAlways>();
+        //    if (status != PermissionStatus.Granted)
+        //    {
+        //        return;
+        //    }
+        //}
 
         GetLocationCTL.Add(new LocationOtherModel()
         {
@@ -146,6 +158,34 @@ public partial class PassengerPersonalStopPage : ContentPage
         await GetLocation();
     }
 
+    private async Task RequestPermissionsAsync()
+    {
+        // Location
+
+        var status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
+        if (status != PermissionStatus.Granted)
+        {
+
+            await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+
+        }
+        status = await Permissions.CheckStatusAsync<Permissions.LocationAlways>();
+        if (status == PermissionStatus.Granted)
+        {
+            return;
+        }
+
+        if (status != PermissionStatus.Granted)
+        {
+
+            await Permissions.RequestAsync<Permissions.LocationAlways>();
+
+        }
+
+        // Notification
+        if (!await LocalNotificationCenter.Current.AreNotificationsEnabled())
+            await LocalNotificationCenter.Current.RequestNotificationPermission();
+    }
     private async Task GetLocation()
     {
         try

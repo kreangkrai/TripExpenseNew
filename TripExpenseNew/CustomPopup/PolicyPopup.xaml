@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup
+    x:Class="TripExpenseNew.CustomPopup.PolicyPopup"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit">
+
+    <Grid
+        Padding="20"
+        BackgroundColor="#80000000"
+        HorizontalOptions="Center"
+        MaximumWidthRequest="420"
+        RowDefinitions="Auto"
+        VerticalOptions="Center">
+
+        <Frame
+            Padding="28"
+            BackgroundColor="White"
+            CornerRadius="20"
+            HasShadow="True"
+            HorizontalOptions="Center"
+            VerticalOptions="Center">
+
+            <VerticalStackLayout Spacing="22">
+
+                <!--  หัวข้อ  -->
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="26"
+                    HorizontalTextAlignment="Center"
+                    Text="Location Permission"
+                    TextColor="#1A73E8" />
+
+                <!--  ข้อความยาว ๆ  -->
+                <ScrollView MaximumHeightRequest="380">
+                    <Label FontSize="16" LineHeight="1.6">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="TripExpense collects location data to enable automatic trip tracking" />
+                                <Span Text="calculate distance and speed even when the app is closed or not in use." />
+                                <Span Text="Do you allow this?" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </ScrollView>
+
+                <!--  Checkbox + ข้อความยอมรับ  -->
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                    <CheckBox
+                        x:Name="AcceptCheckBox"
+                        Scale="1.3"
+                        VerticalOptions="Center"
+                        Color="#1A73E8" />
+
+                    <Label
+                        Grid.Column="1"
+                        FontSize="16"
+                        VerticalTextAlignment="Center">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="I have read and accept the " />
+                                <Span
+                                    Text="Privacy Policy"
+                                    TextColor="#1A73E8"
+                                    TextDecorations="Underline">
+                                    <Span.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="OnPrivacyPolicyLinkTapped" />
+                                    </Span.GestureRecognizers>
+                                </Span>
+                                <Span Text=" regarding background location usage." />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </Grid>
+
+                <!--  ปุ่ม  -->
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="20">
+                    <!--<Button
+                        x:Name="NotNowBtn"
+                        Grid.Column="0"
+                        BackgroundColor="#EEEEEE"
+                        Clicked="NotNowBtn_Clicked"
+                        CornerRadius="12"
+                        FontSize="16"
+                        HeightRequest="54"
+                        Text="Not Now"
+                        TextColor="Black" />-->
+
+                    <Button
+                        x:Name="AcceptBtn"
+                        Grid.Column="1"
+                        BackgroundColor="#1A73E8"
+                        Clicked="AcceptBtn_Clicked"
+                        CornerRadius="12"
+                        FontAttributes="Bold"
+                        FontSize="17"
+                        HeightRequest="54"
+                        IsEnabled="False"
+                        Opacity="0.5"
+                        Text="I Accept"
+                        TextColor="White" />
+                </Grid>
+
+            </VerticalStackLayout>
+        </Frame>
+    </Grid>
+</toolkit:Popup>

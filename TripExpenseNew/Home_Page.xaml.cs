@@ -25,18 +25,18 @@ public partial class Home_Page : ContentPage
     private ILastTrip LastTrip;
     private ILogin Login;
     private IEmployee Employee;
-    private IPrivacy Privacy;
+    //private IPrivacy Privacy;
     CultureInfo cultureinfo = new CultureInfo("en-us");
     LoginModel emp_id = new LoginModel();
     List<LastTripViewModel> trips = new List<LastTripViewModel>();
-    public Home_Page(ILastTrip _LastTrip, ILogin _Login, IEmployee _Employee, IVersion _Version, IPrivacy _Privacy)
+    public Home_Page(ILastTrip _LastTrip, ILogin _Login, IEmployee _Employee, IVersion _Version)
     {
         InitializeComponent();
         LastTrip = _LastTrip;
         Login = _Login;
         Employee = _Employee;
         Version = _Version;
-        Privacy = _Privacy;
+        //Privacy = _Privacy;
     }
 
     [Obsolete]
@@ -53,7 +53,7 @@ public partial class Home_Page : ContentPage
                 await Launcher.OpenAsync(new Uri("https://apps.apple.com/us/app/trip-expense-new/id6752587745"));
 #elif ANDROID
             await Application.Current.MainPage.DisplayAlert("", $"Please Update Android New Version {ver.version}", "OK");
-            await Launcher.OpenAsync(new Uri("https://play.google.com/store/apps/details?id=com.contrologic.tripexpensenew"));
+            await Launcher.OpenAsync(new Uri("https://play.google.com/store/apps/details?id=com.contrologic.trip_expense"));
 #endif
                 await Shell.Current.GoToAsync("Login_Page");
             }
@@ -79,16 +79,16 @@ public partial class Home_Page : ContentPage
 
                 //Check Privacy
 
-                List<PrivacyModel> privacies = await Privacy.GetPrivacies();
-                PrivacyModel privacy = privacies.Where(w=>w.emp_id == emp_id.emp_id).FirstOrDefault();
-                if (privacy != null)
-                {
-                    AddTripBtn.IsEnabled = true;
-                }
-                else
-                {
-                    AddTripBtn.IsEnabled = false;
-                }
+                //List<PrivacyModel> privacies = await Privacy.GetPrivacies();
+                //PrivacyModel privacy = privacies.Where(w=>w.emp_id == emp_id.emp_id).FirstOrDefault();
+                //if (privacy != null)
+                //{
+                //    AddTripBtn.IsEnabled = true;
+                //}
+                //else
+                //{
+                //    AddTripBtn.IsEnabled = false;
+                //}
 
                 if (trips.Count > 0)
                 {

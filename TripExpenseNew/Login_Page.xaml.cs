@@ -25,7 +25,7 @@ public partial class Login_Page : ContentPage
     private double _sheetHeight = 600;
 
     private static readonly HttpClient _httpClient = CreateHttpClient();
-    List<PrivacyModel> privacies = new List<PrivacyModel>();
+    //List<PrivacyModel> privacies = new List<PrivacyModel>();
     public Login_Page(ILogin _Login, IServer _Server)
     {
         InitializeComponent();
@@ -90,20 +90,41 @@ public partial class Login_Page : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-           
-        await RequestPermissionsAsync();
+
+        var status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
+        if (status != PermissionStatus.Granted)
+        {
+            var result = await this.ShowPopupAsync(new PolicyPopup());
+            if (result != null)
+            {
+                await RequestPermissionsAsync();
+            }
+        }
     }
 
     private async Task RequestPermissionsAsync()
     {
         // Location
+        
         var status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
         if (status != PermissionStatus.Granted)
+        {
+                       
             await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
-
+            
+        }
         status = await Permissions.CheckStatusAsync<Permissions.LocationAlways>();
+        if (status == PermissionStatus.Granted)
+        { 
+            return;
+        }
+
         if (status != PermissionStatus.Granted)
-            await Permissions.RequestAsync<Permissions.LocationAlways>();
+        {
+            
+                await Permissions.RequestAsync<Permissions.LocationAlways>();
+            
+        }
 
         // Notification
         if (!await LocalNotificationCenter.Current.AreNotificationsEnabled())
@@ -238,19 +259,19 @@ public partial class Login_Page : ContentPage
                    
 
                     // Check Privacy
-                    privacies = await Privacy.GetPrivacies();
-                    if (privacies.Count > 0)
-                    {
-                        PrivacyModel privacy = privacies.Where(w=>w.emp_id == emp.emp_id).FirstOrDefault();
-                        if (privacy == null)
-                        {
-                            var result = await this.ShowPopupAsync(new PrivacyPolicyPopup(emp.emp_id,emp.name));
-                        }
-                    }
-                    else
-                    {
-                        var result = await this.ShowPopupAsync(new PrivacyPolicyPopup(emp.emp_id, emp.name));
-                    }
+                    //privacies = await Privacy.GetPrivacies();
+                    //if (privacies.Count > 0)
+                    //{
+                    //    PrivacyModel privacy = privacies.Where(w=>w.emp_id == emp.emp_id).FirstOrDefault();
+                    //    if (privacy == null)
+                    //    {
+                    //        var result = await this.ShowPopupAsync(new PrivacyPolicyPopup(emp.emp_id,emp.name));
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    var result = await this.ShowPopupAsync(new PrivacyPolicyPopup(emp.emp_id, emp.name));
+                    //}
 
                     await Shell.Current.GoToAsync("Home_Page");
                 }

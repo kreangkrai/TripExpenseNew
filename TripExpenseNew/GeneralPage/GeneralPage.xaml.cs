@@ -56,33 +56,71 @@ public partial class GeneralPage : ContentPage
         var status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
         if (status != PermissionStatus.Granted)
         {
-            status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
-            if (status != PermissionStatus.Granted)
+            var result = await this.ShowPopupAsync(new PolicyPopup());
+            if (result != null)
             {
-                return;
+                await RequestPermissionsAsync();
             }
         }
+        //var status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
+        //if (status != PermissionStatus.Granted)
+        //{
+        //    status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+        //    if (status != PermissionStatus.Granted)
+        //    {
+        //        return;
+        //    }
+        //}
 
-        status = await Permissions.CheckStatusAsync<Permissions.LocationAlways>();
-        if (status != PermissionStatus.Granted)
-        {
-            status = await Permissions.RequestAsync<Permissions.LocationAlways>();
-            if (status != PermissionStatus.Granted)
-            {
-                MainThread.BeginInvokeOnMainThread(async () =>
-                {
-                    bool confirm = await DisplayAlert("", "Please select type of location permission to Always.", "OK", "Cancel");
-                    if (confirm || !confirm)
-                    {
-                        AppInfo.ShowSettingsUI();
-                    }
-                });
+        //status = await Permissions.CheckStatusAsync<Permissions.LocationAlways>();
+        //if (status != PermissionStatus.Granted)
+        //{
+        //    status = await Permissions.RequestAsync<Permissions.LocationAlways>();
+        //    if (status != PermissionStatus.Granted)
+        //    {
+        //        MainThread.BeginInvokeOnMainThread(async () =>
+        //        {
+        //            bool confirm = await DisplayAlert("", "Please select type of location permission to Always.", "OK", "Cancel");
+        //            if (confirm || !confirm)
+        //            {
+        //                AppInfo.ShowSettingsUI();
+        //            }
+        //        });
 
-                return;
-            }
-        }
+        //        return;
+        //    }
+        //}
 
         await GetLocation();
+    }
+
+    private async Task RequestPermissionsAsync()
+    {
+        // Location
+
+        var status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
+        if (status != PermissionStatus.Granted)
+        {
+
+            await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+
+        }
+        status = await Permissions.CheckStatusAsync<Permissions.LocationAlways>();
+        if (status == PermissionStatus.Granted)
+        {
+            return;
+        }
+
+        if (status != PermissionStatus.Granted)
+        {
+
+            await Permissions.RequestAsync<Permissions.LocationAlways>();
+
+        }
+
+        // Notification
+        if (!await LocalNotificationCenter.Current.AreNotificationsEnabled())
+            await LocalNotificationCenter.Current.RequestNotificationPermission();
     }
     private async void GeneralStart_Clicked(object sender, EventArgs e)
     {

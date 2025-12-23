@@ -37,29 +37,52 @@
                     <Label FontSize="16" LineHeight="1.6">
                         <Label.FormattedText>
                             <FormattedString>
-                                <Span Text="Trip Expense needs to access your location in the background to accurately record your trip route, even when:" />
-                                <Span FontAttributes="Bold" Text="&#10;&#10;• The app is closed&#10;• Screen is locked&#10;• You're using other apps" />
-                                <Span Text="&#10;&#10;Your location data will be securely uploaded and " />
-                                <Span FontAttributes="Bold" Text="permanently stored on our servers" />
-                                <Span Text=" so you can view your complete travel history anytime." />
-                                <Span Text="&#10;&#10;This location data " />
-                                <Span FontAttributes="Bold" Text="cannot be deleted or exported." />
-                                <Span Text="&#10;&#10;A persistent notification will always appear while tracking is active." />
+                                <Span
+                                    FontAttributes="Bold"
+                                    FontSize="Large"
+                                    Text="Important Notice About Background Location Access" />
+                                <Span Text="&#10;&#10;This app collects location data to enable automatic trip route and distance recording even when the app is closed or not in use. This is the core feature of Trip Expense." />
+                                <Span FontAttributes="Bold" Text="&#10;&#10;• Tracking starts when you press 'Start Trip'&#10;• Continues in the background until you press 'Stop Trip'" />
+                                <Span Text="&#10;&#10;Without background location access, the app cannot accurately record your full trip distance when the screen is locked, you're using other apps, or the app is closed." />
+                                <Span Text="&#10;&#10;Data handling:&#10;• Collected only during active trips (latitude, longitude, timestamps)&#10;• No collection when no trip is running&#10;• Securely stored on our servers with encryption for corporate auditing&#10;• Automatically and permanently deleted after 2 years&#10;• Linked only to your corporate account" />
+                                <Span Text="&#10;&#10;Your controls:&#10;• Stop tracking anytime via 'Stop Trip' or the persistent notification&#10;• Revoke permission in device settings&#10;• Deletion managed by your organization (e.g., upon separation or via IT/HR request)" />
+                                <Span Text="&#10;&#10;A persistent notification always appears while tracking is active." />
                                 <Span
                                     FontAttributes="Bold,Italic"
                                     Text="&#10;&#10;We do not sell or share your location data with any third parties."
                                     TextColor="#0B8043" />
-
                                 <Span Text="&#10;&#10;" />
-                                <Span FontAttributes="Italic" Text="You can still view your past trips without accepting this policy." />
+                                <Span FontAttributes="Italic" Text="You can view past trips without accepting this policy." />
                                 <Span
                                     FontAttributes="Bold,Italic"
-                                    Text=" However, starting a new trip requires background location access and acceptance of this policy."
+                                    Text=" Starting a new trip requires acceptance and background location access."
                                     TextColor="Red" />
+                                <Span Text="&#10;&#10;Questions? Contact: info@contrologic.co.th" />
                             </FormattedString>
                         </Label.FormattedText>
                     </Label>
                 </ScrollView>
+                <!--<FormattedString>
+                    <Span Text="Trip Expense needs to access your location in the background to accurately record your trip route, even when:" />
+                    <Span FontAttributes="Bold" Text="&#10;&#10;• The app is closed&#10;• Screen is locked&#10;• You're using other apps" />
+                    <Span Text="&#10;&#10;Your location data will be securely uploaded and " />
+                    <Span FontAttributes="Bold" Text="permanently stored on our servers" />
+                    <Span Text=" so you can view your complete travel history anytime." />
+                    <Span Text="&#10;&#10;This location data " />
+                    <Span FontAttributes="Bold" Text="cannot be deleted or exported." />
+                    <Span Text="&#10;&#10;A persistent notification will always appear while tracking is active." />
+                    <Span
+        FontAttributes="Bold,Italic"
+        Text="&#10;&#10;We do not sell or share your location data with any third parties."
+        TextColor="#0B8043" />
+
+                    <Span Text="&#10;&#10;" />
+                    <Span FontAttributes="Italic" Text="You can still view your past trips without accepting this policy." />
+                    <Span
+        FontAttributes="Bold,Italic"
+        Text=" However, starting a new trip requires background location access and acceptance of this policy."
+        TextColor="Red" />
+                </FormattedString>-->
 
                 <!--  Checkbox + ข้อความยอมรับ  -->
                 <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
