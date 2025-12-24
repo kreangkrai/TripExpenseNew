@@ -19,6 +19,8 @@ using System.Globalization;
 using TripExpenseNew.CustomPersonalPopup;
 using TripExpenseNew.CustomGeneralPopup;
 using CommunityToolkit.Maui.Extensions;
+using Plugin.LocalNotification;
+
 #if IOS
 using CoreLocation;
 using Microsoft.Maui.Maps;
@@ -72,10 +74,49 @@ namespace TripExpenseNew.GeneralPage
                 await UpdateLocationDataAsync(data.Location);
             });
         }
-        protected override void OnAppearing()
+        protected async override void OnAppearing()
         {
             base.OnAppearing();
+            var status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
+            if (status != PermissionStatus.Granted)
+            {
+                var result = await this.ShowPopupAsync(new PolicyPopup());
+                if (result != null)
+                {
+                    await RequestPermissionsAsync();
+                }
+            }
+            
             OnStartTracking();
+            
+        }
+        private async Task RequestPermissionsAsync()
+        {
+            // Location
+
+            var status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
+            if (status != PermissionStatus.Granted)
+            {
+
+                await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+
+            }
+            status = await Permissions.CheckStatusAsync<Permissions.LocationAlways>();
+            if (status == PermissionStatus.Granted)
+            {
+                return;
+            }
+
+            if (status != PermissionStatus.Granted)
+            {
+
+                await Permissions.RequestAsync<Permissions.LocationAlways>();
+
+            }
+
+            // Notification
+            if (!await LocalNotificationCenter.Current.AreNotificationsEnabled())
+                await LocalNotificationCenter.Current.RequestNotificationPermission();
         }
         private async void OnStartTracking()
         {

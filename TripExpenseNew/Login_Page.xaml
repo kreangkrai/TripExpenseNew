@@ -62,21 +62,22 @@
                     x:Name="LogInBtn"
                     Grid.Row="3"
                     Grid.Column="1"
-                    BackgroundColor="#14AE5C"
+                    BackgroundColor="#c2c2c2"
                     Clicked="LogInBtn_Clicked"
                     CornerRadius="30"
                     FontAttributes="Bold"
                     FontSize="Large"
                     HeightRequest="60"
                     HorizontalOptions="Fill"
-                    Text="LOG IN" />
+                    Text="LOG IN"
+                    TextColor="White" />
 
                 <!--  SERVER BUTTON  -->
                 <Button
                     x:Name="ServerBtn"
                     Grid.Row="4"
                     Grid.Column="1"
-                    BackgroundColor="#C3C3D4"
+                    BackgroundColor="#1C4698"
                     Clicked="ServerBtn_Clicked"
                     CornerRadius="30"
                     FontAttributes="Bold"

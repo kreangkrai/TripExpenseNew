@@ -75,40 +75,6 @@ public partial class PersonalPage : ContentPage
             }
         }
 
-        //var status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
-        //if (status != PermissionStatus.Granted)
-        //{
-        //    status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
-        //    if (status != PermissionStatus.Granted)
-        //    {
-        //        return;
-        //    }
-        //}
-
-        //status = await Permissions.CheckStatusAsync<Permissions.LocationAlways>();
-        //if (status != PermissionStatus.Granted)
-        //{
-        //    status = await Permissions.RequestAsync<Permissions.LocationAlways>();
-        //    if (status != PermissionStatus.Granted)
-        //    {
-        //        MainThread.BeginInvokeOnMainThread(async () =>
-        //        {
-        //            bool confirm = await DisplayAlert("", "Please select type of location permission to Always.", "OK","Cancel");
-        //            if (confirm || ! confirm)
-        //            {
-        //                AppInfo.ShowSettingsUI();
-        //            }
-        //        });
-                
-        //        return;
-        //    }
-        //}
-
-        //if (!await LocalNotificationCenter.Current.AreNotificationsEnabled())
-        //{
-        //    await LocalNotificationCenter.Current.RequestNotificationPermission();
-        //}
-
         GetLocationCTL.Add(new LocationOtherModel()
         {
             location = "CTL(HQ)",

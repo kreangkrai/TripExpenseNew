@@ -77,6 +77,7 @@ public partial class Login_Page : ContentPage
             }
 
             LogInBtn.IsEnabled = true;
+            LogInBtn.BackgroundColor = Color.FromArgb("14AE5C");
         }
         catch (Exception ex)
         {
@@ -187,6 +188,7 @@ public partial class Login_Page : ContentPage
         {
             await Server.Save(new ServerModel { Id = 1, server = txt_server.Text.Trim() });
             LogInBtn.IsEnabled = true;
+            LogInBtn.BackgroundColor = Color.FromArgb("14AE5C");
             ToggleBottomSheet();
 
             await DisplayAlert("", "Connect Success!", "OK");
@@ -232,7 +234,7 @@ public partial class Login_Page : ContentPage
         Authen = new AuthenService();
         Internet = new InternetService();
 
-        LogInBtn.IsEnabled = false;
+        LogInBtn.IsEnabled = false;       
         ShowLoading(true);
 
         try
@@ -293,6 +295,7 @@ public partial class Login_Page : ContentPage
         {
             ShowLoading(false);
             LogInBtn.IsEnabled = true;
+            LogInBtn.BackgroundColor = Color.FromArgb("14AE5C");
         }
     }
 
