@@ -369,7 +369,8 @@ public partial class PassengerPersonalStopPage : ContentPage
                     mode = "PASSENGER PERSONAL",
                     status = false,
                     trip = trip.trip,
-                    car_id = ""
+                    car_id = "",
+                    borrower_id = ""
                 };
 
                 message = await LastTrip.UpdateByTrip(lastTrip_passenger);
