@@ -28,7 +28,7 @@
 	<key>CFBundleIdentifier</key>
 	<string>com.contrologic.tripexpensenew</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.1</string>
+	<string>1.0.2</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>location</string>
@@ -53,6 +53,6 @@
 	<key>CFBundleDisplayName</key>
 	<string>TripExpense</string>
 	<key>CFBundleVersion</key>
-	<string>6</string>
+	<string>8</string>
 </dict>
 </plist>

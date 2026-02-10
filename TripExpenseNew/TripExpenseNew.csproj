@@ -75,6 +75,14 @@
 	  <CodesignProvision>tripexpensenew</CodesignProvision>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-ios|AnyCPU'">
+	  <OptimizePNGs>True</OptimizePNGs>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-ios|AnyCPU'">
+	  <OptimizePNGs>True</OptimizePNGs>
+	</PropertyGroup>
+
 	<ItemGroup>
 
 		<!-- App Icon -->
