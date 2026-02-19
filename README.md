@@ -7,6 +7,7 @@
 ## ความต้องการระบบ
 - Visual Studio 2022
 - MAUI 9.0 C# (iOS,Android)
+- MAC (Host)
 
 ## วิธีการติดตั้ง
 - Clone git https://github.com/kreangkrai/TripExpenseNew.git
