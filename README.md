@@ -13,7 +13,7 @@
 - Clone git https://github.com/kreangkrai/TripExpenseNew.git
 
 ## Version
-- Baseline version: Rev.1.0.0
+- Baseline version: 1.0.2
 
 ## ทีมพัฒนา
 - ทีม R&D Contrologic
