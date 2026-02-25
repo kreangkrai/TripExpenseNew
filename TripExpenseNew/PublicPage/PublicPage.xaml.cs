@@ -67,7 +67,7 @@ public partial class PublicPage : ContentPage
     {
         base.OnAppearing();
 
-        var status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
+        var status = await Permissions.CheckStatusAsync<Permissions.LocationAlways>();
         if (status != PermissionStatus.Granted)
         {
             var result = await this.ShowPopupAsync(new PolicyPopup());
@@ -126,17 +126,15 @@ public partial class PublicPage : ContentPage
             await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
 
         }
-        status = await Permissions.CheckStatusAsync<Permissions.LocationAlways>();
-        if (status == PermissionStatus.Granted)
-        {
-            return;
-        }
 
+        status = await Permissions.CheckStatusAsync<Permissions.LocationAlways>();
         if (status != PermissionStatus.Granted)
         {
-
-            await Permissions.RequestAsync<Permissions.LocationAlways>();
-
+            bool confirm = await DisplayAlert("", "Please select type of location permission to Always.", "OK", "Cancel");
+            if (confirm || !confirm)
+            {
+                AppInfo.ShowSettingsUI();
+            }
         }
 
         // Notification

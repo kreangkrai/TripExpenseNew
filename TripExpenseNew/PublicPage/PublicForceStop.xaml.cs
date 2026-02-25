@@ -86,20 +86,16 @@ public partial class PublicForceStop : ContentPage
         var status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
         if (status != PermissionStatus.Granted)
         {
-            status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
-            if (status != PermissionStatus.Granted)
-            {
-                return;
-            }
+            await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
         }
 
         status = await Permissions.CheckStatusAsync<Permissions.LocationAlways>();
         if (status != PermissionStatus.Granted)
         {
-            status = await Permissions.RequestAsync<Permissions.LocationAlways>();
-            if (status != PermissionStatus.Granted)
+            bool confirm = await DisplayAlert("", "Please select type of location permission to Always.", "OK", "Cancel");
+            if (confirm || !confirm)
             {
-                return;
+                AppInfo.ShowSettingsUI();
             }
         }
 
@@ -273,11 +269,13 @@ public partial class PublicForceStop : ContentPage
     private async void ConfirmBtn_Clicked(object sender, EventArgs e)
     {
         ConfirmBtn.IsEnabled = false;
-        if (Text_Location.Text.Trim() != "")
+        try
         {
-            bool internet = await Internet.CheckServerConnection("/api/CurrentTime/get");
-            if (internet)
+            if (Text_Location.Text.Trim() != "")
             {
+                bool internet = await Internet.CheckServerConnection("/api/CurrentTime/get");
+                if (internet)
+                {
                     var popup = new ProgressPopup();
                     this.ShowPopup(popup);
 
@@ -287,7 +285,7 @@ public partial class PublicForceStop : ContentPage
                     var placemarks = await Geocoding.Default.GetPlacemarksAsync(g_location.Latitude, g_location.Longitude);
                     var zipcode = placemarks?.FirstOrDefault()?.PostalCode ?? "N/A";
 
-                PublicModel data_public = new PublicModel();
+                    PublicModel data_public = new PublicModel();
                     string message = "Success";
 
                     await DB_Public.Delete(trip.trip);
@@ -378,27 +376,35 @@ public partial class PublicForceStop : ContentPage
                     locationService?.StopUpdatingLocation();
                     locationService = null; // รีเซ็ต locationService
 #elif ANDROID
-                intent = new Intent(Platform.AppContext, typeof(TripExpenseNew.Platforms.Android.LocationService));
-                Platform.AppContext.StopService(intent);
+                    intent = new Intent(Platform.AppContext, typeof(TripExpenseNew.Platforms.Android.LocationService));
+                    Platform.AppContext.StopService(intent);
 #endif
                     #endregion
                     await popup.CloseAsync();
                     await Shell.Current.GoToAsync("Home_Page");
+                }
+                else
+                {
+                    MainThread.BeginInvokeOnMainThread(async () =>
+                    {
+                        await DisplayAlert("", "Cann't connect to server", "OK");
+                    });
+                }
+
             }
             else
             {
                 MainThread.BeginInvokeOnMainThread(async () =>
                 {
-                    await DisplayAlert("", "Cann't connect to server", "OK");
+                    await DisplayAlert("", "Please input current location", "OK");
                 });
             }
-
         }
-        else
+        catch (Exception ex)
         {
             MainThread.BeginInvokeOnMainThread(async () =>
             {
-                await DisplayAlert("", "Please input current location", "OK");
+                await DisplayAlert("", ex.Message, "OK");
             });
         }
         ConfirmBtn.IsEnabled = true;

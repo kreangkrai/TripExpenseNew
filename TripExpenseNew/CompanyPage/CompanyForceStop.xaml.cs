@@ -93,20 +93,16 @@ public partial class CompanyForceStop : ContentPage
         var status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
         if (status != PermissionStatus.Granted)
         {
-            status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
-            if (status != PermissionStatus.Granted)
-            {
-                return;
-            }
+            await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
         }
 
         status = await Permissions.CheckStatusAsync<Permissions.LocationAlways>();
         if (status != PermissionStatus.Granted)
         {
-            status = await Permissions.RequestAsync<Permissions.LocationAlways>();
-            if (status != PermissionStatus.Granted)
+            bool confirm = await DisplayAlert("", "Please select type of location permission to Always.", "OK", "Cancel");
+            if (confirm || !confirm)
             {
-                return;
+                AppInfo.ShowSettingsUI();
             }
         }
 
@@ -280,215 +276,225 @@ public partial class CompanyForceStop : ContentPage
     private async void ConfirmBtn_Clicked(object sender, EventArgs e)
     {
         ConfirmBtn.IsEnabled = false;
-        if (Text_Location.Text.Trim() != "" && Text_MileageStop.Text.Trim() != "")
+        try
         {
-            bool internet = await Internet.CheckServerConnection("/api/CurrentTime/get");
-            if (internet)
+            if (Text_Location.Text.Trim() != "" && Text_MileageStop.Text.Trim() != "")
             {
-                int mileage_stop = Int32.Parse(Text_MileageStop.Text);
-                if (mileage_stop >= mileage_start)
+                bool internet = await Internet.CheckServerConnection("/api/CurrentTime/get");
+                if (internet)
                 {
-                    var popup = new ProgressPopup();
-                    this.ShowPopup(popup);
-
-                    DateTime date = new DateTime(datePicker.Date.Year, datePicker.Date.Month, datePicker.Date.Day, time_select.Time.Hours, time_select.Time.Minutes, time_select.Time.Seconds);
-
-                    double speed = g_location?.Speed.HasValue ?? false ? g_location.Speed.Value * 3.6 : 0;
-                    var placemarks = await Geocoding.Default.GetPlacemarksAsync(g_location.Latitude, g_location.Longitude);
-                    var zipcode = placemarks?.FirstOrDefault()?.PostalCode ?? "N/A";
-
-                    CompanyModel data_company = new CompanyModel();
-                    string message = "Success";
-
-                    await DB_Company.Delete(trip.trip);
-
-                    data_company = new CompanyModel()
+                    int mileage_stop = Int32.Parse(Text_MileageStop.Text);
+                    if (mileage_stop >= mileage_start)
                     {
-                        driver = emp_id,
-                        date = date,
-                        job_id = trip.job_id,
-                        distance = trip.distance,
-                        latitude = g_location.Latitude,
-                        longitude = g_location.Longitude,
-                        accuracy = g_location.Accuracy.HasValue ? g_location.Accuracy.Value : 10.0,
-                        location = Text_Location.Text,
-                        zipcode = zipcode,
-                        location_mode = IsCustomer ? "CUSTOMER" : "OTHER",
-                        speed = speed,
-                        mileage = mileage_stop,
-                        trip = trip.trip,
-                        status = "STOP",
-                        cash = 0,
-                        car_id = trip.car_id,
-                        borrower = trip.borrower_id,
-                        fleetcard = 0
-                    };
-                    message = await _Company.Insert(data_company);
+                        var popup = new ProgressPopup();
+                        this.ShowPopup(popup);
 
-                    if (message == "Success")
-                    {
-                        LastTripModel lastTrip = new LastTripModel()
+                        DateTime date = new DateTime(datePicker.Date.Year, datePicker.Date.Month, datePicker.Date.Day, time_select.Time.Hours, time_select.Time.Minutes, time_select.Time.Seconds);
+
+                        double speed = g_location?.Speed.HasValue ?? false ? g_location.Speed.Value * 3.6 : 0;
+                        var placemarks = await Geocoding.Default.GetPlacemarksAsync(g_location.Latitude, g_location.Longitude);
+                        var zipcode = placemarks?.FirstOrDefault()?.PostalCode ?? "N/A";
+
+                        CompanyModel data_company = new CompanyModel();
+                        string message = "Success";
+
+                        await DB_Company.Delete(trip.trip);
+
+                        data_company = new CompanyModel()
                         {
-                            driver = data_company.driver,
-                            speed = data_company.speed,
-                            emp_id = data_company.driver,
-                            job_id = data_company.job_id,
-                            trip_start = trip.trip_start,
-                            date = data_company.date,
-                            distance = data_company.distance,
-                            location = data_company.location,
-                            latitude = data_company.latitude,
-                            longitude = data_company.longitude,
-                            accuracy = data_company.accuracy,
-                            mileage_start = mileage_start,
-                            mileage_stop = mileage_stop,
-                            mode = "COMPANY",
-                            status = false,
-                            trip = data_company.trip,
-                            car_id = data_company.car_id,
-                            borrower_id = data_company.borrower
+                            driver = emp_id,
+                            date = date,
+                            job_id = trip.job_id,
+                            distance = trip.distance,
+                            latitude = g_location.Latitude,
+                            longitude = g_location.Longitude,
+                            accuracy = g_location.Accuracy.HasValue ? g_location.Accuracy.Value : 10.0,
+                            location = Text_Location.Text,
+                            zipcode = zipcode,
+                            location_mode = IsCustomer ? "CUSTOMER" : "OTHER",
+                            speed = speed,
+                            mileage = mileage_stop,
+                            trip = trip.trip,
+                            status = "STOP",
+                            cash = 0,
+                            car_id = trip.car_id,
+                            borrower = trip.borrower_id,
+                            fleetcard = 0
                         };
+                        message = await _Company.Insert(data_company);
 
-                        message = await LastTrip.UpdateByTrip(lastTrip);
-
-                        int act = await ActiveCompany.Delete(trip.trip);
-                    }
-
-
-                    #region Add Location
-
-                    if (loc.Item1 != Text_Location.Text && Text_Location.Text != "CTL(HQ)" && Text_Location.Text != "CTL(KBO)" && Text_Location.Text != "CTL(RBO)") // Insert New Location
-                    {
-                        if (IsCustomer)
+                        if (message == "Success")
                         {
-                            LocationCustomerModel locationCustomer = new LocationCustomerModel()
+                            LastTripModel lastTrip = new LastTripModel()
                             {
-                                emp_id = emp_id,
-                                latitude = g_location.Latitude,
-                                longitude = g_location.Longitude,
-                                location = Text_Location.Text,
-                                location_id = DateTime.Now.ToString("yyyyMMddHHmmssfff", cultureinfo),
-                                zipcode = zipcode,
-                            };
-                            await LocationCustomer.Insert(locationCustomer);
-                        }
-                        else
-                        {
-                            LocationOtherModel locationOther = new LocationOtherModel()
-                            {
-                                emp_id = emp_id,
-                                latitude = g_location.Latitude,
-                                longitude = g_location.Longitude,
-                                location = Text_Location.Text,
-                                location_id = DateTime.Now.ToString("yyyyMMddHHmmssfff", cultureinfo),
-                                zipcode = zipcode,
-                            };
-                            await LocationOther.Insert(locationOther);
-                        }
-                    }
-                    #endregion
-
-                    #region GET PASSENGER
-                    //CultureInfo usCulture = new CultureInfo("en-US");
-                    List<PassengerCompanyViewModel> passenger_companies = await PassengerCompany.GetPassengerCompanyByDriver(data_company.driver, data_company.trip);
-
-                    List<string> emp_list = passenger_companies.Where(w => w.status == "STOP").Select(s => s.passenger).ToList();
-                    List<string> emps = passenger_companies.Where(w => !emp_list.Contains(w.passenger)).Select(s => s.passenger).ToList();
-                    emps = emps.Distinct().ToList();
-
-                    if (emps.Count > 0)
-                    {
-                        #region ADD PASSENGER
-                        for (int i = 0; i < emps.Count; i++)
-                        {
-                            PassengerCompanyModel passengerCompany = new PassengerCompanyModel()
-                            {
-                                date = data_company.date,
                                 driver = data_company.driver,
-                                trip = data_company.trip,
+                                speed = data_company.speed,
+                                emp_id = data_company.driver,
                                 job_id = data_company.job_id,
+                                trip_start = trip.trip_start,
+                                date = data_company.date,
+                                distance = data_company.distance,
+                                location = data_company.location,
                                 latitude = data_company.latitude,
                                 longitude = data_company.longitude,
                                 accuracy = data_company.accuracy,
-                                location = data_company.location,
-                                location_mode = data_company.location_mode,
-                                passenger = emps[i],
-                                status = "STOP",
-                                zipcode = data_company.zipcode,
-                                car_id = data_company.car_id,
-                            };
-                            string mes = await PassengerCompany.Insert(passengerCompany);
-
-                            LastTripModel lastTrip_company = new LastTripModel()
-                            {
-                                driver = data_company.driver,
-                                speed = 0,
-                                emp_id = emps[i],
-                                job_id = data_company.job_id,
-                                trip_start = trip.trip_start,
-                                date = date,
-                                distance = 0,
-                                location = data_company.location,
-                                latitude = data_company.latitude,
-                                longitude = data_company.longitude,
-                                accuracy=data_company.accuracy,
-                                mileage_start = 0,
-                                mileage_stop = 0,
-                                mode = "PASSENGER COMPANY",
+                                mileage_start = mileage_start,
+                                mileage_stop = mileage_stop,
+                                mode = "COMPANY",
                                 status = false,
                                 trip = data_company.trip,
-                                car_id = data_company.car_id
+                                car_id = data_company.car_id,
+                                borrower_id = data_company.borrower
                             };
 
-                            mes = await LastTrip.UpdateByTrip(lastTrip_company);
+                            message = await LastTrip.UpdateByTrip(lastTrip);
+
+                            int act = await ActiveCompany.Delete(trip.trip);
+                        }
+
+
+                        #region Add Location
+
+                        if (loc.Item1 != Text_Location.Text && Text_Location.Text != "CTL(HQ)" && Text_Location.Text != "CTL(KBO)" && Text_Location.Text != "CTL(RBO)") // Insert New Location
+                        {
+                            if (IsCustomer)
+                            {
+                                LocationCustomerModel locationCustomer = new LocationCustomerModel()
+                                {
+                                    emp_id = emp_id,
+                                    latitude = g_location.Latitude,
+                                    longitude = g_location.Longitude,
+                                    location = Text_Location.Text,
+                                    location_id = DateTime.Now.ToString("yyyyMMddHHmmssfff", cultureinfo),
+                                    zipcode = zipcode,
+                                };
+                                await LocationCustomer.Insert(locationCustomer);
+                            }
+                            else
+                            {
+                                LocationOtherModel locationOther = new LocationOtherModel()
+                                {
+                                    emp_id = emp_id,
+                                    latitude = g_location.Latitude,
+                                    longitude = g_location.Longitude,
+                                    location = Text_Location.Text,
+                                    location_id = DateTime.Now.ToString("yyyyMMddHHmmssfff", cultureinfo),
+                                    zipcode = zipcode,
+                                };
+                                await LocationOther.Insert(locationOther);
+                            }
                         }
                         #endregion
-                    }
-                    #endregion
 
-                    #region Update Last Mileage
-                    MileageDBModel db_mileage = new MileageDBModel()
-                    {
-                        Id = 1,
-                        mileage = mileage_stop
-                    };
-                    int id = await Mileage.Save(db_mileage);
-                    #endregion
+                        #region GET PASSENGER
+                        //CultureInfo usCulture = new CultureInfo("en-US");
+                        List<PassengerCompanyViewModel> passenger_companies = await PassengerCompany.GetPassengerCompanyByDriver(data_company.driver, data_company.trip);
 
-                    #region Stop
+                        List<string> emp_list = passenger_companies.Where(w => w.status == "STOP").Select(s => s.passenger).ToList();
+                        List<string> emps = passenger_companies.Where(w => !emp_list.Contains(w.passenger)).Select(s => s.passenger).ToList();
+                        emps = emps.Distinct().ToList();
+
+                        if (emps.Count > 0)
+                        {
+                            #region ADD PASSENGER
+                            for (int i = 0; i < emps.Count; i++)
+                            {
+                                PassengerCompanyModel passengerCompany = new PassengerCompanyModel()
+                                {
+                                    date = data_company.date,
+                                    driver = data_company.driver,
+                                    trip = data_company.trip,
+                                    job_id = data_company.job_id,
+                                    latitude = data_company.latitude,
+                                    longitude = data_company.longitude,
+                                    accuracy = data_company.accuracy,
+                                    location = data_company.location,
+                                    location_mode = data_company.location_mode,
+                                    passenger = emps[i],
+                                    status = "STOP",
+                                    zipcode = data_company.zipcode,
+                                    car_id = data_company.car_id,
+                                };
+                                string mes = await PassengerCompany.Insert(passengerCompany);
+
+                                LastTripModel lastTrip_company = new LastTripModel()
+                                {
+                                    driver = data_company.driver,
+                                    speed = 0,
+                                    emp_id = emps[i],
+                                    job_id = data_company.job_id,
+                                    trip_start = trip.trip_start,
+                                    date = date,
+                                    distance = 0,
+                                    location = data_company.location,
+                                    latitude = data_company.latitude,
+                                    longitude = data_company.longitude,
+                                    accuracy = data_company.accuracy,
+                                    mileage_start = 0,
+                                    mileage_stop = 0,
+                                    mode = "PASSENGER COMPANY",
+                                    status = false,
+                                    trip = data_company.trip,
+                                    car_id = data_company.car_id
+                                };
+
+                                mes = await LastTrip.UpdateByTrip(lastTrip_company);
+                            }
+                            #endregion
+                        }
+                        #endregion
+
+                        #region Update Last Mileage
+                        MileageDBModel db_mileage = new MileageDBModel()
+                        {
+                            Id = 1,
+                            mileage = mileage_stop
+                        };
+                        int id = await Mileage.Save(db_mileage);
+                        #endregion
+
+                        #region Stop
 #if IOS
                     locationService?.StopUpdatingLocation();
                     locationService = null; // รีเซ็ต locationService
 #elif ANDROID
-                intent = new Intent(Platform.AppContext, typeof(TripExpenseNew.Platforms.Android.LocationService));
-                Platform.AppContext.StopService(intent);
+                        intent = new Intent(Platform.AppContext, typeof(TripExpenseNew.Platforms.Android.LocationService));
+                        Platform.AppContext.StopService(intent);
 #endif
-                    #endregion
-                    await popup.CloseAsync();
-                    await Shell.Current.GoToAsync("Home_Page");
+                        #endregion
+                        await popup.CloseAsync();
+                        await Shell.Current.GoToAsync("Home_Page");
+                    }
+                    else
+                    {
+                        MainThread.BeginInvokeOnMainThread(async () =>
+                        {
+                            await DisplayAlert("", "Please input current mileage", "OK");
+                        });
+                    }
                 }
                 else
                 {
                     MainThread.BeginInvokeOnMainThread(async () =>
                     {
-                        await DisplayAlert("", "Please input current mileage", "OK");
+                        await DisplayAlert("", "Cann't connect to server", "OK");
                     });
                 }
+
             }
             else
             {
                 MainThread.BeginInvokeOnMainThread(async () =>
                 {
-                    await DisplayAlert("", "Cann't connect to server", "OK");
+                    await DisplayAlert("", "Please input current location or location mileage", "OK");
                 });
             }
-
         }
-        else
+        catch (Exception ex)
         {
             MainThread.BeginInvokeOnMainThread(async () =>
             {
-                await DisplayAlert("", "Please input current location or location mileage", "OK");
+                await DisplayAlert("", ex.Message, "OK");
             });
         }
         ConfirmBtn.IsEnabled = true;

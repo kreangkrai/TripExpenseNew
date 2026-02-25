@@ -91,7 +91,7 @@ public partial class PassengerCompanyStopPage : ContentPage
     {
         base.OnAppearing();
 
-        var status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
+        var status = await Permissions.CheckStatusAsync<Permissions.LocationAlways>();
         if (status != PermissionStatus.Granted)
         {
             var result = await this.ShowPopupAsync(new PolicyPopup());
@@ -171,17 +171,15 @@ public partial class PassengerCompanyStopPage : ContentPage
             await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
 
         }
-        status = await Permissions.CheckStatusAsync<Permissions.LocationAlways>();
-        if (status == PermissionStatus.Granted)
-        {
-            return;
-        }
 
+        status = await Permissions.CheckStatusAsync<Permissions.LocationAlways>();
         if (status != PermissionStatus.Granted)
         {
-
-            await Permissions.RequestAsync<Permissions.LocationAlways>();
-
+            bool confirm = await DisplayAlert("", "Please select type of location permission to Always.", "OK", "Cancel");
+            if (confirm || !confirm)
+            {
+                AppInfo.ShowSettingsUI();
+            }
         }
 
         // Notification
@@ -317,83 +315,94 @@ public partial class PassengerCompanyStopPage : ContentPage
     private async void ConfirmBtn_Clicked(object sender, EventArgs e)
     {
         ConfirmBtn.IsEnabled = false;
-        if (Text_Location.Text.Trim() != "")
+        try
         {
-            bool internet = await Internet.CheckServerConnection("/api/CurrentTime/get");
-            if (internet)
+            if (Text_Location.Text.Trim() != "")
             {
-                var popup = new ProgressPopup();
-                this.ShowPopup(popup);
-
-                DateTime date = new DateTime(trip.trip_start.Year, trip.trip_start.Month, trip.trip_start.Day, time_select.Time.Hours, time_select.Time.Minutes, time_select.Time.Seconds);
-
-                double speed = g_location?.Speed.HasValue ?? false ? g_location.Speed.Value * 3.6 : 0;
-                var placemarks = await Geocoding.Default.GetPlacemarksAsync(g_location.Latitude, g_location.Longitude);
-                var zipcode = placemarks?.FirstOrDefault()?.PostalCode ?? "N/A";
-
-                string message = "";
-
-                #region ADD PASSENGER
-
-                PassengerCompanyModel passengerCompany = new PassengerCompanyModel()
+                bool internet = await Internet.CheckServerConnection("/api/CurrentTime/get");
+                if (internet)
                 {
-                    date = date,
-                    driver = trip.driver,
-                    trip = trip.trip,
-                    job_id = trip.job_id,
-                    latitude = g_location.Latitude,
-                    longitude = g_location.Longitude,
-                    accuracy = g_location.Accuracy.HasValue ? g_location.Accuracy.Value : 10.0,
-                    location = Text_Location.Text,
-                    location_mode = IsCustomer ? "CUSTOMER" : "OTHER",
-                    passenger = emp_id,
-                    status = "STOP",
-                    zipcode = zipcode,
-                    car_id = trip.car_id
-                };
-                message = await PassengerCompany.Insert(passengerCompany);
+                    var popup = new ProgressPopup();
+                    this.ShowPopup(popup);
 
-                LastTripModel lastTrip_passenger = new LastTripModel()
+                    DateTime date = new DateTime(trip.trip_start.Year, trip.trip_start.Month, trip.trip_start.Day, time_select.Time.Hours, time_select.Time.Minutes, time_select.Time.Seconds);
+
+                    double speed = g_location?.Speed.HasValue ?? false ? g_location.Speed.Value * 3.6 : 0;
+                    var placemarks = await Geocoding.Default.GetPlacemarksAsync(g_location.Latitude, g_location.Longitude);
+                    var zipcode = placemarks?.FirstOrDefault()?.PostalCode ?? "N/A";
+
+                    string message = "";
+
+                    #region ADD PASSENGER
+
+                    PassengerCompanyModel passengerCompany = new PassengerCompanyModel()
+                    {
+                        date = date,
+                        driver = trip.driver,
+                        trip = trip.trip,
+                        job_id = trip.job_id,
+                        latitude = g_location.Latitude,
+                        longitude = g_location.Longitude,
+                        accuracy = g_location.Accuracy.HasValue ? g_location.Accuracy.Value : 10.0,
+                        location = Text_Location.Text,
+                        location_mode = IsCustomer ? "CUSTOMER" : "OTHER",
+                        passenger = emp_id,
+                        status = "STOP",
+                        zipcode = zipcode,
+                        car_id = trip.car_id
+                    };
+                    message = await PassengerCompany.Insert(passengerCompany);
+
+                    LastTripModel lastTrip_passenger = new LastTripModel()
+                    {
+                        driver = trip.driver,
+                        speed = 0,
+                        emp_id = emp_id,
+                        job_id = trip.job_id,
+                        trip_start = trip.trip_start,
+                        date = date,
+                        distance = 0,
+                        location = Text_Location.Text,
+                        latitude = g_location.Latitude,
+                        accuracy = g_location.Accuracy.HasValue ? g_location.Accuracy.Value : 10.0,
+                        longitude = g_location.Longitude,
+                        mileage_start = 0,
+                        mileage_stop = 0,
+                        mode = "PASSENGER COMPANY",
+                        status = false,
+                        trip = trip.trip,
+                        car_id = trip.car_id,
+                        borrower_id = trip.borrower_id
+                    };
+
+                    message = await LastTrip.UpdateByTrip(lastTrip_passenger);
+
+                    #endregion
+
+                    await popup.CloseAsync();
+                    await Shell.Current.GoToAsync("Home_Page");
+                }
+                else
                 {
-                    driver = trip.driver,
-                    speed = 0,
-                    emp_id = emp_id,
-                    job_id = trip.job_id,
-                    trip_start = trip.trip_start,
-                    date = date,
-                    distance = 0,
-                    location = Text_Location.Text,
-                    latitude = g_location.Latitude,
-                    accuracy = g_location.Accuracy.HasValue ? g_location.Accuracy.Value : 10.0,
-                    longitude = g_location.Longitude,
-                    mileage_start = 0,
-                    mileage_stop = 0,
-                    mode = "PASSENGER COMPANY",
-                    status = false,
-                    trip = trip.trip,
-                    car_id = trip.car_id
-                };
-
-                message = await LastTrip.UpdateByTrip(lastTrip_passenger);
-
-                #endregion
-
-                await popup.CloseAsync();
-                await Shell.Current.GoToAsync("Home_Page");
+                    MainThread.BeginInvokeOnMainThread(async () =>
+                    {
+                        await DisplayAlert("", "Cann't connect to server", "OK");
+                    });
+                }
             }
             else
             {
                 MainThread.BeginInvokeOnMainThread(async () =>
                 {
-                    await DisplayAlert("", "Cann't connect to server", "OK");
+                    await DisplayAlert("", "Please input current location", "OK");
                 });
             }
         }
-        else
+        catch (Exception ex)
         {
             MainThread.BeginInvokeOnMainThread(async () =>
             {
-                await DisplayAlert("", "Please input current location", "OK");
+                await DisplayAlert("", ex.Message, "OK");
             });
         }
         ConfirmBtn.IsEnabled = true;

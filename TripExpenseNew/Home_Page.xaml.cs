@@ -20,12 +20,11 @@ using TripExpenseNew.ViewModels;
 
 public partial class Home_Page : ContentPage
 {
-    string version = "1.0.1";
+    string version = "1.0.3";
     private IVersion Version;
     private ILastTrip LastTrip;
     private ILogin Login;
     private IEmployee Employee;
-    //private IPrivacy Privacy;
     CultureInfo cultureinfo = new CultureInfo("en-us");
     LoginModel emp_id = new LoginModel();
     List<LastTripViewModel> trips = new List<LastTripViewModel>();
@@ -36,7 +35,6 @@ public partial class Home_Page : ContentPage
         Login = _Login;
         Employee = _Employee;
         Version = _Version;
-        //Privacy = _Privacy;
     }
 
     [Obsolete]
@@ -76,19 +74,6 @@ public partial class Home_Page : ContentPage
                     lbl_name.Text = name;
                     lbl_lastname.Text = "";
                 }
-
-                //Check Privacy
-
-                //List<PrivacyModel> privacies = await Privacy.GetPrivacies();
-                //PrivacyModel privacy = privacies.Where(w=>w.emp_id == emp_id.emp_id).FirstOrDefault();
-                //if (privacy != null)
-                //{
-                //    AddTripBtn.IsEnabled = true;
-                //}
-                //else
-                //{
-                //    AddTripBtn.IsEnabled = false;
-                //}
 
                 if (trips.Count > 0)
                 {
