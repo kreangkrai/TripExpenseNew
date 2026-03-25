@@ -32,6 +32,7 @@ using MathNet.Numerics.LinearAlgebra.Factorization;
 using Android.Content;
 using Microsoft.Maui.ApplicationModel;
 using System.Reflection.Emit;
+using static Android.InputMethodServices.Keyboard;
 
 #endif
 #if IOS
@@ -567,11 +568,14 @@ namespace TripExpenseNew.CompanyPage
 
                             else
                             {
+                                DateTime now = DateTime.Now;
+                                DateTime truncated = new DateTime(now.Year, now.Month, now.Day,
+                                  now.Hour, now.Minute, now.Second);
                                 CompanyDBModel db_company = new CompanyDBModel()
                                 {
                                     driver = emp_id,
                                     car_id = start.car_id,
-                                    date = DateTime.Now,
+                                    date = truncated,
                                     job_id = start.job_id,
                                     distance = totalDistance,
                                     latitude = location.Latitude,
@@ -599,26 +603,27 @@ namespace TripExpenseNew.CompanyPage
                                     db_companies = await DB_Company.GetByTrip(trip_start.ToString("yyyyMMddHHmmss", cultureinfo));
 
                                     List<CompanyModel> companies = new List<CompanyModel>();
-                                    companies = db_companies.Select(s => new CompanyModel()
+                                    companies = db_companies.GroupBy(g => g.date)
+                                        .Select(s => new CompanyModel()
                                     {
-                                        job_id = s.job_id,
-                                        distance = s.distance,
-                                        date = s.date,
-                                        latitude = s.latitude,
-                                        longitude = s.longitude,
-                                        accuracy = s.accuracy,
-                                        location = s.location,
-                                        zipcode = s.zipcode,
-                                        location_mode = s.location_mode,
-                                        speed = s.speed,
-                                        mileage = s.mileage,
+                                        job_id = s.First().job_id,
+                                        distance = s.First().distance,
+                                        date = s.Key,
+                                        latitude = s.First().latitude,
+                                        longitude = s.First().longitude,
+                                        accuracy = s.First().accuracy,
+                                        location = s.First().location,
+                                        zipcode = s.First().zipcode,
+                                        location_mode = s.First().location_mode,
+                                        speed = s.First().speed,
+                                        mileage = s.First().mileage,
                                         trip = trip_start.ToString("yyyyMMddHHmmss", cultureinfo),
-                                        status = s.status,
-                                        driver = s.driver,
-                                        cash = s.cash,
-                                        car_id = s.car_id,
-                                        fleetcard = s.fleetcard,
-                                        borrower = s.borrower,
+                                        status = s.First().status,
+                                        driver = s.First().driver,
+                                        cash = s.First().cash,
+                                        car_id = s.First().car_id,
+                                        fleetcard = s.First().fleetcard,
+                                        borrower = s.First().borrower
                                     }).ToList();
                                     string m = await _Company.Inserts(companies);
 
@@ -773,7 +778,7 @@ namespace TripExpenseNew.CompanyPage
                         {
                             if (company.location != null && company.location != "" && company.mileage != 0)
                             {
-                                if (company.mileage >= start.mileage)
+                                if (company.mileage >= start.mileage && (company.mileage - start.mileage) < 1000)
                                 {
                                     var popup = new ProgressPopup();
                                     this.ShowPopup(popup);
@@ -782,26 +787,27 @@ namespace TripExpenseNew.CompanyPage
                                     var zipcode = placemarks?.FirstOrDefault()?.PostalCode ?? "N/A";
 
                                     List<CompanyDBModel> db_companies = await DB_Company.GetByTrip(trip_start.ToString("yyyyMMddHHmmss", cultureinfo));
-                                    List<CompanyModel> companies = db_companies.Select(s => new CompanyModel()
+                                    List<CompanyModel> companies = db_companies.GroupBy(g => g.date)
+                                        .Select(s => new CompanyModel()
                                     {
-                                        job_id = s.job_id,
-                                        distance = s.distance,
-                                        date = s.date,
-                                        latitude = s.latitude,
-                                        longitude = s.longitude,
-                                        accuracy = s.accuracy,
+                                        job_id = s.First().job_id,
+                                        distance = s.First().distance,
+                                        date = s.Key,
+                                        latitude = s.First().latitude,
+                                        longitude = s.First().longitude,
+                                        accuracy = s.First().accuracy,
                                         location = company.location,
-                                        zipcode = s.zipcode,
+                                        zipcode = s.First().zipcode,
                                         location_mode = company.IsCustomer ? "CUSTOMER" : "OTHER",
-                                        speed = s.speed,
+                                        speed = s.First().speed,
                                         mileage = company.mileage,
                                         trip = trip_start.ToString("yyyyMMddHHmmss", cultureinfo),
-                                        status = s.status,
-                                        driver = s.driver,
-                                        cash = s.cash,
-                                        fleetcard = s.fleetcard,
-                                        borrower = s.borrower,
-                                        car_id = s.car_id
+                                        status = s.First().status,
+                                        driver = s.First().driver,
+                                        cash = s.First().cash,
+                                        fleetcard = s.First().fleetcard,
+                                        borrower = s.First().borrower,
+                                        car_id = s.First().car_id
                                     }).ToList();
 
                                     string message = await _Company.Inserts(companies);
@@ -986,7 +992,7 @@ namespace TripExpenseNew.CompanyPage
                                 {
                                     MainThread.BeginInvokeOnMainThread(async () =>
                                     {
-                                        await DisplayAlert("", "Please input mileage start", "OK");
+                                        await DisplayAlert("", "Please enter the correct mileage stop", "OK");
                                     });
                                 }
                             }

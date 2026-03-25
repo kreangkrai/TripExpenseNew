@@ -24,7 +24,7 @@ public partial class CompanyPassengerPopup : Popup
         employees = await Employee.GetEmployees();
 
         List<string> emps = await LastTrip.GetInUse();
-        employees = employees.Where(w => !emps.Contains(w.emp_id)).ToList();
+        employees = employees.Where(w => !emps.Contains(w.emp_id)).OrderBy(o => o.name).ToList();
 
         BindingContext = new EmployeeItems(employees);
     }

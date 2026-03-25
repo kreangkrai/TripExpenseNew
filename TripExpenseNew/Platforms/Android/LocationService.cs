@@ -70,7 +70,7 @@ namespace TripExpenseNew.Platforms.Android
                 StartForeground(1000, notification);
 
                 
-                int trackingInterval = intent.GetIntExtra("TrackingInterval", 2000); // ค่าเริ่มต้น 1 วินาที
+                int trackingInterval = intent.GetIntExtra("TrackingInterval", 3000); // ค่าเริ่มต้น 3 วินาที
                 //string geolocation_accuracy = intent.GetStringExtra("GeolocationAccuracy");
                 //int timeout = intent.GetIntExtra("AccuracyMeter",5);
                 //int accuracy_meter = intent.GetIntExtra("AccuracyCourse",10);
@@ -149,7 +149,7 @@ namespace TripExpenseNew.Platforms.Android
 
                         if (prevLocation != null)
                         {
-                            if (prevLocation.Timestamp.ToString("yyyy-MM-dd HH:mm:ss.f") != mauiLocation.Timestamp.ToString("yyyy-MM-dd HH:mm:ss.f"))
+                            if (prevLocation.Timestamp.ToString("yyyy-MM-dd HH:mm:ss") != mauiLocation.Timestamp.ToString("yyyy-MM-dd HH:mm:ss"))
                             {
                                 MainThread.BeginInvokeOnMainThread(() =>
                                 {

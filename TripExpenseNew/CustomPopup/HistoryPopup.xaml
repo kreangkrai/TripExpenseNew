@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:shell="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    CanBeDismissedByTappingOutsideOfPopup="false"
     Color="Transparent">
     <Border
         Padding="0"
@@ -180,15 +181,15 @@
                 VerticalOptions="Start" />
 
             <!--  Collection View | Route Trip Detail:  -->
-            <Frame
+            <Border
                 Grid.Row="8"
                 Grid.ColumnSpan="2"
                 Margin="1"
                 Padding="5"
                 BackgroundColor="White"
-                BorderColor="DimGrey"
-                CornerRadius="5"
-                HasShadow="False">
+                Stroke="DimGrey"
+                StrokeShape="RoundRectangle 5"
+                StrokeThickness="1">
                 <ScrollView>
                     <StackLayout>
                         <CollectionView x:Name="TripCollectionView" HeightRequest="200">
@@ -197,12 +198,12 @@
                             </CollectionView.ItemsLayout>
                             <CollectionView.ItemTemplate>
                                 <DataTemplate>
-                                    <Frame
+                                    <Border
                                         Margin="1"
                                         Padding="5,1"
                                         BackgroundColor="{Binding FrameColor}"
-                                        CornerRadius="5"
-                                        HasShadow="False">
+                                        StrokeShape="RoundRectangle 5"
+                                        StrokeThickness="1">
                                         <Grid
                                             Padding="1"
                                             RowDefinitions="Auto,Auto,Auto"
@@ -249,13 +250,13 @@
                                                 Text="{Binding TextDate}"
                                                 VerticalOptions="Center" />
                                         </Grid>
-                                    </Frame>
+                                    </Border>
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
                         </CollectionView>
                     </StackLayout>
                 </ScrollView>
-            </Frame>
+            </Border>
 
             <!--  BUTTON | Close  -->
             <Button

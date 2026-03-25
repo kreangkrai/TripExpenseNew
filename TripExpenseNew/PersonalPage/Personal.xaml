@@ -44,13 +44,15 @@
             <!--
                 INFO |
             -->
-            <Frame
+            <Border
                 Grid.Row="3"
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
                 Padding="5,5"
-                BorderColor="#BCBCBC"
-                CornerRadius="20">
+                BackgroundColor="White"
+                Stroke="#BCBCBC"
+                StrokeShape="RoundRectangle 20"
+                StrokeThickness="1">
                 <Grid
                     Padding="1,1"
                     ColumnDefinitions="*"
@@ -91,17 +93,19 @@
                         TextColor="#535353"
                         VerticalOptions="Center" />
                 </Grid>
-            </Frame>
+            </Border>
             <!--  //////////////////////////////////////////////  -->
 
             <!--  INFO | Distance  -->
-            <Frame
+            <Border
                 Grid.Row="3"
                 Grid.Column="2"
                 Grid.ColumnSpan="2"
                 Padding="5,5"
-                BorderColor="#BCBCBC"
-                CornerRadius="20">
+                BackgroundColor="White"
+                Stroke="#BCBCBC"
+                StrokeShape="RoundRectangle 20"
+                StrokeThickness="1">
                 <Grid
                     Padding="0,0"
                     ColumnDefinitions="*"
@@ -142,7 +146,7 @@
                         TextColor="#535353"
                         VerticalOptions="Center" />
                 </Grid>
-            </Frame>
+            </Border>
             <!--  //////////////////////////////////////////////  -->
 
             <!--  LABEL | Active Trip Detail:  -->
@@ -159,15 +163,15 @@
                 VerticalOptions="Center" />
 
             <!--  Collection View | Active Trip Detail:  -->
-            <Frame
+            <Border
                 Grid.Row="5"
                 Grid.ColumnSpan="4"
                 Margin="1"
                 Padding="5"
                 BackgroundColor="White"
-                BorderColor="DimGrey"
-                CornerRadius="5"
-                HasShadow="False">
+                Stroke="DimGrey"
+                StrokeShape="RoundRectangle 5"
+                StrokeThickness="1">
                 <StackLayout>
                     <CollectionView x:Name="TripCollectionView" HeightRequest="200">
                         <CollectionView.ItemsLayout>
@@ -175,12 +179,11 @@
                         </CollectionView.ItemsLayout>
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <Frame
+                                <Border
                                     Margin="1"
                                     Padding="5,1"
                                     BackgroundColor="{Binding FrameColor}"
-                                    CornerRadius="5"
-                                    HasShadow="False">
+                                    StrokeShape="RoundRectangle 5">
                                     <Grid
                                         Padding="1"
                                         RowDefinitions="Auto,Auto,Auto"
@@ -227,12 +230,12 @@
                                             Text="{Binding TextDate}"
                                             VerticalOptions="Center" />
                                     </Grid>
-                                </Frame>
+                                </Border>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
                 </StackLayout>
-            </Frame>
+            </Border>
             <!--  BUTTON | Check In  -->
             <Button
                 x:Name="CheckInBtn"
@@ -266,17 +269,17 @@
                 VerticalOptions="Center" />
 
             <!--  CollectionView | Current Passenger:  -->
-            <Frame
+            <Border
                 x:Name="frame_passenger"
                 Grid.Row="8"
                 Grid.ColumnSpan="4"
                 Margin="1"
                 Padding="5"
                 BackgroundColor="White"
-                BorderColor="DimGrey"
-                CornerRadius="5"
-                HasShadow="False"
-                IsVisible="False">
+                IsVisible="False"
+                Stroke="DimGrey"
+                StrokeShape="RoundRectangle 5"
+                StrokeThickness="1">
                 <StackLayout Padding="10">
                     <CollectionView x:Name="PassengerCollectionView" HeightRequest="150">
                         <CollectionView.ItemsLayout>
@@ -284,11 +287,11 @@
                         </CollectionView.ItemsLayout>
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <Frame
+                                <Border
                                     Margin="5"
                                     Padding="5,1,5,2"
-                                    CornerRadius="8"
-                                    HasShadow="False">
+                                    Stroke="DimGrey"
+                                    StrokeShape="RoundRectangle 8">
                                     <Grid
                                         Padding="1"
                                         RowDefinitions="Auto,Auto"
@@ -334,12 +337,12 @@
                                             Text="Drop Off"
                                             TextColor="White" />
                                     </Grid>
-                                </Frame>
+                                </Border>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
                 </StackLayout>
-            </Frame>
+            </Border>
             <!--  BUTTON | Add Passenger  -->
             <Button
                 x:Name="AddPassengerBtn"

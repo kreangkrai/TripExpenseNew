@@ -69,7 +69,7 @@ public partial class HistoryPage : ContentPage
     {
         try
         {
-            if (sender is Frame frame && frame.BindingContext is HistoryItems selectedTrip)
+            if (sender is Border frame && frame.BindingContext is HistoryItems selectedTrip)
             {
                 LastTripViewModel lastTrip = lastTrips.Where(w => w.trip_start.ToString("dd/MM/yyyy HH:mm:ss", cultureinfo) == selectedTrip.TextTrip).FirstOrDefault();
                 if (lastTrip.mode == "PERSONAL")

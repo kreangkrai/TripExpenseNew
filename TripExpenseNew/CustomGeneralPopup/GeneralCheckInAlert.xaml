@@ -5,13 +5,14 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:toolkit="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
     x:Name="this"
+    CanBeDismissedByTappingOutsideOfPopup="false"
     Color="Transparent">
-    <Frame
+    <Border
         Padding="10"
         BackgroundColor="White"
-        CornerRadius="10"
-        HasShadow="False"
         HorizontalOptions="Center"
+        StrokeShape="RoundRectangle 10"
+        StrokeThickness="1"
         VerticalOptions="Center"
         WidthRequest="350">
         <VerticalStackLayout Spacing="5">
@@ -57,5 +58,5 @@
                 </Button>
             </VerticalStackLayout>
         </VerticalStackLayout>
-    </Frame>
+    </Border>
 </toolkit:Popup>

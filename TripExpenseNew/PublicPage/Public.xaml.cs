@@ -508,10 +508,13 @@ namespace TripExpenseNew.PublicPage
 
                             else
                             {
+                                DateTime now = DateTime.Now;
+                                DateTime truncated = new DateTime(now.Year, now.Month, now.Day,
+                                  now.Hour, now.Minute, now.Second);
                                 PublicDBModel db_public = new PublicDBModel()
                                 {
                                     passenger = emp_id,
-                                    date = DateTime.Now,
+                                    date = truncated,
                                     job_id = start.job_id,
                                     distance = totalDistance,
                                     latitude = location.Latitude,
@@ -535,21 +538,22 @@ namespace TripExpenseNew.PublicPage
                                     db_publics = await DB_Public.GetByTrip(trip_start.ToString("yyyyMMddHHmmss", cultureinfo));
 
                                     List<PublicModel> publics = new List<PublicModel>();
-                                    publics = db_publics.Select(s => new PublicModel()
+                                    publics = db_publics.GroupBy(g => g.date)
+                                        .Select(s => new PublicModel()
                                     {
-                                        job_id = s.job_id,
-                                        distance = s.distance,
-                                        date = s.date,
-                                        latitude = s.latitude,
-                                        longitude = s.longitude,
-                                        location = s.location,
-                                        accuracy = s.accuracy,
-                                        zipcode = s.zipcode,
-                                        location_mode = s.location_mode,
-                                        speed = s.speed,
+                                        job_id = s.First().job_id,
+                                        distance = s.First().distance,
+                                        date = s.Key,
+                                        latitude = s.First().latitude,
+                                        longitude = s.First().longitude,
+                                        location = s.First().location,
+                                        accuracy = s.First().accuracy,
+                                        zipcode = s.First().zipcode,
+                                        location_mode = s.First().location_mode,
+                                        speed = s.First().speed,
                                         trip = trip_start.ToString("yyyyMMddHHmmss", cultureinfo),
-                                        status = s.status,
-                                        passenger = s.passenger
+                                        status = s.First().status,
+                                        passenger = s.First().passenger
                                     }).ToList();
                                     string m = await _Public.Inserts(publics);
 

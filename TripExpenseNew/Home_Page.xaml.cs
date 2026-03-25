@@ -20,7 +20,7 @@ using TripExpenseNew.ViewModels;
 
 public partial class Home_Page : ContentPage
 {
-    string version = "1.0.3";
+    string version = "1.0.4";
     private IVersion Version;
     private ILastTrip LastTrip;
     private ILogin Login;

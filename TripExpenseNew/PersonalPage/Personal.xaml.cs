@@ -553,10 +553,13 @@ namespace TripExpenseNew.PersonalPage
 
                             else
                             {
+                                DateTime now = DateTime.Now;
+                                DateTime truncated = new DateTime(now.Year, now.Month, now.Day,
+                                  now.Hour, now.Minute, now.Second);
                                 PersonalDBModel db_personal = new PersonalDBModel()
                                 {
                                     driver = emp_id,
-                                    date = DateTime.Now,
+                                    date = truncated,
                                     job_id = start.job_id,
                                     distance = totalDistance,
                                     latitude = location.Latitude,
@@ -582,24 +585,26 @@ namespace TripExpenseNew.PersonalPage
                                     db_personals = await DB_Personal.GetByTrip(trip_start.ToString("yyyyMMddHHmmss", cultureinfo));
 
                                     List<PersonalModel> personals = new List<PersonalModel>();
-                                    personals = db_personals.Select(s => new PersonalModel()
+                                    personals = db_personals.GroupBy(g => g.date)
+                                        .Select(s => new PersonalModel()
                                     {
-                                        job_id = s.job_id,
-                                        distance = s.distance,
-                                        date = s.date,
-                                        latitude = s.latitude,
-                                        longitude = s.longitude,
-                                        accuracy = s.accuracy,
-                                        location = s.location,
-                                        zipcode = s.zipcode,
-                                        location_mode = s.location_mode,
-                                        speed = s.speed,
-                                        mileage = s.mileage,
+                                        job_id = s.First().job_id,
+                                        distance = s.First().distance,
+                                        date = s.Key,
+                                        latitude = s.First().latitude,
+                                        longitude = s.First().longitude,
+                                        accuracy = s.First().accuracy,
+                                        location = s.First().location,
+                                        zipcode = s.First().zipcode,
+                                        location_mode = s.First().location_mode,
+                                        speed = s.First().speed,
+                                        mileage = s.First().mileage,
                                         trip = trip_start.ToString("yyyyMMddHHmmss", cultureinfo),
-                                        status = s.status,
-                                        driver = s.driver,
-                                        cash = s.cash,
+                                        status = s.First().status,
+                                        driver = s.First().driver,
+                                        cash = s.First().cash
                                     }).ToList();
+
                                     string m = await _Personal.Inserts(personals);
 
                                     await DB_Personal.Delete(trip_start.ToString("yyyyMMddHHmmss", cultureinfo));
@@ -754,7 +759,7 @@ namespace TripExpenseNew.PersonalPage
                         {
                             if (personal.location != null && personal.location != "" && personal.mileage != 0)
                             {
-                                if (personal.mileage >= start.mileage)
+                                if (personal.mileage >= start.mileage && (personal.mileage - start.mileage) < 1000)
                                 {
                                     var popup = new ProgressPopup();
                                     this.ShowPopup(popup);
@@ -763,23 +768,24 @@ namespace TripExpenseNew.PersonalPage
                                     var zipcode = placemarks?.FirstOrDefault()?.PostalCode ?? "N/A";
 
                                     List<PersonalDBModel> db_personals = await DB_Personal.GetByTrip(trip_start.ToString("yyyyMMddHHmmss", cultureinfo));
-                                    List<PersonalModel> personals = db_personals.Select(s => new PersonalModel()
+                                    List<PersonalModel> personals = db_personals.GroupBy(g => g.date)
+                                        .Select(s => new PersonalModel()
                                     {
-                                        job_id = s.job_id,
-                                        distance = s.distance,
-                                        date = s.date,
-                                        latitude = s.latitude,
-                                        longitude = s.longitude,
-                                        accuracy = s.accuracy,
+                                        job_id = s.First().job_id,
+                                        distance = s.First().distance,
+                                        date = s.Key,
+                                        latitude = s.First().latitude,
+                                        longitude = s.First().longitude,
+                                        accuracy = s.First().accuracy,
                                         location = personal.location,
-                                        zipcode = s.zipcode,
+                                        zipcode = s.First().zipcode,
                                         location_mode = personal.IsCustomer ? "CUSTOMER" : "OTHER",
-                                        speed = s.speed,
+                                        speed = s.First().speed,
                                         mileage = personal.mileage,
                                         trip = trip_start.ToString("yyyyMMddHHmmss", cultureinfo),
-                                        status = s.status,
-                                        driver = s.driver,
-                                        cash = s.cash,
+                                        status = s.First().status,
+                                        driver = s.First().driver,
+                                        cash = s.First().cash,
                                     }).ToList();
 
                                     string message = await _Personal.Inserts(personals);
@@ -959,7 +965,7 @@ namespace TripExpenseNew.PersonalPage
                                 {
                                     MainThread.BeginInvokeOnMainThread(async () =>
                                     {
-                                        await DisplayAlert("", "Please input mileage start", "OK");
+                                        await DisplayAlert("", "Please enter the correct mileage stop.", "OK");
                                     });
                                 }
                             }

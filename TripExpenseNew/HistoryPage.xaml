@@ -24,15 +24,15 @@
             Text="TRIP HISTORY"
             TextColor="#1C4698"
             VerticalOptions="Center" />
-        <Frame
+        <Border
             Grid.Row="1"
             Grid.Column="0"
             Margin="1"
             Padding="10"
             BackgroundColor="White"
-            BorderColor="DimGrey"
-            CornerRadius="5"
-            HasShadow="False">
+            Stroke="DimGrey"
+            StrokeShape="RoundRectangle 5"
+            StrokeThickness="1">
             <ScrollView>
                 <StackLayout>
                     <CollectionView x:Name="HistoryTripCollectionView" SelectionMode="Single">
@@ -41,15 +41,15 @@
                         </CollectionView.ItemsLayout>
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <Frame
+                                <Border
                                     Margin="1"
                                     Padding="5,1"
                                     BackgroundColor="White"
-                                    CornerRadius="5"
-                                    HasShadow="False">
-                                    <Frame.GestureRecognizers>
+                                    StrokeShape="RoundRectangle 5"
+                                    StrokeThickness="1">
+                                    <Border.GestureRecognizers>
                                         <TapGestureRecognizer x:Name="TapRecognizer" Tapped="OnItemTapped" />
-                                    </Frame.GestureRecognizers>
+                                    </Border.GestureRecognizers>
                                     <Grid
                                         Padding="1"
                                         RowDefinitions="Auto,Auto,Auto,Auto"
@@ -111,13 +111,13 @@
                                             Text="{Binding TextDistance}"
                                             VerticalOptions="Center" />
                                     </Grid>
-                                </Frame>
+                                </Border>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
                 </StackLayout>
             </ScrollView>
-        </Frame>
+        </Border>
         <Button
             x:Name="CancelBtn"
             Grid.Row="2"
